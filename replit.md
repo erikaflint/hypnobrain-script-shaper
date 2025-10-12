@@ -49,11 +49,27 @@ The ScriptEngine (`server/script-engine/`) is the portable IP layer responsible 
     -   **Create New Mode ($3)**: Full customization with 8-dimensional sliders, 6 archetype options, 3 style approaches, 6 marketing assets, PDF/Word download, and unlimited previews.
     -   **Remix Mode ($3)**: AI dimension analysis of existing scripts, adjustable dimensional emphasis, before/after comparison, 6 marketing assets, PDF/Word download.
 -   **Rate Limiting (Free Tier)**: Email-based tracking with a 7-day cooldown period using upsert logic.
+-   **Dice Mix Helper (New)**: Randomly pre-fills presenting issue + contextually matched desired outcome for quick inspiration. 10 issue types, 4 curated outcomes each (40 total suggestions).
+-   **Type-Ahead Autocomplete (New)**:
+    -   **Presenting Issue**: Searchable combobox with 10 common issues
+    -   **Desired Outcome**: Context-aware suggestions based on selected issue + free-text input for custom outcomes
+    -   Helps hypnotherapists explore different script framing options
+-   **Version Control & Favorites**: 
+    -   Star scripts as favorites (appears in dedicated "Favorites" section in dashboard)
+    -   Parent-child tracking for script remixes with version labels (v2, v3, etc.)
+    -   `/api/generations/:id/favorite` (PATCH) and `/api/generations/:id/remix` (POST) endpoints
 
 ### UI/UX Decisions
 -   **Design System**: Purple accent colors (hsl(260 70% 62%)), dark mode optimized, DAW-inspired interface.
 -   **Fonts**: Inter (body), DM Sans (display), JetBrains Mono (code).
 -   **Components**: shadcn/ui with custom dimension sliders and archetype cards.
+-   **Page Routes**:
+    -   `/` - Landing page
+    -   `/free` - Free tier script generation
+    -   `/app-v2` - **Current production version** with template recommendations and full features
+    -   `/dashboard` - Admin dashboard for viewing/managing generated scripts
+    -   `/admin` - Admin panel
+    -   Note: `/app` is deprecated (old v1 architecture)
 
 ### Database Schema Highlights
 -   **Core Tables**: `dimensions`, `archetypes`, `styles`, `pricing`, `generations`, `free_script_usage`, `admin_users`.

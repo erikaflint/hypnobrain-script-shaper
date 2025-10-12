@@ -6,10 +6,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { VoicePlayer } from "@/components/voice-player";
-import { ArrowLeft, ArrowRight, Sparkles, Check, Sliders, User, MessageSquare, Eye, Wand2, FileText } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import { ArrowLeft, ArrowRight, Sparkles, Check, Sliders, User, MessageSquare, Eye, Wand2, FileText, Dices, ChevronsUpDown } from "lucide-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
 
 type Step = "intake" | "recommendations" | "mixer" | "results";
 
@@ -26,6 +29,82 @@ interface RecommendedTemplate {
   matchReasons: string[];
 }
 
+const PRESENTING_ISSUES = [
+  "Anxiety",
+  "Weight Loss",
+  "Smoking Cessation",
+  "Confidence",
+  "Sleep Issues",
+  "Stress Management",
+  "Pain Management",
+  "Phobias",
+  "Performance Enhancement",
+  "Other",
+];
+
+const ISSUE_OUTCOME_PAIRS: Record<string, string[]> = {
+  "Anxiety": [
+    "Feel calm and in control",
+    "Experience peace and relaxation",
+    "Trust my ability to handle challenges",
+    "Live with ease and confidence",
+  ],
+  "Weight Loss": [
+    "Reach and maintain a healthy weight naturally",
+    "Develop a positive relationship with food",
+    "Feel energized and comfortable in my body",
+    "Make healthy choices effortlessly",
+  ],
+  "Smoking Cessation": [
+    "Be free from smoking completely",
+    "Breathe easily and feel healthier",
+    "Live as a confident non-smoker",
+    "Enjoy life without cigarettes",
+  ],
+  "Confidence": [
+    "Feel self-assured in all situations",
+    "Speak and act with confidence",
+    "Trust my abilities and judgment",
+    "Project confidence naturally",
+  ],
+  "Sleep Issues": [
+    "Sleep deeply and wake refreshed",
+    "Fall asleep easily each night",
+    "Enjoy restful, restorative sleep",
+    "Wake up energized and ready",
+  ],
+  "Stress Management": [
+    "Handle stress with ease and grace",
+    "Stay calm under pressure",
+    "Respond to challenges peacefully",
+    "Maintain balance and clarity",
+  ],
+  "Pain Management": [
+    "Experience comfort and relief",
+    "Manage discomfort effectively",
+    "Feel more at ease in my body",
+    "Live with reduced pain levels",
+  ],
+  "Phobias": [
+    "Feel safe and at ease",
+    "Approach situations with confidence",
+    "Live free from fear",
+    "Respond calmly and rationally",
+  ],
+  "Performance Enhancement": [
+    "Perform at my peak ability",
+    "Excel with focus and skill",
+    "Achieve my performance goals",
+    "Compete with confidence and ease",
+  ],
+  "Other": [
+    "Achieve my desired outcome",
+    "Experience positive change",
+    "Feel empowered and capable",
+    "Live with greater well-being",
+  ],
+};
+
 export default function AppV2() {
   const { toast } = useToast();
   const [step, setStep] = useState<Step>("intake");
@@ -34,6 +113,11 @@ export default function AppV2() {
   const [presentingIssue, setPresentingIssue] = useState("");
   const [desiredOutcome, setDesiredOutcome] = useState("");
   const [notes, setNotes] = useState("");
+  
+  // Type-ahead state
+  const [issueOpen, setIssueOpen] = useState(false);
+  const [outcomeOpen, setOutcomeOpen] = useState(false);
+  const [outcomeSearch, setOutcomeSearch] = useState("");
 
   // Recommendations state
   const [recommendations, setRecommendations] = useState<RecommendedTemplate[]>([]);
@@ -120,6 +204,27 @@ export default function AppV2() {
       });
     },
   });
+
+  // Dice Mix helper - randomly select issue and outcome
+  const handleDiceMix = () => {
+    const availableIssues = PRESENTING_ISSUES.filter(issue => issue !== "Other");
+    const randomIssue = availableIssues[Math.floor(Math.random() * availableIssues.length)];
+    const matchingOutcomes = ISSUE_OUTCOME_PAIRS[randomIssue];
+    const randomOutcome = matchingOutcomes[Math.floor(Math.random() * matchingOutcomes.length)];
+    
+    setPresentingIssue(randomIssue);
+    setDesiredOutcome(randomOutcome);
+  };
+
+  // Get suggested outcomes based on selected issue
+  const suggestedOutcomes = presentingIssue && ISSUE_OUTCOME_PAIRS[presentingIssue] 
+    ? ISSUE_OUTCOME_PAIRS[presentingIssue]
+    : [];
+
+  // Filter outcomes based on search
+  const filteredOutcomes = suggestedOutcomes.filter(outcome =>
+    outcome.toLowerCase().includes(outcomeSearch.toLowerCase())
+  );
 
   const handleGetRecommendations = () => {
     if (!presentingIssue.trim() || !desiredOutcome.trim()) {
@@ -257,18 +362,73 @@ export default function AppV2() {
             </div>
 
             <Card className="p-8">
+              <div className="flex items-start justify-between mb-6">
+                <div>
+                  <h3 className="font-semibold text-lg">Client Intake</h3>
+                  <p className="text-sm text-muted-foreground">Start with the basics or get inspired</p>
+                </div>
+                <Button 
+                  type="button"
+                  variant="outline" 
+                  size="sm"
+                  onClick={handleDiceMix}
+                  className="shrink-0"
+                  data-testid="button-dice-mix"
+                >
+                  <Dices className="w-4 h-4 mr-2" />
+                  Dice Mix
+                </Button>
+              </div>
+
               <div className="space-y-6">
                 <div className="space-y-2">
                   <Label htmlFor="presenting-issue">
                     Presenting Issue <span className="text-destructive">*</span>
                   </Label>
-                  <Input
-                    id="presenting-issue"
-                    placeholder="e.g., Anxiety around public speaking"
-                    value={presentingIssue}
-                    onChange={(e) => setPresentingIssue(e.target.value)}
-                    data-testid="input-presenting-issue"
-                  />
+                  <Popover open={issueOpen} onOpenChange={setIssueOpen}>
+                    <PopoverTrigger asChild>
+                      <Button
+                        id="presenting-issue"
+                        variant="outline"
+                        role="combobox"
+                        aria-expanded={issueOpen}
+                        className="w-full justify-between font-normal"
+                        data-testid="select-presenting-issue"
+                      >
+                        {presentingIssue || "Select or type an issue..."}
+                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-full p-0" align="start">
+                      <Command>
+                        <CommandInput placeholder="Search issues..." />
+                        <CommandList>
+                          <CommandEmpty>No issue found.</CommandEmpty>
+                          <CommandGroup>
+                            {PRESENTING_ISSUES.map((issue) => (
+                              <CommandItem
+                                key={issue}
+                                value={issue}
+                                onSelect={(currentValue) => {
+                                  setPresentingIssue(currentValue === presentingIssue ? "" : currentValue);
+                                  setIssueOpen(false);
+                                }}
+                                data-testid={`option-issue-${issue.toLowerCase().replace(/\s+/g, '-')}`}
+                              >
+                                <Check
+                                  className={cn(
+                                    "mr-2 h-4 w-4",
+                                    presentingIssue === issue ? "opacity-100" : "opacity-0"
+                                  )}
+                                />
+                                {issue}
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
                   <p className="text-xs text-muted-foreground">
                     What challenge is your client facing?
                   </p>
@@ -277,14 +437,86 @@ export default function AppV2() {
                 <div className="space-y-2">
                   <Label htmlFor="desired-outcome">
                     Desired Outcome <span className="text-destructive">*</span>
+                    {presentingIssue && suggestedOutcomes.length > 0 && (
+                      <span className="ml-2 text-xs text-muted-foreground">
+                        ({suggestedOutcomes.length} suggestions available)
+                      </span>
+                    )}
                   </Label>
-                  <Input
-                    id="desired-outcome"
-                    placeholder="e.g., Feel confident and relaxed when presenting"
-                    value={desiredOutcome}
-                    onChange={(e) => setDesiredOutcome(e.target.value)}
-                    data-testid="input-desired-outcome"
-                  />
+                  <div className="relative">
+                    <Input
+                      id="desired-outcome"
+                      placeholder="Type or select desired outcome..."
+                      value={desiredOutcome}
+                      onChange={(e) => setDesiredOutcome(e.target.value)}
+                      onFocus={() => {
+                        if (suggestedOutcomes.length > 0) {
+                          setOutcomeOpen(true);
+                        }
+                      }}
+                      onBlur={() => {
+                        setTimeout(() => setOutcomeOpen(false), 200);
+                      }}
+                      data-testid="input-desired-outcome"
+                      className="pr-10"
+                    />
+                    {suggestedOutcomes.length > 0 && (
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="absolute right-0 top-0 h-full"
+                        onClick={() => setOutcomeOpen(!outcomeOpen)}
+                        data-testid="button-show-suggestions"
+                      >
+                        <ChevronsUpDown className="h-4 w-4" />
+                      </Button>
+                    )}
+                    {outcomeOpen && suggestedOutcomes.length > 0 && (
+                      <div className="absolute z-50 w-full mt-1 rounded-md border bg-popover text-popover-foreground shadow-md">
+                        <Command shouldFilter={false}>
+                          <CommandInput 
+                            placeholder="Search suggestions..." 
+                            value={outcomeSearch}
+                            onValueChange={setOutcomeSearch}
+                            className="border-b"
+                          />
+                          <CommandList>
+                            {filteredOutcomes.length === 0 ? (
+                              <CommandEmpty>
+                                <div className="p-2 text-sm text-muted-foreground">
+                                  No matching suggestions
+                                </div>
+                              </CommandEmpty>
+                            ) : (
+                              <CommandGroup>
+                                {filteredOutcomes.map((outcome, idx) => (
+                                  <CommandItem
+                                    key={idx}
+                                    value={outcome}
+                                    onSelect={(currentValue) => {
+                                      setDesiredOutcome(currentValue);
+                                      setOutcomeOpen(false);
+                                      setOutcomeSearch("");
+                                    }}
+                                    data-testid={`option-outcome-${idx}`}
+                                  >
+                                    <Check
+                                      className={cn(
+                                        "mr-2 h-4 w-4",
+                                        desiredOutcome === outcome ? "opacity-100" : "opacity-0"
+                                      )}
+                                    />
+                                    {outcome}
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            )}
+                          </CommandList>
+                        </Command>
+                      </div>
+                    )}
+                  </div>
                   <p className="text-xs text-muted-foreground">
                     What positive change are you working towards?
                   </p>
