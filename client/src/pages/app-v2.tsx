@@ -13,12 +13,16 @@ import { useToast } from "@/hooks/use-toast";
 type Step = "intake" | "recommendations" | "mixer" | "results";
 
 interface RecommendedTemplate {
-  id: number;
-  templateId: string;
-  name: string;
-  description: string;
-  category: string;
-  dimensionValues: Record<string, number>;
+  template: {
+    id: number;
+    templateId: string;
+    name: string;
+    description: string;
+    category: string;
+    jsonData: any;
+  };
+  matchScore: number;
+  matchReasons: string[];
 }
 
 export default function AppV2() {
@@ -35,18 +39,20 @@ export default function AppV2() {
 
   // Get template recommendations mutation
   const getRecommendationsMutation = useMutation({
-    mutationFn: async (data: { presentingIssue: string; desiredOutcome: string; notes?: string }) => {
+    mutationFn: async (data: { presentingIssue: string; desiredOutcome: string; clientNotes?: string }) => {
       return await apiRequest('/api/templates/recommend', {
         method: 'POST',
         body: JSON.stringify(data),
       });
     },
     onSuccess: (data) => {
-      setRecommendations(data.recommendations || []);
+      // API returns recommendations array directly
+      const recommendationsArray = Array.isArray(data) ? data : [];
+      setRecommendations(recommendationsArray);
       setStep("recommendations");
       toast({
         title: "Recommendations Ready",
-        description: `Found ${data.recommendations?.length || 0} matching templates`,
+        description: `Found ${recommendationsArray.length} matching template${recommendationsArray.length === 1 ? '' : 's'}`,
       });
     },
     onError: (error) => {
@@ -71,7 +77,7 @@ export default function AppV2() {
     getRecommendationsMutation.mutate({
       presentingIssue,
       desiredOutcome,
-      notes: notes.trim() || undefined,
+      clientNotes: notes.trim() || undefined,
     });
   };
 
