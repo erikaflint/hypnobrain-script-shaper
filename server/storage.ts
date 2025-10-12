@@ -37,8 +37,10 @@ export interface IStorage {
   getGenerationById(id: number): Promise<Generation | undefined>;
   getAllGenerations(): Promise<Generation[]>;
   getGenerationsByEmail(email: string): Promise<Generation[]>;
+  getGenerationsByParentId(parentId: number): Promise<Generation[]>;
   updateGenerationPaymentStatus(id: number, paymentStatus: string): Promise<void>;
   updateGenerationScript(id: number, fullScript: string): Promise<void>;
+  updateGenerationFavorite(id: number, isFavorite: boolean): Promise<Generation>;
   
   // Free script usage tracking
   checkFreeEligibility(email: string): Promise<boolean>;
@@ -107,6 +109,23 @@ export class DatabaseStorage implements IStorage {
   
   async updateGenerationScript(id: number, fullScript: string): Promise<void> {
     await db.update(generations).set({ fullScript }).where(eq(generations.id, id));
+  }
+  
+  async getGenerationsByParentId(parentId: number): Promise<Generation[]> {
+    return await db
+      .select()
+      .from(generations)
+      .where(eq(generations.parentGenerationId, parentId))
+      .orderBy(desc(generations.createdAt));
+  }
+  
+  async updateGenerationFavorite(id: number, isFavorite: boolean): Promise<Generation> {
+    const result = await db
+      .update(generations)
+      .set({ isFavorite })
+      .where(eq(generations.id, id))
+      .returning();
+    return result[0];
   }
   
   // Free script usage tracking

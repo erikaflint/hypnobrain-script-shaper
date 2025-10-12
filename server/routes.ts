@@ -55,6 +55,82 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Toggle favorite status
+  app.patch("/api/generations/:id/favorite", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const schema = z.object({
+        isFavorite: z.boolean(),
+      });
+      
+      const { isFavorite } = schema.parse(req.body);
+      
+      const updated = await storage.updateGenerationFavorite(id, isFavorite);
+      res.json(updated);
+    } catch (error: any) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+
+  // Create a remix from an existing generation
+  app.post("/api/generations/:id/remix", async (req, res) => {
+    try {
+      const parentId = parseInt(req.params.id);
+      const schema = z.object({
+        versionLabel: z.string().optional(),
+        dimensionValues: z.object({
+          somatic: z.number(),
+          temporal: z.number(),
+          symbolic: z.number(),
+          psychological: z.number(),
+          perspective: z.number(),
+          spiritual: z.number(),
+          relational: z.number(),
+          language: z.number(),
+        }).optional(),
+      });
+      
+      const data = schema.parse(req.body);
+      
+      // Get parent generation to copy settings
+      const parent = await storage.getGenerationById(parentId);
+      if (!parent) {
+        return res.status(404).json({ message: "Parent generation not found" });
+      }
+      
+      // Determine next version number
+      const siblings = await storage.getGenerationsByParentId(parentId);
+      const versionNumber = siblings.length + 2; // +1 for parent, +1 for new version
+      
+      // Create remix with parent tracking
+      const remix = await storage.createGeneration({
+        sessionId: parent.sessionId,
+        email: parent.email,
+        generationMode: 'remix',
+        isFree: false,
+        presentingIssue: parent.presentingIssue,
+        desiredOutcome: parent.desiredOutcome,
+        benefits: parent.benefits,
+        customNotes: parent.customNotes,
+        dimensionsJson: data.dimensionValues || parent.dimensionsJson,
+        archetypeId: parent.archetypeId,
+        stylesJson: parent.stylesJson,
+        templateUsed: parent.templateUsed,
+        parentGenerationId: parentId,
+        versionLabel: data.versionLabel || `v${versionNumber}`,
+        paymentStatus: 'pending_payment',
+      });
+      
+      res.json({ 
+        remixId: remix.id,
+        message: "Remix created. Complete generation to get the script.",
+        versionLabel: remix.versionLabel,
+      });
+    } catch (error: any) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+
   // Check free script eligibility
   app.post("/api/check-free-eligibility", async (req, res) => {
     try {
