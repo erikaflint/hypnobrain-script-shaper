@@ -13,6 +13,8 @@ import { PreviewPanel } from "@/components/preview-panel";
 import { DimensionAnalysis } from "@/components/dimension-analysis";
 import { PaymentModal } from "@/components/payment-modal";
 import { Card } from "@/components/ui/card";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
 
 export default function App() {
   const [location] = useLocation();
@@ -58,70 +60,104 @@ export default function App() {
   // Payment modal
   const [paymentModalOpen, setPaymentModalOpen] = useState(false);
 
-  // Mock data (will be replaced with API calls in Phase 2)
-  const mockDimensions = [
-    { id: 1, name: "Somatic", description: "Body awareness, physical sensations, embodied experience", enabled: true, sortOrder: 1 },
-    { id: 2, name: "Language", description: "Hypnotic language patterns, linguistic precision, embedded suggestions", enabled: true, sortOrder: 2 },
-    { id: 3, name: "Symbolic", description: "Metaphors, imagery, archetypal themes and stories", enabled: true, sortOrder: 3 },
-    { id: 4, name: "Psychological", description: "Inner architecture, cognitive patterns, beliefs, parts work", enabled: true, sortOrder: 4 },
-    { id: 5, name: "Temporal", description: "Time-based work, regression, progression, time perception", enabled: false, sortOrder: 5 },
-    { id: 6, name: "Perspective", description: "Point of view shifts, observer mode, future self perspective", enabled: false, sortOrder: 6 },
-    { id: 7, name: "Relational", description: "Connection, dialogue, self-relationship, interpersonal dynamics", enabled: false, sortOrder: 7 },
-    { id: 8, name: "Spiritual", description: "Transpersonal connection, meaning, purpose, higher self", enabled: false, sortOrder: 8 },
-  ];
+  // Fetch dimensions from backend
+  const { data: dimensionsData, isLoading: dimensionsLoading } = useQuery({
+    queryKey: ['/api/dimensions'],
+  });
 
-  const mockArchetypes = [
-    { id: 1, name: "Hero's Journey", description: "Classic transformation narrative", enabled: true, sortOrder: 1 },
-    { id: 2, name: "Garden/Growth", description: "Nurturing and organic development", enabled: true, sortOrder: 2 },
-    { id: 3, name: "Mountain Climbing", description: "Achievement and overcoming challenges", enabled: true, sortOrder: 3 },
-    { id: 4, name: "River Flow", description: "Natural movement and change", enabled: true, sortOrder: 4 },
-    { id: 5, name: "Inner Child", description: "Connecting with younger self", enabled: true, sortOrder: 5 },
-    { id: 6, name: "Custom", description: "Define your own archetype", enabled: true, sortOrder: 6 },
-  ];
+  // Fetch archetypes from backend
+  const { data: archetypesData, isLoading: archetypesLoading } = useQuery({
+    queryKey: ['/api/archetypes'],
+  });
 
-  const mockStyles = [
-    { id: 1, name: "Direct/Authoritarian", description: "Clear commands and direct suggestions", enabled: true, sortOrder: 1 },
-    { id: 2, name: "Permissive/Ericksonian", description: "Indirect suggestions and metaphors", enabled: true, sortOrder: 2 },
-    { id: 3, name: "Conversational/Informal", description: "Natural, friendly approach", enabled: true, sortOrder: 3 },
-  ];
+  // Fetch styles from backend
+  const { data: stylesData, isLoading: stylesLoading } = useQuery({
+    queryKey: ['/api/styles'],
+  });
 
-  const handleAnalyzeScript = async () => {
-    if (!originalScript.trim()) return;
+  // Initialize dimension values and default selections from backend data
+  useEffect(() => {
+    if (dimensionsData && !analyzed) {
+      const initialDimensions: Record<string, number> = {};
+      dimensionsData.forEach((dim: any) => {
+        initialDimensions[dim.name] = dim.defaultValue || 50;
+      });
+      setDimensions(initialDimensions);
+    }
+  }, [dimensionsData, analyzed]);
 
-    setAnalyzing(true);
-    
-    // Simulate API call
-    setTimeout(() => {
-      // Mock analysis results
-      const mockAnalysis = {
-        dimensions: {
-          Language: 80,
-          Psychological: 60,
-          Somatic: 30,
-          Symbolic: 20,
-          Temporal: 10,
-          Perspective: 15,
-          Relational: 25,
-          Spiritual: 5,
-        },
-        detectedStyle: "Direct/Authoritarian",
-        detectedArchetype: "Problem-solving framework",
-        summary: "This script heavily emphasizes direct linguistic patterns with moderate psychological framing."
-      };
+  // Set default archetype and style selections when data loads
+  useEffect(() => {
+    if (archetypesData && archetypesData.length > 0 && !selectedArchetypeId) {
+      setSelectedArchetypeId(archetypesData[0].id);
+    }
+  }, [archetypesData, selectedArchetypeId]);
 
-      setAnalysisData(mockAnalysis);
-      setDimensions(mockAnalysis.dimensions);
+  useEffect(() => {
+    if (stylesData && stylesData.length > 0 && selectedStyleIds.length === 0) {
+      setSelectedStyleIds([stylesData[0].id]);
+    }
+  }, [stylesData, selectedStyleIds.length]);
+
+  // Analyze script mutation
+  const analyzeScriptMutation = useMutation({
+    mutationFn: async (script) => {
+      return await apiRequest('/api/analyze-script', {
+        method: 'POST',
+        body: JSON.stringify({ script }),
+      });
+    },
+    onSuccess: (data) => {
+      setAnalysisData(data);
+      // Use the 'dimensions' field from the response, not 'detectedDimensions'
+      setDimensions(data.dimensions);
       setAnalyzed(true);
-      setAnalyzing(false);
-
       toast({
         title: "Script Analyzed",
         description: "Dimension sliders have been set to match your script's emphasis",
       });
-    }, 2000);
+    },
+    onError: (error) => {
+      toast({
+        title: "Analysis Failed",
+        description: (error as Error).message || "Failed to analyze script",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleAnalyzeScript = async () => {
+    if (!originalScript.trim()) return;
+    setAnalyzing(true);
+    await analyzeScriptMutation.mutateAsync(originalScript);
+    setAnalyzing(false);
   };
 
-  const handleGeneratePreview = () => {
+  // Preview generation mutation
+  const generatePreviewMutation = useMutation({
+    mutationFn: async (params) => {
+      return await apiRequest('/api/generate-preview', {
+        method: 'POST',
+        body: JSON.stringify(params),
+      });
+    },
+    onSuccess: (data) => {
+      setPreviewText(data.preview);
+      toast({
+        title: "Preview Generated",
+        description: `Estimated length: ${data.estimatedLength}`,
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Preview Failed",
+        description: error.message || "Failed to generate preview",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleGeneratePreview = async () => {
     if (mode === "create" && (!presentingIssue || !desiredOutcome)) {
       toast({
         title: "Missing Information",
@@ -131,17 +167,40 @@ export default function App() {
       return;
     }
 
+    if (!selectedArchetypeId || selectedStyleIds.length === 0) {
+      toast({
+        title: "Missing Selection",
+        description: "Please select an archetype and at least one style",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setPreviewLoading(true);
-    
-    // Simulate API call
-    setTimeout(() => {
-      const mockPreview = mode === "remix" 
-        ? "As you close your eyes and settle into this moment, notice how your breathing naturally deepens... [This remixed version emphasizes somatic awareness through gentle body scanning, weaving symbolic imagery of a garden blooming with each breath. The metaphor of roots growing deeper connects to psychological grounding, while maintaining the therapeutic intent of your original script.]"
-        : "Close your eyes and take a deep breath... Feel the weight of your body settling into the chair... Notice the gentle rhythm of your breathing... [Preview continues with emphasized dimensions based on your slider settings. This is a 150-word preview showing the style and approach of your full script.]";
-      
-      setPreviewText(mockPreview);
-      setPreviewLoading(false);
-    }, 2000);
+
+    // Build dimension values for API based on actual dimension names from backend
+    const dimensionValues = {
+      directAuthoritarian: dimensions["Direct/Authoritarian"] || 50,
+      indirectPermissive: dimensions["Indirect/Permissive"] || 50,
+      analyticalRational: dimensions["Analytical/Rational"] || 50,
+      emotionalMetaphorical: dimensions["Emotional/Metaphorical"] || 50,
+      paternalParental: dimensions["Paternal/Parental"] || 50,
+      maternalNurturing: dimensions["Maternal/Nurturing"] || 50,
+      inwardIntrospective: dimensions["Inward/Introspective"] || 50,
+      outwardSocial: dimensions["Outward/Social"] || 50,
+    };
+
+    await generatePreviewMutation.mutateAsync({
+      mode,
+      clientName: "Client",
+      clientIssue: mode === "create" ? `${presentingIssue} - ${desiredOutcome}` : "",
+      archetypeId: selectedArchetypeId,
+      styleId: selectedStyleIds[0],
+      dimensionValues,
+      existingScript: mode === "remix" ? originalScript : undefined,
+    });
+
+    setPreviewLoading(false);
   };
 
   const handleGenerateFull = () => {
@@ -249,31 +308,43 @@ export default function App() {
                     </p>
                   </div>
                   
-                  {mockDimensions.sort((a, b) => a.sortOrder - b.sortOrder).map((dim) => (
-                    <DimensionSlider
-                      key={dim.id}
-                      name={dim.name}
-                      description={dim.description}
-                      value={dimensions[dim.name] || 50}
-                      enabled={dim.enabled}
-                      onChange={(value) => setDimensions(prev => ({ ...prev, [dim.name]: value }))}
-                    />
-                  ))}
+                  {dimensionsLoading ? (
+                    <div className="text-center text-muted-foreground">Loading dimensions...</div>
+                  ) : (
+                    dimensionsData?.sort((a: any, b: any) => a.sortOrder - b.sortOrder).map((dim: any) => (
+                      <DimensionSlider
+                        key={dim.id}
+                        name={dim.name}
+                        description={dim.description || ""}
+                        value={dimensions[dim.name] || 50}
+                        enabled={dim.enabled}
+                        onChange={(value) => setDimensions(prev => ({ ...prev, [dim.name]: value }))}
+                      />
+                    ))
+                  )}
                 </Card>
 
-                <ArchetypeSelector
-                  archetypes={mockArchetypes}
-                  selectedId={selectedArchetypeId}
-                  customArchetype={customArchetype}
-                  onSelectArchetype={setSelectedArchetypeId}
-                  onCustomArchetype={setCustomArchetype}
-                />
+                {archetypesLoading ? (
+                  <div className="text-center text-muted-foreground">Loading archetypes...</div>
+                ) : (
+                  <ArchetypeSelector
+                    archetypes={archetypesData || []}
+                    selectedId={selectedArchetypeId}
+                    customArchetype={customArchetype}
+                    onSelectArchetype={setSelectedArchetypeId}
+                    onCustomArchetype={setCustomArchetype}
+                  />
+                )}
 
-                <StyleSelector
-                  styles={mockStyles}
-                  selectedIds={selectedStyleIds}
-                  onToggleStyle={handleToggleStyle}
-                />
+                {stylesLoading ? (
+                  <div className="text-center text-muted-foreground">Loading styles...</div>
+                ) : (
+                  <StyleSelector
+                    styles={stylesData || []}
+                    selectedIds={selectedStyleIds}
+                    onToggleStyle={handleToggleStyle}
+                  />
+                )}
               </>
             )}
           </div>

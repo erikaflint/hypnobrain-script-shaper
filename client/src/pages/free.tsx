@@ -14,6 +14,8 @@ import {
 } from "@/components/ui/select";
 import { ArrowLeft, Sparkles, Lock, Crown } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useMutation } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
 
 const PRESENTING_ISSUES = [
   "Anxiety",
@@ -33,7 +35,43 @@ export default function Free() {
   const [email, setEmail] = useState("");
   const [presentingIssue, setPresentingIssue] = useState("");
   const [desiredOutcome, setDesiredOutcome] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [generatedScript, setGeneratedScript] = useState<string | null>(null);
+  const [notEligible, setNotEligible] = useState(false);
+  const [nextAvailableDate, setNextAvailableDate] = useState<string | null>(null);
+
+  // Check eligibility mutation
+  const checkEligibility = useMutation({
+    mutationFn: async (email: string) => {
+      return await apiRequest('/api/check-free-eligibility', {
+        method: 'POST',
+        body: JSON.stringify({ email }),
+      });
+    },
+  });
+
+  // Generate free script mutation
+  const generateScript = useMutation({
+    mutationFn: async (data: { email: string; clientIssue: string }) => {
+      return await apiRequest('/api/generate-free-script', {
+        method: 'POST',
+        body: JSON.stringify(data),
+      });
+    },
+    onSuccess: (data) => {
+      setGeneratedScript(data.script);
+      toast({
+        title: "Script Generated!",
+        description: "Your personalized hypnosis script is ready",
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to generate script",
+        variant: "destructive",
+      });
+    },
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,15 +85,31 @@ export default function Free() {
       return;
     }
 
-    setLoading(true);
-    
-    // TODO: Will be connected to backend in Phase 3
-    toast({
-      title: "Coming Soon",
-      description: "Free script generation will be available once backend is connected",
-    });
-    
-    setLoading(false);
+    // First check eligibility
+    try {
+      const eligibility = await checkEligibility.mutateAsync(email);
+      
+      if (!eligibility.eligible) {
+        setNotEligible(true);
+        setNextAvailableDate(eligibility.nextAvailableDate);
+        toast({
+          title: "Not Eligible",
+          description: eligibility.message,
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // If eligible, generate the script
+      const clientIssue = `${presentingIssue} - ${desiredOutcome}`;
+      await generateScript.mutateAsync({ email, clientIssue });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "Something went wrong",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -151,17 +205,37 @@ export default function Free() {
               </div>
             </Card>
 
+            {notEligible && nextAvailableDate && (
+              <Card className="p-4 bg-destructive/10 border-destructive">
+                <p className="text-sm text-destructive">
+                  You've already used your free script this week. Next available: {new Date(nextAvailableDate).toLocaleDateString()}
+                </p>
+              </Card>
+            )}
+
             <Button 
               type="submit" 
               size="lg" 
               className="w-full"
-              disabled={loading}
+              disabled={generateScript.isPending || checkEligibility.isPending}
               data-testid="button-generate-free"
             >
-              {loading ? "Generating..." : "Generate My Free Script"}
+              {generateScript.isPending || checkEligibility.isPending ? "Generating..." : "Generate My Free Script"}
             </Button>
           </form>
         </Card>
+
+        {/* Generated Script Display */}
+        {generatedScript && (
+          <Card className="p-8 mb-8">
+            <h2 className="font-display text-2xl font-bold mb-4">Your Personalized Script</h2>
+            <div className="prose prose-sm max-w-none" data-testid="text-generated-script">
+              <pre className="whitespace-pre-wrap font-mono text-sm bg-muted p-4 rounded-lg">
+                {generatedScript}
+              </pre>
+            </div>
+          </Card>
+        )}
 
         {/* Upgrade Prompt */}
         <Card className="p-6 border-primary/50 bg-gradient-to-r from-primary/5 to-chart-4/5">
