@@ -1,13 +1,296 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
+import { aiService } from "./ai-service";
+import { paymentService } from "./payment-service";
+import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // put application routes here
-  // prefix all routes with /api
+  // Get all dimensions
+  app.get("/api/dimensions", async (req, res) => {
+    try {
+      const dimensions = await storage.getAllDimensions();
+      res.json(dimensions);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
 
-  // use storage to perform CRUD operations on the storage interface
-  // e.g. storage.insertUser(user) or storage.getUserByUsername(username)
+  // Get all archetypes
+  app.get("/api/archetypes", async (req, res) => {
+    try {
+      const archetypes = await storage.getAllArchetypes();
+      res.json(archetypes);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Get all styles
+  app.get("/api/styles", async (req, res) => {
+    try {
+      const styles = await storage.getAllStyles();
+      res.json(styles);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Check free script eligibility
+  app.post("/api/check-free-eligibility", async (req, res) => {
+    try {
+      const schema = z.object({
+        email: z.string().email(),
+      });
+      
+      const { email } = schema.parse(req.body);
+      const isEligible = await storage.checkFreeEligibility(email);
+      
+      if (!isEligible) {
+        const lastUsage = await storage.getLastFreeUsage(email);
+        const nextAvailable = lastUsage 
+          ? new Date(lastUsage.lastFreeScriptAt.getTime() + 7 * 24 * 60 * 60 * 1000)
+          : new Date();
+        
+        res.json({ 
+          eligible: false, 
+          nextAvailableDate: nextAvailable.toISOString(),
+          message: "You've already used your free script this week"
+        });
+      } else {
+        res.json({ eligible: true });
+      }
+    } catch (error: any) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+
+  // Generate preview
+  app.post("/api/generate-preview", async (req, res) => {
+    try {
+      const schema = z.object({
+        mode: z.enum(['create', 'remix']),
+        clientName: z.string(),
+        clientIssue: z.string(),
+        archetypeId: z.number(),
+        styleId: z.number(),
+        dimensionValues: z.object({
+          directAuthoritarian: z.number(),
+          indirectPermissive: z.number(),
+          analyticalRational: z.number(),
+          emotionalMetaphorical: z.number(),
+          paternalParental: z.number(),
+          maternalNurturing: z.number(),
+          inwardIntrospective: z.number(),
+          outwardSocial: z.number(),
+        }),
+        existingScript: z.string().optional(),
+      });
+      
+      const data = schema.parse(req.body);
+      
+      const archetype = await storage.getArchetypeById(data.archetypeId);
+      if (!archetype) {
+        return res.status(404).json({ message: "Archetype not found" });
+      }
+      
+      const style = await storage.getStyleById(data.styleId);
+      if (!style) {
+        return res.status(404).json({ message: "Style not found" });
+      }
+      
+      const preview = await aiService.generatePreview({
+        mode: data.mode,
+        clientName: data.clientName,
+        clientIssue: data.clientIssue,
+        archetypeName: archetype.name,
+        archetypeDescription: archetype.description || '',
+        styleName: style.name,
+        styleDescription: style.description || '',
+        dimensionValues: data.dimensionValues,
+        existingScript: data.existingScript,
+      });
+      
+      res.json(preview);
+    } catch (error: any) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+
+  // Generate full script (free tier)
+  app.post("/api/generate-free-script", async (req, res) => {
+    try {
+      const schema = z.object({
+        email: z.string().email(),
+        clientIssue: z.string(),
+      });
+      
+      const { email, clientIssue } = schema.parse(req.body);
+      
+      // Check eligibility
+      const isEligible = await storage.checkFreeEligibility(email);
+      if (!isEligible) {
+        return res.status(403).json({ message: "You've already used your free script this week" });
+      }
+      
+      // Get default archetype and style for free tier
+      const archetypes = await storage.getAllArchetypes();
+      const styles = await storage.getAllStyles();
+      const defaultArchetype = archetypes[0]; // "The Healer"
+      const defaultStyle = styles[0]; // "Conversational"
+      
+      // Use balanced dimension values for free tier
+      const balancedDimensions = {
+        directAuthoritarian: 50,
+        indirectPermissive: 50,
+        analyticalRational: 50,
+        emotionalMetaphorical: 50,
+        paternalParental: 50,
+        maternalNurturing: 50,
+        inwardIntrospective: 50,
+        outwardSocial: 50,
+      };
+      
+      const result = await aiService.generateFullScript({
+        mode: 'create',
+        clientName: 'valued client',
+        clientIssue,
+        archetypeName: defaultArchetype.name,
+        archetypeDescription: defaultArchetype.description || '',
+        styleName: defaultStyle.name,
+        styleDescription: defaultStyle.description || '',
+        dimensionValues: balancedDimensions,
+      });
+      
+      // Record usage
+      await storage.recordFreeUsage({
+        email,
+        lastFreeScriptAt: new Date(),
+      });
+      
+      res.json({ script: result.fullScript });
+    } catch (error: any) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+
+  // Create payment intent (mock for now)
+  app.post("/api/create-payment-intent", async (req, res) => {
+    try {
+      const schema = z.object({
+        tier: z.enum(['create_new', 'remix']),
+        generationData: z.any(),
+      });
+      
+      const { tier, generationData } = schema.parse(req.body);
+      
+      const pricing = await storage.getPricingByTierName(tier);
+      if (!pricing) {
+        return res.status(404).json({ message: "Pricing tier not found" });
+      }
+      
+      const paymentIntent = await paymentService.createPaymentIntent(
+        pricing.priceCents,
+        { tier, generationData: JSON.stringify(generationData) }
+      );
+      
+      res.json(paymentIntent);
+    } catch (error: any) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+
+  // Generate full script (paid tier)
+  app.post("/api/generate-paid-script", async (req, res) => {
+    try {
+      const schema = z.object({
+        mode: z.enum(['create', 'remix']),
+        clientName: z.string(),
+        clientIssue: z.string(),
+        archetypeId: z.number(),
+        styleId: z.number(),
+        dimensionValues: z.object({
+          directAuthoritarian: z.number(),
+          indirectPermissive: z.number(),
+          analyticalRational: z.number(),
+          emotionalMetaphorical: z.number(),
+          paternalParental: z.number(),
+          maternalNurturing: z.number(),
+          inwardIntrospective: z.number(),
+          outwardSocial: z.number(),
+        }),
+        existingScript: z.string().optional(),
+        paymentIntentId: z.string(),
+      });
+      
+      const data = schema.parse(req.body);
+      
+      const archetype = await storage.getArchetypeById(data.archetypeId);
+      if (!archetype) {
+        return res.status(404).json({ message: "Archetype not found" });
+      }
+      
+      const style = await storage.getStyleById(data.styleId);
+      if (!style) {
+        return res.status(404).json({ message: "Style not found" });
+      }
+      
+      // Generate the full script
+      const result = await aiService.generateFullScript({
+        mode: data.mode,
+        clientName: data.clientName,
+        clientIssue: data.clientIssue,
+        archetypeName: archetype.name,
+        archetypeDescription: archetype.description || '',
+        styleName: style.name,
+        styleDescription: style.description || '',
+        dimensionValues: data.dimensionValues,
+        existingScript: data.existingScript,
+      });
+      
+      // Save to database (using actual schema field names)
+      const generation = await storage.createGeneration({
+        generationMode: data.mode === 'create' ? 'create_new' : 'remix',
+        isFree: false,
+        originalScript: data.existingScript,
+        originalDimensionsJson: data.mode === 'remix' ? data.dimensionValues : null,
+        presentingIssue: data.clientIssue,
+        dimensionsJson: data.dimensionValues,
+        archetypeId: data.archetypeId,
+        stylesJson: { id: style.id, name: style.name },
+        previewText: result.fullScript.substring(0, 500),
+        fullScript: result.fullScript,
+        assetsJson: result.marketingAssets,
+        paymentStatus: 'pending_payment',
+        stripePaymentIntentId: data.paymentIntentId,
+      });
+      
+      res.json({ 
+        generationId: generation.id,
+        fullScript: result.fullScript,
+        marketingAssets: result.marketingAssets,
+      });
+    } catch (error: any) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+
+  // Analyze script for remix mode
+  app.post("/api/analyze-script", async (req, res) => {
+    try {
+      const schema = z.object({
+        script: z.string(),
+      });
+      
+      const { script } = schema.parse(req.body);
+      
+      const analysis = await aiService.analyzeScriptDimensions(script);
+      
+      res.json(analysis);
+    } catch (error: any) {
+      res.status(400).json({ message: error.message });
+    }
+  });
 
   const httpServer = createServer(app);
 

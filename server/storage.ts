@@ -1,4 +1,4 @@
-import { eq, and, gte, desc } from "drizzle-orm";
+import { eq, and, gte, desc, sql } from "drizzle-orm";
 import { db } from "./db";
 import {
   dimensions,
@@ -27,14 +27,15 @@ export interface IStorage {
   
   // Styles
   getAllStyles(): Promise<Style[]>;
+  getStyleById(id: number): Promise<Style | undefined>;
   
   // Pricing
-  getPricingByTier(tier: string): Promise<Pricing | undefined>;
+  getPricingByTierName(tierName: string): Promise<Pricing | undefined>;
   
   // Generations
   createGeneration(generation: InsertGeneration): Promise<Generation>;
   getGenerationById(id: number): Promise<Generation | undefined>;
-  updateGenerationStatus(id: number, status: string): Promise<void>;
+  updateGenerationPaymentStatus(id: number, paymentStatus: string): Promise<void>;
   updateGenerationScript(id: number, fullScript: string): Promise<void>;
   
   // Free script usage tracking
@@ -64,9 +65,14 @@ export class DatabaseStorage implements IStorage {
     return await db.select().from(styles);
   }
   
+  async getStyleById(id: number): Promise<Style | undefined> {
+    const result = await db.select().from(styles).where(eq(styles.id, id));
+    return result[0];
+  }
+  
   // Pricing
-  async getPricingByTier(tier: string): Promise<Pricing | undefined> {
-    const result = await db.select().from(pricing).where(eq(pricing.tier, tier));
+  async getPricingByTierName(tierName: string): Promise<Pricing | undefined> {
+    const result = await db.select().from(pricing).where(eq(pricing.tierName, tierName));
     return result[0];
   }
   
@@ -81,8 +87,8 @@ export class DatabaseStorage implements IStorage {
     return result[0];
   }
   
-  async updateGenerationStatus(id: number, status: string): Promise<void> {
-    await db.update(generations).set({ status }).where(eq(generations.id, id));
+  async updateGenerationPaymentStatus(id: number, paymentStatus: string): Promise<void> {
+    await db.update(generations).set({ paymentStatus }).where(eq(generations.id, id));
   }
   
   async updateGenerationScript(id: number, fullScript: string): Promise<void> {
@@ -99,10 +105,10 @@ export class DatabaseStorage implements IStorage {
       .where(
         and(
           eq(freeScriptUsage.email, email),
-          gte(freeScriptUsage.usedAt, sevenDaysAgo)
+          gte(freeScriptUsage.lastFreeScriptAt, sevenDaysAgo)
         )
       )
-      .orderBy(desc(freeScriptUsage.usedAt))
+      .orderBy(desc(freeScriptUsage.lastFreeScriptAt))
       .limit(1);
     
     // Eligible if no usage in last 7 days
@@ -110,7 +116,18 @@ export class DatabaseStorage implements IStorage {
   }
   
   async recordFreeUsage(usage: InsertFreeScriptUsage): Promise<FreeScriptUsage> {
-    const result = await db.insert(freeScriptUsage).values(usage).returning();
+    // Upsert: update if exists, insert if not
+    const result = await db
+      .insert(freeScriptUsage)
+      .values(usage)
+      .onConflictDoUpdate({
+        target: freeScriptUsage.email,
+        set: {
+          lastFreeScriptAt: usage.lastFreeScriptAt,
+          freeScriptsCount: sql`${freeScriptUsage.freeScriptsCount} + 1`,
+        },
+      })
+      .returning();
     return result[0];
   }
   
@@ -119,7 +136,7 @@ export class DatabaseStorage implements IStorage {
       .select()
       .from(freeScriptUsage)
       .where(eq(freeScriptUsage.email, email))
-      .orderBy(desc(freeScriptUsage.usedAt))
+      .orderBy(desc(freeScriptUsage.lastFreeScriptAt))
       .limit(1);
     
     return result[0];
