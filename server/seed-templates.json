@@ -1,0 +1,525 @@
+[
+  {
+    "id": "somatic-beginner-v1",
+    "version": "1.0.0",
+    "name": "Somatic Beginner",
+    "description": "Perfect for clients new to hypnosis. Focuses on body awareness, breath, and physical sensations to create a gentle, grounded trance experience.",
+    "category": "beginner",
+    "tags": ["beginner-friendly", "body-based", "gentle", "grounding"],
+    "use_cases": ["First-time hypnosis clients", "Anxiety reduction", "Stress relief", "Body awareness practice"],
+    "presenting_issues": ["anxiety", "stress", "new to hypnosis", "needs grounding"],
+    "dimensions": {
+      "somatic": {
+        "level": 75,
+        "emphasis": "Heavy focus on breath, body scan, and physical sensations",
+        "techniques": ["breath_awareness", "body_scan", "progressive_relaxation"]
+      },
+      "language": {
+        "level": 40,
+        "style": "simple and clear",
+        "pacing": "slow and gentle"
+      },
+      "symbolic": {
+        "level": 15,
+        "archetype": "The Guide",
+        "metaphor": "Simple nature imagery for calm"
+      },
+      "psychological": {
+        "level": 20,
+        "approaches": ["simple_suggestion"],
+        "depth": "surface"
+      },
+      "temporal": {
+        "level": 10,
+        "work_types": ["present_moment"],
+        "focus": "staying in the now"
+      },
+      "perspective": {
+        "level": 10,
+        "primary_pov": "first_person",
+        "techniques": ["minimal_shifting"]
+      },
+      "relational": {
+        "level": 15,
+        "approaches": ["therapist_client", "safety_and_trust"]
+      },
+      "spiritual": {
+        "enabled": false,
+        "level": 0
+      }
+    },
+    "generation_rules": {
+      "opening_style": "Gentle invitation to relax",
+      "closing_style": "Gradual, comfortable return",
+      "voice_tone": "Warm and reassuring",
+      "pacing": "Slow with many pauses"
+    },
+    "prompting_hints": {
+      "priority": ["Use simple language", "Repeat key phrases", "Focus on physical sensations", "Create safety"],
+      "avoid": ["Complex metaphors", "Deep psychological work", "Rapid transitions"]
+    },
+    "metadata": {
+      "created_by": "system",
+      "usage_count": 0,
+      "is_public": true
+    }
+  },
+  {
+    "id": "relaxation-sleep-v1",
+    "version": "1.0.0",
+    "name": "Relaxation & Sleep",
+    "description": "Deeply calming script designed to promote relaxation, stress relief, and restful sleep. Uses gentle language and peaceful imagery.",
+    "category": "therapeutic",
+    "tags": ["sleep", "relaxation", "stress-relief", "calming"],
+    "use_cases": ["Insomnia", "Sleep improvement", "Stress relief", "Deep relaxation"],
+    "presenting_issues": ["insomnia", "sleep problems", "stress", "tension", "anxiety"],
+    "dimensions": {
+      "somatic": {
+        "level": 60,
+        "emphasis": "Progressive relaxation and releasing tension",
+        "techniques": ["progressive_relaxation", "breath_awareness", "body_scan"]
+      },
+      "language": {
+        "level": 55,
+        "style": "soft and flowing",
+        "pacing": "very slow with long pauses"
+      },
+      "symbolic": {
+        "level": 35,
+        "archetype": "The Nurturer",
+        "metaphor": "Peaceful water, clouds, gentle nature"
+      },
+      "psychological": {
+        "level": 15,
+        "approaches": ["simple_suggestion", "letting_go"],
+        "depth": "light"
+      },
+      "temporal": {
+        "level": 5,
+        "work_types": ["present_moment"],
+        "focus": "here and now"
+      },
+      "perspective": {
+        "level": 5,
+        "primary_pov": "first_person",
+        "techniques": ["minimal"]
+      },
+      "relational": {
+        "level": 10,
+        "approaches": ["self_care", "self_soothing"]
+      },
+      "spiritual": {
+        "enabled": false,
+        "level": 0
+      }
+    },
+    "generation_rules": {
+      "opening_style": "Soft invitation to let go",
+      "closing_style": "Drift into sleep or deep rest",
+      "voice_tone": "Soothing and gentle",
+      "pacing": "Very slow, dreamlike"
+    },
+    "prompting_hints": {
+      "priority": ["Use flowing language", "Include many pauses", "Build progressive deepening", "Emphasize release and letting go"],
+      "avoid": ["Anything activating", "Complex thoughts", "Rapid pacing"]
+    },
+    "metadata": {
+      "created_by": "system",
+      "usage_count": 0,
+      "is_public": true
+    }
+  },
+  {
+    "id": "balanced-therapeutic-v1",
+    "version": "1.0.0",
+    "name": "Balanced Therapeutic",
+    "description": "Well-rounded therapeutic approach with moderate emphasis across multiple dimensions. Suitable for general therapeutic work with experienced clients.",
+    "category": "therapeutic",
+    "tags": ["balanced", "general-purpose", "therapeutic", "versatile"],
+    "use_cases": ["General therapeutic work", "Habit change", "Confidence building", "Life transitions"],
+    "presenting_issues": ["habits", "confidence", "self-esteem", "life changes", "general wellness"],
+    "dimensions": {
+      "somatic": {
+        "level": 40,
+        "emphasis": "Body awareness as therapeutic resource",
+        "techniques": ["breath_awareness", "body_scan", "somatic_markers"]
+      },
+      "language": {
+        "level": 50,
+        "style": "moderate complexity with hypnotic patterns",
+        "pacing": "steady and measured"
+      },
+      "symbolic": {
+        "level": 40,
+        "archetype": "The Healer",
+        "metaphor": "Journey and transformation"
+      },
+      "psychological": {
+        "level": 50,
+        "approaches": ["cognitive_reframe", "parts_work", "resource_building"],
+        "depth": "moderate"
+      },
+      "temporal": {
+        "level": 35,
+        "work_types": ["regression", "present_moment", "future_pacing"],
+        "focus": "past-present-future balance"
+      },
+      "perspective": {
+        "level": 30,
+        "primary_pov": "first_person with observer shifts",
+        "techniques": ["occasional_perspective_shifts"]
+      },
+      "relational": {
+        "level": 35,
+        "approaches": ["self_relationship", "therapeutic_alliance"]
+      },
+      "spiritual": {
+        "enabled": false,
+        "level": 0
+      }
+    },
+    "generation_rules": {
+      "opening_style": "Professional and confident",
+      "closing_style": "Empowered return",
+      "voice_tone": "Confident and compassionate",
+      "pacing": "Steady with purposeful pauses"
+    },
+    "prompting_hints": {
+      "priority": ["Address issue from multiple angles", "Use moderate complexity", "Include metaphor and cognitive work", "Build comprehensive therapeutic experience"],
+      "avoid": ["Overemphasis on one dimension", "Too simple or too complex"]
+    },
+    "metadata": {
+      "created_by": "system",
+      "usage_count": 0,
+      "is_public": true
+    }
+  },
+  {
+    "id": "metaphor-journey-v1",
+    "version": "1.0.0",
+    "name": "Metaphor Journey",
+    "description": "Rich in symbolic imagery and archetypal stories. Takes the client on a metaphorical journey that parallels their therapeutic work.",
+    "category": "advanced",
+    "tags": ["metaphor", "symbolic", "journey", "archetypal"],
+    "use_cases": ["Creative visualization", "Archetypal work", "Symbolic healing", "Deep inner journeys"],
+    "presenting_issues": ["need for insight", "creative blocks", "transformation", "life purpose"],
+    "dimensions": {
+      "somatic": {
+        "level": 25,
+        "emphasis": "Sensory experience within imagery",
+        "techniques": ["sensory_awareness_in_metaphor"]
+      },
+      "language": {
+        "level": 65,
+        "style": "rich and evocative",
+        "pacing": "flowing with dramatic pauses"
+      },
+      "symbolic": {
+        "level": 80,
+        "archetype": "The Storyteller",
+        "metaphor": "Hero's journey, transformation, archetypal stories"
+      },
+      "psychological": {
+        "level": 30,
+        "approaches": ["parts_work", "resource_building", "symbolic_reframe"],
+        "depth": "symbolic"
+      },
+      "temporal": {
+        "level": 20,
+        "work_types": ["progression_within_journey"],
+        "focus": "journey through time"
+      },
+      "perspective": {
+        "level": 45,
+        "primary_pov": "first_person in story",
+        "techniques": ["frequent_shifts", "observer", "future_self"]
+      },
+      "relational": {
+        "level": 25,
+        "approaches": ["inner_dialogue", "relationship_to_inner_wisdom"]
+      },
+      "spiritual": {
+        "enabled": true,
+        "level": 35,
+        "framework": "archetypal"
+      }
+    },
+    "generation_rules": {
+      "opening_style": "Invitation to journey",
+      "closing_style": "Return with treasure/wisdom",
+      "voice_tone": "Evocative and imaginative",
+      "pacing": "Flowing narrative rhythm"
+    },
+    "prompting_hints": {
+      "priority": ["Create vivid metaphorical journey", "Use archetypal elements", "Mirror client's issue in story", "Include transformation moments"],
+      "avoid": ["Literal therapeutic language", "Breaking metaphorical frame", "Rushing the journey"]
+    },
+    "metadata": {
+      "created_by": "system",
+      "usage_count": 0,
+      "is_public": true
+    }
+  },
+  {
+    "id": "deep-psychological-v1",
+    "version": "1.0.0",
+    "name": "Deep Psychological",
+    "description": "Focuses on beliefs, thought patterns, and inner mental architecture. Ideal for cognitive restructuring and deep mindset shifts.",
+    "category": "advanced",
+    "tags": ["cognitive", "beliefs", "mindset", "psychological"],
+    "use_cases": ["Limiting beliefs", "Cognitive patterns", "Deep mindset work", "Internal conflicts"],
+    "presenting_issues": ["limiting beliefs", "negative self-talk", "cognitive patterns", "inner conflicts"],
+    "dimensions": {
+      "somatic": {
+        "level": 20,
+        "emphasis": "Body as information source",
+        "techniques": ["noticing_somatic_markers"]
+      },
+      "language": {
+        "level": 55,
+        "style": "sophisticated with presuppositions",
+        "pacing": "thoughtful with reflection pauses"
+      },
+      "symbolic": {
+        "level": 25,
+        "archetype": "The Sage",
+        "metaphor": "Mental architecture, internal systems"
+      },
+      "psychological": {
+        "level": 75,
+        "approaches": ["cognitive_reframe", "belief_change", "parts_work", "submodalities"],
+        "depth": "deep"
+      },
+      "temporal": {
+        "level": 30,
+        "work_types": ["regression_to_belief_origins", "present_moment_awareness"],
+        "focus": "identifying belief formation"
+      },
+      "perspective": {
+        "level": 50,
+        "primary_pov": "observer",
+        "techniques": ["frequent_perspective_shifts", "different_age_self", "meta_position"]
+      },
+      "relational": {
+        "level": 30,
+        "approaches": ["inner_dialogue", "parts_work", "internal_relationships"]
+      },
+      "spiritual": {
+        "enabled": false,
+        "level": 0
+      }
+    },
+    "generation_rules": {
+      "opening_style": "Invitation to explore inner landscape",
+      "closing_style": "Integration of new understanding",
+      "voice_tone": "Thoughtful and insightful",
+      "pacing": "Deliberate with thinking pauses"
+    },
+    "prompting_hints": {
+      "priority": ["Identify and transform beliefs", "Use parts work", "Include perspective shifts", "Emphasize cognitive reframing"],
+      "avoid": ["Surface-level work", "Bypassing beliefs", "Overly directive"]
+    },
+    "metadata": {
+      "created_by": "system",
+      "usage_count": 0,
+      "is_public": true
+    }
+  },
+  {
+    "id": "timeline-therapy-v1",
+    "version": "1.0.0",
+    "name": "Timeline Therapy",
+    "description": "Specialized in temporal work - regression to source events, progression to desired future, and timeline healing.",
+    "category": "specialized",
+    "tags": ["timeline", "regression", "progression", "temporal"],
+    "use_cases": ["Past trauma resolution", "Future pacing", "Timeline work", "Source event healing"],
+    "presenting_issues": ["past trauma", "phobias", "limiting decisions", "future anxiety"],
+    "dimensions": {
+      "somatic": {
+        "level": 30,
+        "emphasis": "Anchoring and somatic markers of memories",
+        "techniques": ["anchoring", "body_markers_of_time"]
+      },
+      "language": {
+        "level": 50,
+        "style": "clear and guiding",
+        "pacing": "structured and methodical"
+      },
+      "symbolic": {
+        "level": 20,
+        "archetype": "The Guide",
+        "metaphor": "Timeline path, thread of time"
+      },
+      "psychological": {
+        "level": 45,
+        "approaches": ["belief_change", "resource_building", "reimprinting"],
+        "depth": "moderate to deep"
+      },
+      "temporal": {
+        "level": 80,
+        "work_types": ["regression", "progression", "age_progression", "future_pacing", "timeline_visualization"],
+        "focus": "extensive time work"
+      },
+      "perspective": {
+        "level": 60,
+        "primary_pov": "observer",
+        "techniques": ["very_frequent_shifts", "different_age_self", "future_self", "dissociated_viewing"]
+      },
+      "relational": {
+        "level": 20,
+        "approaches": ["inner_dialogue_across_time"]
+      },
+      "spiritual": {
+        "enabled": false,
+        "level": 0
+      }
+    },
+    "generation_rules": {
+      "opening_style": "Clear timeline orientation",
+      "closing_style": "Integration across timeline",
+      "voice_tone": "Clear and guiding",
+      "pacing": "Structured with methodical progression"
+    },
+    "prompting_hints": {
+      "priority": ["Guide regression with dissociation", "Include future pacing", "Use timeline metaphors", "Reimprint past events with resources"],
+      "avoid": ["Skipping safety setup", "Rushing through memories", "Insufficient dissociation"]
+    },
+    "metadata": {
+      "created_by": "system",
+      "usage_count": 0,
+      "is_public": true
+    }
+  },
+  {
+    "id": "spiritual-awakening-v1",
+    "version": "1.0.0",
+    "name": "Spiritual Awakening",
+    "description": "Connects to deeper meaning, purpose, and transcendent experiences. Integrates spiritual dimension with therapeutic work.",
+    "category": "specialized",
+    "tags": ["spiritual", "meaning", "purpose", "transcendent"],
+    "use_cases": ["Life purpose discovery", "Spiritual connection", "Meaning-making", "Existential questions"],
+    "presenting_issues": ["lack of purpose", "disconnection", "existential concerns", "seeking meaning"],
+    "dimensions": {
+      "somatic": {
+        "level": 20,
+        "emphasis": "Subtle energy and expanded awareness",
+        "techniques": ["breath_awareness", "energy_awareness"]
+      },
+      "language": {
+        "level": 60,
+        "style": "evocative and expansive",
+        "pacing": "spacious with silence"
+      },
+      "symbolic": {
+        "level": 55,
+        "archetype": "The Mystic",
+        "metaphor": "Light, cosmic journey, interconnection"
+      },
+      "psychological": {
+        "level": 35,
+        "approaches": ["meaning_making", "purpose_discovery"],
+        "depth": "transpersonal"
+      },
+      "temporal": {
+        "level": 25,
+        "work_types": ["transcendent_time", "eternal_now"],
+        "focus": "non-linear time experience"
+      },
+      "perspective": {
+        "level": 45,
+        "primary_pov": "expanded_awareness",
+        "techniques": ["higher_self", "universal_perspective"]
+      },
+      "relational": {
+        "level": 50,
+        "approaches": ["connection_to_greater_whole", "universal_belonging"]
+      },
+      "spiritual": {
+        "enabled": true,
+        "level": 80,
+        "framework": "universal and inclusive"
+      }
+    },
+    "generation_rules": {
+      "opening_style": "Invitation to expand",
+      "closing_style": "Grounded integration of wisdom",
+      "voice_tone": "Reverent and expansive",
+      "pacing": "Spacious with sacred pauses"
+    },
+    "prompting_hints": {
+      "priority": ["Connect to meaning and purpose", "Use inclusive spiritual language", "Emphasize interconnection", "Access inner wisdom"],
+      "avoid": ["Denominational language", "Imposing beliefs", "Rushing sacred moments"]
+    },
+    "metadata": {
+      "created_by": "system",
+      "usage_count": 0,
+      "is_public": true
+    }
+  },
+  {
+    "id": "nature-connection-v1",
+    "version": "1.0.0",
+    "name": "Nature Connection",
+    "description": "Uses earth-based metaphors and natural imagery to create grounding, healing experiences. Emphasizes connection to nature.",
+    "category": "therapeutic",
+    "tags": ["nature", "grounding", "earth-based", "natural-healing"],
+    "use_cases": ["Grounding", "Nature-based healing", "Seasonal work", "Earth connection"],
+    "presenting_issues": ["disconnection", "stress", "need for grounding", "seasonal transitions"],
+    "dimensions": {
+      "somatic": {
+        "level": 50,
+        "emphasis": "Earth connection and natural rhythms",
+        "techniques": ["grounding", "breath_with_earth", "embodied_presence"]
+      },
+      "language": {
+        "level": 55,
+        "style": "natural and organic",
+        "pacing": "flowing like nature"
+      },
+      "symbolic": {
+        "level": 70,
+        "archetype": "The Nurturer",
+        "metaphor": "Trees, roots, seasons, growth cycles, elements"
+      },
+      "psychological": {
+        "level": 25,
+        "approaches": ["resource_building", "natural_wisdom"],
+        "depth": "natural and intuitive"
+      },
+      "temporal": {
+        "level": 15,
+        "work_types": ["natural_cycles", "seasonal_rhythms"],
+        "focus": "cyclical time"
+      },
+      "perspective": {
+        "level": 30,
+        "primary_pov": "first_person",
+        "techniques": ["nature_element_perspective", "observer"]
+      },
+      "relational": {
+        "level": 60,
+        "approaches": ["connection_to_nature", "belonging_to_earth", "nature_as_teacher"]
+      },
+      "spiritual": {
+        "enabled": true,
+        "level": 45,
+        "framework": "earth_based"
+      }
+    },
+    "generation_rules": {
+      "opening_style": "Invitation into nature",
+      "closing_style": "Carrying nature's support",
+      "voice_tone": "Warm and organic",
+      "pacing": "Natural rhythm with breath"
+    },
+    "prompting_hints": {
+      "priority": ["Immerse in nature imagery", "Use growth and renewal metaphors", "Emphasize earth connection", "Include sensory nature details"],
+      "avoid": ["Urban imagery", "Mechanical metaphors", "Disconnection from natural world"]
+    },
+    "metadata": {
+      "created_by": "system",
+      "usage_count": 0,
+      "is_public": true
+    }
+  }
+]
