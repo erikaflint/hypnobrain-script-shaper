@@ -1,7 +1,73 @@
-# HypnoBrain Script Shaper
+# HypnoBrain Script Shaper v2.0
 
 ## Project Overview
 A DAW-style web application for hypnotherapists to generate customized hypnosis scripts using Erika Flint's 8-Dimensional Hypnosis Framework.
+
+**v2.0 Architecture**: JSON template-based system with embedded ScriptEngine IP layer that enforces 6 core principles and 13 narrative arcs.
+
+## Architecture Evolution: v1 → v2
+
+### v1.0 (Original)
+- Database-driven dimension/archetype/style system
+- Direct AI generation from dimension values
+- IP methodology "baked into" AI prompts (not portable)
+
+### v2.0 (Current - JSON Template Architecture)
+**Separation of Concerns:**
+1. **Templates (JSON)**: Dimension mixes stored as data (PostgreSQL JSONB)
+2. **ScriptEngine**: Erika's IP methodology as config-driven orchestration layer
+3. **AI Service**: Execution engine (receives comprehensive directives from ScriptEngine)
+
+**New Data Flow:**
+```
+Client Intake → TemplateSelector → DimensionAssembler → ScriptEngine → AI Service
+                                                          ↑
+                                                    (The IP Layer)
+```
+
+### ScriptEngine: The IP Core
+Located in `server/script-engine/`, this is the **portable IP** that transforms template-based generation into methodology-driven transformation.
+
+**Components:**
+1. **Config System** (`config/`):
+   - `principles.json` - 6 core principles with prompt directives, quality gates, examples
+   - `narrative-arcs.json` - 13 narrative arcs (7 currently implemented)
+   - `metaphor-library.json` - Metaphor families mapped to presenting issues
+
+2. **StrategyPlanner** (`strategy-planner.ts`):
+   - Detects presenting issues from keywords (anxiety, confidence, stuck, habits, trauma, etc.)
+   - Selects narrative arcs with priority: always_include > issue_specific > template_preferred
+   - Chooses primary metaphor based on issue + symbolic dimension level
+   - Returns `GenerationContract` with selected arcs, metaphor, reasoning log
+
+3. **PrincipleEnforcer** (`principle-enforcer.ts`):
+   - Translates 6 principles into AI prompt directives
+   - Adapts to client level (beginner/intermediate/advanced)
+   - Builds language hierarchy (permissive vs directive ratios)
+   - Generates quality reminders for validation
+
+4. **Main Orchestrator** (`index.ts`):
+   - `ScriptEngine.generate()` combines StrategyPlanner + PrincipleEnforcer
+   - Returns comprehensive directives for AI: enhanced system prompts, structured instructions
+   - Complete reasoning logs for transparency
+
+**6 Core Principles:**
+1. Somatic Anchoring Early
+2. Metaphor Consistency  
+3. Adaptive Language Complexity
+4. Permissive-to-Directive Gradient
+5. Safety Language Always
+6. Ego Strengthening Closure
+
+**13 Narrative Arcs** (7 implemented):
+- ✅ Effortlessness of Change
+- ✅ Re-Minding (Not Learning)
+- ✅ Two Tempos of Change
+- ✅ Recognition & Ego Strengthening
+- ✅ Relief to New Life
+- ✅ Emotional-Physical Chain
+- ✅ Brain as Master Skill
+- ⏳ 6 more to backfill
 
 ## Architecture
 
@@ -136,7 +202,45 @@ npx tsx server/seed.ts  # Seed database with initial data
 - `STRIPE_ENABLED`: Feature flag for payment integration (default: false)
 - `SESSION_SECRET`: Session encryption key
 
+## Implementation Status
+
+### ✅ Task SE1: ScriptEngine Foundation (Completed)
+- **Config System** (`server/script-engine/config/`):
+  - principles.json: All 6 core principles with prompt directives, quality gates, examples
+  - narrative-arcs.json: 7 of 13 arcs implemented (effortlessness, re-minding, two-tempos, recognition-ego-strengthening, relief-to-new-life, emotional-physical-chain, brain-master-skill)
+  - metaphor-library.json: 8 metaphor families mapped to presenting issues
+- **StrategyPlanner** (`strategy-planner.ts`): Issue detection, arc selection, metaphor choosing
+- **PrincipleEnforcer** (`principle-enforcer.ts`): IP to AI prompt translation
+- **Main Orchestrator** (`index.ts`): Complete generation workflow
+- **Testing**: Console tests verify end-to-end flow (anxiety → nature_gentle metaphor, confidence → tree metaphor)
+
+### 🔄 Next Tasks
+- SE4: Build PromptOrchestrator - 3-stage generation (Outline → Draft → Polish)
+- SE5: Build Validator - quality gates & auto-repair
+- SE6: Integrate ScriptEngine into AI service
+- SE7: Update templates to support preferred arcs
+- SE8: Test end-to-end generation with ScriptEngine
+
 ## Recent Changes (2025-10-12)
+
+### ✅ MAJOR: ScriptEngine v1.0 Implementation
+- **What**: Created portable IP layer that sits between templates and AI generation
+- **Architecture**: 
+  - StrategyPlanner: Detects issues → selects narrative arcs → chooses metaphors
+  - PrincipleEnforcer: Translates 6 principles into AI prompt directives
+  - Main Orchestrator: Combines both into comprehensive generation package
+- **Test Results**:
+  - Anxiety client → nature_gentle metaphor (clouds, breeze, meadow)
+  - Confidence client → tree metaphor (roots, strength, grounding)
+  - Generated 2,689 char system prompts + 52 structured instructions
+- **Files Created**: 
+  - `server/script-engine/index.ts`
+  - `server/script-engine/strategy-planner.ts`
+  - `server/script-engine/principle-enforcer.ts`
+  - `server/script-engine/config/principles.json`
+  - `server/script-engine/config/narrative-arcs.json`
+  - `server/script-engine/config/metaphor-library.json`
+- **Why Important**: IP is now versioned, portable, and can be A/B tested without code changes
 
 ### CRITICAL FIX #4: Paid Script Generation Not Saving to Database
 - **Issue**: User generated scripts twice but /admin showed empty - scripts weren't being saved
