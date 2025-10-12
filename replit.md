@@ -138,6 +138,18 @@ npx tsx server/seed.ts  # Seed database with initial data
 
 ## Recent Changes (2025-10-12)
 
+### CRITICAL FIX #4: Paid Script Generation Not Saving to Database
+- **Issue**: User generated scripts twice but /admin showed empty - scripts weren't being saved
+- **Root Cause**: Payment modal's "Queue My Generation" button only showed toast, never called backend API
+- **Resolution**: 
+  - Implemented `generateFullScriptMutation` in app.tsx that properly calls:
+    1. `/api/create-payment-intent` (mock payment)
+    2. `/api/generate-paid-script` (generates + saves to DB)
+  - Added loading state to payment modal (shows "Generating Script..." spinner)
+  - Fixed TypeScript errors with proper type annotations
+- **Verification**: Manual API tests confirmed 2 scripts saved successfully (~8,500 chars each)
+- **Files Changed**: `client/src/pages/app.tsx`, `client/src/components/payment-modal.tsx`
+
 ### CRITICAL FIX #1: Corrected 8D Framework Dimensions
 - **Issue**: Application was built with incorrect paired dimensions (Direct/Authoritarian vs Indirect/Permissive, etc.)
 - **Resolution**: Replaced with actual Erika Flint 8D Framework dimensions:
