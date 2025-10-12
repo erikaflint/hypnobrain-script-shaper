@@ -15,6 +15,14 @@ import { PaymentModal } from "@/components/payment-modal";
 import { Card } from "@/components/ui/card";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { VoicePlayer } from "@/components/voice-player";
 
 export default function App() {
   const [location] = useLocation();
@@ -59,6 +67,10 @@ export default function App() {
 
   // Payment modal
   const [paymentModalOpen, setPaymentModalOpen] = useState(false);
+
+  // Results dialog
+  const [resultsDialogOpen, setResultsDialogOpen] = useState(false);
+  const [generatedScript, setGeneratedScript] = useState<{ fullScript: string; marketingAssets: any } | null>(null);
 
   // Fetch dimensions from backend
   const { data: dimensionsData, isLoading: dimensionsLoading } = useQuery({
@@ -254,12 +266,12 @@ export default function App() {
       return result;
     },
     onSuccess: (data) => {
-      toast({
-        title: "Script Generated!",
-        description: "Your full script has been generated and saved",
+      setGeneratedScript({
+        fullScript: data.fullScript,
+        marketingAssets: data.marketingAssets,
       });
       setPaymentModalOpen(false);
-      // Could display the full script here or navigate to a results page
+      setResultsDialogOpen(true);
     },
     onError: (error) => {
       toast({
@@ -436,6 +448,58 @@ export default function App() {
         onProceed={handlePaymentProceed}
         loading={generateFullScriptMutation.isPending}
       />
+
+      <Dialog open={resultsDialogOpen} onOpenChange={setResultsDialogOpen}>
+        <DialogContent className="max-w-4xl max-h-[90vh]">
+          <DialogHeader>
+            <DialogTitle>Your Script is Ready! 🎉</DialogTitle>
+          </DialogHeader>
+          <ScrollArea className="h-[70vh] pr-4">
+            {generatedScript && (
+              <div className="space-y-6">
+                {/* Full Script */}
+                <div className="space-y-2">
+                  <h3 className="font-semibold">Full Hypnosis Script</h3>
+                  <div className="prose prose-sm max-w-none">
+                    <pre className="whitespace-pre-wrap text-sm bg-muted p-4 rounded-lg">
+                      {generatedScript.fullScript}
+                    </pre>
+                  </div>
+                </div>
+
+                {/* Voice Player */}
+                <VoicePlayer text={generatedScript.fullScript} title="Listen to Your Script" />
+
+                {/* Marketing Assets */}
+                {generatedScript.marketingAssets && (
+                  <div className="space-y-2">
+                    <h3 className="font-semibold">Marketing Assets</h3>
+                    <pre className="text-xs bg-muted p-3 rounded-lg overflow-x-auto">
+                      {JSON.stringify(generatedScript.marketingAssets, null, 2)}
+                    </pre>
+                  </div>
+                )}
+
+                <div className="flex gap-2 pt-4">
+                  <Button
+                    onClick={() => setResultsDialogOpen(false)}
+                    variant="outline"
+                    className="flex-1"
+                    data-testid="button-close-results"
+                  >
+                    Close
+                  </Button>
+                  <Link href="/admin" data-testid="link-view-all-scripts">
+                    <Button className="flex-1" data-testid="button-view-all-scripts">
+                      View All Scripts
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            )}
+          </ScrollArea>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

@@ -14,6 +14,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ArrowLeft, Eye, Calendar, Sparkles } from "lucide-react";
 import type { Generation } from "@shared/schema";
+import { VoicePlayer } from "@/components/voice-player";
 
 export default function Admin() {
   const { data: generations, isLoading } = useQuery<Generation[]>({
@@ -80,7 +81,7 @@ export default function Admin() {
                       <div className="mt-2 flex gap-2 flex-wrap text-xs text-muted-foreground">
                         <span>Archetype: {gen.archetypeId}</span>
                         <span>•</span>
-                        <span>Dimensions: {JSON.stringify(gen.dimensionsJson as Record<string, unknown>).substring(0, 50)}...</span>
+                        <span>Dimensions: {JSON.stringify(gen.dimensionsJson).substring(0, 50)}...</span>
                       </div>
                     )}
                   </div>
@@ -124,7 +125,7 @@ export default function Admin() {
                           <div className="space-y-2">
                             <h3 className="font-semibold">Dimension Values</h3>
                             <pre className="text-xs bg-muted p-3 rounded-lg overflow-x-auto">
-                              {JSON.stringify(gen.dimensionsJson as Record<string, unknown>, null, 2)}
+                              {JSON.stringify(gen.dimensionsJson, null, 2)}
                             </pre>
                           </div>
                         )}
@@ -141,12 +142,17 @@ export default function Admin() {
                           </div>
                         )}
 
+                        {/* Voice Player */}
+                        {gen.fullScript && (
+                          <VoicePlayer text={gen.fullScript} title="Listen to Script" />
+                        )}
+
                         {/* Marketing Assets */}
                         {gen.assetsJson && (
                           <div className="space-y-2">
                             <h3 className="font-semibold">Marketing Assets</h3>
                             <pre className="text-xs bg-muted p-3 rounded-lg overflow-x-auto">
-                              {JSON.stringify(gen.assetsJson as Record<string, unknown>, null, 2)}
+                              {JSON.stringify(gen.assetsJson, null, 2)}
                             </pre>
                           </div>
                         )}

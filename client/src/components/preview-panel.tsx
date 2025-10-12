@@ -2,6 +2,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Sparkles, Heart, RotateCcw } from "lucide-react";
+import { VoicePlayer } from "./voice-player";
 
 interface PreviewPanelProps {
   previewText: string | null;
@@ -104,6 +105,8 @@ export function PreviewPanel({
           </div>
         )}
       </Card>
+
+      <VoicePlayer text={previewText} title="Listen to Preview" />
 
       <div className="flex gap-3">
         <Button
