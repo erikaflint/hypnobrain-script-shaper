@@ -3,6 +3,9 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { aiService } from "./ai-service";
 import { paymentService } from "./payment-service";
+import { templateManager } from "./template-manager";
+import { templateSelector } from "./template-selector";
+import { dimensionAssembler } from "./dimension-assembler";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -299,6 +302,316 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(allGenerations);
     } catch (error: any) {
       res.status(400).json({ message: error.message });
+    }
+  });
+
+  // ========== V2 TEMPLATE-BASED ROUTES ==========
+  
+  // Get all templates (with optional filters)
+  app.get("/api/templates", async (req, res) => {
+    try {
+      const { type, category } = req.query;
+      
+      let templates;
+      if (type === 'system') {
+        templates = await templateManager.getSystemTemplates();
+      } else if (type === 'public') {
+        templates = await templateManager.getPublicTemplates();
+      } else if (category) {
+        templates = await templateManager.getTemplatesByCategory(category as string);
+      } else {
+        templates = await templateManager.getAllTemplates();
+      }
+      
+      res.json(templates);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+  
+  // Get single template by ID
+  app.get("/api/templates/:templateId", async (req, res) => {
+    try {
+      const template = await templateManager.getTemplateById(req.params.templateId);
+      if (!template) {
+        return res.status(404).json({ message: "Template not found" });
+      }
+      res.json(template);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+  
+  // Get template recommendations
+  app.post("/api/templates/recommend", async (req, res) => {
+    try {
+      const schema = z.object({
+        presentingIssue: z.string(),
+        desiredOutcome: z.string().optional(),
+        clientNotes: z.string().optional(),
+        category: z.string().optional(),
+        tags: z.array(z.string()).optional(),
+      });
+      
+      const data = schema.parse(req.body);
+      
+      const recommendations = await templateSelector.recommendTemplates(
+        data.presentingIssue,
+        data.desiredOutcome || '',
+        data.clientNotes || ''
+      );
+      
+      res.json(recommendations);
+    } catch (error: any) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+  
+  // Generate preview with template
+  app.post("/api/templates/:templateId/preview", async (req, res) => {
+    try {
+      const schema = z.object({
+        presentingIssue: z.string(),
+        desiredOutcome: z.string(),
+        clientNotes: z.string().optional(),
+      });
+      
+      const data = schema.parse(req.body);
+      const template = await templateManager.getTemplateById(req.params.templateId);
+      
+      if (!template) {
+        return res.status(404).json({ message: "Template not found" });
+      }
+      
+      // Increment usage count
+      await templateManager.incrementUsageCount(req.params.templateId);
+      
+      // Generate preview using template
+      const preview = await aiService.generatePreview({
+        template: template.jsonData as any, // JSONB returns unknown, safe to cast
+        presentingIssue: data.presentingIssue,
+        desiredOutcome: data.desiredOutcome,
+        clientNotes: data.clientNotes || '',
+      });
+      
+      res.json(preview);
+    } catch (error: any) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+  
+  // Generate full script with template
+  app.post("/api/templates/:templateId/generate", async (req, res) => {
+    try {
+      const schema = z.object({
+        presentingIssue: z.string(),
+        desiredOutcome: z.string(),
+        clientNotes: z.string().optional(),
+        paymentIntentId: z.string().optional(),
+      });
+      
+      const data = schema.parse(req.body);
+      const template = await templateManager.getTemplateById(req.params.templateId);
+      
+      if (!template) {
+        return res.status(404).json({ message: "Template not found" });
+      }
+      
+      // Increment usage count
+      await templateManager.incrementUsageCount(req.params.templateId);
+      
+      // Generate full script using template
+      const result = await aiService.generateFullScript({
+        template: template.jsonData as any, // JSONB returns unknown, safe to cast
+        presentingIssue: data.presentingIssue,
+        desiredOutcome: data.desiredOutcome,
+        clientNotes: data.clientNotes || '',
+      });
+      
+      // Save to database
+      const generation = await storage.createGeneration({
+        generationMode: 'create_new',
+        isFree: false,
+        presentingIssue: data.presentingIssue,
+        dimensionsJson: null, // Template-based, no manual dimension values
+        archetypeId: null,
+        stylesJson: null,
+        previewText: result.fullScript.substring(0, 500),
+        fullScript: result.fullScript,
+        assetsJson: result.marketingAssets,
+        paymentStatus: 'pending_payment',
+        stripePaymentIntentId: data.paymentIntentId,
+        templateUsed: template.templateId,
+      });
+      
+      res.json({ 
+        generationId: generation.id,
+        fullScript: result.fullScript,
+        marketingAssets: result.marketingAssets,
+      });
+    } catch (error: any) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+  
+  // Remix existing script with template
+  app.post("/api/templates/:templateId/remix", async (req, res) => {
+    try {
+      const schema = z.object({
+        existingScript: z.string(),
+        presentingIssue: z.string(),
+        desiredOutcome: z.string(),
+        clientNotes: z.string().optional(),
+        paymentIntentId: z.string().optional(),
+      });
+      
+      const data = schema.parse(req.body);
+      const template = await templateManager.getTemplateById(req.params.templateId);
+      
+      if (!template) {
+        return res.status(404).json({ message: "Template not found" });
+      }
+      
+      // Increment usage count
+      await templateManager.incrementUsageCount(req.params.templateId);
+      
+      // Generate remixed script using template
+      const result = await aiService.generateRemixScript({
+        template: template.jsonData as any, // JSONB returns unknown, safe to cast
+        existingScript: data.existingScript,
+        presentingIssue: data.presentingIssue,
+        desiredOutcome: data.desiredOutcome,
+        clientNotes: data.clientNotes || '',
+      });
+      
+      // Save to database
+      const generation = await storage.createGeneration({
+        generationMode: 'remix',
+        isFree: false,
+        originalScript: data.existingScript,
+        presentingIssue: data.presentingIssue,
+        dimensionsJson: null,
+        archetypeId: null,
+        stylesJson: null,
+        previewText: result.fullScript.substring(0, 500),
+        fullScript: result.fullScript,
+        assetsJson: result.marketingAssets,
+        paymentStatus: 'pending_payment',
+        stripePaymentIntentId: data.paymentIntentId,
+        templateUsed: template.templateId,
+      });
+      
+      res.json({ 
+        generationId: generation.id,
+        fullScript: result.fullScript,
+        marketingAssets: result.marketingAssets,
+      });
+    } catch (error: any) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+  
+  // Analyze script and get dimension analysis (for showing what dimensions are in a script)
+  app.post("/api/templates/analyze", async (req, res) => {
+    try {
+      const schema = z.object({
+        script: z.string(),
+      });
+      
+      const { script } = schema.parse(req.body);
+      const analysis = await aiService.analyzeScriptDimensions(script);
+      
+      res.json(analysis);
+    } catch (error: any) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+  
+  // Create new user template
+  app.post("/api/templates", async (req, res) => {
+    try {
+      const schema = z.object({
+        templateId: z.string(),
+        jsonData: z.any(), // TemplateJSON object
+        name: z.string(),
+        description: z.string().optional(),
+        category: z.string().optional(),
+        tags: z.array(z.string()).optional(),
+        userId: z.string(),
+        isPublic: z.boolean().optional(),
+      });
+      
+      const data = schema.parse(req.body);
+      
+      // Validate the JSON data structure
+      templateManager.validateTemplateJSON(data.jsonData);
+      
+      const template = await templateManager.createTemplate({
+        templateId: data.templateId,
+        jsonData: data.jsonData,
+        name: data.name,
+        description: data.description,
+        category: data.category,
+        tags: data.tags,
+        createdBy: "user",
+        userId: data.userId,
+        isPublic: data.isPublic || false,
+        isSystem: false,
+      });
+      
+      res.json(template);
+    } catch (error: any) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+  
+  // User template library: Add template to library
+  app.post("/api/user-library/templates/:templateId", async (req, res) => {
+    try {
+      const schema = z.object({
+        userId: z.string(),
+      });
+      
+      const { userId } = schema.parse(req.body);
+      const { templateId } = req.params;
+      
+      const libraryEntry = await templateManager.addTemplateToUserLibrary(userId, templateId);
+      res.json(libraryEntry);
+    } catch (error: any) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+  
+  // User template library: Remove template from library
+  app.delete("/api/user-library/templates/:templateId", async (req, res) => {
+    try {
+      const schema = z.object({
+        userId: z.string(),
+      });
+      
+      const { userId } = schema.parse(req.body);
+      const { templateId } = req.params;
+      
+      await templateManager.removeTemplateFromUserLibrary(userId, templateId);
+      res.json({ message: "Template removed from library" });
+    } catch (error: any) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+  
+  // User template library: Get user's saved templates
+  app.get("/api/user-library/templates", async (req, res) => {
+    try {
+      const { userId } = req.query;
+      
+      if (!userId) {
+        return res.status(400).json({ message: "userId query parameter required" });
+      }
+      
+      const templates = await templateManager.getUserLibraryTemplates(userId as string);
+      res.json(templates);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
     }
   });
 
