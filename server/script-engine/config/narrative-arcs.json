@@ -177,20 +177,127 @@
         "The mechanism that created the pattern can create a new one"
       ],
       "prompt_integration": "Reframe brain's capacity to form habits as a feature, not a bug. The same neuroplasticity that learned unwanted patterns can learn desired ones."
+    },
+    {
+      "id": "mind-body-unity",
+      "name": "Mind-Body Unity",
+      "description": "Mind and body are one system - changing one changes the other",
+      "core_message": "Your mind and body are unified. A shift in one creates a shift in the other.",
+      "when_to_use": ["psychosomatic issues", "chronic pain", "stress-related symptoms"],
+      "presenting_issues": ["chronic pain", "tension headaches", "stress symptoms", "psychosomatic issues"],
+      "key_language": [
+        "Your mind and body speak the same language",
+        "As your thoughts shift, your body responds",
+        "What changes in the mind, changes in the body",
+        "One system, deeply connected, working together",
+        "The body hears what the mind believes",
+        "Unified, whole, responsive to your intention"
+      ],
+      "prompt_integration": "Emphasize the bidirectional relationship between mind and body. Show how mental/emotional shifts naturally create physical changes and vice versa."
+    },
+    {
+      "id": "parts-integration",
+      "name": "Parts Integration",
+      "description": "All parts of you want the same thing - safety and wellbeing",
+      "core_message": "Even conflicting parts share a common goal when we look beneath the surface",
+      "when_to_use": ["internal conflict", "self-sabotage", "conflicting desires"],
+      "presenting_issues": ["self-sabotage", "inner conflict", "ambivalence", "part of me wants/part of me doesn't"],
+      "key_language": [
+        "Every part of you, even the ones that seem to conflict, wants your wellbeing",
+        "The part that resists and the part that wants change - both protecting you",
+        "When we listen to all parts, integration becomes natural",
+        "No part is the enemy. Each has wisdom to offer.",
+        "Beneath the conflict, a shared desire for your safety and happiness",
+        "All parts coming together, aligned in their true purpose"
+      ],
+      "prompt_integration": "Validate all parts as having positive intent. Frame integration as recognition of shared goals, not elimination of parts. Use dialogue between parts to find common ground."
+    },
+    {
+      "id": "future-self",
+      "name": "Future Self Connection",
+      "description": "Your future self is already there, calling you forward",
+      "core_message": "Connect with the version of you who has already made this transformation",
+      "when_to_use": ["goal achievement", "identity shifts", "major transitions"],
+      "presenting_issues": ["uncertainty about future", "lacking direction", "identity confusion", "major life decisions"],
+      "key_language": [
+        "Imagine the you who has already made this change, looking back with wisdom",
+        "Your future self is already there, waiting, beckoning you forward",
+        "Step into the experience of being that version of you",
+        "What does your future self know that you're beginning to remember now?",
+        "From that future place, looking back, what wisdom arises?",
+        "The path illuminated by the one who's already walked it - you"
+      ],
+      "prompt_integration": "Use temporal perspective shifting to access resourceful future states. Have client experience themselves as already transformed, then bring that wisdom back to present."
+    },
+    {
+      "id": "inner-wisdom",
+      "name": "Inner Wisdom Access",
+      "description": "Deep within, you know what you need - we're creating space to hear it",
+      "core_message": "The answers are within you. We're simply quieting the noise so you can hear them.",
+      "when_to_use": ["decision making", "confusion", "seeking clarity"],
+      "presenting_issues": ["confusion", "indecision", "seeking answers", "lost direction"],
+      "key_language": [
+        "Beneath the noise, a quiet knowing",
+        "Your inner wisdom has been there all along",
+        "In the stillness, your truth becomes clear",
+        "The part of you that already knows, waiting to be heard",
+        "Wisdom rising from within, clear and certain",
+        "You've always known. Now you're ready to hear it."
+      ],
+      "prompt_integration": "Create deep receptive states for inner wisdom to emerge. Use minimal guidance - more space for client's own knowing to surface. Frame therapist as facilitator, not source of answers."
+    },
+    {
+      "id": "sensory-amplification",
+      "name": "Sensory Amplification",
+      "description": "What we notice grows stronger - amplify the desired state through sensory detail",
+      "core_message": "The more vividly you experience something, the more real it becomes",
+      "when_to_use": ["strengthening positive states", "creating new experiences", "embodiment work"],
+      "presenting_issues": ["weak motivation", "difficulty feeling positive states", "disconnection from experience"],
+      "key_language": [
+        "Notice how that feels in your body - really notice",
+        "And as you pay attention to that sensation, it grows stronger",
+        "What do you see? What do you hear? What do you feel?",
+        "The more you notice, the more vivid it becomes",
+        "Amplifying that experience with each breath",
+        "Rich, detailed, alive - growing with your attention"
+      ],
+      "prompt_integration": "Guide detailed sensory exploration of desired states. Layer sensory modalities (visual, kinesthetic, auditory) to deepen experience. What's noticed becomes amplified."
+    },
+    {
+      "id": "resource-activation",
+      "name": "Resource Activation",
+      "description": "You have resources you haven't fully accessed - let's activate them",
+      "core_message": "Strengths, skills, and capacities you already possess, now fully available",
+      "when_to_use": ["building confidence", "facing challenges", "empowerment"],
+      "presenting_issues": ["feeling inadequate", "facing challenges", "need for strength", "overwhelm"],
+      "key_language": [
+        "Accessing resources you already have but perhaps haven't fully used",
+        "Strengths that are yours, now fully available",
+        "Every experience of resilience, every moment of courage - accessible now",
+        "Your inner resources, activated and ready",
+        "Capacity you've built over a lifetime, available in this moment",
+        "Not creating something new - activating what's already yours"
+      ],
+      "prompt_integration": "Guide recall and activation of past resources (times of strength, courage, resilience). Anchor these resources in body. Make them portable and accessible for future use."
     }
   ],
   "arc_selection_rules": {
     "always_include": ["effortlessness", "re-minding", "two-tempos"],
     "issue_mappings": {
-      "anxiety": ["emotional-physical-chain", "effortlessness"],
-      "confidence": ["recognition-ego-strengthening", "inherent-wholeness"],
-      "stuck": ["relief-to-new-life", "two-tempos"],
+      "anxiety": ["emotional-physical-chain", "effortlessness", "mind-body-unity"],
+      "confidence": ["recognition-ego-strengthening", "resource-activation"],
+      "stuck": ["relief-to-new-life", "two-tempos", "future-self"],
       "habits": ["brain-master-skill", "effortlessness"],
-      "trauma": ["emotional-physical-chain", "two-tempos"],
-      "self-worth": ["recognition-ego-strengthening"],
-      "life-change": ["relief-to-new-life"]
+      "trauma": ["emotional-physical-chain", "two-tempos", "parts-integration"],
+      "self-worth": ["recognition-ego-strengthening", "resource-activation"],
+      "life-change": ["relief-to-new-life", "future-self"],
+      "chronic-pain": ["mind-body-unity", "emotional-physical-chain"],
+      "internal-conflict": ["parts-integration"],
+      "confusion": ["inner-wisdom", "future-self"],
+      "overwhelm": ["resource-activation", "mind-body-unity"],
+      "disconnection": ["sensory-amplification", "mind-body-unity"]
     },
-    "max_arcs_per_script": 3,
+    "max_arcs_per_script": 5,
     "priority_order": ["always_include", "issue_specific", "template_preferred"]
   }
 }

@@ -121,7 +121,12 @@ export class StrategyPlanner {
       'habits': ['habit', 'pattern', 'automatic', 'addiction', 'compulsion', 'routine'],
       'trauma': ['trauma', 'ptsd', 'past hurt', 'abuse', 'painful memory'],
       'self-worth': ['worth', 'value', 'deserve', 'self-love', 'self-acceptance'],
-      'life-change': ['transition', 'change', 'new chapter', 'life change', 'transformation']
+      'life-change': ['transition', 'change', 'new chapter', 'life change', 'transformation'],
+      'chronic-pain': ['chronic pain', 'pain', 'headache', 'body pain', 'physical discomfort'],
+      'internal-conflict': ['conflict', 'torn', 'ambivalent', 'part of me wants', 'self-sabotage'],
+      'confusion': ['confused', 'unclear', 'don\'t know', 'uncertain', 'lost', 'indecision'],
+      'overwhelm': ['overwhelmed', 'too much', 'can\'t cope', 'drowning', 'exhausted'],
+      'disconnection': ['disconnected', 'numb', 'detached', 'can\'t feel', 'out of touch']
     };
     
     for (const [issue, keywords] of Object.entries(issuePatterns)) {
