@@ -9,7 +9,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { AlertCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { AlertCircle, Dices } from "lucide-react";
 
 interface ClientContextFormProps {
   presentingIssue: string;
@@ -35,6 +36,69 @@ const PRESENTING_ISSUES = [
   "Other",
 ];
 
+const ISSUE_OUTCOME_PAIRS: Record<string, string[]> = {
+  "Anxiety": [
+    "Feel calm and in control",
+    "Experience peace and relaxation",
+    "Trust my ability to handle challenges",
+    "Live with ease and confidence",
+  ],
+  "Weight Loss": [
+    "Reach and maintain a healthy weight naturally",
+    "Develop a positive relationship with food",
+    "Feel energized and comfortable in my body",
+    "Make healthy choices effortlessly",
+  ],
+  "Smoking Cessation": [
+    "Be free from smoking completely",
+    "Breathe easily and feel healthier",
+    "Live as a confident non-smoker",
+    "Enjoy life without cigarettes",
+  ],
+  "Confidence": [
+    "Feel self-assured in all situations",
+    "Speak and act with confidence",
+    "Trust my abilities and judgment",
+    "Project confidence naturally",
+  ],
+  "Sleep Issues": [
+    "Sleep deeply and wake refreshed",
+    "Fall asleep easily each night",
+    "Enjoy restful, restorative sleep",
+    "Wake up energized and ready",
+  ],
+  "Stress Management": [
+    "Handle stress with ease and grace",
+    "Stay calm under pressure",
+    "Respond to challenges peacefully",
+    "Maintain balance and clarity",
+  ],
+  "Pain Management": [
+    "Experience comfort and relief",
+    "Manage discomfort effectively",
+    "Feel more at ease in my body",
+    "Live with reduced pain levels",
+  ],
+  "Phobias": [
+    "Feel safe and at ease",
+    "Approach situations with confidence",
+    "Live free from fear",
+    "Respond calmly and rationally",
+  ],
+  "Performance Enhancement": [
+    "Perform at my peak ability",
+    "Excel with focus and skill",
+    "Achieve my performance goals",
+    "Compete with confidence and ease",
+  ],
+  "Other": [
+    "Achieve my desired outcome",
+    "Experience positive change",
+    "Feel empowered and capable",
+    "Live with greater well-being",
+  ],
+};
+
 export function ClientContextForm({
   presentingIssue,
   desiredOutcome,
@@ -45,13 +109,40 @@ export function ClientContextForm({
   onBenefitsChange,
   onCustomNotesChange,
 }: ClientContextFormProps) {
+  const handleDiceMix = () => {
+    // Randomly select a presenting issue (exclude "Other")
+    const availableIssues = PRESENTING_ISSUES.filter(issue => issue !== "Other");
+    const randomIssue = availableIssues[Math.floor(Math.random() * availableIssues.length)];
+    
+    // Get matching outcomes for that issue
+    const matchingOutcomes = ISSUE_OUTCOME_PAIRS[randomIssue];
+    const randomOutcome = matchingOutcomes[Math.floor(Math.random() * matchingOutcomes.length)];
+    
+    // Update both fields
+    onPresentingIssueChange(randomIssue);
+    onDesiredOutcomeChange(randomOutcome);
+  };
+
   return (
     <Card className="p-6 space-y-6">
-      <div>
-        <h3 className="font-semibold mb-2">Client Context</h3>
-        <p className="text-sm text-muted-foreground">
-          Provide details about the therapeutic session
-        </p>
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h3 className="font-semibold mb-2">Client Context</h3>
+          <p className="text-sm text-muted-foreground">
+            Provide details about the therapeutic session
+          </p>
+        </div>
+        <Button 
+          type="button"
+          variant="outline" 
+          size="sm"
+          onClick={handleDiceMix}
+          className="shrink-0"
+          data-testid="button-dice-mix"
+        >
+          <Dices className="w-4 h-4 mr-2" />
+          Dice Mix
+        </Button>
       </div>
 
       <div className="space-y-2">
