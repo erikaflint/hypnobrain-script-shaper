@@ -71,6 +71,12 @@ export const generations = pgTable("generations", {
   stripePaymentIntentId: varchar("stripe_payment_intent_id", { length: 255 }),
   paymentStatus: varchar("payment_status", { length: 50 }).default("pending_payment"), // 'pending_payment', 'completed', 'failed'
   templateUsed: varchar("template_used", { length: 255 }).references(() => templates.templateId, { onDelete: 'set null' }), // V2: Track which template was used
+  
+  // Version control fields
+  isFavorite: boolean("is_favorite").default(false).notNull(),
+  parentGenerationId: integer("parent_generation_id").references(() => generations.id, { onDelete: 'set null' }),
+  versionLabel: varchar("version_label", { length: 100 }),
+  
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
