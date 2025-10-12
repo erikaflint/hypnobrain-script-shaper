@@ -1,16 +1,13 @@
+import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { AlertCircle, Dices } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import { AlertCircle, Dices, Check, ChevronsUpDown } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface ClientContextFormProps {
   presentingIssue: string;
@@ -109,6 +106,10 @@ export function ClientContextForm({
   onBenefitsChange,
   onCustomNotesChange,
 }: ClientContextFormProps) {
+  const [issueOpen, setIssueOpen] = useState(false);
+  const [outcomeOpen, setOutcomeOpen] = useState(false);
+  const [outcomeSearch, setOutcomeSearch] = useState("");
+
   const handleDiceMix = () => {
     // Randomly select a presenting issue (exclude "Other")
     const availableIssues = PRESENTING_ISSUES.filter(issue => issue !== "Other");
@@ -122,6 +123,16 @@ export function ClientContextForm({
     onPresentingIssueChange(randomIssue);
     onDesiredOutcomeChange(randomOutcome);
   };
+
+  // Get suggested outcomes based on selected issue
+  const suggestedOutcomes = presentingIssue && ISSUE_OUTCOME_PAIRS[presentingIssue] 
+    ? ISSUE_OUTCOME_PAIRS[presentingIssue]
+    : [];
+
+  // Filter outcomes based on search
+  const filteredOutcomes = suggestedOutcomes.filter(outcome =>
+    outcome.toLowerCase().includes(outcomeSearch.toLowerCase())
+  );
 
   return (
     <Card className="p-6 space-y-6">
@@ -147,29 +158,136 @@ export function ClientContextForm({
 
       <div className="space-y-2">
         <Label htmlFor="presenting-issue">Presenting Issue *</Label>
-        <Select value={presentingIssue} onValueChange={onPresentingIssueChange}>
-          <SelectTrigger id="presenting-issue" data-testid="select-presenting-issue">
-            <SelectValue placeholder="Select an issue to address" />
-          </SelectTrigger>
-          <SelectContent>
-            {PRESENTING_ISSUES.map((issue) => (
-              <SelectItem key={issue} value={issue}>
-                {issue}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <Popover open={issueOpen} onOpenChange={setIssueOpen}>
+          <PopoverTrigger asChild>
+            <Button
+              id="presenting-issue"
+              variant="outline"
+              role="combobox"
+              aria-expanded={issueOpen}
+              className="w-full justify-between font-normal"
+              data-testid="select-presenting-issue"
+            >
+              {presentingIssue || "Select or type an issue to address..."}
+              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-full p-0" align="start">
+            <Command>
+              <CommandInput placeholder="Search issues..." />
+              <CommandList>
+                <CommandEmpty>No issue found.</CommandEmpty>
+                <CommandGroup>
+                  {PRESENTING_ISSUES.map((issue) => (
+                    <CommandItem
+                      key={issue}
+                      value={issue}
+                      onSelect={(currentValue) => {
+                        onPresentingIssueChange(currentValue === presentingIssue ? "" : currentValue);
+                        setIssueOpen(false);
+                      }}
+                      data-testid={`option-issue-${issue.toLowerCase().replace(/\s+/g, '-')}`}
+                    >
+                      <Check
+                        className={cn(
+                          "mr-2 h-4 w-4",
+                          presentingIssue === issue ? "opacity-100" : "opacity-0"
+                        )}
+                      />
+                      {issue}
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              </CommandList>
+            </Command>
+          </PopoverContent>
+        </Popover>
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="desired-outcome">Desired Outcome *</Label>
-        <Input
-          id="desired-outcome"
-          placeholder="e.g., Feel calm and in control"
-          value={desiredOutcome}
-          onChange={(e) => onDesiredOutcomeChange(e.target.value)}
-          data-testid="input-desired-outcome"
-        />
+        <Label htmlFor="desired-outcome">
+          Desired Outcome *
+          {presentingIssue && suggestedOutcomes.length > 0 && (
+            <span className="ml-2 text-xs text-muted-foreground">
+              ({suggestedOutcomes.length} suggestions available)
+            </span>
+          )}
+        </Label>
+        <div className="relative">
+          <Input
+            id="desired-outcome"
+            placeholder="Type desired outcome or click suggestions..."
+            value={desiredOutcome}
+            onChange={(e) => onDesiredOutcomeChange(e.target.value)}
+            onFocus={() => {
+              if (suggestedOutcomes.length > 0) {
+                setOutcomeOpen(true);
+              }
+            }}
+            onBlur={() => {
+              // Close suggestions after a short delay to allow clicking on suggestions
+              setTimeout(() => setOutcomeOpen(false), 200);
+            }}
+            data-testid="input-desired-outcome"
+            className="pr-10"
+          />
+          {suggestedOutcomes.length > 0 && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              className="absolute right-0 top-0 h-full"
+              onClick={() => setOutcomeOpen(!outcomeOpen)}
+              data-testid="button-show-suggestions"
+            >
+              <ChevronsUpDown className="h-4 w-4" />
+            </Button>
+          )}
+          {outcomeOpen && suggestedOutcomes.length > 0 && (
+            <div className="absolute z-50 w-full mt-1 rounded-md border bg-popover text-popover-foreground shadow-md">
+              <Command shouldFilter={false}>
+                <CommandInput 
+                  placeholder="Search suggestions..." 
+                  value={outcomeSearch}
+                  onValueChange={setOutcomeSearch}
+                  className="border-b"
+                />
+                <CommandList>
+                  {filteredOutcomes.length === 0 ? (
+                    <CommandEmpty>
+                      <div className="p-2 text-sm text-muted-foreground">
+                        No matching suggestions
+                      </div>
+                    </CommandEmpty>
+                  ) : (
+                    <CommandGroup>
+                      {filteredOutcomes.map((outcome, idx) => (
+                        <CommandItem
+                          key={idx}
+                          value={outcome}
+                          onSelect={(currentValue) => {
+                            onDesiredOutcomeChange(currentValue);
+                            setOutcomeOpen(false);
+                            setOutcomeSearch("");
+                          }}
+                          data-testid={`option-outcome-${idx}`}
+                        >
+                          <Check
+                            className={cn(
+                              "mr-2 h-4 w-4",
+                              desiredOutcome === outcome ? "opacity-100" : "opacity-0"
+                            )}
+                          />
+                          {outcome}
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  )}
+                </CommandList>
+              </Command>
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="space-y-2">
