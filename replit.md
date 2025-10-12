@@ -16,6 +16,7 @@ Do not make changes to the file Y.
 - **Frontend**: React + TypeScript + Vite
 - **Backend**: Express.js + TypeScript
 - **Database**: PostgreSQL (Neon) + Drizzle ORM
+- **Authentication**: Replit Auth (OpenID Connect) with Google, GitHub, email/password support
 - **AI**: Anthropic Claude Sonnet 4
 - **Styling**: Tailwind CSS + shadcn/ui components
 - **State Management**: TanStack Query (React Query v5)
@@ -71,8 +72,18 @@ The ScriptEngine (`server/script-engine/`) is the portable IP layer responsible 
     -   `/admin` - Admin panel
     -   Note: `/app` is deprecated (old v1 architecture)
 
+###  Authentication System
+-   **Provider**: Replit Auth (OpenID Connect)
+-   **Login Methods**: Google, GitHub, X (Twitter), Apple, Email/Password
+-   **Session Management**: PostgreSQL-backed sessions (`sessions` table) with 7-day TTL
+-   **User Storage**: `users` table with UUID primary keys, stores email, first/last name, profile image
+-   **Protected Routes**: Script generation and dashboard require authentication
+-   **Client Integration**: `useAuth()` hook provides authentication state, automatic redirect to login when unauthorized
+-   **Middleware**: `isAuthenticated` middleware protects API routes, handles token refresh automatically
+
 ### Database Schema Highlights
--   **Core Tables**: `dimensions`, `archetypes`, `styles`, `pricing`, `generations`, `free_script_usage`, `admin_users`.
+-   **Core Tables**: `users`, `sessions`, `dimensions`, `archetypes`, `styles`, `pricing`, `generations`, `free_script_usage`, `admin_users`.
+-   **User Ownership**: `generations.userId` links scripts to authenticated users
 -   **Naming Convention**: `snake_case` in database, `camelCase` in Drizzle ORM TypeScript schema.
 
 ## External Dependencies

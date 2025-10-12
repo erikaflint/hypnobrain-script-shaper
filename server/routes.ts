@@ -6,9 +6,25 @@ import { paymentService } from "./payment-service";
 import { templateManager } from "./template-manager";
 import { templateSelector } from "./template-selector";
 import { dimensionAssembler } from "./dimension-assembler";
+import { setupAuth, isAuthenticated } from "./replitAuth";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Set up Replit Auth
+  await setupAuth(app);
+
+  // Auth user endpoint
+  app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      res.json(user);
+    } catch (error) {
+      console.error("Error fetching user:", error);
+      res.status(500).json({ message: "Failed to fetch user" });
+    }
+  });
+
   // Get all dimensions
   app.get("/api/dimensions", async (req, res) => {
     try {
@@ -39,7 +55,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get user's saved generations
+  // Get authenticated user's saved generations
+  app.get("/api/user/generations", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const generations = await storage.getGenerationsByUserId(userId);
+      res.json(generations);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+  
+  // Get user's saved generations by email (legacy - for backwards compatibility)
   app.get("/api/generations", async (req, res) => {
     try {
       const email = req.query.email as string;
@@ -492,8 +519,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  // Generate full script with template
-  app.post("/api/templates/:templateId/generate", async (req, res) => {
+  // Generate full script with template (protected - requires auth)
+  app.post("/api/templates/:templateId/generate", isAuthenticated, async (req: any, res) => {
     try {
       const schema = z.object({
         presentingIssue: z.string(),
@@ -509,6 +536,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Template not found" });
       }
       
+      // Get authenticated user ID
+      const userId = req.user.claims.sub;
+      
       // Increment usage count
       await templateManager.incrementUsageCount(req.params.templateId);
       
@@ -520,8 +550,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         clientNotes: data.clientNotes || '',
       });
       
-      // Save to database
+      // Save to database with userId
       const generation = await storage.createGeneration({
+        userId, // Save authenticated user's ID
         generationMode: 'create_new',
         isFree: false,
         presentingIssue: data.presentingIssue,

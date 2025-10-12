@@ -7,6 +7,7 @@ import {
   pricing,
   generations,
   freeScriptUsage,
+  users,
   type Dimension,
   type Archetype,
   type Style,
@@ -15,9 +16,15 @@ import {
   type FreeScriptUsage,
   type InsertGeneration,
   type InsertFreeScriptUsage,
+  type User,
+  type UpsertUser,
 } from "@shared/schema";
 
 export interface IStorage {
+  // User operations (for Replit Auth)
+  getUser(id: string): Promise<User | undefined>;
+  upsertUser(user: UpsertUser): Promise<User>;
+  
   // Dimensions
   getAllDimensions(): Promise<Dimension[]>;
   
@@ -37,6 +44,7 @@ export interface IStorage {
   getGenerationById(id: number): Promise<Generation | undefined>;
   getAllGenerations(): Promise<Generation[]>;
   getGenerationsByEmail(email: string): Promise<Generation[]>;
+  getGenerationsByUserId(userId: string): Promise<Generation[]>;
   getGenerationsByParentId(parentId: number): Promise<Generation[]>;
   updateGenerationPaymentStatus(id: number, paymentStatus: string): Promise<void>;
   updateGenerationScript(id: number, fullScript: string): Promise<void>;
@@ -49,6 +57,27 @@ export interface IStorage {
 }
 
 export class DatabaseStorage implements IStorage {
+  // User operations (for Replit Auth)
+  async getUser(id: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user;
+  }
+
+  async upsertUser(userData: UpsertUser): Promise<User> {
+    const [user] = await db
+      .insert(users)
+      .values(userData)
+      .onConflictDoUpdate({
+        target: users.id,
+        set: {
+          ...userData,
+          updatedAt: new Date(),
+        },
+      })
+      .returning();
+    return user;
+  }
+
   // Dimensions
   async getAllDimensions(): Promise<Dimension[]> {
     return await db.select().from(dimensions);
@@ -100,6 +129,14 @@ export class DatabaseStorage implements IStorage {
       .select()
       .from(generations)
       .where(eq(generations.email, email))
+      .orderBy(desc(generations.createdAt));
+  }
+  
+  async getGenerationsByUserId(userId: string): Promise<Generation[]> {
+    return await db
+      .select()
+      .from(generations)
+      .where(eq(generations.userId, userId))
       .orderBy(desc(generations.createdAt));
   }
   

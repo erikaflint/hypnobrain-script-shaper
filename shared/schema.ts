@@ -4,6 +4,31 @@ import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 import { relations } from "drizzle-orm";
 
+// Session storage table for Replit Auth
+export const sessions = pgTable(
+  "sessions",
+  {
+    sid: varchar("sid").primaryKey(),
+    sess: jsonb("sess").notNull(),
+    expire: timestamp("expire").notNull(),
+  },
+  (table) => [index("IDX_session_expire").on(table.expire)],
+);
+
+// User storage table for Replit Auth
+export const users = pgTable("users", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  email: varchar("email").unique(),
+  firstName: varchar("first_name"),
+  lastName: varchar("last_name"),
+  profileImageUrl: varchar("profile_image_url"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export type UpsertUser = typeof users.$inferInsert;
+export type User = typeof users.$inferSelect;
+
 // Dimension configuration table
 export const dimensions = pgTable("dimensions", {
   id: serial("id").primaryKey(),
@@ -51,8 +76,9 @@ export const pricing = pgTable("pricing", {
 // Generation history (for analytics)
 export const generations = pgTable("generations", {
   id: serial("id").primaryKey(),
+  userId: varchar("user_id").references(() => users.id, { onDelete: 'cascade' }), // Link to authenticated user
   sessionId: varchar("session_id", { length: 255 }),
-  email: varchar("email", { length: 255 }),
+  email: varchar("email", { length: 255 }), // Keep for backwards compatibility
   generationMode: varchar("generation_mode", { length: 20 }).notNull(), // 'create_new', 'remix', or 'free_weekly'
   isFree: boolean("is_free").default(false).notNull(),
   originalScript: text("original_script"),
@@ -207,21 +233,6 @@ export type InsertFreeScriptUsage = z.infer<typeof insertFreeScriptUsageSchema>;
 
 export type AdminUser = typeof adminUsers.$inferSelect;
 export type InsertAdminUser = z.infer<typeof insertAdminUserSchema>;
-
-// Keep users table for compatibility (not used in this app)
-export const users = pgTable("users", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  username: text("username").notNull().unique(),
-  password: text("password").notNull(),
-});
-
-export const insertUserSchema = createInsertSchema(users).pick({
-  username: true,
-  password: true,
-});
-
-export type InsertUser = z.infer<typeof insertUserSchema>;
-export type User = typeof users.$inferSelect;
 
 // V2: Template schemas and types
 export const insertTemplateSchema = createInsertSchema(templates).omit({

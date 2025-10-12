@@ -1,24 +1,39 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { VoicePlayer } from "@/components/voice-player";
 import { useToast } from "@/hooks/use-toast";
-import { Copy, FileText, Calendar, Tag, Sparkles, Eye, Home, Wand2, Star, RotateCcw } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { isUnauthorizedError } from "@/lib/authUtils";
+import { Copy, FileText, Calendar, Tag, Sparkles, Home, Wand2, Star, RotateCcw } from "lucide-react";
 import { format } from "date-fns";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import type { Generation } from "@shared/schema";
 
 export default function Dashboard() {
-  const [email, setEmail] = useState("");
-  const [searchEmail, setSearchEmail] = useState("");
   const { toast } = useToast();
+  const { isAuthenticated, isLoading: authLoading } = useAuth();
+
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!authLoading && !isAuthenticated) {
+      toast({
+        title: "Unauthorized",
+        description: "You are logged out. Logging in again...",
+        variant: "destructive",
+      });
+      setTimeout(() => {
+        window.location.href = "/api/login";
+      }, 500);
+      return;
+    }
+  }, [isAuthenticated, authLoading, toast]);
 
   const { data: generations, isLoading, error } = useQuery<Generation[]>({
-    queryKey: ["/api/generations", { email: searchEmail }],
-    enabled: !!searchEmail,
+    queryKey: ["/api/user/generations"],
+    enabled: isAuthenticated,
   });
 
   // Mutation for toggling favorite
@@ -30,25 +45,13 @@ export default function Dashboard() {
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/generations", { email: searchEmail }] });
+      queryClient.invalidateQueries({ queryKey: ["/api/user/generations"] });
       toast({
         title: "Updated",
         description: "Favorite status updated",
       });
     },
   });
-
-  const handleSearch = () => {
-    if (!email.trim()) {
-      toast({
-        title: "Email required",
-        description: "Please enter your email to view saved scripts",
-        variant: "destructive",
-      });
-      return;
-    }
-    setSearchEmail(email);
-  };
 
   const copyToClipboard = (text: string, label: string) => {
     navigator.clipboard.writeText(text);
@@ -100,28 +103,6 @@ export default function Dashboard() {
           </p>
         </div>
 
-        {/* Email Search */}
-        <Card className="p-6 mb-8">
-          <div className="flex gap-3">
-            <Input
-              type="email"
-              placeholder="Enter your email to view scripts"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-              data-testid="input-email-search"
-            />
-            <Button
-              onClick={handleSearch}
-              disabled={!email.trim()}
-              data-testid="button-search-scripts"
-            >
-              <Eye className="w-4 h-4 mr-2" />
-              View Scripts
-            </Button>
-          </div>
-        </Card>
-
         {/* Loading State */}
         {isLoading && (
           <div className="text-center py-12">
@@ -131,7 +112,7 @@ export default function Dashboard() {
         )}
 
         {/* Empty State */}
-        {!isLoading && searchEmail && generations?.length === 0 && (
+        {!isLoading && generations?.length === 0 && (
           <Card className="p-12 text-center">
             <FileText className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
             <h3 className="text-lg font-semibold mb-2">No scripts found</h3>
