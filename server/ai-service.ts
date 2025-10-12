@@ -1,5 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { dimensionAssembler, type AssembledPrompt } from './dimension-assembler';
+import { scriptEngine } from './script-engine';
 import type { TemplateJSON } from '@shared/schema';
 
 /*
@@ -81,9 +82,10 @@ export interface RemixAnalysisResult {
 
 export class AIService {
   /**
-   * Generate preview using template-based approach
+   * Generate preview using template-based approach + ScriptEngine IP
    */
   async generatePreview(params: TemplateScriptGenerationParams): Promise<PreviewGenerationResult> {
+    // Step 1: Get dimension mix from template
     const assembled = dimensionAssembler.assemblePrompt(
       params.template,
       params.presentingIssue,
@@ -91,12 +93,32 @@ export class AIService {
       params.clientNotes || ''
     );
     
+    // Step 2: Get IP-enhanced directives from ScriptEngine
+    const engineOutput = await scriptEngine.generate({
+      presentingIssue: params.presentingIssue,
+      desiredOutcome: params.desiredOutcome,
+      clientNotes: params.clientNotes,
+      symbolicDimensionLevel: params.template.dimensions.symbolic.level,
+      somaticDimensionLevel: params.template.dimensions.somatic.level,
+      clientLevel: 'beginner', // Default for preview
+      targetTranceDep: 'light'
+    });
+    
+    // Step 3: Combine both into enhanced prompts
+    const enhancedSystemPrompt = `${assembled.systemPrompt}
+
+${engineOutput.enhancedSystemPrompt}`;
+    
     const previewPrompt = `${assembled.userPrompt}
 
+**STRUCTURED INSTRUCTIONS FROM SCRIPT ENGINE**:
+${engineOutput.structuredInstructions.slice(0, 15).join('\n')}
+
 **TASK**: Generate a 150-200 word PREVIEW (NOT a full script) that demonstrates:
-1. The opening style and therapeutic approach
+1. The opening style and therapeutic approach following the core principles
 2. How the dimensional emphasis will be applied
-3. An estimated length for the full script (e.g., "15-20 minutes")
+3. The selected narrative arc(s) and metaphor
+4. An estimated length for the full script (e.g., "15-20 minutes")
 
 This is a PREVIEW ONLY - do not generate the complete script.
 
@@ -109,7 +131,7 @@ Format as JSON:
     const response = await anthropic.messages.create({
       model: DEFAULT_MODEL_STR,
       max_tokens: 2000,
-      system: assembled.systemPrompt,
+      system: enhancedSystemPrompt,
       messages: [{ role: 'user', content: previewPrompt }],
     });
 
@@ -122,9 +144,10 @@ Format as JSON:
   }
 
   /**
-   * Generate full script using template-based approach
+   * Generate full script using template-based approach + ScriptEngine IP
    */
   async generateFullScript(params: TemplateScriptGenerationParams): Promise<FullScriptGenerationResult> {
+    // Step 1: Get dimension mix from template
     const assembled = dimensionAssembler.assemblePrompt(
       params.template,
       params.presentingIssue,
@@ -132,20 +155,47 @@ Format as JSON:
       params.clientNotes || ''
     );
     
+    // Step 2: Get IP-enhanced directives from ScriptEngine
+    const engineOutput = await scriptEngine.generate({
+      presentingIssue: params.presentingIssue,
+      desiredOutcome: params.desiredOutcome,
+      clientNotes: params.clientNotes,
+      symbolicDimensionLevel: params.template.dimensions.symbolic.level,
+      somaticDimensionLevel: params.template.dimensions.somatic.level,
+      clientLevel: 'intermediate', // Full scripts assume some experience
+      targetTranceDep: 'medium'
+    });
+    
+    // Step 3: Combine both into enhanced prompts
+    const enhancedSystemPrompt = `${assembled.systemPrompt}
+
+${engineOutput.enhancedSystemPrompt}
+
+## GENERATION CONTRACT
+Selected Narrative Arcs: ${engineOutput.generationContract.selectedArcs.map(a => a.arcName).join(', ')}
+Primary Metaphor: ${engineOutput.generationContract.primaryMetaphor?.family || 'None'}
+
+You MUST weave these narrative arcs throughout the script and maintain metaphor consistency.`;
+    
     const fullScriptPrompt = `${assembled.userPrompt}
 
-**TASK**: Generate a COMPLETE hypnosis script following the dimensional instructions provided.
+**STRUCTURED INSTRUCTIONS FROM SCRIPT ENGINE**:
+${engineOutput.structuredInstructions.join('\n')}
+
+**TASK**: Generate a COMPLETE hypnosis script following ALL the instructions above.
 
 Requirements:
 1. FULL SCRIPT (1500-2000 words) with all phases:
-   - Induction (guide client into trance)
-   - Deepening (deepen the trance state)
-   - Therapeutic work (address the issue using the specified dimensional emphasis)
-   - Emergence (guide client out of trance safely)
+   - Induction (guide client into trance) - Use somatic anchoring early (first 100-150 words)
+   - Deepening (deepen the trance state) - Apply selected narrative arcs
+   - Therapeutic work (address the issue) - Maintain metaphor consistency, use all selected arcs
+   - Emergence (guide client out of trance safely) - Include ego strengthening closure
    
 2. Six marketing assets to help promote this therapeutic approach
 
-The script should flow naturally while emphasizing the specified dimensions according to their levels.
+3. CRITICAL: Follow ALL 6 core principles listed in the structured instructions above.
+
+The script should flow naturally while emphasizing the specified dimensions AND following the IP methodology.
 
 Format as JSON:
 {
@@ -163,7 +213,7 @@ Format as JSON:
     const response = await anthropic.messages.create({
       model: DEFAULT_MODEL_STR,
       max_tokens: 4000,
-      system: assembled.systemPrompt,
+      system: enhancedSystemPrompt,
       messages: [{ role: 'user', content: fullScriptPrompt }],
     });
 
