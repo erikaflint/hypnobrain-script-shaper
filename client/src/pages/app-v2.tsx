@@ -1,12 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeft, ArrowRight, Sparkles, Check, Sliders } from "lucide-react";
-import { useMutation } from "@tanstack/react-query";
+import { ArrowLeft, ArrowRight, Sparkles, Check, Sliders, User, MessageSquare, Eye, Wand2 } from "lucide-react";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 
@@ -37,6 +37,57 @@ export default function AppV2() {
   // Recommendations state
   const [recommendations, setRecommendations] = useState<RecommendedTemplate[]>([]);
   const [selectedTemplate, setSelectedTemplate] = useState<RecommendedTemplate | null>(null);
+  
+  // Mixer state - initialize from selectedTemplate or defaults
+  const [dimensionValues, setDimensionValues] = useState<Record<string, number>>({});
+  const [selectedArchetypeId, setSelectedArchetypeId] = useState<number | null>(null);
+  const [selectedStyleId, setSelectedStyleId] = useState<number | null>(null);
+  
+  // Load dimension values from selected template when it changes
+  useEffect(() => {
+    if (selectedTemplate?.template.jsonData) {
+      const templateData = selectedTemplate.template.jsonData as any;
+      if (templateData.dimensions) {
+        // Extract dimension levels from template
+        const values: Record<string, number> = {};
+        Object.keys(templateData.dimensions).forEach(dimName => {
+          const dimData = templateData.dimensions[dimName];
+          values[dimName] = dimData.level || 50;
+        });
+        setDimensionValues(values);
+      }
+    } else {
+      // Default to 50% for all dimensions when starting from scratch
+      setDimensionValues({
+        somatic: 50,
+        temporal: 50,
+        symbolic: 50,
+        psychological: 50,
+        perspective: 50,
+        spiritual: 50,
+        relational: 50,
+        language: 50
+      });
+    }
+  }, [selectedTemplate]);
+
+  // Fetch dimensions for sliders
+  const { data: dimensions = [] } = useQuery({
+    queryKey: ['/api/dimensions'],
+    enabled: step === "mixer"
+  });
+  
+  // Fetch archetypes for dropdown
+  const { data: archetypes = [] } = useQuery({
+    queryKey: ['/api/archetypes'],
+    enabled: step === "mixer"
+  });
+  
+  // Fetch styles for dropdown
+  const { data: styles = [] } = useQuery({
+    queryKey: ['/api/styles'],
+    enabled: step === "mixer"
+  });
 
   // Get template recommendations mutation
   const getRecommendationsMutation = useMutation({
@@ -345,8 +396,169 @@ export default function AppV2() {
         )}
 
         {step === "mixer" && (
-          <div className="text-center p-12">
-            <p className="text-muted-foreground">Dimension mixer coming in task 12...</p>
+          <div className="space-y-6">
+            {/* Mixer Header */}
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-2xl font-semibold" data-testid="mixer-title">
+                  {selectedTemplate ? `Customizing: ${selectedTemplate.template.name}` : "Create From Scratch"}
+                </h2>
+                <p className="text-muted-foreground mt-1">
+                  Adjust the 8-dimensional mix to shape your hypnosis script
+                </p>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setStep("recommendations");
+                  toast({
+                    title: "Back to Templates",
+                    description: "Returning to recommendations",
+                  });
+                }}
+                data-testid="button-back-to-recommendations"
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back
+              </Button>
+            </div>
+
+            {/* Dimension Sliders */}
+            <Card className="p-6">
+              <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                <Sliders className="w-5 h-5 text-primary" />
+                8-Dimensional Framework
+              </h3>
+              <div className="space-y-6">
+                {dimensions
+                  .filter((dim: any) => dim.enabled)
+                  .sort((a: any, b: any) => a.sortOrder - b.sortOrder)
+                  .map((dim: any) => {
+                    const value = dimensionValues[dim.name.toLowerCase()] || dim.defaultValue;
+                    return (
+                      <div key={dim.id} className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <label className="text-sm font-medium" data-testid={`label-${dim.name.toLowerCase()}`}>
+                            {dim.name}
+                          </label>
+                          <span className="text-sm text-muted-foreground" data-testid={`value-${dim.name.toLowerCase()}`}>
+                            {value}%
+                          </span>
+                        </div>
+                        <input
+                          type="range"
+                          min={dim.minValue}
+                          max={dim.maxValue}
+                          value={value}
+                          onChange={(e) => {
+                            const newValue = parseInt(e.target.value);
+                            setDimensionValues(prev => ({
+                              ...prev,
+                              [dim.name.toLowerCase()]: newValue
+                            }));
+                          }}
+                          className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer slider-thumb"
+                          data-testid={`slider-${dim.name.toLowerCase()}`}
+                        />
+                        <p className="text-xs text-muted-foreground">{dim.description}</p>
+                      </div>
+                    );
+                  })}
+              </div>
+            </Card>
+
+            {/* Archetype & Style Selection */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Archetype Dropdown */}
+              <Card className="p-6">
+                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                  <User className="w-5 h-5 text-primary" />
+                  Therapeutic Archetype
+                </h3>
+                <select
+                  value={selectedArchetypeId || ""}
+                  onChange={(e) => setSelectedArchetypeId(e.target.value ? parseInt(e.target.value) : null)}
+                  className="w-full p-3 rounded-md border bg-background"
+                  data-testid="select-archetype"
+                >
+                  <option value="">Choose an archetype...</option>
+                  {archetypes
+                    .filter((arch: any) => arch.enabled)
+                    .sort((a: any, b: any) => a.sortOrder - b.sortOrder)
+                    .map((arch: any) => (
+                      <option key={arch.id} value={arch.id}>
+                        {arch.name}
+                      </option>
+                    ))}
+                </select>
+                {selectedArchetypeId && (
+                  <p className="text-sm text-muted-foreground mt-3">
+                    {archetypes.find((a: any) => a.id === selectedArchetypeId)?.description}
+                  </p>
+                )}
+              </Card>
+
+              {/* Style Dropdown */}
+              <Card className="p-6">
+                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                  <MessageSquare className="w-5 h-5 text-primary" />
+                  Communication Style
+                </h3>
+                <select
+                  value={selectedStyleId || ""}
+                  onChange={(e) => setSelectedStyleId(e.target.value ? parseInt(e.target.value) : null)}
+                  className="w-full p-3 rounded-md border bg-background"
+                  data-testid="select-style"
+                >
+                  <option value="">Choose a style...</option>
+                  {styles
+                    .filter((style: any) => style.enabled)
+                    .sort((a: any, b: any) => a.sortOrder - b.sortOrder)
+                    .map((style: any) => (
+                      <option key={style.id} value={style.id}>
+                        {style.name}
+                      </option>
+                    ))}
+                </select>
+                {selectedStyleId && (
+                  <p className="text-sm text-muted-foreground mt-3">
+                    {styles.find((s: any) => s.id === selectedStyleId)?.description}
+                  </p>
+                )}
+              </Card>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex gap-4 justify-end">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  toast({
+                    title: "Preview Generation",
+                    description: "Generating preview...",
+                  });
+                  // Preview generation will be implemented
+                }}
+                data-testid="button-preview"
+              >
+                <Eye className="w-4 h-4 mr-2" />
+                Preview Script
+              </Button>
+              <Button
+                onClick={() => {
+                  toast({
+                    title: "Generating Full Script",
+                    description: "Creating your hypnosis script...",
+                  });
+                  // Full generation will be implemented
+                }}
+                data-testid="button-generate"
+              >
+                <Wand2 className="w-4 h-4 mr-2" />
+                Generate Full Script ($3)
+              </Button>
+            </div>
           </div>
         )}
 
