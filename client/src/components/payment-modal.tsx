@@ -7,15 +7,16 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { CreditCard, Clock } from "lucide-react";
+import { CreditCard, Clock, Loader2 } from "lucide-react";
 
 interface PaymentModalProps {
   open: boolean;
   onClose: () => void;
   onProceed: () => void;
+  loading?: boolean;
 }
 
-export function PaymentModal({ open, onClose, onProceed }: PaymentModalProps) {
+export function PaymentModal({ open, onClose, onProceed, loading = false }: PaymentModalProps) {
   return (
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
       <DialogContent className="sm:max-w-md">
@@ -48,14 +49,23 @@ export function PaymentModal({ open, onClose, onProceed }: PaymentModalProps) {
           <Button 
             onClick={onProceed} 
             className="w-full"
+            disabled={loading}
             data-testid="button-queue-generation"
           >
-            Queue My Generation
+            {loading ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Generating Script...
+              </>
+            ) : (
+              'Queue My Generation'
+            )}
           </Button>
           <Button 
             onClick={onClose} 
             variant="outline" 
             className="w-full"
+            disabled={loading}
             data-testid="button-cancel-payment"
           >
             Cancel

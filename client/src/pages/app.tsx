@@ -77,7 +77,7 @@ export default function App() {
 
   // Initialize dimension values and default selections from backend data
   useEffect(() => {
-    if (dimensionsData && !analyzed) {
+    if (dimensionsData && Array.isArray(dimensionsData) && !analyzed) {
       const initialDimensions: Record<string, number> = {};
       dimensionsData.forEach((dim: any) => {
         initialDimensions[dim.name] = dim.defaultValue || 50;
@@ -88,20 +88,20 @@ export default function App() {
 
   // Set default archetype and style selections when data loads
   useEffect(() => {
-    if (archetypesData && archetypesData.length > 0 && !selectedArchetypeId) {
+    if (archetypesData && Array.isArray(archetypesData) && archetypesData.length > 0 && !selectedArchetypeId) {
       setSelectedArchetypeId(archetypesData[0].id);
     }
   }, [archetypesData, selectedArchetypeId]);
 
   useEffect(() => {
-    if (stylesData && stylesData.length > 0 && selectedStyleIds.length === 0) {
+    if (stylesData && Array.isArray(stylesData) && stylesData.length > 0 && selectedStyleIds.length === 0) {
       setSelectedStyleIds([stylesData[0].id]);
     }
   }, [stylesData, selectedStyleIds.length]);
 
   // Analyze script mutation
   const analyzeScriptMutation = useMutation({
-    mutationFn: async (script) => {
+    mutationFn: async (script: string) => {
       return await apiRequest('/api/analyze-script', {
         method: 'POST',
         body: JSON.stringify({ script }),
@@ -140,7 +140,7 @@ export default function App() {
 
   // Preview generation mutation
   const generatePreviewMutation = useMutation({
-    mutationFn: async (params) => {
+    mutationFn: async (params: any) => {
       return await apiRequest('/api/generate-preview', {
         method: 'POST',
         body: JSON.stringify(params),
@@ -208,16 +208,74 @@ export default function App() {
     setPreviewLoading(false);
   };
 
+  // Full script generation mutation (paid tier)
+  const generateFullScriptMutation = useMutation({
+    mutationFn: async () => {
+      // Build dimension values for API
+      const dimensionValues = {
+        somatic: dimensions["Somatic"] || 50,
+        temporal: dimensions["Temporal"] || 50,
+        symbolic: dimensions["Symbolic"] || 50,
+        psychological: dimensions["Psychological"] || 50,
+        perspective: dimensions["Perspective"] || 50,
+        spiritual: dimensions["Spiritual"] || 50,
+        relational: dimensions["Relational"] || 50,
+        language: dimensions["Language"] || 50,
+      };
+
+      const generationData = {
+        mode,
+        clientName: "Client",
+        clientIssue: mode === "create" ? `${presentingIssue} - ${desiredOutcome}` : "",
+        archetypeId: selectedArchetypeId,
+        styleId: selectedStyleIds[0],
+        dimensionValues,
+        existingScript: mode === "remix" ? originalScript : undefined,
+      };
+
+      // Create payment intent (mock)
+      const paymentIntent = await apiRequest('/api/create-payment-intent', {
+        method: 'POST',
+        body: JSON.stringify({
+          tier: mode === 'create' ? 'create_new' : 'remix',
+          generationData,
+        }),
+      });
+
+      // Generate paid script
+      const result = await apiRequest('/api/generate-paid-script', {
+        method: 'POST',
+        body: JSON.stringify({
+          ...generationData,
+          paymentIntentId: paymentIntent.id,
+        }),
+      });
+
+      return result;
+    },
+    onSuccess: (data) => {
+      toast({
+        title: "Script Generated!",
+        description: "Your full script has been generated and saved",
+      });
+      setPaymentModalOpen(false);
+      // Could display the full script here or navigate to a results page
+    },
+    onError: (error) => {
+      toast({
+        title: "Generation Failed",
+        description: (error as Error).message || "Failed to generate script",
+        variant: "destructive",
+      });
+    },
+  });
+
   const handleGenerateFull = () => {
     setPaymentModalOpen(true);
   };
 
-  const handlePaymentProceed = () => {
-    toast({
-      title: "Generation Queued",
-      description: "Your script generation has been queued with pending_payment status",
-    });
-    setPaymentModalOpen(false);
+  const handlePaymentProceed = async () => {
+    await generateFullScriptMutation.mutateAsync();
   };
 
   const handleToggleStyle = (id: number) => {
@@ -316,7 +374,7 @@ export default function App() {
                   {dimensionsLoading ? (
                     <div className="text-center text-muted-foreground">Loading dimensions...</div>
                   ) : (
-                    dimensionsData?.sort((a: any, b: any) => a.sortOrder - b.sortOrder).map((dim: any) => (
+                    Array.isArray(dimensionsData) && dimensionsData.sort((a: any, b: any) => a.sortOrder - b.sortOrder).map((dim: any) => (
                       <DimensionSlider
                         key={dim.id}
                         name={dim.name}
@@ -333,7 +391,7 @@ export default function App() {
                   <div className="text-center text-muted-foreground">Loading archetypes...</div>
                 ) : (
                   <ArchetypeSelector
-                    archetypes={archetypesData || []}
+                    archetypes={Array.isArray(archetypesData) ? archetypesData : []}
                     selectedId={selectedArchetypeId}
                     customArchetype={customArchetype}
                     onSelectArchetype={setSelectedArchetypeId}
@@ -345,7 +403,7 @@ export default function App() {
                   <div className="text-center text-muted-foreground">Loading styles...</div>
                 ) : (
                   <StyleSelector
-                    styles={stylesData || []}
+                    styles={Array.isArray(stylesData) ? stylesData : []}
                     selectedIds={selectedStyleIds}
                     onToggleStyle={handleToggleStyle}
                   />
@@ -376,6 +434,7 @@ export default function App() {
         open={paymentModalOpen}
         onClose={() => setPaymentModalOpen(false)}
         onProceed={handlePaymentProceed}
+        loading={generateFullScriptMutation.isPending}
       />
     </div>
   );
