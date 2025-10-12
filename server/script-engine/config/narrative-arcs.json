@@ -279,15 +279,33 @@
         "Not creating something new - activating what's already yours"
       ],
       "prompt_integration": "Guide recall and activation of past resources (times of strength, courage, resilience). Anchor these resources in body. Make them portable and accessible for future use."
+    },
+    {
+      "id": "playful-learning",
+      "name": "Playful Learning",
+      "description": "The play brain structure naturally contains learning - change through curiosity and joy",
+      "core_message": "Your brain learns best through play, curiosity, and exploration - not pressure",
+      "when_to_use": ["learning blocks", "rigid thinking", "perfectionism", "performance pressure"],
+      "presenting_issues": ["perfectionism", "fear of failure", "rigidity", "performance anxiety", "learning pressure", "joylessness", "trying too hard"],
+      "key_language": [
+        "What if this could be playful? Curious? Light?",
+        "Your brain learns naturally through play - that's how you learned everything important",
+        "Experimenting, exploring, discovering - no wrong moves, only feedback",
+        "The play brain holds the learning brain within it",
+        "Lightness in the process, joy in the exploration",
+        "Permission to try, to wonder, to play with possibilities",
+        "Not performing, but exploring. Not proving, but discovering."
+      ],
+      "prompt_integration": "Frame change as playful exploration rather than serious work or performance. Emphasize that the brain's play circuits naturally activate learning. Remove pressure by introducing curiosity, experimentation, and permission to 'try things on' without commitment. The play brain structure neurologically contains learning pathways."
     }
   ],
   "arc_selection_rules": {
     "always_include": ["effortlessness", "re-minding", "two-tempos"],
     "issue_mappings": {
       "anxiety": ["emotional-physical-chain", "effortlessness", "mind-body-unity"],
-      "confidence": ["recognition-ego-strengthening", "resource-activation"],
+      "confidence": ["recognition-ego-strengthening", "resource-activation", "playful-learning"],
       "stuck": ["relief-to-new-life", "two-tempos", "future-self"],
-      "habits": ["brain-master-skill", "effortlessness"],
+      "habits": ["brain-master-skill", "effortlessness", "playful-learning"],
       "trauma": ["emotional-physical-chain", "two-tempos", "parts-integration"],
       "self-worth": ["recognition-ego-strengthening", "resource-activation"],
       "life-change": ["relief-to-new-life", "future-self"],
@@ -295,7 +313,9 @@
       "internal-conflict": ["parts-integration"],
       "confusion": ["inner-wisdom", "future-self"],
       "overwhelm": ["resource-activation", "mind-body-unity"],
-      "disconnection": ["sensory-amplification", "mind-body-unity"]
+      "disconnection": ["sensory-amplification", "mind-body-unity"],
+      "perfectionism": ["playful-learning", "effortlessness", "two-tempos"],
+      "learning-blocks": ["playful-learning", "re-minding", "brain-master-skill"]
     },
     "max_arcs_per_script": 5,
     "priority_order": ["always_include", "issue_specific", "template_preferred"]

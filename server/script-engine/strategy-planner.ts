@@ -126,7 +126,9 @@ export class StrategyPlanner {
       'internal-conflict': ['conflict', 'torn', 'ambivalent', 'part of me wants', 'self-sabotage'],
       'confusion': ['confused', 'unclear', 'don\'t know', 'uncertain', 'lost', 'indecision'],
       'overwhelm': ['overwhelmed', 'too much', 'can\'t cope', 'drowning', 'exhausted'],
-      'disconnection': ['disconnected', 'numb', 'detached', 'can\'t feel', 'out of touch']
+      'disconnection': ['disconnected', 'numb', 'detached', 'can\'t feel', 'out of touch'],
+      'perfectionism': ['perfectionism', 'perfectionist', 'fear of failure', 'not good enough', 'have to be perfect', 'afraid to fail', 'rigid'],
+      'learning-blocks': ['learning', 'can\'t learn', 'struggling to learn', 'difficulty learning', 'learning block']
     };
     
     for (const [issue, keywords] of Object.entries(issuePatterns)) {

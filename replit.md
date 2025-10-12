@@ -32,14 +32,14 @@ The system employs a "separation of concerns" approach:
 The ScriptEngine (`server/script-engine/`) is the portable IP layer responsible for transforming template-based generation into methodology-driven transformation.
 
 **Components:**
--   **Config System**: Contains `principles.json` (6 core principles), `narrative-arcs.json` (13 narrative arcs), and `metaphor-library.json`.
+-   **Config System**: Contains `principles.json` (6 core principles), `narrative-arcs.json` (14 narrative arcs), and `metaphor-library.json`.
 -   **StrategyPlanner**: Detects presenting issues, selects narrative arcs, and chooses primary metaphors.
 -   **PrincipleEnforcer**: Translates the 6 core principles into AI prompt directives, adapting to client levels and building language hierarchies.
 -   **Main Orchestrator**: Combines StrategyPlanner and PrincipleEnforcer to generate comprehensive AI directives and reasoning logs.
 
 **6 Core Principles:** Somatic Anchoring Early, Metaphor Consistency, Adaptive Language Complexity, Permissive-to-Directive Gradient, Safety Language Always, Ego Strengthening Closure.
 
-**13 Narrative Arcs:** Effortlessness of Change, Re-Minding (Not Learning), Two Tempos of Change, Recognition & Ego Strengthening, Relief to New Life, Emotional-Physical Chain, Brain as Master Skill, Mind-Body Unity, Parts Integration, Future Self Connection, Inner Wisdom Access, Sensory Amplification, Resource Activation.
+**14 Narrative Arcs:** Effortlessness of Change, Re-Minding (Not Learning), Two Tempos of Change, Recognition & Ego Strengthening, Relief to New Life, Emotional-Physical Chain, Brain as Master Skill, Mind-Body Unity, Parts Integration, Future Self Connection, Inner Wisdom Access, Sensory Amplification, Resource Activation, **Playful Learning** (new - learning through play, curiosity, and exploration).
 
 ### Feature Specifications
 -   **8-Dimensional Framework**: Implements Erika Flint's 8D Hypnosis Framework (Somatic, Temporal, Symbolic, Psychological, Perspective, Spiritual, Relational, Language) as independent emphasis levels (0-100%).
