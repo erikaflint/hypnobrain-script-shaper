@@ -16,6 +16,8 @@ export function VoicePlayer({ text, title = "Voice Narration" }: VoicePlayerProp
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
   const [selectedVoice, setSelectedVoice] = useState<string>("");
   const [speed, setSpeed] = useState(0.6); // Default 60% speed for hypnosis
+  const [pauseIntensity, setPauseIntensity] = useState(2); // 0-4 scale for pause intensity
+  const [pitch, setPitch] = useState(0.9); // Slightly lower pitch for hypnosis
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
   // Load available voices - filtered to English only (UK, US, India, AU)
@@ -70,6 +72,36 @@ export function VoicePlayer({ text, title = "Voice Narration" }: VoicePlayerProp
     };
   }, []);
 
+  // Process text to add hypnotic pauses based on intensity
+  const processTextWithPauses = (originalText: string, intensity: number): string => {
+    if (intensity === 0) return originalText;
+    
+    let processedText = originalText;
+    
+    // Level 1-2: Add pauses after sentences
+    if (intensity >= 1) {
+      processedText = processedText.replace(/\./g, '...');
+      processedText = processedText.replace(/\?/g, '?...');
+      processedText = processedText.replace(/!/g, '!...');
+    }
+    
+    // Level 3-4: Add pauses within sentences (every 8-12 words)
+    if (intensity >= 3) {
+      const words = processedText.split(' ');
+      const wordsPerPause = intensity === 3 ? 12 : 8;
+      const chunks = [];
+      
+      for (let i = 0; i < words.length; i += wordsPerPause) {
+        const chunk = words.slice(i, i + wordsPerPause).join(' ');
+        chunks.push(chunk);
+      }
+      
+      processedText = chunks.join('... ');
+    }
+    
+    return processedText;
+  };
+
   const handlePlay = () => {
     if (isPaused) {
       // Resume if paused
@@ -80,7 +112,10 @@ export function VoicePlayer({ text, title = "Voice Narration" }: VoicePlayerProp
       // Start new playback
       window.speechSynthesis.cancel(); // Stop any existing speech
       
-      const utterance = new SpeechSynthesisUtterance(text);
+      // Process text with hypnotic pauses
+      const processedText = processTextWithPauses(text, pauseIntensity);
+      
+      const utterance = new SpeechSynthesisUtterance(processedText);
       const voice = voices.find(v => v.name === selectedVoice);
       
       if (voice) {
@@ -88,7 +123,7 @@ export function VoicePlayer({ text, title = "Voice Narration" }: VoicePlayerProp
       }
       
       utterance.rate = speed;
-      utterance.pitch = 1;
+      utterance.pitch = pitch;
       utterance.volume = 1;
       
       utterance.onend = () => {
@@ -183,10 +218,56 @@ export function VoicePlayer({ text, title = "Voice Narration" }: VoicePlayerProp
             data-testid="slider-speed"
           />
           <div className="flex justify-between text-xs text-muted-foreground mt-1">
-            <span>50% (Slow)</span>
-            <span>60% (Hypnosis)</span>
-            <span>100% (Normal)</span>
-            <span>150% (Fast)</span>
+            <span>Slow</span>
+            <span>Hypnotic</span>
+            <span>Normal</span>
+          </div>
+        </div>
+
+        {/* Hypnotic Pacing Control */}
+        <div>
+          <div className="flex items-center justify-between mb-1">
+            <label className="text-sm text-muted-foreground">Hypnotic Pacing</label>
+            <span className="text-sm font-medium">
+              {pauseIntensity === 0 ? 'Off' : 
+               pauseIntensity === 1 ? 'Light' :
+               pauseIntensity === 2 ? 'Medium' :
+               pauseIntensity === 3 ? 'Deep' : 'Very Deep'}
+            </span>
+          </div>
+          <Slider
+            value={[pauseIntensity]}
+            onValueChange={(values) => setPauseIntensity(values[0])}
+            min={0}
+            max={4}
+            step={1}
+            className="w-full"
+            data-testid="slider-pause-intensity"
+          />
+          <div className="flex justify-between text-xs text-muted-foreground mt-1">
+            <span>No Pauses</span>
+            <span>Strategic Pauses</span>
+          </div>
+        </div>
+
+        {/* Pitch Control */}
+        <div>
+          <div className="flex items-center justify-between mb-1">
+            <label className="text-sm text-muted-foreground">Voice Pitch</label>
+            <span className="text-sm font-medium">{pitch.toFixed(1)}x</span>
+          </div>
+          <Slider
+            value={[pitch]}
+            onValueChange={(values) => setPitch(values[0])}
+            min={0.5}
+            max={1.5}
+            step={0.1}
+            className="w-full"
+            data-testid="slider-pitch"
+          />
+          <div className="flex justify-between text-xs text-muted-foreground mt-1">
+            <span>Lower (Calming)</span>
+            <span>Normal</span>
           </div>
         </div>
 
