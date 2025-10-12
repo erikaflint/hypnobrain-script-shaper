@@ -70,13 +70,18 @@ A DAW-style web application for hypnotherapists to generate customized hypnosis 
 ## Key Features
 
 ### 8-Dimensional Framework
-The application implements Erika Flint's framework with 8 dimensions:
-- Direct/Authoritarian ↔ Indirect/Permissive
-- Analytical/Rational ↔ Emotional/Metaphorical
-- Paternal/Parental ↔ Maternal/Nurturing
-- Inward/Introspective ↔ Outward/Social
+The application implements Erika Flint's 8D Hypnosis Framework with 8 independent dimensions (NOT opposing pairs):
 
-Currently 4 dimensions are enabled (first in each pair), with visual lock icons on disabled dimensions.
+1. **Somatic** - Body-based: Uses breath, posture, temperature, physical sensations to anchor transformation
+2. **Temporal** - Time-based: Leverages fluid experience of time through regression/progression
+3. **Symbolic** - Metaphor & Archetype: Uses symbolic language, imagery, and archetypal stories
+4. **Psychological** - Inner Architecture: Engages cognitive patterns, beliefs, and mental structures
+5. **Perspective** - Point of View: Shifts viewpoint for insight and integration
+6. **Spiritual** - Transpersonal: Taps into meaning, purpose, and connection to something greater
+7. **Relational** - Connection & Dialogue: Integrates relationships and experiences of belonging
+8. **Language** - Linguistic Craft: Employs hypnotic phrasing, pacing, and embedded suggestions
+
+All 8 dimensions are independent emphasis levels (0-100%), not opposing pairs.
 
 ### AI Script Generation
 - **Preview**: 150-200 word preview showing style and approach
@@ -132,6 +137,21 @@ npx tsx server/seed.ts  # Seed database with initial data
 - `SESSION_SECRET`: Session encryption key
 
 ## Recent Changes (2025-10-12)
+
+### CRITICAL FIX: Corrected 8D Framework Dimensions
+- **Issue**: Application was built with incorrect paired dimensions (Direct/Authoritarian vs Indirect/Permissive, etc.)
+- **Resolution**: Replaced with actual Erika Flint 8D Framework dimensions:
+  - Somatic, Temporal, Symbolic, Psychological, Perspective, Spiritual, Relational, Language
+  - All 8 are independent emphasis levels (0-100%), NOT opposing pairs
+- **Changes Made**:
+  - Updated seed.ts with correct dimension names and descriptions
+  - Rewrote AI service (ai-service.ts) to use correct DimensionValues interface
+  - Updated all AI prompts to reference proper 8D framework
+  - Fixed frontend dimension mapping in app.tsx
+  - Updated backend routes validation schemas
+  - Cleared database and reseeded with correct dimensions
+  
+### Earlier Session Fixes
 - Fixed free-tier eligibility check to use correct field names
 - Implemented upsert logic for repeat free script usage
 - Connected frontend to backend APIs using TanStack Query
