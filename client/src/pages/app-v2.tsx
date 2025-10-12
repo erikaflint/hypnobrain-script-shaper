@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeft, ArrowRight, Sparkles } from "lucide-react";
+import { ArrowLeft, ArrowRight, Sparkles, Check, Sliders } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
@@ -36,6 +36,7 @@ export default function AppV2() {
 
   // Recommendations state
   const [recommendations, setRecommendations] = useState<RecommendedTemplate[]>([]);
+  const [selectedTemplate, setSelectedTemplate] = useState<RecommendedTemplate | null>(null);
 
   // Get template recommendations mutation
   const getRecommendationsMutation = useMutation({
@@ -213,16 +214,132 @@ export default function AppV2() {
             <div className="text-center">
               <h2 className="font-display text-3xl font-bold mb-2">Recommended Templates</h2>
               <p className="text-muted-foreground max-w-2xl mx-auto">
-                Based on your client's needs, here are {recommendations.length} templates that might work well.
+                Based on your client's needs, here are {recommendations.length} template{recommendations.length === 1 ? '' : 's'} that match well.
               </p>
             </div>
 
-            {/* Template recommendations will be built in task 11 */}
-            <div className="text-center p-12">
-              <p className="text-muted-foreground">Template recommendation display coming in task 11...</p>
-              <p className="text-sm text-muted-foreground mt-2">
-                Found {recommendations.length} recommendations
+            {/* Template Cards */}
+            <div className="space-y-6">
+              {recommendations.map((rec, index) => {
+                const templateData = rec.template.jsonData;
+                const dimensionValues = templateData?.dimension_values || {};
+                
+                return (
+                  <Card key={rec.template.id} className="p-6" data-testid={`recommendation-${index}`}>
+                    <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
+                      {/* Left: Template Info */}
+                      <div className="flex-1">
+                        <div className="flex items-start gap-3 mb-3">
+                          <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-primary/10 shrink-0">
+                            <Sparkles className="w-5 h-5 text-primary" />
+                          </div>
+                          <div>
+                            <h3 className="font-semibold text-xl mb-1" data-testid={`template-name-${index}`}>
+                              {rec.template.name}
+                            </h3>
+                            <p className="text-sm text-muted-foreground">
+                              {rec.template.category} • Match Score: {rec.matchScore}
+                            </p>
+                          </div>
+                        </div>
+                        
+                        <p className="text-muted-foreground mb-4" data-testid={`template-description-${index}`}>
+                          {rec.template.description}
+                        </p>
+                        
+                        {/* Match Reasons */}
+                        {rec.matchReasons.length > 0 && (
+                          <div className="space-y-2 mb-4">
+                            <p className="text-sm font-medium">Why this template works:</p>
+                            <ul className="space-y-1">
+                              {rec.matchReasons.slice(0, 3).map((reason, i) => (
+                                <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
+                                  <Check className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+                                  <span>{reason}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                        
+                        {/* Dimension Preview */}
+                        <div className="space-y-2">
+                          <p className="text-sm font-medium">Dimension Emphasis:</p>
+                          <div className="flex flex-wrap gap-2">
+                            {Object.entries(dimensionValues)
+                              .filter(([_, value]) => (value as number) > 60)
+                              .slice(0, 4)
+                              .map(([dim, value]) => (
+                                <div
+                                  key={dim}
+                                  className="px-3 py-1 rounded-full bg-primary/10 text-sm"
+                                  data-testid={`dimension-${dim}-${index}`}
+                                >
+                                  {dim.charAt(0).toUpperCase() + dim.slice(1)}: {value as number}%
+                                </div>
+                              ))}
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Right: Actions */}
+                      <div className="flex flex-col gap-3 md:w-48">
+                        <Button 
+                          className="w-full" 
+                          data-testid={`button-use-template-${index}`}
+                          onClick={() => {
+                            setSelectedTemplate(rec);
+                            setStep("mixer");
+                            toast({
+                              title: "Template Selected",
+                              description: `Using ${rec.template.name}`,
+                            });
+                          }}
+                        >
+                          Use This Template
+                        </Button>
+                        <Button 
+                          variant="outline" 
+                          className="w-full"
+                          data-testid={`button-customize-${index}`}
+                          onClick={() => {
+                            setSelectedTemplate(rec);
+                            setStep("mixer");
+                            toast({
+                              title: "Customizing Template",
+                              description: "Opening dimension mixer...",
+                            });
+                          }}
+                        >
+                          Customize First
+                        </Button>
+                      </div>
+                    </div>
+                  </Card>
+                );
+              })}
+            </div>
+            
+            {/* Manual Creation Option */}
+            <div className="text-center pt-6 border-t">
+              <p className="text-muted-foreground mb-4">
+                Don't see what you need? Start from scratch.
               </p>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setSelectedTemplate(null);
+                  setStep("mixer");
+                  toast({
+                    title: "Starting Fresh",
+                    description: "Creating script from scratch",
+                  });
+                }}
+                data-testid="button-start-from-scratch"
+              >
+                <Sliders className="w-4 h-4 mr-2" />
+                Start From Scratch
+              </Button>
             </div>
           </div>
         )}
