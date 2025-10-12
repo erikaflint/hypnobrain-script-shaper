@@ -400,7 +400,7 @@ export class DimensionAssembler implements IDimensionAssembler {
   private buildSystemPrompt(dimensionInstructions: string, styleInstructions: string, generationRules: string): string {
     let prompt = `You are an expert hypnotherapist using Erika Flint's 8-Dimensional Hypnosis Framework.
 
-You will generate a hypnosis script following these EXACT dimensional instructions:
+You will generate hypnotic content following these EXACT dimensional instructions:
 
 ${dimensionInstructions}
 
@@ -417,11 +417,11 @@ ${styleInstructions}`;
 2. Only include dimensions that have emphasis > 0
 3. If spiritual dimension is not enabled, do NOT include any spiritual content
 4. Respect the specified style, archetype, metaphor, framework, and techniques
-5. Create a flowing, coherent script that integrates all active dimensions naturally
+5. Create flowing, coherent content that integrates all active dimensions naturally
 6. Use appropriate hypnotic language patterns based on the language dimension level
-7. The script should feel unified, not like separate dimension sections
+7. The output should feel unified, not like separate dimension sections
 
-Your script should guide the client into trance, work therapeutically with their issue using the specified dimensional emphasis, and guide them out of trance.`;
+Follow the specific task instructions in the user message for what to generate (preview, full script, or remix).`;
 
     return prompt;
   }
@@ -434,15 +434,13 @@ Your script should guide the client into trance, work therapeutically with their
     desiredOutcome: string,
     clientNotes: string
   ): string {
-    let prompt = `Generate a hypnosis script for the following client:\n\n`;
+    let prompt = `**CLIENT CONTEXT**:\n\n`;
     prompt += `**PRESENTING ISSUE**: ${presentingIssue}\n\n`;
     prompt += `**DESIRED OUTCOME**: ${desiredOutcome}\n\n`;
     
     if (clientNotes.trim()) {
       prompt += `**ADDITIONAL NOTES**: ${clientNotes}\n\n`;
     }
-    
-    prompt += `Create a complete hypnosis script (1500-2000 words) following the dimensional instructions provided. The script should flow naturally while emphasizing the specified dimensions according to their levels.`;
     
     return prompt;
   }

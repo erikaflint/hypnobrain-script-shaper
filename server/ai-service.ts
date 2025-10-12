@@ -1,4 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk';
+import { dimensionAssembler, type AssembledPrompt } from './dimension-assembler';
+import type { TemplateJSON } from '@shared/schema';
 
 /*
 <important_code_snippet_instructions>
@@ -25,29 +27,24 @@ function cleanJsonResponse(text: string): string {
   return cleaned;
 }
 
-export interface DimensionValues {
-  somatic: number;
-  temporal: number;
-  symbolic: number;
-  psychological: number;
-  perspective: number;
-  spiritual: number;
-  relational: number;
-  language: number;
+// Template-based generation parameters
+export interface TemplateScriptGenerationParams {
+  template: TemplateJSON;
+  presentingIssue: string;
+  desiredOutcome: string;
+  clientNotes?: string;
 }
 
-export interface ScriptGenerationParams {
-  mode: 'create' | 'remix';
-  clientName: string;
-  clientIssue: string;
-  archetypeName: string;
-  archetypeDescription: string;
-  styleName: string;
-  styleDescription: string;
-  dimensionValues: DimensionValues;
-  existingScript?: string;
+// Remix generation parameters
+export interface RemixScriptGenerationParams {
+  template: TemplateJSON;
+  existingScript: string;
+  presentingIssue: string;
+  desiredOutcome: string;
+  clientNotes?: string;
 }
 
+// Result interfaces
 export interface PreviewGenerationResult {
   preview: string;
   estimatedLength: string;
@@ -65,69 +62,55 @@ export interface FullScriptGenerationResult {
   };
 }
 
+// Dimension values for analysis
+export interface DimensionValues {
+  somatic: number;
+  temporal: number;
+  symbolic: number;
+  psychological: number;
+  perspective: number;
+  spiritual: number;
+  relational: number;
+  language: number;
+}
+
 export interface RemixAnalysisResult {
   detectedDimensions: DimensionValues;
   analysis: string;
 }
 
 export class AIService {
-  private buildDimensionPrompt(dimensions: DimensionValues): string {
-    const dimensionDescriptions = [
-      `Somatic (${dimensions.somatic}%): ${dimensions.somatic > 70 ? 'STRONG emphasis - ' : dimensions.somatic > 40 ? 'Moderate emphasis - ' : 'Minimal emphasis - '}Use body as entry point. Include breath, posture, temperature, physical sensations. Guide awareness of bodily shifts to deepen trance.`,
-      `Temporal (${dimensions.temporal}%): ${dimensions.temporal > 70 ? 'STRONG emphasis - ' : dimensions.temporal > 40 ? 'Moderate emphasis - ' : 'Minimal emphasis - '}Leverage fluid experience of time. Guide backward to memories or forward to future states. Stretch, compress, or dissolve time.`,
-      `Symbolic (${dimensions.symbolic}%): ${dimensions.symbolic > 70 ? 'STRONG emphasis - ' : dimensions.symbolic > 40 ? 'Moderate emphasis - ' : 'Minimal emphasis - '}Use metaphors, imagery, archetypal stories. Transform struggles into landscapes, journeys, or symbolic transformations.`,
-      `Psychological (${dimensions.psychological}%): ${dimensions.psychological > 70 ? 'STRONG emphasis - ' : dimensions.psychological > 40 ? 'Moderate emphasis - ' : 'Minimal emphasis - '}Engage deeper mind structures. Address cognitive patterns, limiting beliefs, protective parts, inner conflicts.`,
-      `Perspective (${dimensions.perspective}%): ${dimensions.perspective > 70 ? 'STRONG emphasis - ' : dimensions.perspective > 40 ? 'Moderate emphasis - ' : 'Minimal emphasis - '}Shift viewpoint. Use observer mode for insight, first-person for integration, or future-self perspective.`,
-      `Spiritual (${dimensions.spiritual}%): ${dimensions.spiritual > 70 ? 'STRONG emphasis - ' : dimensions.spiritual > 40 ? 'Moderate emphasis - ' : 'Minimal emphasis - '}Tap into meaning, purpose, connection to something greater. Invite higher self, inner wisdom, transpersonal strength.`,
-      `Relational (${dimensions.relational}%): ${dimensions.relational > 70 ? 'STRONG emphasis - ' : dimensions.relational > 40 ? 'Moderate emphasis - ' : 'Minimal emphasis - '}Integrate relationships. Include dialogues, forgiveness work, experiences of support and belonging.`,
-      `Language (${dimensions.language}%): ${dimensions.language > 70 ? 'STRONG emphasis - ' : dimensions.language > 40 ? 'Moderate emphasis - ' : 'Minimal emphasis - '}Use hypnotic phrasing, pacing, rhythm. Embed commands, layer ambiguity, shape sentence flow to bypass resistance.`,
-    ];
+  /**
+   * Generate preview using template-based approach
+   */
+  async generatePreview(params: TemplateScriptGenerationParams): Promise<PreviewGenerationResult> {
+    const assembled = dimensionAssembler.assemblePrompt(
+      params.template,
+      params.presentingIssue,
+      params.desiredOutcome,
+      params.clientNotes || ''
+    );
     
-    return dimensionDescriptions.join('\n');
-  }
+    const previewPrompt = `${assembled.userPrompt}
 
-  async generatePreview(params: ScriptGenerationParams): Promise<PreviewGenerationResult> {
-    const dimensionPrompt = this.buildDimensionPrompt(params.dimensionValues);
-    
-    const systemPrompt = `You are an expert hypnotherapist trained in Erika Flint's 8-Dimensional Hypnosis Framework. Generate hypnosis script previews based on specific dimensional emphasis, archetypes, and styles.`;
-    
-    const userPrompt = `Generate a 150-200 word PREVIEW of a hypnosis script with these specifications:
+**TASK**: Generate a 150-200 word PREVIEW (NOT a full script) that demonstrates:
+1. The opening style and therapeutic approach
+2. How the dimensional emphasis will be applied
+3. An estimated length for the full script (e.g., "15-20 minutes")
 
-CLIENT CONTEXT:
-- Name: ${params.clientName}
-- Issue: ${params.clientIssue}
-
-ARCHETYPE: ${params.archetypeName}
-${params.archetypeDescription}
-
-STYLE: ${params.styleName}
-${params.styleDescription}
-
-DIMENSIONAL EMPHASIS (Erika Flint's 8-Dimensional Framework):
-${dimensionPrompt}
-
-${params.mode === 'remix' && params.existingScript ? `
-REMIX MODE - Transform this existing script:
-${params.existingScript.substring(0, 500)}...
-
-Adjust the dimensional emphasis while maintaining the core therapeutic intent.
-` : ''}
-
-Provide:
-1. A compelling 150-200 word preview showing the opening and style
-2. Estimated full script length (e.g., "15-20 minutes")
+This is a PREVIEW ONLY - do not generate the complete script.
 
 Format as JSON:
 {
-  "preview": "script preview text here...",
+  "preview": "150-200 word preview text here...",
   "estimatedLength": "15-20 minutes"
 }`;
 
     const response = await anthropic.messages.create({
       model: DEFAULT_MODEL_STR,
       max_tokens: 2000,
-      system: systemPrompt,
-      messages: [{ role: 'user', content: userPrompt }],
+      system: assembled.systemPrompt,
+      messages: [{ role: 'user', content: previewPrompt }],
     });
 
     const textContent = response.content[0];
@@ -138,38 +121,35 @@ Format as JSON:
     return result;
   }
 
-  async generateFullScript(params: ScriptGenerationParams): Promise<FullScriptGenerationResult> {
-    const dimensionPrompt = this.buildDimensionPrompt(params.dimensionValues);
+  /**
+   * Generate full script using template-based approach
+   */
+  async generateFullScript(params: TemplateScriptGenerationParams): Promise<FullScriptGenerationResult> {
+    const assembled = dimensionAssembler.assemblePrompt(
+      params.template,
+      params.presentingIssue,
+      params.desiredOutcome,
+      params.clientNotes || ''
+    );
     
-    const systemPrompt = `You are an expert hypnotherapist trained in Erika Flint's 8-Dimensional Hypnosis Framework. Generate complete, professional hypnosis scripts with marketing assets.`;
-    
-    const userPrompt = `Generate a COMPLETE hypnosis script (1500-2000 words) with these specifications:
+    const fullScriptPrompt = `${assembled.userPrompt}
 
-CLIENT CONTEXT:
-- Name: ${params.clientName}
-- Issue: ${params.clientIssue}
+**TASK**: Generate a COMPLETE hypnosis script following the dimensional instructions provided.
 
-ARCHETYPE: ${params.archetypeName}
-${params.archetypeDescription}
-
-STYLE: ${params.styleName}
-${params.styleDescription}
-
-DIMENSIONAL EMPHASIS (Erika Flint's 8-Dimensional Framework):
-${dimensionPrompt}
-
-${params.mode === 'remix' && params.existingScript ? `
-REMIX MODE - Transform this existing script with new dimensional emphasis:
-${params.existingScript}
-` : ''}
-
-Provide:
-1. Complete hypnosis script (1500-2000 words) with induction, deepening, therapeutic work, and emergence
+Requirements:
+1. FULL SCRIPT (1500-2000 words) with all phases:
+   - Induction (guide client into trance)
+   - Deepening (deepen the trance state)
+   - Therapeutic work (address the issue using the specified dimensional emphasis)
+   - Emergence (guide client out of trance safely)
+   
 2. Six marketing assets to help promote this therapeutic approach
+
+The script should flow naturally while emphasizing the specified dimensions according to their levels.
 
 Format as JSON:
 {
-  "fullScript": "complete script here...",
+  "fullScript": "complete 1500-2000 word script here...",
   "marketingAssets": {
     "postTitle": "Social media post title",
     "postBody": "Social media post body (2-3 sentences)",
@@ -183,8 +163,65 @@ Format as JSON:
     const response = await anthropic.messages.create({
       model: DEFAULT_MODEL_STR,
       max_tokens: 4000,
-      system: systemPrompt,
-      messages: [{ role: 'user', content: userPrompt }],
+      system: assembled.systemPrompt,
+      messages: [{ role: 'user', content: fullScriptPrompt }],
+    });
+
+    const textContent = response.content[0];
+    if (textContent.type !== 'text') {
+      throw new Error('Expected text response from AI');
+    }
+    const result = JSON.parse(cleanJsonResponse(textContent.text));
+    return result;
+  }
+
+  /**
+   * Generate remix script by applying template to existing script
+   */
+  async generateRemixScript(params: RemixScriptGenerationParams): Promise<FullScriptGenerationResult> {
+    const assembled = dimensionAssembler.assemblePrompt(
+      params.template,
+      params.presentingIssue,
+      params.desiredOutcome,
+      params.clientNotes || ''
+    );
+    
+    const remixPrompt = `${assembled.userPrompt}
+
+**TASK**: REMIX MODE - Transform the existing hypnosis script below by applying the new dimensional emphasis.
+
+**EXISTING SCRIPT TO TRANSFORM**:
+${params.existingScript}
+
+Requirements:
+1. COMPLETE transformed script (1500-2000 words) that:
+   - Maintains the core therapeutic intent and issue resolution
+   - Applies the NEW dimensional emphasis from the template instructions
+   - Includes all phases: induction, deepening, therapeutic work, and emergence
+   - Flows naturally with the new dimensional balance
+   
+2. Six marketing assets for the transformed therapeutic approach
+
+The script should feel like a cohesive whole with the new dimensional emphasis, not a patchwork.
+
+Format as JSON:
+{
+  "fullScript": "complete 1500-2000 word transformed script here...",
+  "marketingAssets": {
+    "postTitle": "Social media post title",
+    "postBody": "Social media post body (2-3 sentences)",
+    "emailSubject": "Email subject line",
+    "emailBody": "Email body (3-4 paragraphs)",
+    "videoScript": "Short video script (30-45 seconds)",
+    "adCopy": "Ad copy (2-3 sentences)"
+  }
+}`;
+
+    const response = await anthropic.messages.create({
+      model: DEFAULT_MODEL_STR,
+      max_tokens: 4000,
+      system: assembled.systemPrompt,
+      messages: [{ role: 'user', content: remixPrompt }],
     });
 
     const textContent = response.content[0];
