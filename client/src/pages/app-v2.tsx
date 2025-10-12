@@ -43,6 +43,10 @@ export default function AppV2() {
   const [selectedArchetypeId, setSelectedArchetypeId] = useState<number | null>(null);
   const [selectedStyleId, setSelectedStyleId] = useState<number | null>(null);
   
+  // Results state
+  const [previewResult, setPreviewResult] = useState<{ preview: string; estimatedLength: string } | null>(null);
+  const [fullScriptResult, setFullScriptResult] = useState<{ fullScript: string } | null>(null);
+  
   // Load dimension values from selected template when it changes
   useEffect(() => {
     if (selectedTemplate?.template.jsonData) {
@@ -132,6 +136,68 @@ export default function AppV2() {
       clientNotes: notes.trim() || undefined,
     });
   };
+
+  // Generate preview mutation
+  const generatePreviewMutation = useMutation({
+    mutationFn: async () => {
+      if (!selectedTemplate) throw new Error("No template selected");
+      
+      return await apiRequest(`/api/templates/${selectedTemplate.template.templateId}/preview`, {
+        method: 'POST',
+        body: JSON.stringify({
+          presentingIssue,
+          desiredOutcome,
+          clientNotes: notes.trim() || undefined,
+        }),
+      });
+    },
+    onSuccess: (data) => {
+      setPreviewResult(data);
+      setStep("results");
+      toast({
+        title: "Preview Ready",
+        description: "Your script preview has been generated",
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Preview Failed",
+        description: error.message || "Failed to generate preview",
+        variant: "destructive",
+      });
+    },
+  });
+
+  // Generate full script mutation
+  const generateFullScriptMutation = useMutation({
+    mutationFn: async () => {
+      if (!selectedTemplate) throw new Error("No template selected");
+      
+      return await apiRequest(`/api/templates/${selectedTemplate.template.templateId}/generate`, {
+        method: 'POST',
+        body: JSON.stringify({
+          presentingIssue,
+          desiredOutcome,
+          clientNotes: notes.trim() || undefined,
+        }),
+      });
+    },
+    onSuccess: (data) => {
+      setFullScriptResult(data);
+      setStep("results");
+      toast({
+        title: "Script Generated",
+        description: "Your full hypnosis script is ready",
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Generation Failed",
+        description: error.message || "Failed to generate script",
+        variant: "destructive",
+      });
+    },
+  });
 
   return (
     <div className="min-h-screen bg-background">
@@ -533,38 +599,140 @@ export default function AppV2() {
             <div className="flex gap-4 justify-end">
               <Button
                 variant="outline"
-                onClick={() => {
-                  toast({
-                    title: "Preview Generation",
-                    description: "Generating preview...",
-                  });
-                  // Preview generation will be implemented
-                }}
+                onClick={() => generatePreviewMutation.mutate()}
+                disabled={!selectedTemplate || generatePreviewMutation.isPending}
                 data-testid="button-preview"
               >
                 <Eye className="w-4 h-4 mr-2" />
-                Preview Script
+                {generatePreviewMutation.isPending ? "Generating..." : "Preview Script"}
               </Button>
               <Button
-                onClick={() => {
-                  toast({
-                    title: "Generating Full Script",
-                    description: "Creating your hypnosis script...",
-                  });
-                  // Full generation will be implemented
-                }}
+                onClick={() => generateFullScriptMutation.mutate()}
+                disabled={!selectedTemplate || generateFullScriptMutation.isPending}
                 data-testid="button-generate"
               >
                 <Wand2 className="w-4 h-4 mr-2" />
-                Generate Full Script ($3)
+                {generateFullScriptMutation.isPending ? "Generating..." : "Generate Full Script ($3)"}
               </Button>
             </div>
           </div>
         )}
 
         {step === "results" && (
-          <div className="text-center p-12">
-            <p className="text-muted-foreground">Results display coming later...</p>
+          <div className="space-y-6">
+            {/* Results Header */}
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-2xl font-semibold" data-testid="results-title">
+                  {fullScriptResult ? "Your Hypnosis Script" : "Script Preview"}
+                </h2>
+                <p className="text-muted-foreground mt-1">
+                  {selectedTemplate ? `Generated from: ${selectedTemplate.template.name}` : "Custom generation"}
+                </p>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setStep("mixer");
+                  setPreviewResult(null);
+                  setFullScriptResult(null);
+                }}
+                data-testid="button-back-to-mixer"
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Adjust Mix
+              </Button>
+            </div>
+
+            {/* Preview Result */}
+            {previewResult && !fullScriptResult && (
+              <Card className="p-6">
+                <div className="flex items-start gap-3 mb-4">
+                  <Eye className="w-5 h-5 text-primary mt-1" />
+                  <div className="flex-1">
+                    <h3 className="text-lg font-semibold">Preview</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Estimated length: {previewResult.estimatedLength}
+                    </p>
+                  </div>
+                </div>
+                <div 
+                  className="prose prose-sm max-w-none dark:prose-invert whitespace-pre-wrap"
+                  data-testid="preview-content"
+                >
+                  {previewResult.preview}
+                </div>
+                <div className="mt-6 pt-6 border-t flex gap-3">
+                  <Button
+                    onClick={() => generateFullScriptMutation.mutate()}
+                    disabled={generateFullScriptMutation.isPending}
+                    data-testid="button-generate-from-preview"
+                  >
+                    <Wand2 className="w-4 h-4 mr-2" />
+                    {generateFullScriptMutation.isPending ? "Generating..." : "Generate Full Script ($3)"}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setStep("mixer");
+                      setPreviewResult(null);
+                    }}
+                    data-testid="button-adjust-from-preview"
+                  >
+                    <Sliders className="w-4 h-4 mr-2" />
+                    Adjust Mix
+                  </Button>
+                </div>
+              </Card>
+            )}
+
+            {/* Full Script Result */}
+            {fullScriptResult && (
+              <Card className="p-6">
+                <div className="flex items-start gap-3 mb-4">
+                  <Check className="w-5 h-5 text-primary mt-1" />
+                  <div className="flex-1">
+                    <h3 className="text-lg font-semibold">Complete Hypnosis Script</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Your full therapeutic script is ready
+                    </p>
+                  </div>
+                </div>
+                <div 
+                  className="prose max-w-none dark:prose-invert whitespace-pre-wrap"
+                  data-testid="full-script-content"
+                >
+                  {fullScriptResult.fullScript}
+                </div>
+                <div className="mt-6 pt-6 border-t flex gap-3">
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      navigator.clipboard.writeText(fullScriptResult.fullScript);
+                      toast({
+                        title: "Copied",
+                        description: "Script copied to clipboard",
+                      });
+                    }}
+                    data-testid="button-copy-script"
+                  >
+                    Copy Script
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setStep("mixer");
+                      setFullScriptResult(null);
+                      setPreviewResult(null);
+                    }}
+                    data-testid="button-generate-new"
+                  >
+                    Generate New Script
+                  </Button>
+                </div>
+              </Card>
+            )}
           </div>
         )}
       </main>
