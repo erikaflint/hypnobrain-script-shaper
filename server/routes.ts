@@ -39,6 +39,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get user's saved generations
+  app.get("/api/generations", async (req, res) => {
+    try {
+      const email = req.query.email as string;
+      
+      if (!email) {
+        return res.status(400).json({ message: "Email parameter is required" });
+      }
+      
+      const generations = await storage.getGenerationsByEmail(email);
+      res.json(generations);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
   // Check free script eligibility
   app.post("/api/check-free-eligibility", async (req, res) => {
     try {

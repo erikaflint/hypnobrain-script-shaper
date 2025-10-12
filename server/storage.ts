@@ -36,6 +36,7 @@ export interface IStorage {
   createGeneration(generation: InsertGeneration): Promise<Generation>;
   getGenerationById(id: number): Promise<Generation | undefined>;
   getAllGenerations(): Promise<Generation[]>;
+  getGenerationsByEmail(email: string): Promise<Generation[]>;
   updateGenerationPaymentStatus(id: number, paymentStatus: string): Promise<void>;
   updateGenerationScript(id: number, fullScript: string): Promise<void>;
   
@@ -90,6 +91,14 @@ export class DatabaseStorage implements IStorage {
   
   async getAllGenerations(): Promise<Generation[]> {
     return await db.select().from(generations).orderBy(desc(generations.createdAt));
+  }
+  
+  async getGenerationsByEmail(email: string): Promise<Generation[]> {
+    return await db
+      .select()
+      .from(generations)
+      .where(eq(generations.email, email))
+      .orderBy(desc(generations.createdAt));
   }
   
   async updateGenerationPaymentStatus(id: number, paymentStatus: string): Promise<void> {
