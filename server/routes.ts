@@ -292,6 +292,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin: Get all generations
+  app.get("/api/admin/generations", async (req, res) => {
+    try {
+      const allGenerations = await storage.getAllGenerations();
+      res.json(allGenerations);
+    } catch (error: any) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+
   const httpServer = createServer(app);
 
   return httpServer;

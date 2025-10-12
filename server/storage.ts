@@ -35,6 +35,7 @@ export interface IStorage {
   // Generations
   createGeneration(generation: InsertGeneration): Promise<Generation>;
   getGenerationById(id: number): Promise<Generation | undefined>;
+  getAllGenerations(): Promise<Generation[]>;
   updateGenerationPaymentStatus(id: number, paymentStatus: string): Promise<void>;
   updateGenerationScript(id: number, fullScript: string): Promise<void>;
   
@@ -85,6 +86,10 @@ export class DatabaseStorage implements IStorage {
   async getGenerationById(id: number): Promise<Generation | undefined> {
     const result = await db.select().from(generations).where(eq(generations.id, id));
     return result[0];
+  }
+  
+  async getAllGenerations(): Promise<Generation[]> {
+    return await db.select().from(generations).orderBy(desc(generations.createdAt));
   }
   
   async updateGenerationPaymentStatus(id: number, paymentStatus: string): Promise<void> {

@@ -225,8 +225,13 @@ export default function Landing() {
 
       {/* Footer */}
       <footer className="py-12 px-6 border-t">
-        <div className="max-w-7xl mx-auto text-center text-sm text-muted-foreground">
+        <div className="max-w-7xl mx-auto text-center text-sm text-muted-foreground space-y-2">
           <p>Based on the 8-Dimensional Hypnosis Framework by Erika Flint</p>
+          <Link href="/admin" data-testid="link-admin">
+            <Button variant="link" size="sm" className="text-xs text-muted-foreground" data-testid="button-admin">
+              Admin Dashboard
+            </Button>
+          </Link>
         </div>
       </footer>
     </div>
