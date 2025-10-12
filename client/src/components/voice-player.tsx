@@ -18,16 +18,37 @@ export function VoicePlayer({ text, title = "Voice Narration" }: VoicePlayerProp
   const [speed, setSpeed] = useState(0.6); // Default 60% speed for hypnosis
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
-  // Load available voices
+  // Load available voices - filtered to English only (UK, US, India, AU)
   useEffect(() => {
     const loadVoices = () => {
       const availableVoices = window.speechSynthesis.getVoices();
-      setVoices(availableVoices);
       
-      // Try to select a good default voice (prefer English, female voices for hypnosis)
-      const preferredVoice = availableVoices.find(v => 
-        v.lang.startsWith('en') && v.name.toLowerCase().includes('female')
-      ) || availableVoices.find(v => v.lang.startsWith('en')) || availableVoices[0];
+      // Filter to only English variants we want: UK, US, India, Australia
+      // Look for both language codes and common voice name patterns
+      const curatedVoices = availableVoices.filter(voice => {
+        const lang = voice.lang.toLowerCase();
+        const name = voice.name.toLowerCase();
+        
+        // Accept these English language codes
+        const acceptedLangs = ['en-us', 'en-gb', 'en-uk', 'en-in', 'en-au'];
+        const hasAcceptedLang = acceptedLangs.some(l => lang.includes(l));
+        
+        // Also accept voices with these country indicators in name
+        const hasAcceptedName = name.includes('us ') || name.includes('uk ') || 
+                                 name.includes('british') || name.includes('india') || 
+                                 name.includes('australia') || name.includes('american');
+        
+        return hasAcceptedLang || (lang.startsWith('en') && hasAcceptedName);
+      });
+      
+      // Limit to max 10 voices - prefer diverse genders/regions
+      const limitedVoices = curatedVoices.slice(0, 10);
+      setVoices(limitedVoices);
+      
+      // Try to select a good default voice (prefer female voices for hypnosis)
+      const preferredVoice = limitedVoices.find(v => 
+        v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('woman')
+      ) || limitedVoices[0];
       
       if (preferredVoice) {
         setSelectedVoice(preferredVoice.name);
@@ -115,11 +136,33 @@ export function VoicePlayer({ text, title = "Voice Narration" }: VoicePlayerProp
               <SelectValue placeholder="Select a voice" />
             </SelectTrigger>
             <SelectContent>
-              {voices.map((voice) => (
-                <SelectItem key={voice.name} value={voice.name}>
-                  {voice.name} ({voice.lang})
-                </SelectItem>
-              ))}
+              {voices.map((voice) => {
+                // Extract region from language code
+                const region = voice.lang.includes('-GB') || voice.lang.includes('-UK') ? '🇬🇧 UK' :
+                              voice.lang.includes('-US') ? '🇺🇸 US' :
+                              voice.lang.includes('-IN') ? '🇮🇳 India' :
+                              voice.lang.includes('-AU') ? '🇦🇺 Australia' : voice.lang;
+                
+                // Detect gender from name
+                const isFemale = voice.name.toLowerCase().includes('female') || 
+                                voice.name.toLowerCase().includes('woman') ||
+                                voice.name.toLowerCase().includes('samantha') ||
+                                voice.name.toLowerCase().includes('victoria') ||
+                                voice.name.toLowerCase().includes('karen');
+                
+                const isMale = voice.name.toLowerCase().includes('male') || 
+                              voice.name.toLowerCase().includes('man') ||
+                              voice.name.toLowerCase().includes('daniel') ||
+                              voice.name.toLowerCase().includes('oliver');
+                
+                const gender = isFemale ? '♀' : isMale ? '♂' : '';
+                
+                return (
+                  <SelectItem key={voice.name} value={voice.name}>
+                    {gender} {region} - {voice.name}
+                  </SelectItem>
+                );
+              })}
             </SelectContent>
           </Select>
         </div>
