@@ -5,55 +5,55 @@ async function seed() {
   console.log("🌱 Seeding database...");
 
   try {
-    // Seed dimensions (4 enabled, 4 disabled)
-    console.log("📊 Seeding dimensions...");
+    // Seed 8D Hypnosis Framework dimensions (all 8 are independent emphasis levels)
+    console.log("📊 Seeding 8D Framework dimensions...");
     await db.insert(dimensions).values([
       {
-        name: "Direct/Authoritarian",
-        description: "Use direct commands and authoritative language vs gentle suggestions",
+        name: "Somatic",
+        description: "Use the body as an entry point for transformation. Anchor the experience in breath, posture, temperature, or physical sensations. Guide awareness of bodily shifts to deepen trance.",
         enabled: true,
         sortOrder: 1,
       },
       {
-        name: "Indirect/Permissive",
-        description: "Use gentle, permissive suggestions vs direct commands",
-        enabled: false,
+        name: "Temporal",
+        description: "Leverage the mind's fluid experience of time. Guide backward to access formative memories or forward to inhabit future states. Stretch, compress, or dissolve time.",
+        enabled: true,
         sortOrder: 2,
       },
       {
-        name: "Analytical/Rational",
-        description: "Use logical, rational language and cognitive reframes",
+        name: "Symbolic",
+        description: "Use metaphors, imagery, and archetypal stories to speak directly to the subconscious. Transform struggles into landscapes, journeys, or symbolic transformations.",
         enabled: true,
         sortOrder: 3,
       },
       {
-        name: "Emotional/Metaphorical",
-        description: "Use emotional, metaphorical language and storytelling",
-        enabled: false,
+        name: "Psychological",
+        description: "Engage the deeper structures of the mind. Address cognitive patterns, limiting beliefs, protective parts, and inner conflicts. Bridge conscious awareness and subconscious transformation.",
+        enabled: true,
         sortOrder: 4,
       },
       {
-        name: "Paternal/Parental",
-        description: "Use protective, authoritative parental guidance",
+        name: "Perspective",
+        description: "Change how the client sees themselves and their story by shifting viewpoint. Use observer mode for insight, first-person for integration, or future-self perspective for clarity.",
         enabled: true,
         sortOrder: 5,
       },
       {
-        name: "Maternal/Nurturing",
-        description: "Use nurturing, maternal comfort and support",
-        enabled: false,
+        name: "Spiritual",
+        description: "Tap into the client's sense of meaning, purpose, or connection to something greater. Invite connection with higher self, inner wisdom, or transpersonal sources of strength.",
+        enabled: true,
         sortOrder: 6,
       },
       {
-        name: "Inward/Introspective",
-        description: "Focus on internal reflection and self-discovery",
+        name: "Relational",
+        description: "Integrate relationships—real, imagined, or symbolic—to activate emotional change. Include dialogues, forgiveness work, or experiences of support and belonging.",
         enabled: true,
         sortOrder: 7,
       },
       {
-        name: "Outward/Social",
-        description: "Focus on external relationships and social connections",
-        enabled: false,
+        name: "Language",
+        description: "Use hypnotic phrasing, pacing, and rhythm deliberately. Embed commands, layer ambiguity, and shape sentence flow to mirror trance depth and bypass resistance.",
+        enabled: true,
         sortOrder: 8,
       },
     ]);
