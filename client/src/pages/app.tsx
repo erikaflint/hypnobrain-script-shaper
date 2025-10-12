@@ -109,8 +109,13 @@ export default function App() {
     },
     onSuccess: (data) => {
       setAnalysisData(data);
-      // Use the 'dimensions' field from the response, not 'detectedDimensions'
-      setDimensions(data.dimensions);
+      // Map detectedDimensions to frontend dimension state (capitalize first letter)
+      const mappedDimensions: Record<string, number> = {};
+      Object.entries(data.detectedDimensions).forEach(([key, value]) => {
+        const capitalizedKey = key.charAt(0).toUpperCase() + key.slice(1);
+        mappedDimensions[capitalizedKey] = value as number;
+      });
+      setDimensions(mappedDimensions);
       setAnalyzed(true);
       toast({
         title: "Script Analyzed",
@@ -178,16 +183,16 @@ export default function App() {
 
     setPreviewLoading(true);
 
-    // Build dimension values for API based on actual dimension names from backend
+    // Build dimension values for API using correct 8D Framework names
     const dimensionValues = {
-      directAuthoritarian: dimensions["Direct/Authoritarian"] || 50,
-      indirectPermissive: dimensions["Indirect/Permissive"] || 50,
-      analyticalRational: dimensions["Analytical/Rational"] || 50,
-      emotionalMetaphorical: dimensions["Emotional/Metaphorical"] || 50,
-      paternalParental: dimensions["Paternal/Parental"] || 50,
-      maternalNurturing: dimensions["Maternal/Nurturing"] || 50,
-      inwardIntrospective: dimensions["Inward/Introspective"] || 50,
-      outwardSocial: dimensions["Outward/Social"] || 50,
+      somatic: dimensions["Somatic"] || 50,
+      temporal: dimensions["Temporal"] || 50,
+      symbolic: dimensions["Symbolic"] || 50,
+      psychological: dimensions["Psychological"] || 50,
+      perspective: dimensions["Perspective"] || 50,
+      spiritual: dimensions["Spiritual"] || 50,
+      relational: dimensions["Relational"] || 50,
+      language: dimensions["Language"] || 50,
     };
 
     await generatePreviewMutation.mutateAsync({

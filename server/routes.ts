@@ -75,14 +75,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         archetypeId: z.number(),
         styleId: z.number(),
         dimensionValues: z.object({
-          directAuthoritarian: z.number(),
-          indirectPermissive: z.number(),
-          analyticalRational: z.number(),
-          emotionalMetaphorical: z.number(),
-          paternalParental: z.number(),
-          maternalNurturing: z.number(),
-          inwardIntrospective: z.number(),
-          outwardSocial: z.number(),
+          somatic: z.number(),
+          temporal: z.number(),
+          symbolic: z.number(),
+          psychological: z.number(),
+          perspective: z.number(),
+          spiritual: z.number(),
+          relational: z.number(),
+          language: z.number(),
         }),
         existingScript: z.string().optional(),
       });
@@ -139,16 +139,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const defaultArchetype = archetypes[0]; // "The Healer"
       const defaultStyle = styles[0]; // "Conversational"
       
-      // Use balanced dimension values for free tier
+      // Use balanced dimension values for free tier (all 8D dimensions at 50%)
       const balancedDimensions = {
-        directAuthoritarian: 50,
-        indirectPermissive: 50,
-        analyticalRational: 50,
-        emotionalMetaphorical: 50,
-        paternalParental: 50,
-        maternalNurturing: 50,
-        inwardIntrospective: 50,
-        outwardSocial: 50,
+        somatic: 50,
+        temporal: 50,
+        symbolic: 50,
+        psychological: 50,
+        perspective: 50,
+        spiritual: 50,
+        relational: 50,
+        language: 50,
       };
       
       const result = await aiService.generateFullScript({
@@ -210,14 +210,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         archetypeId: z.number(),
         styleId: z.number(),
         dimensionValues: z.object({
-          directAuthoritarian: z.number(),
-          indirectPermissive: z.number(),
-          analyticalRational: z.number(),
-          emotionalMetaphorical: z.number(),
-          paternalParental: z.number(),
-          maternalNurturing: z.number(),
-          inwardIntrospective: z.number(),
-          outwardSocial: z.number(),
+          somatic: z.number(),
+          temporal: z.number(),
+          symbolic: z.number(),
+          psychological: z.number(),
+          perspective: z.number(),
+          spiritual: z.number(),
+          relational: z.number(),
+          language: z.number(),
         }),
         existingScript: z.string().optional(),
         paymentIntentId: z.string(),
