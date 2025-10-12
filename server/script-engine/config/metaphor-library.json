@@ -1,0 +1,162 @@
+{
+  "version": "1.0.0",
+  "metaphor_families": {
+    "garden": {
+      "primary_images": ["seeds", "soil", "roots", "growth", "seasons", "rain", "sun", "flowering", "harvest"],
+      "related_imagery": ["tending", "nurturing", "planting", "weeding", "pruning", "watering"],
+      "good_for_issues": ["growth", "patience", "nurturing_self", "body_relationship", "slow_change"],
+      "avoid_for": ["urgent_crisis", "trauma_processing"]
+    },
+    "water": {
+      "primary_images": ["river", "stream", "ocean", "waves", "flow", "currents", "depth", "surface"],
+      "related_imagery": ["flowing", "clearing", "cleansing", "depths", "tides", "ripples"],
+      "good_for_issues": ["emotions", "letting_go", "natural_flow", "clearing", "depth_work"],
+      "avoid_for": ["drowning_fears", "loss_grief"]
+    },
+    "light": {
+      "primary_images": ["sun", "brightness", "warmth", "illumination", "glow", "radiance", "dawn"],
+      "related_imagery": ["expanding", "brightening", "warming", "illuminating", "shining"],
+      "good_for_issues": ["hope", "clarity", "awakening", "confidence", "visibility"],
+      "avoid_for": ["shame", "hiding"]
+    },
+    "journey": {
+      "primary_images": ["path", "road", "steps", "destination", "traveler", "horizon", "direction"],
+      "related_imagery": ["walking", "traveling", "discovering", "arriving", "returning"],
+      "good_for_issues": ["life_transitions", "progress", "direction", "purpose"],
+      "avoid_for": ["feeling_lost", "no_direction"]
+    },
+    "building": {
+      "primary_images": ["foundation", "structure", "walls", "home", "shelter", "construction"],
+      "related_imagery": ["building", "constructing", "strengthening", "creating", "establishing"],
+      "good_for_issues": ["confidence", "strength", "stability", "foundation"],
+      "avoid_for": ["feeling_trapped", "rigid_thinking"]
+    },
+    "nature_gentle": {
+      "primary_images": ["clouds", "breeze", "leaves", "meadow", "gentle_rain", "moonlight"],
+      "related_imagery": ["floating", "drifting", "softening", "gentle", "peaceful"],
+      "good_for_issues": ["anxiety", "sleep", "relaxation", "gentleness", "beginners"],
+      "avoid_for": []
+    },
+    "tree": {
+      "primary_images": ["roots", "trunk", "branches", "leaves", "growth_rings", "seasons"],
+      "related_imagery": ["rooted", "grounded", "growing", "reaching", "stable", "flexible"],
+      "good_for_issues": ["grounding", "strength", "flexibility", "growth", "stability"],
+      "avoid_for": []
+    },
+    "observer": {
+      "primary_images": ["hill", "mountain_top", "viewpoint", "witness", "distance", "perspective"],
+      "related_imagery": ["watching", "witnessing", "observing", "safe_distance", "clarity"],
+      "good_for_issues": ["trauma", "anxiety", "overwhelm", "perspective", "safety"],
+      "avoid_for": ["dissociation", "detachment_issues"]
+    }
+  },
+  "issue_to_metaphor_mapping": {
+    "anxiety": {
+      "recommended": ["nature_gentle", "observer", "tree"],
+      "avoid": ["water (if drowning fears)", "journey (if feeling lost)"],
+      "specific_images": [
+        {
+          "name": "stones_in_pockets",
+          "description": "Releasing burdens by taking stones out of pockets",
+          "language": "And imagine each worry, each tension, like a stone you've been carrying in your pockets. One by one, gently setting them down..."
+        },
+        {
+          "name": "tight_jar_loosening",
+          "description": "A jar lid that's been too tight, now loosening",
+          "language": "Like a jar that's been sealed too tight, and now, with gentle persistence, beginning to loosen, to ease, to open..."
+        },
+        {
+          "name": "clouds_passing",
+          "description": "Clouds passing across the sky",
+          "language": "Like clouds passing across the sky - you observe them, acknowledge them, and watch as they drift by, changing, moving, releasing..."
+        }
+      ]
+    },
+    "confidence": {
+      "recommended": ["tree", "light", "building"],
+      "avoid": ["armor/shields (reinforces separation)"],
+      "specific_images": [
+        {
+          "name": "roots_growing",
+          "description": "Roots growing deeper and stronger",
+          "language": "Like roots growing deeper into rich soil, each day stronger, more stable, more certain of your place and power..."
+        },
+        {
+          "name": "light_expanding",
+          "description": "Inner light expanding outward",
+          "language": "Like a light that's always been within you, now expanding, growing brighter, filling you, radiating outward..."
+        },
+        {
+          "name": "tree_strengthening",
+          "description": "Tree trunk strengthening while remaining flexible",
+          "language": "Like a tree that grows both strong and flexible, rooted deeply yet able to sway with the wind, powerful in your stability..."
+        }
+      ]
+    },
+    "weight": {
+      "recommended": ["garden", "nature_gentle"],
+      "avoid": ["battle language (creates conflict with body)"],
+      "specific_images": [
+        {
+          "name": "garden_tending",
+          "description": "Tending a garden with care and nurturing",
+          "language": "Like tending a garden with gentle care, nurturing the relationship with your body, honoring its wisdom, its needs..."
+        },
+        {
+          "name": "coming_home",
+          "description": "Coming home to yourself and your body",
+          "language": "Like coming home to yourself, to your body, recognizing this is where you belong, this is your true home..."
+        }
+      ]
+    },
+    "trauma": {
+      "recommended": ["observer", "nature_gentle"],
+      "avoid": ["going_back_into_it (re-traumatizing)"],
+      "specific_images": [
+        {
+          "name": "observer_on_hill",
+          "description": "Safe observer on a hill, distant perspective",
+          "language": "From a safe place, like standing on a hill, you can observe what happened from this distance, with this safety, this new perspective..."
+        },
+        {
+          "name": "rewriting_story",
+          "description": "Rewriting the narrative with new understanding",
+          "language": "And now, with the wisdom you have now, you can rewrite that story, add the ending that was missing, the care that was needed..."
+        },
+        {
+          "name": "gentle_witnessing",
+          "description": "Gentle witnessing with compassion",
+          "language": "Gently witnessing what happened, not going back into it, but seeing it with compassion, with the understanding you have now..."
+        }
+      ]
+    },
+    "sleep": {
+      "recommended": ["nature_gentle", "water"],
+      "avoid": ["anything_activating"],
+      "specific_images": [
+        {
+          "name": "peaceful_water",
+          "description": "Peaceful water, gentle waves",
+          "language": "Like peaceful water, gentle waves rocking you, each breath a wave carrying you deeper into rest..."
+        },
+        {
+          "name": "soft_clouds",
+          "description": "Soft clouds drifting",
+          "language": "Like soft clouds drifting across a twilight sky, thoughts becoming lighter, softer, dissolving into rest..."
+        }
+      ]
+    }
+  },
+  "consistency_rules": {
+    "primary_metaphor_required_if": {
+      "symbolic_dimension_above": 40
+    },
+    "related_imagery_allowed": {
+      "within_same_family": true,
+      "example": "If garden is primary, seeds/roots/seasons are OK"
+    },
+    "conflicting_metaphors_blocked": {
+      "example": "If garden is primary, mountain/ocean are NOT allowed"
+    }
+  }
+}

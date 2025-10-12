@@ -1,0 +1,284 @@
+{
+  "version": "1.0.0",
+  "principles": [
+    {
+      "id": "somatic-anchoring",
+      "name": "Somatic Anchoring Early",
+      "description": "Ground in body awareness within first 3-5 sentences",
+      "rule": "Every script MUST begin with body awareness within the first 150 words",
+      "why": "The body is the foundation. You can't do deep work if someone's floating in their head.",
+      "prompt_directives": [
+        "Begin script with body/breath awareness in first 100-150 words",
+        "Include at least one of: breath mention, physical sensation, weight, temperature, contact points",
+        "Anchor in present moment through physical sensations",
+        "Give permission to settle into the body"
+      ],
+      "quality_gates": [
+        {
+          "gate": "body_breath_early",
+          "check": "Body or breath referenced in first 100 words",
+          "method": "regex",
+          "pattern": "\\b(breath|breathing|body|weight|sensation|feel|notice|aware|settle)\\b",
+          "min_matches": 2,
+          "max_word_position": 100
+        },
+        {
+          "gate": "physical_sensations",
+          "check": "Physical sensations mentioned",
+          "method": "keyword",
+          "keywords": ["weight", "temperature", "contact", "pressure", "warmth", "cool", "heavy", "light", "tingling", "pulsing"],
+          "min_matches": 1
+        }
+      ],
+      "examples": [
+        "And as you settle into this moment, you might begin to notice the breath, moving in its own rhythm, the weight of your body supported...",
+        "Taking a moment to notice where your body makes contact with the surface beneath you, feeling the support that's always been there...",
+        "And you might become aware of the breath, flowing naturally, effortlessly, just as it has been all along..."
+      ]
+    },
+    {
+      "id": "metaphor-consistency",
+      "name": "Metaphor Consistency",
+      "description": "One central metaphor per script, all imagery serves ONE landscape",
+      "rule": "One central metaphor per script. All imagery must be coherent within that metaphor world.",
+      "why": "A script is a journey through one landscape, not a tour of disconnected scenes.",
+      "prompt_directives": [
+        "Select ONE primary metaphor that fits the presenting issue",
+        "All subsequent imagery must be coherent with this central metaphor",
+        "Do not introduce unrelated metaphorical landscapes",
+        "Related imagery within same metaphor world is allowed"
+      ],
+      "quality_gates": [
+        {
+          "gate": "single_primary_metaphor",
+          "check": "One dominant metaphor identified",
+          "method": "semantic_analysis",
+          "instruction": "Identify primary metaphor family (garden, water, journey, building, light, etc.)"
+        },
+        {
+          "gate": "no_conflicting_metaphors",
+          "check": "No unrelated metaphor families present",
+          "method": "semantic_analysis",
+          "instruction": "Flag if multiple unrelated metaphor families detected (e.g., garden AND mountain)"
+        }
+      ],
+      "metaphor_selection_rules": {
+        "if_symbolic_level_above": 40,
+        "require": "Select one primary metaphor",
+        "allow": "Related imagery within same metaphor world",
+        "block": "Additional unrelated metaphorical landscapes"
+      }
+    },
+    {
+      "id": "language-rhythm",
+      "name": "Language Rhythm",
+      "description": "Sentence length mirrors trance depth",
+      "rule": "Sentence structure and length reflect intended trance state",
+      "why": "The cadence teaches the nervous system.",
+      "prompt_directives": [
+        "Opening (light trance): 8-12 word sentences, simple structure",
+        "Deepening (medium): 12-18 word sentences, compound flowing",
+        "Core work (deep): 18-25 word sentences, complex layered meandering",
+        "Emergence (return): Gradually shorten from 18→15→12→8 words"
+      ],
+      "quality_gates": [
+        {
+          "gate": "opening_rhythm",
+          "check": "Opening sentences average 8-12 words",
+          "method": "sentence_analysis",
+          "section": "first_150_words",
+          "target_avg_length": [8, 12]
+        },
+        {
+          "gate": "deepening_rhythm",
+          "check": "Deepening sentences average 12-18 words",
+          "method": "sentence_analysis",
+          "section": "middle_third",
+          "target_avg_length": [12, 18]
+        },
+        {
+          "gate": "core_rhythm",
+          "check": "Core work sentences average 15-22 words",
+          "method": "sentence_analysis",
+          "section": "middle_section",
+          "target_avg_length": [15, 22]
+        },
+        {
+          "gate": "no_monotony",
+          "check": "Not all sentences same length (variance required)",
+          "method": "statistical",
+          "require_variance": true
+        }
+      ],
+      "examples": {
+        "opening": "And you might notice the breath.",
+        "deepening": "And as you continue to relax, you might notice how the breath moves naturally, effortlessly.",
+        "core": "And in this deep space, as you allow yourself to simply be, to rest, to receive what your body already knows, what has always been true...",
+        "emergence": "Taking a gentle breath. Becoming aware. Returning refreshed."
+      }
+    },
+    {
+      "id": "emotional-safety",
+      "name": "Emotional Safety",
+      "description": "Permission, not commands - lead with invitation",
+      "rule": "Lead with invitation. Commands only after safety established.",
+      "why": "The subconscious needs to feel safe to open.",
+      "prompt_directives": [
+        "Establish safety through permissive language first",
+        "Use invitation words: might, perhaps, could, if it feels right, at your own pace",
+        "Commands only after permission framework established",
+        "Client must maintain agency throughout"
+      ],
+      "language_hierarchy": {
+        "beginner_anxious": {
+          "permissive": "90%",
+          "gentle_directive": "10%",
+          "commands": "0%"
+        },
+        "intermediate": {
+          "permissive": "60%",
+          "gentle_directive": "30%",
+          "direct_suggestion": "10%"
+        },
+        "advanced": {
+          "permissive": "40%",
+          "directive": "40%",
+          "direct_suggestion": "20%"
+        }
+      },
+      "safety_language_library": [
+        "You might...",
+        "Perhaps...",
+        "If it feels right...",
+        "In your own way...",
+        "At your own pace...",
+        "Your body knows...",
+        "When you're ready...",
+        "As much or as little as feels right..."
+      ],
+      "quality_gates": [
+        {
+          "gate": "permission_language_ratio",
+          "check": "Beginner templates have 80%+ permissive language",
+          "method": "linguistic_analysis",
+          "count_permission_words": ["might", "perhaps", "could", "if", "when you're ready", "at your pace"],
+          "min_ratio": 0.8
+        },
+        {
+          "gate": "client_agency",
+          "check": "Client has choice and agency throughout",
+          "method": "semantic_check",
+          "avoid_patterns": ["you must", "you will", "you have to"],
+          "max_command_ratio": 0.1
+        }
+      ]
+    },
+    {
+      "id": "specificity-without-prescription",
+      "name": "Specificity Without Prescription",
+      "description": "Concrete enough to create experience, vague enough to be personal",
+      "rule": "Must be vivid to land, but personal to fit.",
+      "why": "Scripts need to be concrete enough to create an experience, but flexible enough to be personally relevant.",
+      "prompt_directives": [
+        "Name the category of experience",
+        "Offer 2-3 specific examples",
+        "Add 'or whatever X means to you' for flexibility",
+        "Trust the client's subconscious to fill in personal details"
+      ],
+      "goldilocks_zone": {
+        "too_vague": [
+          "You feel better",
+          "Everything is fine",
+          "You are healed"
+        ],
+        "too_specific": [
+          "You feel tingling in your left hand",
+          "You see bright blue light",
+          "You are at the beach in Hawaii"
+        ],
+        "just_right": [
+          "You might notice a sensation in your hands... warmth, or tingling, or perhaps just presence...",
+          "A color that represents peace for you...",
+          "Someone who loves you... real or imagined...",
+          "A place where you feel completely safe... familiar or imaginary..."
+        ]
+      },
+      "formula": [
+        "1. Name the category",
+        "2. Offer 2-3 examples",
+        "3. Add 'or whatever X means to you'",
+        "4. Trust their subconscious"
+      ],
+      "quality_gates": [
+        {
+          "gate": "concrete_but_flexible",
+          "check": "Specific sensory details with flexibility phrases",
+          "method": "pattern_check",
+          "require_patterns": ["or perhaps", "whatever", "means to you", "in your own way"],
+          "min_occurrences": 3
+        }
+      ]
+    },
+    {
+      "id": "inherent-wholeness",
+      "name": "Recognition of Inherent Wholeness",
+      "description": "Remind, not fix - they are already complete",
+      "rule": "Scripts remind, not fix. The listener is whole, they've just forgotten.",
+      "why": "This is the heart. The listener is a miracle who's merely forgotten.",
+      "prompt_directives": [
+        "Use language of remembering, not acquiring",
+        "Frame as 'already within you' not 'will become'",
+        "Recognize body wisdom and inherent capacity",
+        "Avoid 'fixing' or 'broken' language entirely",
+        "Emphasize removing obstacles, not building something new"
+      ],
+      "tone_framework": {
+        "avoid_fixing": [
+          "I will heal your broken parts",
+          "Let's fix what's wrong",
+          "Repair the damage"
+        ],
+        "use_remembering": [
+          "Your body already knows",
+          "You're remembering something you've always known",
+          "This wholeness has always been here",
+          "Returning to what you've always been"
+        ]
+      },
+      "language_framing": {
+        "use": ["remember", "reclaim", "return", "already within you", "recognize", "rediscover"],
+        "avoid": ["learn", "acquire", "arrive", "become", "fix", "broken", "damaged"]
+      },
+      "miracle_recognition": [
+        "The miracle of breath moving you",
+        "Your heart beating faithfully",
+        "Your body healing without instruction",
+        "The intelligence that grew you from a single cell",
+        "The wisdom that has always been within you"
+      ],
+      "quality_gates": [
+        {
+          "gate": "remembering_language",
+          "check": "Uses language of remembering/recognition, not learning/fixing",
+          "method": "linguistic_analysis",
+          "require_words": ["remember", "reclaim", "return", "already", "always been", "recognize"],
+          "min_matches": 3
+        },
+        {
+          "gate": "no_fixing_language",
+          "check": "Avoids fixing/broken language",
+          "method": "keyword_exclusion",
+          "forbidden_words": ["fix", "broken", "damaged", "repair", "heal the wound"],
+          "max_matches": 0
+        },
+        {
+          "gate": "body_wisdom_present",
+          "check": "References body wisdom or inherent capacity",
+          "method": "semantic_check",
+          "require_concepts": ["body knows", "inner wisdom", "natural intelligence", "always had"],
+          "min_matches": 1
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,196 @@
+{
+  "version": "1.0.0",
+  "arcs": [
+    {
+      "id": "effortlessness",
+      "name": "Effortlessness of Change",
+      "description": "Change is natural when we remove blocks, not effortful when we push",
+      "core_message": "Change happens naturally when obstacles are removed, like water finding its path",
+      "when_to_use": ["always", "foundation"],
+      "presenting_issues": ["resistance", "trying too hard", "forcing change", "burnout"],
+      "key_language": [
+        "As naturally as breath",
+        "Effortlessly, the way your body heals a cut",
+        "Without trying, without forcing",
+        "Change happens when we get out of its way",
+        "Like water flowing around obstacles",
+        "Your body knows how to do this"
+      ],
+      "prompt_integration": "Emphasize that change is a natural unfolding, not something that requires effort or force. Use metaphors of natural processes (healing, growth, water flowing)."
+    },
+    {
+      "id": "re-minding",
+      "name": "Re-Minding (Not Learning)",
+      "description": "The brain has been in peaceful states before - we're RE-MINDING it",
+      "core_message": "You're not learning something new; you're remembering what you already know",
+      "when_to_use": ["always", "removes pressure of learning"],
+      "presenting_issues": ["performance anxiety", "learning pressure", "fear of failure"],
+      "key_language": [
+        "Your body remembers how to feel at peace",
+        "Some part of you has always known this",
+        "You're accessing a state you've been in before",
+        "Re-minding yourself of what you already know",
+        "This feeling isn't new - it's a return",
+        "Your system remembers this state"
+      ],
+      "prompt_integration": "Frame all suggestions as remembering or returning to a known state, not acquiring something new. Emphasize recognition over learning."
+    },
+    {
+      "id": "two-tempos",
+      "name": "Two Tempos of Change",
+      "description": "Change can be sudden (bursting) or gradual (slow growth) - both valid",
+      "core_message": "Honor whatever tempo of change feels right for you",
+      "when_to_use": ["always", "gives permission for any pace"],
+      "presenting_issues": ["impatience", "frustration with progress", "comparison", "timeline pressure"],
+      "variations": {
+        "bursting": {
+          "name": "The Bursting (Flower Bud)",
+          "description": "Sudden transformation, ready to bloom",
+          "language": [
+            "Like a flower bud that's been preparing, ready to bloom in an instant",
+            "All the work has been done beneath the surface, and now...",
+            "Sometimes change happens in a moment of recognition",
+            "The breakthrough that's been building, ready to emerge"
+          ]
+        },
+        "slow_growth": {
+          "name": "The Slow Growth (Seed Underground)",
+          "description": "Gradual change, invisible work beneath the surface",
+          "language": [
+            "Like a seed growing beneath the soil - invisible work until breakthrough",
+            "Patient, steady change building beneath awareness",
+            "Trust the process even when you can't see the growth",
+            "Each day, small shifts accumulating"
+          ]
+        }
+      },
+      "key_language": [
+        "Change in its own time - sometimes sudden, sometimes gradual, always natural",
+        "Your body knows the tempo that's right for you",
+        "Fast or slow, both are perfect",
+        "The wisdom to unfold at exactly the right pace"
+      ],
+      "prompt_integration": "Include both possibilities - sudden shift and gradual change. Give explicit permission for whatever tempo emerges naturally."
+    },
+    {
+      "id": "recognition-ego-strengthening",
+      "name": "Recognition Ego Strengthening",
+      "description": "You are MORE than you realize - recognition, not inflation",
+      "core_message": "Recognizing the power, capacity, and wholeness that's always been there",
+      "when_to_use": ["confidence issues", "self-worth", "empowerment", "imposter syndrome"],
+      "presenting_issues": ["low self-esteem", "imposter syndrome", "self-doubt", "lack of confidence"],
+      "key_language": [
+        "You are more powerful than you've been letting yourself remember",
+        "More wonderful, more capable than you've allowed yourself to recognize",
+        "Not becoming something new - recognizing what's always been true",
+        "The strength that's always been yours",
+        "Your inherent capacity, simply covered over",
+        "The truth of your capability, waiting to be recognized"
+      ],
+      "prompt_integration": "Frame ego strengthening as recognition of existing qualities, not creation of new ones. Use 'recognize' and 'remember' language, not 'become' or 'develop'."
+    },
+    {
+      "id": "relief-to-new-life",
+      "name": "Relief → Inspiration → New Life",
+      "description": "The transformation sequence from weight to freedom",
+      "core_message": "As weight lifts, energy returns, and new possibilities open",
+      "when_to_use": ["major transformation", "life changes", "breakthrough work"],
+      "presenting_issues": ["feeling stuck", "carrying burdens", "exhaustion", "seeking life change"],
+      "transformation_sequence": [
+        {
+          "stage": "weight",
+          "description": "Acknowledge the burden at all levels",
+          "language": "The weight you've been carrying - physically, emotionally, mentally, spiritually"
+        },
+        {
+          "stage": "lifting",
+          "description": "Release of emotional baggage and limiting beliefs",
+          "language": "As that weight begins to lift, emotional baggage releasing, old beliefs dissolving"
+        },
+        {
+          "stage": "energy_returns",
+          "description": "Reclaim the energy that was bound up",
+          "language": "And you feel energy returning - energy that was always yours, now freed up, available"
+        },
+        {
+          "stage": "inspiration",
+          "description": "New possibilities become visible",
+          "language": "Relief becomes inspiration, new possibilities opening before you"
+        },
+        {
+          "stage": "new_life",
+          "description": "Living from authentic self",
+          "language": "Inspiration becomes new life, living from your authentic self, your true nature"
+        }
+      ],
+      "key_language": [
+        "As that weight lifts, you feel energy returning",
+        "Energy that was always yours, now freed up",
+        "Relief becomes inspiration. Inspiration becomes new life.",
+        "The natural sequence of transformation unfolding"
+      ],
+      "prompt_integration": "Follow the 5-stage sequence: Weight → Lifting → Energy Returns → Inspiration → New Life. Emphasize that energy returns (not created), and transformation is natural unfolding."
+    },
+    {
+      "id": "emotional-physical-chain",
+      "name": "Emotions Create Physical Tension",
+      "description": "Clear emotions, release tension, return to true self",
+      "core_message": "Unprocessed emotions create physical tension; releasing them reveals who you've always been",
+      "when_to_use": ["anxiety", "physical tension", "stuck emotions", "trauma healing"],
+      "presenting_issues": ["anxiety", "tension", "stuck feelings", "body armoring", "trauma"],
+      "chain_sequence": [
+        "Unprocessed emotions (fear, shame, grief)",
+        "Physical tension in body",
+        "Hesitation, stuckness, lack of confidence",
+        "Isolation",
+        "False narratives and stories"
+      ],
+      "reversal_sequence": [
+        "Acknowledge the emotions",
+        "Allow them to move and release",
+        "Feel physical tension softening",
+        "Confidence and ease returning",
+        "Connection restored",
+        "True story revealed"
+      ],
+      "key_language": [
+        "These layers of protection served you once. Now we're gently removing what you no longer need.",
+        "Returning to who you've always been underneath the armor",
+        "Not becoming someone new. Remembering who you are.",
+        "As emotions clear, tension releases, and you return to yourself",
+        "The real you, beneath the protective layers"
+      ],
+      "prompt_integration": "Frame tension as protective armor, not pathology. Emphasize gentle release and return to authentic self beneath the protection."
+    },
+    {
+      "id": "brain-master-skill",
+      "name": "Brain's Master Skill: Forgetting & Learning",
+      "description": "The same skill that learned the problem can learn the solution",
+      "core_message": "Your brain is masterful at both forgetting and learning - use that power",
+      "when_to_use": ["habit change", "neural rewiring", "overcoming patterns"],
+      "presenting_issues": ["bad habits", "unwanted patterns", "automatic responses", "conditioning"],
+      "key_language": [
+        "Your brain is a master at forgetting what no longer serves and learning something new",
+        "The same skill that learned fear can learn peace",
+        "Forgetting is as natural as learning",
+        "Your brain does this automatically - let it work for you",
+        "The mechanism that created the pattern can create a new one"
+      ],
+      "prompt_integration": "Reframe brain's capacity to form habits as a feature, not a bug. The same neuroplasticity that learned unwanted patterns can learn desired ones."
+    }
+  ],
+  "arc_selection_rules": {
+    "always_include": ["effortlessness", "re-minding", "two-tempos"],
+    "issue_mappings": {
+      "anxiety": ["emotional-physical-chain", "effortlessness"],
+      "confidence": ["recognition-ego-strengthening", "inherent-wholeness"],
+      "stuck": ["relief-to-new-life", "two-tempos"],
+      "habits": ["brain-master-skill", "effortlessness"],
+      "trauma": ["emotional-physical-chain", "two-tempos"],
+      "self-worth": ["recognition-ego-strengthening"],
+      "life-change": ["relief-to-new-life"]
+    },
+    "max_arcs_per_script": 3,
+    "priority_order": ["always_include", "issue_specific", "template_preferred"]
+  }
+}
