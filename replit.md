@@ -138,7 +138,7 @@ npx tsx server/seed.ts  # Seed database with initial data
 
 ## Recent Changes (2025-10-12)
 
-### CRITICAL FIX: Corrected 8D Framework Dimensions
+### CRITICAL FIX #1: Corrected 8D Framework Dimensions
 - **Issue**: Application was built with incorrect paired dimensions (Direct/Authoritarian vs Indirect/Permissive, etc.)
 - **Resolution**: Replaced with actual Erika Flint 8D Framework dimensions:
   - Somatic, Temporal, Symbolic, Psychological, Perspective, Spiritual, Relational, Language
@@ -150,6 +150,18 @@ npx tsx server/seed.ts  # Seed database with initial data
   - Fixed frontend dimension mapping in app.tsx
   - Updated backend routes validation schemas
   - Cleared database and reseeded with correct dimensions
+
+### CRITICAL FIX #2: Frontend API Request Bug
+- **Issue**: apiRequest function had wrong parameter order causing "not a valid HTTP method" errors
+- **Root Cause**: Function defined as (method, url, data) but called as (url, options) throughout codebase
+- **Resolution**: Changed apiRequest signature to (url, options) to match standard fetch API pattern
+- **Additional Fix**: Function now auto-parses JSON responses for cleaner mutation/query code
+
+### CRITICAL FIX #3: AI JSON Parsing Bug  
+- **Issue**: Claude sometimes wraps JSON in markdown code blocks (```json\n{...}```) breaking JSON.parse()
+- **Error**: "Unexpected token '`'" when parsing AI responses
+- **Resolution**: Added cleanJsonResponse() helper to strip markdown before parsing
+- **Applied To**: All 3 AI methods (generatePreview, generateFullScript, analyzeScriptDimensions)
   
 ### Earlier Session Fixes
 - Fixed free-tier eligibility check to use correct field names

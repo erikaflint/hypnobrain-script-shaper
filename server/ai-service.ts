@@ -15,6 +15,16 @@ const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
 
+// Helper function to strip markdown code blocks from AI responses
+function cleanJsonResponse(text: string): string {
+  // Remove markdown code block markers (```json, ```, etc.)
+  const cleaned = text
+    .replace(/^```(?:json)?\s*\n?/gm, '')
+    .replace(/\n?```\s*$/gm, '')
+    .trim();
+  return cleaned;
+}
+
 export interface DimensionValues {
   somatic: number;
   temporal: number;
@@ -124,7 +134,7 @@ Format as JSON:
     if (textContent.type !== 'text') {
       throw new Error('Expected text response from AI');
     }
-    const result = JSON.parse(textContent.text);
+    const result = JSON.parse(cleanJsonResponse(textContent.text));
     return result;
   }
 
@@ -181,7 +191,7 @@ Format as JSON:
     if (textContent.type !== 'text') {
       throw new Error('Expected text response from AI');
     }
-    const result = JSON.parse(textContent.text);
+    const result = JSON.parse(cleanJsonResponse(textContent.text));
     return result;
   }
 
@@ -239,7 +249,7 @@ Format as JSON:
     if (textContent.type !== 'text') {
       throw new Error('Expected text response from AI');
     }
-    const result = JSON.parse(textContent.text);
+    const result = JSON.parse(cleanJsonResponse(textContent.text));
     return result;
   }
 }
