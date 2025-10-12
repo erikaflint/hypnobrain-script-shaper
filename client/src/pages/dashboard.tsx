@@ -4,6 +4,7 @@ import { Link } from "wouter";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { VoicePlayer } from "@/components/voice-player";
 import { useToast } from "@/hooks/use-toast";
 import { Copy, FileText, Calendar, Tag, Sparkles, Eye, Home, Wand2 } from "lucide-react";
 import { format } from "date-fns";
@@ -193,25 +194,39 @@ export default function Dashboard() {
 
                   {/* Preview or Full Script Display */}
                   {generation.fullScript ? (
-                    <div className="border-t pt-4">
-                      <p className="text-sm font-medium mb-2">Full Script:</p>
-                      <div 
-                        className="prose prose-sm max-w-none dark:prose-invert whitespace-pre-wrap bg-muted/30 p-4 rounded-md max-h-60 overflow-y-auto"
-                        data-testid={`script-content-${generation.id}`}
-                      >
-                        {generation.fullScript}
+                    <>
+                      <div className="border-t pt-4">
+                        <p className="text-sm font-medium mb-2">Full Script:</p>
+                        <div 
+                          className="prose prose-sm max-w-none dark:prose-invert whitespace-pre-wrap bg-muted/30 p-4 rounded-md max-h-60 overflow-y-auto"
+                          data-testid={`script-content-${generation.id}`}
+                        >
+                          {generation.fullScript}
+                        </div>
                       </div>
-                    </div>
+                      
+                      {/* Voice Player for Full Script */}
+                      <div className="border-t pt-4">
+                        <VoicePlayer text={generation.fullScript} title="Listen to Script" />
+                      </div>
+                    </>
                   ) : generation.previewText ? (
-                    <div className="border-t pt-4">
-                      <p className="text-sm font-medium mb-2">Preview:</p>
-                      <div 
-                        className="prose prose-sm max-w-none dark:prose-invert whitespace-pre-wrap bg-muted/30 p-4 rounded-md"
-                        data-testid={`preview-content-${generation.id}`}
-                      >
-                        {generation.previewText}
+                    <>
+                      <div className="border-t pt-4">
+                        <p className="text-sm font-medium mb-2">Preview:</p>
+                        <div 
+                          className="prose prose-sm max-w-none dark:prose-invert whitespace-pre-wrap bg-muted/30 p-4 rounded-md"
+                          data-testid={`preview-content-${generation.id}`}
+                        >
+                          {generation.previewText}
+                        </div>
                       </div>
-                    </div>
+                      
+                      {/* Voice Player for Preview */}
+                      <div className="border-t pt-4">
+                        <VoicePlayer text={generation.previewText} title="Listen to Preview" />
+                      </div>
+                    </>
                   ) : null}
                 </div>
               </Card>

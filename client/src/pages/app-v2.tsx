@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { VoicePlayer } from "@/components/voice-player";
 import { ArrowLeft, ArrowRight, Sparkles, Check, Sliders, User, MessageSquare, Eye, Wand2, FileText } from "lucide-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
@@ -698,49 +699,54 @@ export default function AppV2() {
 
             {/* Full Script Result */}
             {fullScriptResult && (
-              <Card className="p-6">
-                <div className="flex items-start gap-3 mb-4">
-                  <Check className="w-5 h-5 text-primary mt-1" />
-                  <div className="flex-1">
-                    <h3 className="text-lg font-semibold">Complete Hypnosis Script</h3>
-                    <p className="text-sm text-muted-foreground">
-                      Your full therapeutic script is ready
-                    </p>
+              <div className="space-y-6">
+                <Card className="p-6">
+                  <div className="flex items-start gap-3 mb-4">
+                    <Check className="w-5 h-5 text-primary mt-1" />
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold">Complete Hypnosis Script</h3>
+                      <p className="text-sm text-muted-foreground">
+                        Your full therapeutic script is ready
+                      </p>
+                    </div>
                   </div>
-                </div>
-                <div 
-                  className="prose max-w-none dark:prose-invert whitespace-pre-wrap"
-                  data-testid="full-script-content"
-                >
-                  {fullScriptResult.fullScript}
-                </div>
-                <div className="mt-6 pt-6 border-t flex gap-3">
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      navigator.clipboard.writeText(fullScriptResult.fullScript);
-                      toast({
-                        title: "Copied",
-                        description: "Script copied to clipboard",
-                      });
-                    }}
-                    data-testid="button-copy-script"
+                  <div 
+                    className="prose max-w-none dark:prose-invert whitespace-pre-wrap"
+                    data-testid="full-script-content"
                   >
-                    Copy Script
-                  </Button>
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      setStep("mixer");
-                      setFullScriptResult(null);
-                      setPreviewResult(null);
-                    }}
-                    data-testid="button-generate-new"
-                  >
-                    Generate New Script
-                  </Button>
-                </div>
-              </Card>
+                    {fullScriptResult.fullScript}
+                  </div>
+                  <div className="mt-6 pt-6 border-t flex gap-3">
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        navigator.clipboard.writeText(fullScriptResult.fullScript);
+                        toast({
+                          title: "Copied",
+                          description: "Script copied to clipboard",
+                        });
+                      }}
+                      data-testid="button-copy-script"
+                    >
+                      Copy Script
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setStep("mixer");
+                        setFullScriptResult(null);
+                        setPreviewResult(null);
+                      }}
+                      data-testid="button-generate-new"
+                    >
+                      Generate New Script
+                    </Button>
+                  </div>
+                </Card>
+
+                {/* Voice Player */}
+                <VoicePlayer text={fullScriptResult.fullScript} title="Listen to Your Script" />
+              </div>
             )}
           </div>
         )}
