@@ -7,6 +7,7 @@ import NotFound from "@/pages/not-found";
 import Landing from "@/pages/landing";
 import Free from "@/pages/free";
 import AppPage from "@/pages/app";
+import AppV2 from "@/pages/app-v2";
 import Admin from "@/pages/admin";
 
 function Router() {
@@ -15,6 +16,7 @@ function Router() {
       <Route path="/" component={Landing} />
       <Route path="/free" component={Free} />
       <Route path="/app" component={AppPage} />
+      <Route path="/app-v2" component={AppV2} />
       <Route path="/admin" component={Admin} />
       <Route component={NotFound} />
     </Switch>

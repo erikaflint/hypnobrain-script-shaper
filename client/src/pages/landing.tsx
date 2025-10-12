@@ -63,7 +63,7 @@ export default function Landing() {
               <p className="text-muted-foreground mb-6">
                 Full customization with templates, dimension mixing, and marketing assets.
               </p>
-              <Link href="/app" data-testid="link-create">
+              <Link href="/app-v2" data-testid="link-create">
                 <Button className="w-full" size="lg" data-testid="button-create-custom">
                   Create Script - $3
                 </Button>
@@ -81,7 +81,7 @@ export default function Landing() {
               <p className="text-muted-foreground mb-6">
                 Transform existing scripts with templates. Adjust emphasis, add depth.
               </p>
-              <Link href="/app?mode=remix" data-testid="link-remix">
+              <Link href="/app-v2?mode=remix" data-testid="link-remix">
                 <Button className="w-full" variant="outline" size="lg" data-testid="button-remix-existing">
                   Remix Script - $3
                 </Button>
@@ -244,7 +244,7 @@ export default function Landing() {
                 </li>
               </ul>
               
-              <Link href="/app" data-testid="link-pricing-create">
+              <Link href="/app-v2" data-testid="link-pricing-create">
                 <Button className="w-full" data-testid="button-pricing-create">
                   Create Custom Script
                 </Button>
@@ -282,7 +282,7 @@ export default function Landing() {
                 </li>
               </ul>
               
-              <Link href="/app?mode=remix" data-testid="link-pricing-remix">
+              <Link href="/app-v2?mode=remix" data-testid="link-pricing-remix">
                 <Button variant="outline" className="w-full" data-testid="button-pricing-remix">
                   Remix Existing Script
                 </Button>
@@ -308,7 +308,7 @@ export default function Landing() {
                 Try Free This Week
               </Button>
             </Link>
-            <Link href="/app" data-testid="link-cta-create">
+            <Link href="/app-v2" data-testid="link-cta-create">
               <Button size="lg" variant="outline" data-testid="button-cta-create">
                 <Sliders className="w-5 h-5 mr-2" />
                 Create Custom Script
