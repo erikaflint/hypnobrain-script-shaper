@@ -48,11 +48,11 @@ export default function AppV2() {
     if (selectedTemplate?.template.jsonData) {
       const templateData = selectedTemplate.template.jsonData as any;
       if (templateData.dimensions) {
-        // Extract dimension levels from template
+        // Extract dimension levels from template - normalize keys to lowercase
         const values: Record<string, number> = {};
         Object.keys(templateData.dimensions).forEach(dimName => {
           const dimData = templateData.dimensions[dimName];
-          values[dimName] = dimData.level || 50;
+          values[dimName.toLowerCase()] = dimData.level || 50;
         });
         setDimensionValues(values);
       }
@@ -72,19 +72,19 @@ export default function AppV2() {
   }, [selectedTemplate]);
 
   // Fetch dimensions for sliders
-  const { data: dimensions = [] } = useQuery({
+  const { data: dimensions = [] } = useQuery<any[]>({
     queryKey: ['/api/dimensions'],
     enabled: step === "mixer"
   });
   
   // Fetch archetypes for dropdown
-  const { data: archetypes = [] } = useQuery({
+  const { data: archetypes = [] } = useQuery<any[]>({
     queryKey: ['/api/archetypes'],
     enabled: step === "mixer"
   });
   
   // Fetch styles for dropdown
-  const { data: styles = [] } = useQuery({
+  const { data: styles = [] } = useQuery<any[]>({
     queryKey: ['/api/styles'],
     enabled: step === "mixer"
   });
