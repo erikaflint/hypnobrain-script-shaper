@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { Link } from "wouter";
 import { Card } from "@/components/ui/card";
@@ -6,8 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { VoicePlayer } from "@/components/voice-player";
 import { useToast } from "@/hooks/use-toast";
-import { Copy, FileText, Calendar, Tag, Sparkles, Eye, Home, Wand2 } from "lucide-react";
+import { Copy, FileText, Calendar, Tag, Sparkles, Eye, Home, Wand2, Star, RotateCcw } from "lucide-react";
 import { format } from "date-fns";
+import { queryClient, apiRequest } from "@/lib/queryClient";
 import type { Generation } from "@shared/schema";
 
 export default function Dashboard() {
@@ -18,6 +19,23 @@ export default function Dashboard() {
   const { data: generations, isLoading, error } = useQuery<Generation[]>({
     queryKey: ["/api/generations", { email: searchEmail }],
     enabled: !!searchEmail,
+  });
+
+  // Mutation for toggling favorite
+  const favoriteMutation = useMutation({
+    mutationFn: async ({ id, isFavorite }: { id: number; isFavorite: boolean }) => {
+      return await apiRequest(`/api/generations/${id}/favorite`, {
+        method: "PATCH",
+        body: JSON.stringify({ isFavorite }),
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/generations", { email: searchEmail }] });
+      toast({
+        title: "Updated",
+        description: "Favorite status updated",
+      });
+    },
   });
 
   const handleSearch = () => {
@@ -37,6 +55,13 @@ export default function Dashboard() {
     toast({
       title: "Copied",
       description: `${label} copied to clipboard`,
+    });
+  };
+
+  const toggleFavorite = (generation: Generation) => {
+    favoriteMutation.mutate({
+      id: generation.id,
+      isFavorite: !generation.isFavorite,
     });
   };
 
@@ -121,119 +146,166 @@ export default function Dashboard() {
           <div className="space-y-6">
             <p className="text-sm text-muted-foreground" data-testid="scripts-count">
               Found {generations.length} script{generations.length !== 1 ? "s" : ""}
+              {generations.filter(g => g.isFavorite).length > 0 && (
+                <span className="ml-2">
+                  ({generations.filter(g => g.isFavorite).length} favorite{generations.filter(g => g.isFavorite).length !== 1 ? 's' : ''})
+                </span>
+              )}
             </p>
 
-            {generations.map((generation) => (
-              <Card key={generation.id} className="p-6" data-testid={`script-card-${generation.id}`}>
-                <div className="space-y-4">
-                  {/* Header */}
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex-1">
-                      <h3 className="text-lg font-semibold mb-2" data-testid={`script-title-${generation.id}`}>
-                        {generation.presentingIssue || "Hypnosis Script"}
-                      </h3>
-                      
-                      <div className="flex flex-wrap gap-3 text-sm text-muted-foreground">
-                        {generation.createdAt && (
-                          <div className="flex items-center gap-1">
-                            <Calendar className="w-4 h-4" />
-                            {format(new Date(generation.createdAt), "MMM d, yyyy")}
-                          </div>
-                        )}
-                        
-                        {generation.templateUsed && (
-                          <div className="flex items-center gap-1">
-                            <Tag className="w-4 h-4" />
-                            {generation.templateUsed}
-                          </div>
-                        )}
-                        
-                        <div className="flex items-center gap-1">
-                          <Sparkles className="w-4 h-4" />
-                          {generation.generationMode === "free_weekly" ? "Free" : 
-                           generation.generationMode === "remix" ? "Remix" : "Create New"}
-                        </div>
-                      </div>
-                    </div>
+            {/* Favorites Section */}
+            {generations.filter(g => g.isFavorite).length > 0 && (
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold flex items-center gap-2">
+                  <Star className="w-5 h-5 fill-current text-primary" />
+                  Favorites
+                </h3>
+                {generations.filter(g => g.isFavorite).map((generation) => (
+                  <Card key={generation.id} className="p-6 border-primary/50" data-testid={`script-card-${generation.id}`}>
+                    {renderScriptCard(generation)}
+                  </Card>
+                ))}
+              </div>
+            )}
 
-                    {/* Actions */}
-                    <div className="flex gap-2">
-                      {generation.previewText && (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => copyToClipboard(generation.previewText!, "Preview")}
-                          data-testid={`button-copy-preview-${generation.id}`}
-                        >
-                          <Copy className="w-4 h-4 mr-2" />
-                          Copy Preview
-                        </Button>
-                      )}
-                      
-                      {generation.fullScript && (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => copyToClipboard(generation.fullScript!, "Script")}
-                          data-testid={`button-copy-script-${generation.id}`}
-                        >
-                          <Copy className="w-4 h-4 mr-2" />
-                          Copy Full Script
-                        </Button>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Desired Outcome */}
-                  {generation.desiredOutcome && (
-                    <div>
-                      <p className="text-sm font-medium mb-1">Desired Outcome:</p>
-                      <p className="text-sm text-muted-foreground">{generation.desiredOutcome}</p>
-                    </div>
-                  )}
-
-                  {/* Preview or Full Script Display */}
-                  {generation.fullScript ? (
-                    <>
-                      <div className="border-t pt-4">
-                        <p className="text-sm font-medium mb-2">Full Script:</p>
-                        <div 
-                          className="prose prose-sm max-w-none dark:prose-invert whitespace-pre-wrap bg-muted/30 p-4 rounded-md max-h-60 overflow-y-auto"
-                          data-testid={`script-content-${generation.id}`}
-                        >
-                          {generation.fullScript}
-                        </div>
-                      </div>
-                      
-                      {/* Voice Player for Full Script */}
-                      <div className="border-t pt-4">
-                        <VoicePlayer text={generation.fullScript} title="Listen to Script" />
-                      </div>
-                    </>
-                  ) : generation.previewText ? (
-                    <>
-                      <div className="border-t pt-4">
-                        <p className="text-sm font-medium mb-2">Preview:</p>
-                        <div 
-                          className="prose prose-sm max-w-none dark:prose-invert whitespace-pre-wrap bg-muted/30 p-4 rounded-md"
-                          data-testid={`preview-content-${generation.id}`}
-                        >
-                          {generation.previewText}
-                        </div>
-                      </div>
-                      
-                      {/* Voice Player for Preview */}
-                      <div className="border-t pt-4">
-                        <VoicePlayer text={generation.previewText} title="Listen to Preview" />
-                      </div>
-                    </>
-                  ) : null}
-                </div>
-              </Card>
-            ))}
+            {/* All Scripts Section */}
+            {generations.filter(g => !g.isFavorite).length > 0 && (
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold">All Scripts</h3>
+                {generations.filter(g => !g.isFavorite).map((generation) => (
+                  <Card key={generation.id} className="p-6" data-testid={`script-card-${generation.id}`}>
+                    {renderScriptCard(generation)}
+                  </Card>
+                ))}
+              </div>
+            )}
           </div>
         )}
       </div>
     </div>
   );
+
+  function renderScriptCard(generation: Generation) {
+    return (
+      <div className="space-y-4">
+        {/* Header */}
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex-1">
+            <h3 className="text-lg font-semibold mb-2" data-testid={`script-title-${generation.id}`}>
+              {generation.presentingIssue || "Hypnosis Script"}
+              {generation.versionLabel && (
+                <span className="ml-2 text-sm font-normal text-muted-foreground">
+                  ({generation.versionLabel})
+                </span>
+              )}
+            </h3>
+            
+            <div className="flex flex-wrap gap-3 text-sm text-muted-foreground">
+              {generation.createdAt && (
+                <div className="flex items-center gap-1">
+                  <Calendar className="w-4 h-4" />
+                  {format(new Date(generation.createdAt), "MMM d, yyyy")}
+                </div>
+              )}
+              
+              {generation.templateUsed && (
+                <div className="flex items-center gap-1">
+                  <Tag className="w-4 h-4" />
+                  {generation.templateUsed}
+                </div>
+              )}
+              
+              <div className="flex items-center gap-1">
+                <Sparkles className="w-4 h-4" />
+                {generation.generationMode === "free_weekly" ? "Free" : 
+                 generation.generationMode === "remix" ? "Remix" : "Create New"}
+              </div>
+            </div>
+          </div>
+
+          {/* Actions */}
+          <div className="flex flex-wrap gap-2">
+            <Button
+              variant={generation.isFavorite ? "default" : "outline"}
+              size="icon"
+              onClick={() => toggleFavorite(generation)}
+              data-testid={`button-favorite-${generation.id}`}
+              title={generation.isFavorite ? "Remove from favorites" : "Add to favorites"}
+            >
+              <Star className={`w-4 h-4 ${generation.isFavorite ? 'fill-current' : ''}`} />
+            </Button>
+            
+            {generation.previewText && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => copyToClipboard(generation.previewText!, "Preview")}
+                data-testid={`button-copy-preview-${generation.id}`}
+              >
+                <Copy className="w-4 h-4 mr-2" />
+                Copy Preview
+              </Button>
+            )}
+            
+            {generation.fullScript && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => copyToClipboard(generation.fullScript!, "Script")}
+                data-testid={`button-copy-script-${generation.id}`}
+              >
+                <Copy className="w-4 h-4 mr-2" />
+                Copy Full Script
+              </Button>
+            )}
+          </div>
+        </div>
+
+        {/* Desired Outcome */}
+        {generation.desiredOutcome && (
+          <div>
+            <p className="text-sm font-medium mb-1">Desired Outcome:</p>
+            <p className="text-sm text-muted-foreground">{generation.desiredOutcome}</p>
+          </div>
+        )}
+
+        {/* Preview or Full Script Display */}
+        {generation.fullScript ? (
+          <>
+            <div className="border-t pt-4">
+              <p className="text-sm font-medium mb-2">Full Script:</p>
+              <div 
+                className="prose prose-sm max-w-none dark:prose-invert whitespace-pre-wrap bg-muted/30 p-4 rounded-md max-h-60 overflow-y-auto"
+                data-testid={`script-content-${generation.id}`}
+              >
+                {generation.fullScript}
+              </div>
+            </div>
+            
+            {/* Voice Player for Full Script */}
+            <div className="border-t pt-4">
+              <VoicePlayer text={generation.fullScript} title="Listen to Script" />
+            </div>
+          </>
+        ) : generation.previewText ? (
+          <>
+            <div className="border-t pt-4">
+              <p className="text-sm font-medium mb-2">Preview:</p>
+              <div 
+                className="prose prose-sm max-w-none dark:prose-invert whitespace-pre-wrap bg-muted/30 p-4 rounded-md"
+                data-testid={`preview-content-${generation.id}`}
+              >
+                {generation.previewText}
+              </div>
+            </div>
+            
+            {/* Voice Player for Preview */}
+            <div className="border-t pt-4">
+              <VoicePlayer text={generation.previewText} title="Listen to Preview" />
+            </div>
+          </>
+        ) : null}
+      </div>
+    );
+  }
 }
