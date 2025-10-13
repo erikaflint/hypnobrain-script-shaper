@@ -953,10 +953,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
           const presentingIssue = script.userModifiedIssue || script.suggestedPresentingIssue || '';
           const desiredOutcome = script.userModifiedOutcome || script.suggestedDesiredOutcome || '';
           
-          // Get template if assigned
+          // Get template if assigned (assignedTemplateId is the numeric database ID)
           let template = null;
           if (script.assignedTemplateId) {
-            template = await templateManager.getTemplateById(script.assignedTemplateId);
+            template = await templateManager.getTemplateByDbId(script.assignedTemplateId);
           }
           
           // If no template assigned, use template selector to find one
@@ -974,10 +974,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
             throw new Error(`No template available for script: ${script.conceptTitle}`);
           }
           
-          // Parse template JSON (field is jsonData, not templateJson)
-          const templateJson = typeof template.jsonData === 'string' 
-            ? JSON.parse(template.jsonData) 
-            : template.jsonData;
+          // jsonData is already parsed by Drizzle (jsonb type)
+          const templateJson = template.jsonData as any;
+          
+          // Defensive check
+          if (!templateJson || !templateJson.dimensions) {
+            throw new Error(`Invalid template data for template ID ${script.assignedTemplateId}`);
+          }
           
           // Generate full script
           const result = await aiService.generateFullScript({

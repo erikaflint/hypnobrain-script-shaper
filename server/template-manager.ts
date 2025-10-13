@@ -14,6 +14,7 @@ import {
 export interface ITemplateManager {
   // Template CRUD
   getTemplateById(templateId: string): Promise<Template | undefined>;
+  getTemplateByDbId(id: number): Promise<Template | undefined>;
   getAllTemplates(): Promise<Template[]>;
   getSystemTemplates(): Promise<Template[]>;
   getPublicTemplates(): Promise<Template[]>;
@@ -45,6 +46,15 @@ export class TemplateManager implements ITemplateManager {
       .select()
       .from(templates)
       .where(eq(templates.templateId, templateId))
+      .limit(1);
+    return result[0];
+  }
+
+  async getTemplateByDbId(id: number): Promise<Template | undefined> {
+    const result = await db
+      .select()
+      .from(templates)
+      .where(eq(templates.id, id))
       .limit(1);
     return result[0];
   }
