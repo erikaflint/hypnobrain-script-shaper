@@ -45,6 +45,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get blended archetypes (sort_order >= 10) for DREAM
+  app.get("/api/archetypes/blended", async (req, res) => {
+    try {
+      const blendedArchetypes = await storage.getBlendedArchetypes();
+      res.json(blendedArchetypes);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
   // Get all styles
   app.get("/api/styles", async (req, res) => {
     try {
@@ -301,9 +311,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const schema = z.object({
         journeyIdea: z.string(),
+        archetypeId: z.number().optional(),
       });
       
-      const { journeyIdea } = schema.parse(req.body);
+      const { journeyIdea, archetypeId } = schema.parse(req.body);
+      
+      // Fetch selected archetype or use first blended archetype
+      let archetype;
+      if (archetypeId) {
+        archetype = await storage.getArchetypeById(archetypeId);
+      } else {
+        const blendedArchetypes = await storage.getBlendedArchetypes();
+        archetype = blendedArchetypes[0]; // Default to first blended archetype
+      }
+      
+      if (!archetype) {
+        return res.status(404).json({ message: "Archetype not found" });
+      }
       
       // Get a template suitable for DREAM (high somatic, high symbolic)
       // For now, use template selector with journey idea
@@ -336,6 +360,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         template: dreamTemplate,
         presentingIssue: journeyIdea,
         desiredOutcome: "Experience a peaceful, restful journey into natural sleep",
+        archetype: archetype.name,
+        archetypeDescription: archetype.description || '',
         emergenceType: 'sleep',  // Key difference: sleep emergence
         targetWordCount: 3000,  // 30-minute script
       });

@@ -37,6 +37,7 @@ export interface IStorage {
   
   // Archetypes
   getAllArchetypes(): Promise<Archetype[]>;
+  getBlendedArchetypes(): Promise<Archetype[]>;
   getArchetypeById(id: number): Promise<Archetype | undefined>;
   
   // Styles
@@ -108,6 +109,10 @@ export class DatabaseStorage implements IStorage {
   // Archetypes
   async getAllArchetypes(): Promise<Archetype[]> {
     return await db.select().from(archetypes);
+  }
+  
+  async getBlendedArchetypes(): Promise<Archetype[]> {
+    return await db.select().from(archetypes).where(gte(archetypes.sortOrder, 10));
   }
   
   async getArchetypeById(id: number): Promise<Archetype | undefined> {
