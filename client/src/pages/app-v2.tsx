@@ -658,7 +658,20 @@ export default function AppV2() {
             <div className="grid gap-4 md:grid-cols-2">
               {recommendations.map((rec, index) => {
                 const templateData = rec.template.jsonData;
-                const dimensionValues = templateData?.dimension_values || {};
+                
+                // Extract dimension values - handle both old and new formats
+                const dimensionValues: Record<string, number> = {};
+                if (templateData?.dimension_values) {
+                  // Old format: flat object with values
+                  Object.assign(dimensionValues, templateData.dimension_values);
+                } else if (templateData?.dimensions) {
+                  // New format: nested objects with level property
+                  Object.entries(templateData.dimensions).forEach(([key, val]: [string, any]) => {
+                    if (val?.level !== undefined) {
+                      dimensionValues[key] = val.level;
+                    }
+                  });
+                }
                 
                 return (
                   <Card key={rec.template.id} className="p-4" data-testid={`recommendation-${index}`}>
