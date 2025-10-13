@@ -49,6 +49,8 @@ export interface RemixScriptGenerationParams {
 export interface PreviewGenerationResult {
   preview: string;
   estimatedLength: string;
+  systemPrompt?: string; // Track the system prompt for testing/debugging
+  userPrompt?: string; // Track the user prompt for testing/debugging
 }
 
 export interface FullScriptGenerationResult {
@@ -61,6 +63,8 @@ export interface FullScriptGenerationResult {
     videoScript: string;
     adCopy: string;
   };
+  systemPrompt?: string; // Track the system prompt for testing/debugging
+  userPrompt?: string; // Track the user prompt for testing/debugging
 }
 
 // Dimension values for analysis
@@ -140,7 +144,13 @@ Format as JSON:
       throw new Error('Expected text response from AI');
     }
     const result = JSON.parse(cleanJsonResponse(textContent.text));
-    return result;
+    
+    // Include prompts for tracking/debugging
+    return {
+      ...result,
+      systemPrompt: enhancedSystemPrompt,
+      userPrompt: previewPrompt,
+    };
   }
 
   /**
@@ -222,7 +232,13 @@ Format as JSON:
       throw new Error('Expected text response from AI');
     }
     const result = JSON.parse(cleanJsonResponse(textContent.text));
-    return result;
+    
+    // Include prompts for tracking/debugging
+    return {
+      ...result,
+      systemPrompt: enhancedSystemPrompt,
+      userPrompt: fullScriptPrompt,
+    };
   }
 
   /**
@@ -279,7 +295,13 @@ Format as JSON:
       throw new Error('Expected text response from AI');
     }
     const result = JSON.parse(cleanJsonResponse(textContent.text));
-    return result;
+    
+    // Include prompts for tracking/debugging
+    return {
+      ...result,
+      systemPrompt: assembled.systemPrompt,
+      userPrompt: remixPrompt,
+    };
   }
 
   async analyzeScriptDimensions(script: string): Promise<RemixAnalysisResult> {

@@ -606,6 +606,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         paymentStatus: 'pending_payment',
         stripePaymentIntentId: data.paymentIntentId,
         templateUsed: template.templateId,
+        systemPrompt: result.systemPrompt, // Track AI prompts for testing/debugging
+        userPrompt: result.userPrompt,
       });
       
       res.json({ 
@@ -663,6 +665,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         paymentStatus: 'pending_payment',
         stripePaymentIntentId: data.paymentIntentId,
         templateUsed: template.templateId,
+        systemPrompt: result.systemPrompt, // Track AI prompts for testing/debugging
+        userPrompt: result.userPrompt,
       });
       
       res.json({ 
