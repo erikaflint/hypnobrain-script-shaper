@@ -9,6 +9,8 @@ import {
   freeScriptUsage,
   users,
   templates,
+  scriptPackages,
+  packageScripts,
   type Dimension,
   type Archetype,
   type Style,
@@ -19,6 +21,10 @@ import {
   type InsertFreeScriptUsage,
   type User,
   type UpsertUser,
+  type ScriptPackage,
+  type InsertScriptPackage,
+  type PackageScript,
+  type InsertPackageScript,
 } from "@shared/schema";
 
 export interface IStorage {
@@ -58,6 +64,18 @@ export interface IStorage {
   
   // User templates (custom mixes)
   getUserTemplates(userId: string): Promise<any[]>;
+  
+  // Script Packages
+  createPackage(pkg: InsertScriptPackage): Promise<ScriptPackage>;
+  getPackagesByUserId(userId: string): Promise<ScriptPackage[]>;
+  getPackageById(id: number): Promise<ScriptPackage | undefined>;
+  updatePackageStatus(id: number, status: string): Promise<void>;
+  
+  // Package Scripts
+  createPackageScript(script: InsertPackageScript): Promise<PackageScript>;
+  getPackageScripts(packageId: number): Promise<PackageScript[]>;
+  updatePackageScript(id: number, updates: Partial<InsertPackageScript>): Promise<PackageScript>;
+  deletePackageScript(id: number): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -223,6 +241,62 @@ export class DatabaseStorage implements IStorage {
       .from(templates)
       .where(eq(templates.userId, userId))
       .orderBy(desc(templates.createdAt));
+  }
+  
+  // Script Packages
+  async createPackage(pkg: InsertScriptPackage): Promise<ScriptPackage> {
+    const [result] = await db.insert(scriptPackages).values(pkg).returning();
+    return result;
+  }
+
+  async getPackagesByUserId(userId: string): Promise<ScriptPackage[]> {
+    return await db
+      .select()
+      .from(scriptPackages)
+      .where(eq(scriptPackages.userId, userId))
+      .orderBy(desc(scriptPackages.createdAt));
+  }
+
+  async getPackageById(id: number): Promise<ScriptPackage | undefined> {
+    const [result] = await db
+      .select()
+      .from(scriptPackages)
+      .where(eq(scriptPackages.id, id));
+    return result;
+  }
+
+  async updatePackageStatus(id: number, status: string): Promise<void> {
+    await db
+      .update(scriptPackages)
+      .set({ status, updatedAt: new Date() })
+      .where(eq(scriptPackages.id, id));
+  }
+
+  // Package Scripts
+  async createPackageScript(script: InsertPackageScript): Promise<PackageScript> {
+    const [result] = await db.insert(packageScripts).values(script).returning();
+    return result;
+  }
+
+  async getPackageScripts(packageId: number): Promise<PackageScript[]> {
+    return await db
+      .select()
+      .from(packageScripts)
+      .where(eq(packageScripts.packageId, packageId))
+      .orderBy(packageScripts.sortOrder);
+  }
+
+  async updatePackageScript(id: number, updates: Partial<InsertPackageScript>): Promise<PackageScript> {
+    const [result] = await db
+      .update(packageScripts)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(packageScripts.id, id))
+      .returning();
+    return result;
+  }
+
+  async deletePackageScript(id: number): Promise<void> {
+    await db.delete(packageScripts).where(eq(packageScripts.id, id));
   }
 }
 

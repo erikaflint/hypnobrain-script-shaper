@@ -782,6 +782,236 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: error.message });
     }
   });
+  
+  // ============================================
+  // SCRIPT PACKAGES - Collection Generator
+  // ============================================
+  
+  // Create a new script package and generate concepts
+  app.post("/api/packages", isAuthenticated, async (req, res) => {
+    let createdPackageId: number | null = null;
+    
+    try {
+      const schema = z.object({
+        title: z.string().min(1),
+        description: z.string().optional(),
+        theme: z.string().min(1),
+        scriptCount: z.number().min(1).max(50),
+      });
+      
+      const data = schema.parse(req.body);
+      const userId = req.user!.id;
+      
+      // Create the package with 'generating' status
+      const pkg = await storage.createPackage({
+        userId,
+        title: data.title,
+        description: data.description,
+        theme: data.theme,
+        scriptCount: data.scriptCount,
+        status: 'generating',
+      });
+      createdPackageId = pkg.id;
+      
+      try {
+        // Generate script concepts using AI
+        const concepts = await aiService.generatePackageConcepts({
+          theme: data.theme,
+          count: data.scriptCount,
+          description: data.description,
+        });
+        
+        // Save concepts as package scripts
+        const packageScripts = await Promise.all(
+          concepts.map((concept, index) => 
+            storage.createPackageScript({
+              packageId: pkg.id,
+              conceptTitle: concept.title,
+              conceptDescription: concept.description,
+              suggestedPresentingIssue: concept.presentingIssue,
+              suggestedDesiredOutcome: concept.desiredOutcome,
+              sortOrder: index + 1,
+              status: 'concept',
+            })
+          )
+        );
+        
+        // Update package status to draft (success)
+        await storage.updatePackageStatus(pkg.id, 'draft');
+        
+        // Fetch updated package to return accurate state
+        const updatedPkg = await storage.getPackageById(pkg.id);
+        
+        res.json({ package: updatedPkg, scripts: packageScripts });
+      } catch (generationError: any) {
+        // Mark package as failed if AI generation or script creation fails
+        await storage.updatePackageStatus(pkg.id, 'failed');
+        throw generationError;
+      }
+    } catch (error: any) {
+      console.error('Error creating package:', error);
+      
+      // If package was created but generation failed, inform user
+      if (createdPackageId) {
+        res.status(500).json({ 
+          message: error.message || 'Failed to generate package concepts',
+          packageId: createdPackageId,
+          status: 'failed'
+        });
+      } else {
+        res.status(500).json({ message: error.message || 'Failed to create package' });
+      }
+    }
+  });
+  
+  // Get all packages for the authenticated user
+  app.get("/api/packages", isAuthenticated, async (req, res) => {
+    try {
+      const userId = req.user!.id;
+      const packages = await storage.getPackagesByUserId(userId);
+      res.json(packages);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+  
+  // Get a specific package with all its scripts
+  app.get("/api/packages/:id", isAuthenticated, async (req, res) => {
+    try {
+      const packageId = parseInt(req.params.id);
+      const pkg = await storage.getPackageById(packageId);
+      
+      if (!pkg) {
+        return res.status(404).json({ message: 'Package not found' });
+      }
+      
+      // Verify ownership
+      if (pkg.userId !== req.user!.id) {
+        return res.status(403).json({ message: 'Unauthorized' });
+      }
+      
+      const scripts = await storage.getPackageScripts(packageId);
+      res.json({ package: pkg, scripts });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+  
+  // Update a package script (user modifications)
+  app.patch("/api/packages/:packageId/scripts/:scriptId", isAuthenticated, async (req, res) => {
+    try {
+      const packageId = parseInt(req.params.packageId);
+      const scriptId = parseInt(req.params.scriptId);
+      
+      const schema = z.object({
+        userModifiedTitle: z.string().optional(),
+        userModifiedIssue: z.string().optional(),
+        userModifiedOutcome: z.string().optional(),
+        assignedTemplateId: z.string().optional(),
+      });
+      
+      const updates = schema.parse(req.body);
+      
+      // Verify package ownership
+      const pkg = await storage.getPackageById(packageId);
+      if (!pkg || pkg.userId !== req.user!.id) {
+        return res.status(403).json({ message: 'Unauthorized' });
+      }
+      
+      const updatedScript = await storage.updatePackageScript(scriptId, updates);
+      res.json(updatedScript);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+  
+  // Generate all scripts in a package
+  app.post("/api/packages/:id/generate", isAuthenticated, async (req, res) => {
+    try {
+      const packageId = parseInt(req.params.id);
+      const pkg = await storage.getPackageById(packageId);
+      
+      if (!pkg || pkg.userId !== req.user!.id) {
+        return res.status(403).json({ message: 'Unauthorized' });
+      }
+      
+      await storage.updatePackageStatus(packageId, 'generating');
+      
+      const scripts = await storage.getPackageScripts(packageId);
+      const generatedScripts = [];
+      
+      // Generate each script
+      for (const script of scripts) {
+        try {
+          // Use modified values if available, otherwise use suggested values
+          const presentingIssue = script.userModifiedIssue || script.suggestedPresentingIssue || '';
+          const desiredOutcome = script.userModifiedOutcome || script.suggestedDesiredOutcome || '';
+          
+          // Get template if assigned
+          let template = null;
+          if (script.assignedTemplateId) {
+            template = await templateManager.getTemplateById(script.assignedTemplateId);
+          }
+          
+          // If no template assigned, use template selector to find one
+          if (!template) {
+            const recommendations = await templateSelector.getTemplateRecommendations(
+              presentingIssue,
+              desiredOutcome
+            );
+            if (recommendations.length > 0) {
+              template = recommendations[0];
+            }
+          }
+          
+          if (!template) {
+            throw new Error(`No template available for script: ${script.conceptTitle}`);
+          }
+          
+          // Generate full script
+          const result = await aiService.generateFullScript({
+            template,
+            presentingIssue,
+            desiredOutcome,
+          });
+          
+          // Save generation
+          const generation = await storage.createGeneration({
+            userId: req.user!.id,
+            title: script.userModifiedTitle || script.conceptTitle,
+            generationMode: 'create_new',
+            isFree: false,
+            presentingIssue,
+            desiredOutcome,
+            fullScript: result.fullScript,
+            assetsJson: result.marketingAssets,
+            templateUsed: template.templateId,
+            pricePaidCents: 0, // Part of package, no individual charge
+            paymentStatus: 'completed',
+            systemPrompt: result.systemPrompt,
+            userPrompt: result.userPrompt,
+          });
+          
+          // Link generation to package script
+          await storage.updatePackageScript(script.id, {
+            generationId: generation.id,
+            status: 'completed',
+          });
+          
+          generatedScripts.push(generation);
+        } catch (error: any) {
+          console.error(`Error generating script ${script.id}:`, error);
+          await storage.updatePackageScript(script.id, { status: 'concept' });
+        }
+      }
+      
+      await storage.updatePackageStatus(packageId, 'completed');
+      res.json({ package: pkg, generatedScripts });
+    } catch (error: any) {
+      console.error('Error generating package scripts:', error);
+      res.status(500).json({ message: error.message });
+    }
+  });
 
   const httpServer = createServer(app);
 
