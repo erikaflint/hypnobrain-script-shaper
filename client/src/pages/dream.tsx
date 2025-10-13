@@ -4,9 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft, Moon, Sparkles } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { VoicePlayer } from "@/components/voice-player";
+import { ArrowLeft, Moon, Sparkles, Volume2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 
 const JOURNEY_EXAMPLES = [
@@ -17,14 +19,27 @@ const JOURNEY_EXAMPLES = [
   "Journey with me to a cozy mountain cabin where I find deep rest by a crackling fireplace",
 ];
 
+interface Archetype {
+  id: number;
+  name: string;
+  description: string;
+  promptModifier: string | null;
+}
+
 export default function Dream() {
   const { toast } = useToast();
   const [journeyIdea, setJourneyIdea] = useState("");
+  const [selectedArchetypeId, setSelectedArchetypeId] = useState<number | null>(null);
   const [generatedScript, setGeneratedScript] = useState<string | null>(null);
+
+  // Fetch blended archetypes for DREAM
+  const { data: archetypes = [] } = useQuery<Archetype[]>({
+    queryKey: ['/api/archetypes/blended'],
+  });
 
   // Generate DREAM script mutation
   const generateDreamScript = useMutation({
-    mutationFn: async (data: { journeyIdea: string }) => {
+    mutationFn: async (data: { journeyIdea: string; archetypeId?: number }) => {
       return await apiRequest('/api/generate-dream-script', {
         method: 'POST',
         body: JSON.stringify(data),
@@ -58,7 +73,10 @@ export default function Dream() {
       return;
     }
 
-    await generateDreamScript.mutateAsync({ journeyIdea });
+    await generateDreamScript.mutateAsync({ 
+      journeyIdea,
+      archetypeId: selectedArchetypeId || undefined 
+    });
   };
 
   const handleExampleClick = (example: string) => {
@@ -123,6 +141,35 @@ export default function Dream() {
                     className="min-h-[120px] text-base"
                     disabled={generateDreamScript.isPending}
                   />
+                </div>
+
+                {/* Archetype Selection */}
+                <div className="space-y-3">
+                  <Label htmlFor="archetype" className="text-lg">
+                    Choose Your Guide Voice
+                  </Label>
+                  <p className="text-sm text-muted-foreground">
+                    Select the narrative voice that will guide your journey to sleep
+                  </p>
+                  <Select 
+                    value={selectedArchetypeId?.toString() || ""} 
+                    onValueChange={(value) => setSelectedArchetypeId(Number(value))}
+                    disabled={generateDreamScript.isPending}
+                  >
+                    <SelectTrigger id="archetype" data-testid="select-archetype">
+                      <SelectValue placeholder="Select a guide voice..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {archetypes.map((archetype) => (
+                        <SelectItem key={archetype.id} value={archetype.id.toString()}>
+                          <div className="flex flex-col">
+                            <span className="font-medium">{archetype.name}</span>
+                            <span className="text-xs text-muted-foreground">{archetype.description}</span>
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 {/* Example Ideas */}
@@ -215,6 +262,10 @@ export default function Dream() {
               </Button>
             </div>
 
+            {/* Voice Player */}
+            <VoicePlayer text={generatedScript} title="Listen to Your Journey" />
+
+            {/* Script Display */}
             <Card className="p-8">
               <div className="prose prose-lg max-w-none dark:prose-invert">
                 <pre className="whitespace-pre-wrap font-sans text-base leading-relaxed">
