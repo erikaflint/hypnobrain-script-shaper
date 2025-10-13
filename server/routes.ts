@@ -961,12 +961,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
           
           // If no template assigned, use template selector to find one
           if (!template) {
-            const recommendations = await templateSelector.getTemplateRecommendations(
+            const recommendations = await templateSelector.recommendTemplates(
               presentingIssue,
               desiredOutcome
             );
             if (recommendations.length > 0) {
-              template = recommendations[0];
+              template = recommendations[0].template;
             }
           }
           
