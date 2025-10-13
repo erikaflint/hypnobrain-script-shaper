@@ -16,7 +16,7 @@ export default function CreatePackage() {
   
   const [title, setTitle] = useState("");
   const [theme, setTheme] = useState("");
-  const [scriptCount, setScriptCount] = useState(12);
+  const [scriptCount, setScriptCount] = useState("12");
   const [description, setDescription] = useState("");
 
   const createPackageMutation = useMutation({
@@ -26,7 +26,10 @@ export default function CreatePackage() {
       scriptCount: number;
       description?: string;
     }) => {
-      const response = await apiRequest("POST", "/api/packages", data);
+      const response = await apiRequest("/api/packages", {
+        method: "POST",
+        body: JSON.stringify(data),
+      });
       return response;
     },
     onSuccess: (data) => {
@@ -47,10 +50,21 @@ export default function CreatePackage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    const count = parseInt(scriptCount, 10);
+    if (isNaN(count) || count < 1 || count > 50) {
+      toast({
+        title: "Invalid Script Count",
+        description: "Please enter a number between 1 and 50",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     createPackageMutation.mutate({
       title,
       theme,
-      scriptCount: Number(scriptCount), // Ensure it's a number
+      scriptCount: count,
       description: description || undefined,
     });
   };
@@ -129,7 +143,7 @@ export default function CreatePackage() {
                   min="1"
                   max="50"
                   value={scriptCount}
-                  onChange={(e) => setScriptCount(parseInt(e.target.value))}
+                  onChange={(e) => setScriptCount(e.target.value)}
                   required
                   data-testid="input-count"
                 />
