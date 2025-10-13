@@ -53,12 +53,15 @@ export async function generateDreamThumbnail(
   archetypeName?: string
 ): Promise<string> {
   // Craft an artistic prompt optimized for sleep/meditation imagery
-  const basePrompt = `Create a serene, dreamlike illustration for a guided meditation journey: ${journeyIdea}. 
+  // IMPORTANT: No people, bodies, or human figures - only landscapes and environments
+  const basePrompt = `Create a serene, dreamlike landscape illustration for a guided meditation journey: ${journeyIdea}. 
 Style: Soft, ethereal, calming colors with gentle gradients. Peaceful and inviting atmosphere. 
+View as if looking through a window at a beautiful natural setting.
+IMPORTANT: Show ONLY the environment, landscape, and surroundings. NO people, bodies, human figures, or essence of humans. 
 High-quality digital art with soothing visual elements perfect for relaxation and sleep.`;
 
   const archetypeModifier = archetypeName 
-    ? ` Incorporate the essence of "${archetypeName}" archetype in the visual style.`
+    ? ` Incorporate the essence of "${archetypeName}" archetype in the visual mood and atmosphere.`
     : '';
 
   const fullPrompt = basePrompt + archetypeModifier;
