@@ -133,6 +133,23 @@ The ScriptEngine (`server/script-engine/`) is the portable IP layer responsible 
 -   **User Ownership**: `generations.userId` links scripts to authenticated users
 -   **Naming Convention**: `snake_case` in database, `camelCase` in Drizzle ORM TypeScript schema.
 
+## Future Enhancements / To-Do
+
+### Post-Creation Content Review Process (Priority: Future)
+**Problem:** AI-generated content can be unpredictable. While we validate user input before generation, the AI output itself (especially DREAM stories and therapeutic scripts) may contain unintended therapeutic language, sensitive topics, or content that doesn't align with intended use cases.
+
+**Proposed Solution:** Implement post-creation content moderation/review for ALL scripts:
+- **What:** Review AI-generated scripts after creation but before delivery to user
+- **Why:** Some scripts will naturally contain therapeutic elements even in DREAM mode; need systematic way to flag/review
+- **How:** TBD - could include:
+  - Automated scanning of generated content for therapeutic keywords
+  - Confidence scoring based on content type
+  - Admin review queue for flagged content
+  - User-facing warning labels for scripts with therapeutic elements
+  - Option to regenerate if content doesn't match expectations
+
+**Note:** Not currently a blocker, but important for production quality assurance and user safety.
+
 ## External Dependencies
 -   **Database**: PostgreSQL (via Neon)
 -   **ORM**: Drizzle ORM
