@@ -138,18 +138,20 @@ The ScriptEngine (`server/script-engine/`) is the portable IP layer responsible 
 ### Post-Creation Content Review Process (Priority: Future)
 **Problem:** AI-generated content can be unpredictable. While we validate user input before generation, the AI output itself (especially DREAM stories and therapeutic scripts) may contain unintended therapeutic language, sensitive topics, or content that doesn't align with intended use cases.
 
-**Proposed Solution:** Implement post-creation content moderation/review for ALL scripts:
-- **What:** Review AI-generated scripts after creation but before delivery to user
-- **Why:** Some scripts will naturally contain therapeutic elements even in DREAM mode; need systematic way to flag/review
-- **How:** TBD - could include:
-  - Automated scanning of generated content for therapeutic keywords
-  - Confidence scoring based on content type
-  - **Auto-refinement pipeline:** Flagged content ("rejects") automatically goes through AI refinement to fix issues, then re-validated until passes
-  - Admin review queue for flagged content
-  - User-facing warning labels for scripts with therapeutic elements
-  - Option to regenerate if content doesn't match expectations
+**Proposed Solution:** Implement **multi-layer refinement system** for ALL scripts:
+- **What:** Post-creation AI refinement layers that polish and enhance scripts before delivery
+- **Why:** Scripts can be iteratively improved through targeted refinement passes rather than full regeneration
+- **Philosophy:** "No rejects, only refinements" - embrace all generated content and improve it through layers
+- **How:** TBD - refinement layers could include:
+  - **Content safety pass** - Adjust problematic language, validate appropriateness
+  - **Tone refinement** - Fine-tune voice consistency, adjust emotional gradient
+  - **Sensory enhancement** - Enrich with vivid details, varied language
+  - **Length optimization** - Expand or condense sections as needed
+  - **Quality scoring** - Confidence metrics to determine which layers to apply
+  - **Iterative loops** - Run refinement passes until quality thresholds met
+- **Benefits:** Much more efficient than regenerating from scratch, preserves core narrative while improving details
 
-**Note:** Not currently a blocker, but important for production quality assurance and user safety.
+**Note:** Not currently a blocker, but important for production quality assurance and could unlock powerful script enhancement capabilities.
 
 ## External Dependencies
 -   **Database**: PostgreSQL (via Neon)
