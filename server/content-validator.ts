@@ -3,21 +3,22 @@
  * Blocks inappropriate content across all endpoints
  */
 
-const INAPPROPRIATE_KEYWORDS = [
+// Use word boundaries to avoid false positives (e.g., "harm" in "harmless")
+const INAPPROPRIATE_PATTERNS = [
   // Sexual/Adult content
-  'sex', 'sexy', 'nude', 'naked', 'porn', 'explicit', 'adult', 'erotic', 'xxx',
+  /\bsex\b/i, /\bsexy\b/i, /\bnude\b/i, /\bnaked\b/i, /\bporn\b/i, /\bexplicit\b/i, /\berotic\b/i, /\bxxx\b/i,
   
-  // Violence
-  'violent', 'kill', 'murder', 'blood', 'gore', 'death', 'torture', 'harm',
+  // Violence (use word boundaries to avoid "harmless", "charm", etc.)
+  /\bviolent\b/i, /\bkill\b/i, /\bmurder\b/i, /\bblood\b/i, /\bgore\b/i, /\btorture\b/i,
   
   // Hate speech
-  'hate', 'racist', 'discrimination', 'slur',
+  /\bracist\b/i, /\bdiscrimination\b/i, /\bslur\b/i,
   
   // Drugs
-  'drug', 'cocaine', 'heroin', 'meth', 'weed', 'marijuana',
+  /\bcocaine\b/i, /\bheroin\b/i, /\bmeth\b/i,
   
-  // Other inappropriate
-  'suicide', 'self-harm', 'abuse',
+  // Self-harm
+  /\bsuicide\b/i, /\bself-harm\b/i,
 ];
 
 export interface ValidationResult {
@@ -36,22 +37,23 @@ export function validateContent(content: string, userId?: string): ValidationRes
   if (!content || typeof content !== 'string') {
     return { isValid: true };
   }
-
-  const lowerContent = content.toLowerCase();
   
-  for (const keyword of INAPPROPRIATE_KEYWORDS) {
-    if (lowerContent.includes(keyword)) {
+  for (const pattern of INAPPROPRIATE_PATTERNS) {
+    const match = pattern.exec(content);
+    if (match) {
+      const flaggedWord = match[0];
+      
       // Log the violation
       if (userId) {
-        console.warn(`🚨 FLAGGED CONTENT from user ${userId}: keyword "${keyword}" in "${content.substring(0, 100)}..."`);
+        console.warn(`🚨 FLAGGED CONTENT from user ${userId}: word "${flaggedWord}" in "${content.substring(0, 100)}..."`);
       } else {
-        console.warn(`🚨 FLAGGED CONTENT (no user): keyword "${keyword}" in "${content.substring(0, 100)}..."`);
+        console.warn(`🚨 FLAGGED CONTENT (no user): word "${flaggedWord}" in "${content.substring(0, 100)}..."`);
       }
       
       return {
         isValid: false,
         reason: 'Inappropriate content detected. Please use respectful, safe language.',
-        flaggedWord: keyword,
+        flaggedWord,
       };
     }
   }
