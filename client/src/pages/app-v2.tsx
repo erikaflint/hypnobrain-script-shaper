@@ -359,6 +359,7 @@ export default function AppV2() {
           step === "mixer" ? "Step 3: Customize Mix" :
           "Your Script"
         }
+        showDreamLink={true}
         showDashboard={true}
         rightContent={
           <div className="flex items-center gap-2">

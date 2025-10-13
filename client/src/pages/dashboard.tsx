@@ -79,6 +79,7 @@ export default function Dashboard() {
     <div className="min-h-screen bg-background">
       <AppHeader 
         title="HypnoBrain Script Shaper"
+        showDreamLink={true}
         showCreateScript={true}
         showAdminLink={true}
         rightContent={

@@ -16,7 +16,9 @@ Located at: `client/src/components/app-header.tsx`
 - 📝 **Title & Subtitle**: Optional page title with icon
 - 🔐 **Auth Buttons**: Login/Logout with conditional rendering
 - 📊 **Dashboard Link**: Quick access to user scripts
+- 🌙 **DREAM Link**: Navigate to DREAM Hypnosis generator
 - ✨ **Create Script Button**: Primary CTA for script generation
+- 🛡️ **Admin Link**: Admin panel (only visible to admins)
 - 🎨 **Custom Right Content**: Flexible slot for any components
 
 ### Props Interface
@@ -31,6 +33,7 @@ interface AppHeaderProps {
   icon?: React.ReactNode;        // Icon next to title
   showAuth?: boolean;            // Show login/logout buttons
   showDashboard?: boolean;       // Show dashboard link
+  showDreamLink?: boolean;       // Show DREAM Hypnosis link 🌙
   showCreateScript?: boolean;    // Show "Create Script" button
   showAdminLink?: boolean;       // Show admin link (🔒 only visible to admins!)
   rightContent?: React.ReactNode; // Custom components on right side
@@ -87,14 +90,14 @@ The `isAdmin` middleware:
 
 ## Usage Examples
 
-### 1. Landing Page (with Auth + Admin)
+### 1. Landing Page (with Auth + DREAM + Admin)
 ```tsx
-<AppHeader showAuth={true} showAdminLink={true} />
+<AppHeader showAuth={true} showDreamLink={true} showAdminLink={true} />
 ```
 Shows: 
 - Logo | Login (when logged out)
-- Logo | Admin 🛡️ (admins only) | Dashboard | Logout (when admin)
-- Logo | Dashboard | Logout (when regular user)
+- Logo | DREAM 🌙 | Admin 🛡️ (admins only) | Dashboard | Logout (when admin)
+- Logo | DREAM 🌙 | Dashboard | Logout (when regular user)
 
 ### 2. DREAM Page (Back + Title + Dashboard)
 ```tsx
@@ -107,11 +110,13 @@ Shows:
 ```
 Shows: Back Button | DREAM Hypnosis 🌙 | My Scripts
 
-### 3. Dashboard (Title + Actions)
+### 3. Dashboard (Title + DREAM + Actions)
 ```tsx
 <AppHeader 
   title="HypnoBrain Script Shaper"
+  showDreamLink={true}
   showCreateScript={true}
+  showAdminLink={true}
   rightContent={
     <Link href="/packages/create">
       <Button variant="outline" size="sm">
@@ -122,7 +127,7 @@ Shows: Back Button | DREAM Hypnosis 🌙 | My Scripts
   }
 />
 ```
-Shows: Logo | HypnoBrain Script Shaper | Create Package | Create Script
+Shows: Logo | HypnoBrain Script Shaper | Create Package | DREAM | Create Script | Admin (if admin)
 
 ### 4. Admin Page (Back + Title + Badge)
 ```tsx
