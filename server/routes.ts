@@ -385,8 +385,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { journeyIdea, expandedStory, archetypeId } = schema.parse(req.body);
       const userId = req.user.claims.sub;
       
-      // Backend content validation using centralized validator
-      const validation = validateContent(expandedStory || journeyIdea, userId);
+      // Backend content validation
+      // Only validate the original journey idea, not the AI-generated expanded story
+      // (The expanded story already passed validation during the shape-dream-story step)
+      const validation = validateContent(journeyIdea, userId);
       if (!validation.isValid) {
         return res.status(400).json({ 
           message: "DREAM scripts are for peaceful sleep journeys only. " + validation.reason
