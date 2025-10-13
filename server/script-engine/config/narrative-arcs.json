@@ -299,6 +299,372 @@
       "prompt_integration": "Frame change as playful exploration rather than serious work or performance. Emphasize that the brain's play circuits naturally activate learning. Remove pressure by introducing curiosity, experimentation, and permission to 'try things on' without commitment. The play brain structure neurologically contains learning pathways."
     }
   ],
+  "dream_arcs": [
+    {
+      "id": "effortless-release",
+      "name": "Effortless Release (DREAM Foundation)",
+      "type": "foundation",
+      "description": "Letting go happens naturally, no effort required",
+      "core_message": "Release, dissolve, melt - tension leaves without trying",
+      "when_to_use": ["always_in_dream_scripts"],
+      "key_language": [
+        "Release",
+        "Dissolve",
+        "Melt",
+        "No need to...",
+        "Tension dissolves like sugar in warm water",
+        "Letting go as naturally as breath",
+        "Without effort, without forcing, simply allowing"
+      ],
+      "prompt_integration": "Emphasize that release is effortless and natural. Use dissolving/melting imagery. No effort required from listener."
+    },
+    {
+      "id": "safe-drifting",
+      "name": "Safe Drifting (DREAM Foundation)",
+      "type": "foundation",
+      "description": "It's safe to let your mind wander, drift is natural and good",
+      "core_message": "Your mind can drift wherever it wishes - to sleep or rest, whatever feels right",
+      "when_to_use": ["always_in_dream_scripts"],
+      "key_language": [
+        "Drift",
+        "Float",
+        "Wander",
+        "Easy to fall asleep or do whatever is best",
+        "Your mind can drift wherever it wishes",
+        "To sleep or simply rest, whatever feels right",
+        "Safe to let go, safe to wander, safe to sleep"
+      ],
+      "prompt_integration": "Give explicit permission for mind to wander. Frame sleep as one option among many. Emphasize safety of drifting."
+    },
+    {
+      "id": "continuous-replenishment",
+      "name": "Continuous Replenishment (DREAM Foundation)",
+      "type": "foundation",
+      "description": "Each moment, your body is healing, replenishing, restoring",
+      "core_message": "Every breath, every moment - continuous renewal",
+      "when_to_use": ["always_in_dream_scripts"],
+      "key_language": [
+        "Each breath",
+        "Every moment",
+        "Continuously",
+        "Ongoing restoration",
+        "Each moment your body replenishes itself completely",
+        "Cells renewing, systems restoring",
+        "Continuous healing, unfolding naturally"
+      ],
+      "prompt_integration": "Weave replenishment suggestions throughout. Emphasize continuous, ongoing process. Link to breath and natural rhythms."
+    },
+    {
+      "id": "progressive-body-journey",
+      "name": "Progressive Body Journey (DREAM Somatic)",
+      "type": "somatic",
+      "description": "Systematic body scanning, walking up or down the body",
+      "core_message": "Notice each part, release each part, rest completely",
+      "when_to_use": ["when_pmr_needed", "physical_tension", "body_focus"],
+      "variations": {
+        "ascending": {
+          "name": "Feet → Head (Grounding to Release)",
+          "sequence": "Feet/Toes → Ankles/Calves → Knees/Thighs → Hips/Pelvis → Belly/Lower Back → Chest/Upper Back → Shoulders/Arms → Neck/Jaw → Face/Scalp",
+          "description": "Building up to final release in head/face"
+        },
+        "descending": {
+          "name": "Head → Feet (Releasing Down)",
+          "sequence": "Scalp/Crown → Forehead/Temples → Eyes/Cheeks → Jaw/Mouth → Neck/Throat → Shoulders/Upper Back → Upper Arms → Elbows/Forearms → Hands/Fingers → Chest/Ribcage → Belly/Solar Plexus → Lower Back/Pelvis → Upper Legs → Knees → Lower Legs → Feet → Toes",
+          "description": "Releases down into earth, gravity assists"
+        }
+      },
+      "key_language": [
+        "Moving now to...",
+        "And now...",
+        "Noticing now...",
+        "Feel your [body part], releasing...",
+        "Softening, releasing, melting",
+        "Each part releasing, replenishing, renewing"
+      ],
+      "timing": "Each body part: 20-30 seconds = ~7-8 minutes total. Can repeat 2-3 times in 30-minute journey.",
+      "prompt_integration": "Use systematic body progression. Include functional suggestions during PMR ('as your muscles release, your body heals'). Multiple passes get slower and more detailed."
+    },
+    {
+      "id": "enchanted-greenhouse",
+      "name": "Enchanted Interior Greenhouse (DREAM Landscape)",
+      "type": "landscape",
+      "description": "Lush indoor paradise, no wind, magical stillness, complete shelter",
+      "core_message": "Protected, abundant, perfectly still - a magical sanctuary",
+      "when_to_use": ["shelter_seeking", "overstimulation", "need_for_safety"],
+      "elements": [
+        "Glass ceiling showing stars/moon",
+        "Exotic plants, ferns, flowers",
+        "Warm humid air, perfectly still",
+        "Soft moss underfoot",
+        "Gentle light filtering through leaves",
+        "Stone paths winding through greenery",
+        "Pools of still water reflecting plants",
+        "Complete shelter, total safety",
+        "Temperature perfect, constant"
+      ],
+      "key_language": [
+        "Lush",
+        "Still",
+        "Sheltered",
+        "Abundant",
+        "Verdant",
+        "Magical",
+        "Stepping into a vast greenhouse, warm and lush",
+        "Palms reaching toward a glass ceiling revealing stars",
+        "Air perfectly still, fragrant with jasmine and earth"
+      ],
+      "prompt_integration": "Rich sensory detail. Emphasize stillness and shelter. Create magical but peaceful atmosphere. No weather, no wind - perfect control."
+    },
+    {
+      "id": "river-journey",
+      "name": "River Journey (DREAM Landscape)",
+      "type": "landscape",
+      "description": "Floating down gentle river, each moment body replenishing completely",
+      "core_message": "Carried effortlessly, replenishing continuously, timeless flow",
+      "when_to_use": ["exhaustion", "need_for_support", "replenishment_focus"],
+      "elements": [
+        "Floating on back or in gentle boat",
+        "Warm water supporting completely",
+        "Slow, meandering current",
+        "Banks lined with beauty",
+        "No paddling, no effort",
+        "River knows where to take you",
+        "Each moment = complete replenishment",
+        "Timeless, endless journey"
+      ],
+      "key_language": [
+        "Floating",
+        "Drifting",
+        "Carried",
+        "Supported",
+        "Meandering",
+        "Floating on a gentle river, warm water holding you perfectly",
+        "The current carries you, your body replenishes itself completely",
+        "Every cell renewed with each moment"
+      ],
+      "prompt_integration": "Link continuous replenishment to river flow. Emphasize zero effort. Create timeless, dreamlike quality. Water as support and renewal."
+    },
+    {
+      "id": "moonlit-garden",
+      "name": "Moonlit Garden (DREAM Landscape)",
+      "type": "landscape",
+      "description": "Classic peaceful garden bathed in soft moonlight",
+      "core_message": "Beauty, peace, gentle light, timeless tranquility",
+      "when_to_use": ["classic_relaxation", "beauty_seeking", "gentle_peace"],
+      "elements": [
+        "Flowers blooming in moonlight",
+        "Soft paths winding through gardens",
+        "Benches for resting",
+        "Gentle fountains",
+        "Silvery light casting gentle shadows",
+        "Protected outdoor feeling",
+        "Night air soft and perfect"
+      ],
+      "key_language": [
+        "Moonlight",
+        "Silvery",
+        "Gentle shadows",
+        "Night blooming flowers",
+        "Soft paths",
+        "Peaceful garden",
+        "Garden bathed in soft moonlight, flowers glowing"
+      ],
+      "prompt_integration": "Classic peaceful imagery. Emphasize gentleness and beauty. Moonlight as soft, safe illumination."
+    },
+    {
+      "id": "forest-twilight",
+      "name": "Forest at Twilight (DREAM Landscape)",
+      "type": "landscape",
+      "description": "Ancient trees, soft earth, dappled light fading, deep stillness arriving",
+      "core_message": "Grounding, ancient wisdom, natural rhythm of day becoming night",
+      "when_to_use": ["grounding_needed", "nature_connection", "ancient_peace"],
+      "elements": [
+        "Tall ancient trees",
+        "Soft earth and moss underfoot",
+        "Dappled light fading",
+        "Birdsong gently quieting",
+        "Stillness deepening",
+        "Safe among the trees",
+        "Day transitioning naturally to night"
+      ],
+      "key_language": [
+        "Ancient",
+        "Grounding",
+        "Twilight",
+        "Settling",
+        "Trees standing witness",
+        "Forest growing quiet as day ends",
+        "Ancient trees, soft earth, deepening peace"
+      ],
+      "prompt_integration": "Use natural day-to-night transition as metaphor for sleep. Ancient trees as guardians. Earth as grounding presence."
+    },
+    {
+      "id": "ocean-sanctuary",
+      "name": "Ocean Sanctuary (DREAM Landscape)",
+      "type": "landscape",
+      "description": "Protected cove, gentle waves, maternal embrace of water",
+      "core_message": "Rhythmic, maternal, embracing - the ocean as mother",
+      "when_to_use": ["need_for_nurturing", "rhythm_seeking", "emotional_comfort"],
+      "elements": [
+        "Protected cove or bay",
+        "Gentle rhythmic waves",
+        "Warm sand",
+        "Sound of sea",
+        "No harsh weather - perfectly calm",
+        "Maternal embrace of water",
+        "Horizon line peaceful"
+      ],
+      "key_language": [
+        "Rhythmic",
+        "Maternal",
+        "Embracing",
+        "Gentle waves",
+        "Protected cove",
+        "Ocean holding you like a mother",
+        "Waves arriving in perfect rhythm"
+      ],
+      "prompt_integration": "Use wave rhythm to deepen trance. Ocean as nurturing presence. Protected from storms - only gentleness."
+    },
+    {
+      "id": "cosmic-observatory",
+      "name": "Cosmic Observatory (DREAM Landscape)",
+      "type": "landscape",
+      "description": "Vast night sky, infinite stars, peaceful perspective",
+      "core_message": "Awe without overwhelm, perspective, belonging to something vast",
+      "when_to_use": ["perspective_needed", "cosmic_connection", "awe_seeking"],
+      "elements": [
+        "Vast night sky",
+        "Infinite stars",
+        "Planets visible",
+        "Nebulae in soft colors",
+        "Sense of peaceful vastness",
+        "Belonging to the cosmos",
+        "Safe observation point"
+      ],
+      "key_language": [
+        "Vast",
+        "Infinite",
+        "Cosmic",
+        "Perspective",
+        "Stars stretching infinitely",
+        "Part of this vast peaceful universe",
+        "Held by the cosmos, safe in the infinite"
+      ],
+      "prompt_integration": "Create awe without overwhelm. Vastness as peaceful, not scary. Client as safe observer and participant in cosmic peace."
+    },
+    {
+      "id": "mountain-meadow",
+      "name": "Mountain Meadow at Dusk (DREAM Landscape)",
+      "type": "landscape",
+      "description": "High meadow, wildflowers, distant peaks, clear peaceful air",
+      "core_message": "Elevated peace, clarity, gentle transition to night",
+      "when_to_use": ["clarity_seeking", "elevation_needed", "peaceful_transition"],
+      "elements": [
+        "High mountain meadow",
+        "Wildflowers swaying gently",
+        "Distant peaks in soft light",
+        "Clear clean air",
+        "Warm stones from day's heat",
+        "Sky shifting to twilight",
+        "Elevated but safe"
+      ],
+      "key_language": [
+        "Elevated",
+        "Clear",
+        "Meadow",
+        "Twilight",
+        "Mountain peace",
+        "High meadow where air is clear and peaceful",
+        "Wildflowers settling as day ends"
+      ],
+      "prompt_integration": "Use elevation as metaphor for perspective without losing safety. Clear air, clear mind. Gentle transition to night."
+    },
+    {
+      "id": "desert-night",
+      "name": "Desert Night (DREAM Landscape)",
+      "type": "landscape",
+      "description": "Infinite stars, warm rock, profound silence, primordial stillness",
+      "core_message": "Stillness, spaciousness, connection to ancient earth",
+      "when_to_use": ["deep_silence_seeking", "spaciousness_needed", "primordial_connection"],
+      "elements": [
+        "Infinite starry sky",
+        "Warm rock holding day's heat",
+        "Profound silence",
+        "Sense of vast space",
+        "Primordial landscape",
+        "Connection to ancient earth",
+        "Nothing extra, nothing needed"
+      ],
+      "key_language": [
+        "Stillness",
+        "Silence",
+        "Spacious",
+        "Primordial",
+        "Ancient",
+        "Desert night, stars infinite, silence profound",
+        "Rock still warm, holding you gently"
+      ],
+      "prompt_integration": "Deep silence as positive presence. Spaciousness as freedom. Ancient landscape connecting to timeless peace within."
+    },
+    {
+      "id": "multisensory-delight",
+      "name": "Multisensory Delight (DREAM Enhancement)",
+      "type": "enhancement",
+      "description": "Rich sensory detail enhancing immersion in any landscape",
+      "core_message": "See it, hear it, feel it, smell it - fully immersed",
+      "when_to_use": ["enhancement_of_any_landscape", "deep_immersion"],
+      "sensory_categories": {
+        "touch": ["texture", "temperature", "weight", "softness", "smoothness"],
+        "sound": ["gentle", "rhythmic", "natural", "soothing"],
+        "sight": ["color", "light", "shadow", "movement", "detail"],
+        "smell": ["earth", "flowers", "water", "air", "natural scents"],
+        "taste": ["hint of rain", "salt air", "sweetness on the breeze"]
+      },
+      "key_language": [
+        "Notice the texture...",
+        "Feel the temperature...",
+        "Hear the gentle...",
+        "See the way the light...",
+        "The scent of...",
+        "Rich sensory detail bringing this moment fully alive"
+      ],
+      "prompt_integration": "Layer sensory modalities through chosen landscape. Touch, sound, sight, smell, hint of taste. Build rich immersive experience."
+    }
+  ],
+  "dream_arc_selection_rules": {
+    "foundation_arcs_always": ["effortless-release", "safe-drifting", "continuous-replenishment"],
+    "somatic_arc_when_needed": "progressive-body-journey",
+    "landscape_arcs_select_1_or_2": [
+      "enchanted-greenhouse",
+      "river-journey",
+      "moonlit-garden",
+      "forest-twilight",
+      "ocean-sanctuary",
+      "cosmic-observatory",
+      "mountain-meadow",
+      "desert-night"
+    ],
+    "enhancement_arc_optional": "multisensory-delight",
+    "mood_to_landscape_mapping": {
+      "insomnia": ["river-journey", "ocean-sanctuary"],
+      "stressed_anxious": ["enchanted-greenhouse", "forest-twilight"],
+      "restless_mind": ["cosmic-observatory", "desert-night"],
+      "physical_tension": ["moonlit-garden", "mountain-meadow"],
+      "exhausted": ["river-journey", "enchanted-greenhouse"],
+      "general_relaxation": ["moonlit-garden", "forest-twilight", "ocean-sanctuary"]
+    },
+    "structure": {
+      "always_foundation": 3,
+      "optional_somatic": 1,
+      "landscape_choice": "1_or_2",
+      "optional_enhancement": 1
+    },
+    "word_count_targets": {
+      "20_min": "3000-3500",
+      "25_min": "4000-4500",
+      "30_min": "4500-5000"
+    }
+  },
   "arc_selection_rules": {
     "always_include": ["effortlessness", "re-minding", "two-tempos"],
     "issue_mappings": {

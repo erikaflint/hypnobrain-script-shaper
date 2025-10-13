@@ -221,62 +221,103 @@
     },
     {
       "id": "inherent-wholeness",
-      "name": "Recognition of Inherent Wholeness",
-      "description": "Remind, not fix - they are already complete",
-      "rule": "Scripts remind, not fix. The listener is whole, they've just forgotten.",
-      "why": "This is the heart. The listener is a miracle who's merely forgotten.",
+      "name": "Recognition of Inherent Wholeness & Functional Improvement",
+      "description": "Remind wholeness AND weave tangible functional improvements throughout",
+      "rule": "Scripts remind wholeness while suggesting specific functional improvements. Not emotional affirmations, but tangible changes.",
+      "why": "The listener is whole AND their systems can improve. Functional suggestions create real-world transformation.",
       "prompt_directives": [
-        "Use language of remembering, not acquiring",
-        "Frame as 'already within you' not 'will become'",
-        "Recognize body wisdom and inherent capacity",
-        "Avoid 'fixing' or 'broken' language entirely",
-        "Emphasize removing obstacles, not building something new"
+        "Use language of remembering, not acquiring ('your body already knows')",
+        "Weave functional improvement suggestions throughout (not just at end)",
+        "Physical Restoration: 'Your body healing and replenishing completely, each cell renewing, immune system strengthening'",
+        "Sleep Quality: 'Your sleep deepening, improving night after night, waking more refreshed'",
+        "Cognitive Enhancement: 'Memory strengthening, words coming more easily, mental clarity increasing'",
+        "Energy & Vitality: 'Your energy replenishing completely, natural vitality returning'",
+        "Stress Response: 'Your nervous system learning deeper calm, stress releasing more easily'",
+        "Avoid emotional affirmations like 'you are loved' - focus on FUNCTIONAL improvements",
+        "For regular scripts: Include these throughout + count 1-5 emergence",
+        "For sleep scripts: Continue these as client drifts, no counting, natural sleep transition"
       ],
       "tone_framework": {
-        "avoid_fixing": [
-          "I will heal your broken parts",
-          "Let's fix what's wrong",
-          "Repair the damage"
+        "avoid_emotional_affirmations": [
+          "You are loved",
+          "You are enough",
+          "You are worthy",
+          "You are special"
         ],
-        "use_remembering": [
-          "Your body already knows",
-          "You're remembering something you've always known",
-          "This wholeness has always been here",
-          "Returning to what you've always been"
+        "use_functional_improvements": [
+          "Your body healing and replenishing completely",
+          "Your sleep deepening night after night",
+          "Your memory strengthening, clarity increasing",
+          "Words coming more easily, thoughts flowing smoothly",
+          "Your energy restoring, building, renewing",
+          "Your nervous system learning deeper calm"
+        ],
+        "weaving_pattern": [
+          "Early in script: 'As you rest, your body begins its natural healing'",
+          "Throughout: 'Each breath, your memory strengthens, your mind clears'",
+          "Continuous: 'Your sleep deepening night after night'",
+          "For sleep scripts: Continue as they drift, no formal ending"
         ]
       },
-      "language_framing": {
-        "use": ["remember", "reclaim", "return", "already within you", "recognize", "rediscover"],
-        "avoid": ["learn", "acquire", "arrive", "become", "fix", "broken", "damaged"]
+      "functional_categories": {
+        "physical_restoration": [
+          "Your body healing and replenishing completely",
+          "Each cell renewing, each system restoring",
+          "Immune system strengthening naturally",
+          "Muscles releasing tension, fascia softening",
+          "Circulation flowing freely, bringing nourishment"
+        ],
+        "sleep_quality": [
+          "Your sleep becoming deeper, more restorative",
+          "Night after night, your body remembers how to rest completely",
+          "Waking more refreshed, more energized",
+          "Sleep cycles optimizing naturally"
+        ],
+        "cognitive_enhancement": [
+          "Your memory improving, becoming clearer, sharper",
+          "Words coming more easily, thoughts flowing smoothly",
+          "Mental clarity increasing day by day",
+          "Your mind processing and organizing effortlessly",
+          "Concentration strengthening naturally"
+        ],
+        "energy_vitality": [
+          "Your energy replenishing completely",
+          "Each moment of rest creating more vitality",
+          "Your natural energy returning, building, strengthening"
+        ],
+        "stress_response": [
+          "Your nervous system learning deeper calm",
+          "Stress releasing more easily from your body",
+          "Your baseline calm becoming your new normal"
+        ]
       },
-      "miracle_recognition": [
-        "The miracle of breath moving you",
-        "Your heart beating faithfully",
-        "Your body healing without instruction",
-        "The intelligence that grew you from a single cell",
-        "The wisdom that has always been within you"
-      ],
       "quality_gates": [
         {
-          "gate": "remembering_language",
-          "check": "Uses language of remembering/recognition, not learning/fixing",
-          "method": "linguistic_analysis",
-          "require_words": ["remember", "reclaim", "return", "already", "always been", "recognize"],
-          "min_matches": 3
+          "gate": "functional_improvements_present",
+          "check": "Includes at least 2 functional improvement categories",
+          "method": "semantic_check",
+          "require_concepts": [
+            "body healing/replenishing",
+            "sleep improving/deepening",
+            "memory/clarity/cognitive",
+            "energy/vitality",
+            "stress/nervous system calm"
+          ],
+          "min_matches": 2
         },
         {
-          "gate": "no_fixing_language",
-          "check": "Avoids fixing/broken language",
+          "gate": "no_emotional_affirmations",
+          "check": "Avoids emotional affirmations, focuses on functional changes",
           "method": "keyword_exclusion",
-          "forbidden_words": ["fix", "broken", "damaged", "repair", "heal the wound"],
+          "forbidden_phrases": ["you are loved", "you are enough", "you are worthy", "you are special"],
           "max_matches": 0
         },
         {
-          "gate": "body_wisdom_present",
-          "check": "References body wisdom or inherent capacity",
-          "method": "semantic_check",
-          "require_concepts": ["body knows", "inner wisdom", "natural intelligence", "always had"],
-          "min_matches": 1
+          "gate": "woven_throughout",
+          "check": "Functional suggestions distributed throughout script, not just at end",
+          "method": "distribution_check",
+          "require_in_sections": ["beginning_third", "middle_third", "final_third"],
+          "min_occurrences_per_section": 1
         }
       ]
     }
