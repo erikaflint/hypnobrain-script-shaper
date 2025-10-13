@@ -61,7 +61,7 @@ export class TemplateSelector implements ITemplateSelector {
     
     // If we have < 3 good matches, use fallback templates
     if (goodMatches.length < 3) {
-      const fallbacks = await this.getFallbackTemplates(5);
+      const fallbacks = await this.getFallbackTemplates(20);
       
       // Add fallbacks that aren't already in the list
       const existingIds = new Set(scored.map(s => s.template.templateId));

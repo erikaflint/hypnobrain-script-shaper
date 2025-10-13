@@ -703,8 +703,9 @@ export default function AppV2() {
                           <p className="text-sm font-medium">Dimension Emphasis:</p>
                           <div className="flex flex-wrap gap-2">
                             {Object.entries(dimensionValues)
-                              .filter(([_, value]) => (value as number) > 60)
-                              .slice(0, 4)
+                              .filter(([_, value]) => (value as number) > 40)
+                              .sort(([, a], [, b]) => (b as number) - (a as number))
+                              .slice(0, 5)
                               .map(([dim, value]) => (
                                 <div
                                   key={dim}
