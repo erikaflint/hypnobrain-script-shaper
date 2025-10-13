@@ -348,14 +348,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Enhance template for DREAM: boost somatic and symbolic, set archetype
       const dreamTemplate = {
         ...templateJson,
-        archetype: {
-          name: archetype.name,
-          description: archetype.description || '',
-        },
         dimensions: {
           ...templateJson.dimensions,
-          somatic: { ...templateJson.dimensions.somatic, level: Math.max(70, templateJson.dimensions.somatic.level) },
-          symbolic: { ...templateJson.dimensions.symbolic, level: Math.max(70, templateJson.dimensions.symbolic.level) },
+          somatic: { 
+            ...templateJson.dimensions.somatic, 
+            level: Math.max(70, templateJson.dimensions.somatic.level) 
+          },
+          symbolic: { 
+            ...templateJson.dimensions.symbolic, 
+            level: Math.max(70, templateJson.dimensions.symbolic.level),
+            archetype: `${archetype.name} - ${archetype.description || ''}` 
+          },
         }
       };
       
