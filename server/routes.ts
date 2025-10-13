@@ -8,6 +8,7 @@ import { templateSelector } from "./template-selector";
 import { dimensionAssembler } from "./dimension-assembler";
 import { setupAuth, isAuthenticated } from "./replitAuth";
 import { z } from "zod";
+import { validateContent, validateMultipleFields } from "./content-validator";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Set up Replit Auth
@@ -221,6 +222,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       const data = schema.parse(req.body);
       
+      // Validate user input content
+      const validation = validateMultipleFields({
+        clientIssue: data.clientIssue,
+        existingScript: data.existingScript,
+      });
+      if (!validation.isValid) {
+        return res.status(400).json({ message: validation.reason });
+      }
+      
       const archetype = await storage.getArchetypeById(data.archetypeId);
       if (!archetype) {
         return res.status(404).json({ message: "Archetype not found" });
@@ -258,6 +268,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
       
       const { email, clientIssue } = schema.parse(req.body);
+      
+      // Validate content
+      const validation = validateContent(clientIssue);
+      if (!validation.isValid) {
+        return res.status(400).json({ message: validation.reason });
+      }
       
       // Check eligibility
       const isEligible = await storage.checkFreeEligibility(email);
@@ -317,21 +333,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { journeyIdea, archetypeId } = schema.parse(req.body);
       const userId = req.user.claims.sub;
       
-      // Backend content validation - double check for inappropriate keywords
-      const inappropriateKeywords = [
-        'sex', 'sexy', 'nude', 'naked', 'porn', 'explicit', 'adult',
-        'violent', 'kill', 'murder', 'blood', 'gore', 'death',
-        'hate', 'racist', 'discrimination',
-        'drug', 'cocaine', 'heroin', 'meth',
-      ];
-      
-      const lowerInput = journeyIdea.toLowerCase();
-      const foundBadWord = inappropriateKeywords.find(word => lowerInput.includes(word));
-      
-      if (foundBadWord) {
-        console.warn(`🚨 FLAGGED CONTENT from user ${userId}: "${journeyIdea}"`);
+      // Backend content validation using centralized validator
+      const validation = validateContent(journeyIdea, userId);
+      if (!validation.isValid) {
         return res.status(400).json({ 
-          message: "DREAM scripts are for peaceful sleep journeys only. Inappropriate content detected." 
+          message: "DREAM scripts are for peaceful sleep journeys only. " + validation.reason
         });
       }
       
@@ -497,6 +503,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
       
       const data = schema.parse(req.body);
+      
+      // Validate user input content
+      const validation = validateMultipleFields({
+        clientIssue: data.clientIssue,
+        existingScript: data.existingScript,
+      });
+      if (!validation.isValid) {
+        return res.status(400).json({ message: validation.reason });
+      }
       
       const archetype = await storage.getArchetypeById(data.archetypeId);
       if (!archetype) {

@@ -11,6 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/useAuth";
+import { validateContent } from "@/lib/contentValidator";
 
 const JOURNEY_EXAMPLES = [
   "Take me on a peaceful walk through an enchanted forest where I meet wise talking animals",
@@ -90,21 +91,12 @@ export default function Dream() {
       return;
     }
 
-    // Client-side content validation - block obviously inappropriate content
-    const inappropriateKeywords = [
-      'sex', 'sexy', 'nude', 'naked', 'porn', 'explicit', 'adult',
-      'violent', 'kill', 'murder', 'blood', 'gore', 'death',
-      'hate', 'racist', 'discrimination',
-      'drug', 'cocaine', 'heroin', 'meth',
-    ];
-
-    const lowerInput = journeyIdea.toLowerCase();
-    const foundBadWord = inappropriateKeywords.find(word => lowerInput.includes(word));
-    
-    if (foundBadWord) {
+    // Client-side content validation using centralized validator
+    const validation = validateContent(journeyIdea);
+    if (!validation.isValid) {
       toast({
         title: "Inappropriate Content Detected",
-        description: "DREAM scripts are for peaceful sleep journeys only. Please revise your journey idea.",
+        description: validation.reason || "DREAM scripts are for peaceful sleep journeys only.",
         variant: "destructive",
       });
       return;
