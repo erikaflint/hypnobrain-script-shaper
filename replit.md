@@ -65,7 +65,8 @@ The ScriptEngine (`server/script-engine/`) is the portable IP layer responsible 
     -   Backend: POST `/api/templates` (protected) saves user templates with name and dimension values
     -   Backend: GET `/api/user/templates` (protected) retrieves user's saved dimension mixes
     -   Templates stored in `templates` table with userId linkage
-    -   Frontend UI: Save Mix button + dropdown to apply saved mixes (pending implementation)
+    -   Frontend UI: "Save Mix" button with dialog to name template, "Apply Saved Mix" button showing count and list of saved templates
+    -   Clicking a saved template instantly applies its dimension values to sliders
 
 ### UI/UX Decisions
 -   **Design System**: Purple accent colors (hsl(260 70% 62%)), dark mode optimized, DAW-inspired interface.
