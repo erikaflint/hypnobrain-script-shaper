@@ -87,8 +87,8 @@ export class TemplateSelector implements ITemplateSelector {
       }
     });
     
-    // Return top 3-5 templates
-    const count = scored.length < 3 ? scored.length : Math.min(5, scored.length);
+    // Return all matched templates (up to 20)
+    const count = Math.min(20, scored.length);
     return scored.slice(0, count);
   }
 
