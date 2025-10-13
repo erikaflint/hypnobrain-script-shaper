@@ -79,6 +79,8 @@ export const generations = pgTable("generations", {
   userId: varchar("user_id").references(() => users.id, { onDelete: 'cascade' }), // Link to authenticated user
   sessionId: varchar("session_id", { length: 255 }),
   email: varchar("email", { length: 255 }), // Keep for backwards compatibility
+  title: varchar("title", { length: 255 }), // Script title
+  imageUrl: varchar("image_url", { length: 500 }), // Generated stock image for the script
   generationMode: varchar("generation_mode", { length: 20 }).notNull(), // 'create_new', 'remix', or 'free_weekly'
   isFree: boolean("is_free").default(false).notNull(),
   originalScript: text("original_script"),

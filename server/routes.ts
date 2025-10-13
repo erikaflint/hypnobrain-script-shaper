@@ -490,6 +490,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/templates/:templateId/preview", async (req, res) => {
     try {
       const schema = z.object({
+        title: z.string().optional(),
         presentingIssue: z.string(),
         desiredOutcome: z.string(),
         clientNotes: z.string().optional(),
@@ -523,6 +524,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/templates/:templateId/generate", isAuthenticated, async (req: any, res) => {
     try {
       const schema = z.object({
+        title: z.string().optional(),
         presentingIssue: z.string(),
         desiredOutcome: z.string(),
         clientNotes: z.string().optional(),
@@ -553,6 +555,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Save to database with userId
       const generation = await storage.createGeneration({
         userId, // Save authenticated user's ID
+        title: data.title,
         generationMode: 'create_new',
         isFree: false,
         presentingIssue: data.presentingIssue,
