@@ -8,7 +8,7 @@ import { VoicePlayer } from "@/components/voice-player";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { isUnauthorizedError } from "@/lib/authUtils";
-import { Copy, FileText, Calendar, Tag, Sparkles, Home, Wand2, Star, RotateCcw, Package } from "lucide-react";
+import { Copy, FileText, Calendar, Tag, Sparkles, Home, Wand2, Star, RotateCcw, Package, Moon } from "lucide-react";
 import { format } from "date-fns";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import type { Generation } from "@shared/schema";
@@ -243,9 +243,18 @@ export default function Dashboard() {
               )}
               
               <div className="flex items-center gap-1">
-                <Sparkles className="w-4 h-4" />
-                {generation.generationMode === "free_weekly" ? "Free" : 
-                 generation.generationMode === "remix" ? "Remix" : "Create New"}
+                {generation.generationMode === "dream" ? (
+                  <>
+                    <Moon className="w-4 h-4" />
+                    DREAM
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="w-4 h-4" />
+                    {generation.generationMode === "free_weekly" ? "Free" : 
+                     generation.generationMode === "remix" ? "Remix" : "Create New"}
+                  </>
+                )}
               </div>
             </div>
           </div>

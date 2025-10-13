@@ -92,10 +92,12 @@ The ScriptEngine (`server/script-engine/`) is the portable IP layer responsible 
     -   Journey-based input (not issue/outcome) - e.g., "walking through an enchanted forest"
     -   Sleep emergence by default - natural drift without alertness cues
     -   High somatic/symbolic emphasis (≥70) for rich sensory experience
-    -   **Frontend**: `/dream` route with journey idea input
-    -   **Backend**: Same generation pipeline with emergenceType='sleep', longer word count, different dimension emphasis
+    -   **Frontend**: `/dream` route with journey idea input, archetype selector, VoicePlayer for TTS playback
+    -   **Backend**: POST `/api/generate-dream-script` (authenticated) - saves to database with generationMode='dream', auto-generates title
+    -   **Dashboard Integration**: DREAM scripts visible with Moon icon indicator
     -   **13 DREAM-Specific Narrative Arcs**: 3 foundation (always included), 1 somatic (PMR), 8 landscape themes, 1 enhancement
     -   **8 Blended Archetypes**: Specialized voice blends optimized for sleep/DREAM scripts (e.g., "Compassionate Truth-Teller" = 70% Nurturer + 30% Truth Teller, "Fierce Mama Bear" = 75% Nurturer + 25% Rebel). Stored as JSON metadata in archetypes.prompt_modifier field
+    -   **Voice Controls**: Play/Pause/Stop, Speed (50-150%), Pause intensity (0-4), Pitch (0.5-1.5x), Voice selection
 
 ### UI/UX Decisions
 -   **Design System**: Purple accent colors (hsl(260 70% 62%)), dark mode optimized, DAW-inspired interface.

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
@@ -10,6 +10,7 @@ import { ArrowLeft, Moon, Sparkles, Volume2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
+import { useAuth } from "@/hooks/useAuth";
 
 const JOURNEY_EXAMPLES = [
   "Take me on a peaceful walk through an enchanted forest where I meet wise talking animals",
@@ -28,9 +29,12 @@ interface Archetype {
 
 export default function Dream() {
   const { toast } = useToast();
+  const { user, isLoading: authLoading } = useAuth();
+  const [, navigate] = useLocation();
   const [journeyIdea, setJourneyIdea] = useState("");
   const [selectedArchetypeId, setSelectedArchetypeId] = useState<number | null>(null);
   const [generatedScript, setGeneratedScript] = useState<string | null>(null);
+  const [generationId, setGenerationId] = useState<number | null>(null);
 
   // Fetch blended archetypes for DREAM
   const { data: archetypes = [] } = useQuery<Archetype[]>({
@@ -47,17 +51,28 @@ export default function Dream() {
     },
     onSuccess: (data) => {
       setGeneratedScript(data.fullScript);
+      setGenerationId(data.generationId);
       toast({
         title: "DREAM Script Created!",
-        description: "Your 30-minute sleep hypnosis journey is ready",
+        description: `"${data.title}" has been saved to your library`,
       });
     },
     onError: (error: any) => {
-      toast({
-        title: "Error",
-        description: error.message || "Failed to generate DREAM script",
-        variant: "destructive",
-      });
+      // Handle authentication errors
+      if (error.message?.includes('Unauthorized') || error.message?.includes('401')) {
+        toast({
+          title: "Login Required",
+          description: "Please log in to save your DREAM journeys",
+          variant: "destructive",
+        });
+        setTimeout(() => navigate('/'), 2000);
+      } else {
+        toast({
+          title: "Error",
+          description: error.message || "Failed to generate DREAM script",
+          variant: "destructive",
+        });
+      }
     },
   });
 

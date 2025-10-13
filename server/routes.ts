@@ -306,8 +306,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Generate DREAM script (sleep hypnosis journey)
-  app.post("/api/generate-dream-script", async (req, res) => {
+  // Generate DREAM script (sleep hypnosis journey) - requires authentication
+  app.post("/api/generate-dream-script", isAuthenticated, async (req: any, res) => {
     try {
       const schema = z.object({
         journeyIdea: z.string(),
@@ -315,6 +315,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
       
       const { journeyIdea, archetypeId } = schema.parse(req.body);
+      const userId = req.user.claims.sub;
       
       // Fetch selected archetype or use first blended archetype
       let archetype;
@@ -371,7 +372,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
         targetWordCount: 3000,  // 30-minute script
       });
       
-      res.json({ fullScript: result.fullScript });
+      // Generate meaningful title from journey idea
+      const dreamTitle = journeyIdea.length > 50 
+        ? `DREAM: ${journeyIdea.substring(0, 47)}...`
+        : `DREAM: ${journeyIdea}`;
+      
+      // Save to database
+      const generation = await storage.createGeneration({
+        userId,
+        title: dreamTitle,
+        generationMode: 'dream', // New mode for DREAM scripts
+        isFree: false,
+        presentingIssue: journeyIdea,
+        desiredOutcome: "Experience a peaceful, restful journey into natural sleep",
+        fullScript: result.fullScript,
+        archetypeId: archetype.id,
+      });
+      
+      res.json({ 
+        fullScript: result.fullScript,
+        generationId: generation.id,
+        title: dreamTitle
+      });
     } catch (error: any) {
       console.error("DREAM generation error:", error);
       res.status(400).json({ message: error.message });
