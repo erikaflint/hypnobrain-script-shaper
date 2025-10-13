@@ -138,18 +138,24 @@ The ScriptEngine (`server/script-engine/`) is the portable IP layer responsible 
 ### Post-Creation Content Review Process (Priority: Future)
 **Problem:** AI-generated content can be unpredictable. While we validate user input before generation, the AI output itself (especially DREAM stories and therapeutic scripts) may contain unintended therapeutic language, sensitive topics, or content that doesn't align with intended use cases.
 
-**Proposed Solution:** Implement **multi-layer refinement system** for ALL scripts:
-- **What:** Post-creation AI refinement layers that polish and enhance scripts before delivery
-- **Why:** Scripts can be iteratively improved through targeted refinement passes rather than full regeneration
-- **Philosophy:** "No rejects, only refinements" - embrace all generated content and improve it through layers
-- **How:** TBD - refinement layers could include:
-  - **Content safety pass** - Adjust problematic language, validate appropriateness
-  - **Tone refinement** - Fine-tune voice consistency, adjust emotional gradient
-  - **Sensory enhancement** - Enrich with vivid details, varied language
-  - **Length optimization** - Expand or condense sections as needed
-  - **Quality scoring** - Confidence metrics to determine which layers to apply
-  - **Iterative loops** - Run refinement passes until quality thresholds met
-- **Benefits:** Much more efficient than regenerating from scratch, preserves core narrative while improving details
+**Proposed Solution:** Implement **pluggable multi-layer refinement system** for ALL scripts:
+- **What:** Modular, post-creation AI refinement layers that automatically polish and enhance scripts
+- **Philosophy:** "Really good → Automatically refined → Excellent" - Don't expect perfect scripts, expect really good ones that get systematically improved
+- **Why:** 
+  - Scripts can be iteratively improved through targeted refinement passes rather than full regeneration
+  - Pluggable architecture allows mixing and matching refinement passes for different purposes
+  - Two-level improvement: (1) Refine prompts for better initial output + (2) Refinement layers to polish
+- **How:** TBD - **Pluggable refinement passes** could include:
+  - 🔒 **Safety refinement** - Adjust problematic language, validate appropriateness
+  - 🎨 **Tone refinement** - Fine-tune voice consistency, adjust emotional gradient
+  - 🌍 **Translation refinement** - Convert to Spanish, French, or other languages
+  - ✨ **Sensory enhancement** - Enrich with vivid details, varied language
+  - 📏 **Length optimization** - Expand or condense to target word count
+  - 🎭 **Voice consistency** - Ensure archetype voice stays consistent throughout
+  - ⚡ **Quality scoring** - Confidence metrics to determine which layers to apply
+  - 🔄 **Iterative loops** - Run refinement passes until quality thresholds met
+- **Architecture:** Each refinement pass is independent and reusable - can run individually or chain together
+- **Benefits:** Much more efficient than regenerating from scratch, preserves core narrative while improving details, enables new capabilities like translation without full regeneration
 
 **Note:** Not currently a blocker, but important for production quality assurance and could unlock powerful script enhancement capabilities.
 
