@@ -939,6 +939,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       const scripts = await storage.getPackageScripts(packageId);
       const generatedScripts = [];
+      const failedScripts = [];
       
       // Generate each script
       for (const script of scripts) {
@@ -992,23 +993,117 @@ export async function registerRoutes(app: Express): Promise<Server> {
             userPrompt: result.userPrompt,
           });
           
-          // Link generation to package script
+          // Link generation to package script and clear any previous error
           await storage.updatePackageScript(script.id, {
             generationId: generation.id,
             status: 'completed',
+            errorMessage: null, // Clear any previous error on successful generation
           });
           
           generatedScripts.push(generation);
         } catch (error: any) {
           console.error(`Error generating script ${script.id}:`, error);
-          await storage.updatePackageScript(script.id, { status: 'concept' });
+          await storage.updatePackageScript(script.id, { 
+            status: 'failed',
+            errorMessage: error.message || 'Unknown error during generation'
+          });
+          failedScripts.push({ scriptId: script.id, title: script.conceptTitle, error: error.message });
         }
       }
       
-      await storage.updatePackageStatus(packageId, 'completed');
-      res.json({ package: pkg, generatedScripts });
+      // Set package status based on results
+      const finalStatus = failedScripts.length === 0 ? 'completed' : 
+                         failedScripts.length === scripts.length ? 'failed' : 'partial';
+      await storage.updatePackageStatus(packageId, finalStatus);
+      
+      res.json({ 
+        package: { ...pkg, status: finalStatus }, 
+        generatedScripts,
+        failedScripts: failedScripts.length > 0 ? failedScripts : undefined
+      });
     } catch (error: any) {
       console.error('Error generating package scripts:', error);
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Export package scripts
+  app.get("/api/packages/:id/export", isAuthenticated, async (req, res) => {
+    try {
+      const packageId = parseInt(req.params.id);
+      
+      // Re-fetch package to ensure fresh status (not stale cached data)
+      const pkg = await storage.getPackageById(packageId);
+      
+      if (!pkg || pkg.userId !== req.user!.id) {
+        return res.status(403).json({ message: 'Unauthorized' });
+      }
+      
+      // Fetch all scripts and independently verify completion status
+      const scripts = await storage.getPackageScripts(packageId);
+      
+      // Check for any failed scripts
+      const failedScripts = scripts.filter(s => s.status === 'failed');
+      if (failedScripts.length > 0) {
+        return res.status(400).json({ 
+          message: `Cannot export: ${failedScripts.length} script(s) failed to generate. Please review errors and regenerate failed scripts.`,
+          failedScripts: failedScripts.map(s => ({
+            title: s.conceptTitle,
+            error: s.errorMessage || 'Unknown error'
+          }))
+        });
+      }
+      
+      // Check for scripts still in concept/generating state
+      const incompleteScripts = scripts.filter(s => !s.generationId || s.status !== 'completed');
+      if (incompleteScripts.length > 0) {
+        return res.status(400).json({ 
+          message: `Cannot export: ${incompleteScripts.length} script(s) have not been generated yet. Please generate all scripts before exporting.` 
+        });
+      }
+      
+      // Final safety check: verify package status matches script reality
+      if (pkg.status !== 'completed') {
+        return res.status(400).json({ 
+          message: `Package status is '${pkg.status}'. Only completed packages can be exported.` 
+        });
+      }
+      
+      // Get all generated scripts
+      const generatedScripts = await Promise.all(
+        scripts
+          .filter(s => s.generationId)
+          .map(async (script) => {
+            const generation = await storage.getGenerationById(script.generationId!);
+            return {
+              title: script.userModifiedTitle || script.conceptTitle,
+              description: script.conceptDescription,
+              presentingIssue: script.userModifiedIssue || script.suggestedPresentingIssue,
+              desiredOutcome: script.userModifiedOutcome || script.suggestedDesiredOutcome,
+              script: generation?.fullScript || '',
+            };
+          })
+      );
+      
+      // Format as text document
+      let exportText = `${pkg.title}\n`;
+      exportText += `Theme: ${pkg.theme}\n`;
+      exportText += `\n${'='.repeat(80)}\n\n`;
+      
+      generatedScripts.forEach((script, index) => {
+        exportText += `SCRIPT ${index + 1}: ${script.title}\n`;
+        exportText += `${'='.repeat(80)}\n\n`;
+        exportText += `Presenting Issue: ${script.presentingIssue}\n`;
+        exportText += `Desired Outcome: ${script.desiredOutcome}\n\n`;
+        exportText += `${script.script}\n\n`;
+        exportText += `${'-'.repeat(80)}\n\n`;
+      });
+      
+      res.setHeader('Content-Type', 'text/plain');
+      res.setHeader('Content-Disposition', `attachment; filename="${pkg.title.replace(/[^a-z0-9]/gi, '_')}.txt"`);
+      res.send(exportText);
+    } catch (error: any) {
+      console.error('Error exporting package:', error);
       res.status(500).json({ message: error.message });
     }
   });

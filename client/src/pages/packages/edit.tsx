@@ -39,10 +39,21 @@ export default function EditPackage() {
       return await apiRequest("POST", `/api/packages/${id}/generate`, {});
     },
     onSuccess: (response) => {
-      toast({
-        title: "Package Generated!",
-        description: `${response.generatedScripts.length} scripts created successfully.`,
-      });
+      const failedCount = response.failedScripts?.length || 0;
+      const successCount = response.generatedScripts.length;
+      
+      if (failedCount === 0) {
+        toast({
+          title: "Package Generated!",
+          description: `All ${successCount} scripts created successfully.`,
+        });
+      } else {
+        toast({
+          title: "Partial Generation",
+          description: `${successCount} scripts succeeded, ${failedCount} failed. Check individual scripts for details.`,
+          variant: "destructive",
+        });
+      }
       queryClient.invalidateQueries({ queryKey: [`/api/packages/${id}`] });
     },
     onError: (error: any) => {
@@ -113,12 +124,25 @@ export default function EditPackage() {
                   </>
                 )}
               </Button>
-              {pkg.status === 'completed' && (
-                <Button variant="outline" data-testid="button-export">
-                  <Download className="w-4 h-4 mr-2" />
-                  Export Package
-                </Button>
-              )}
+              <Button
+                variant="outline"
+                disabled={pkg.status !== 'completed'}
+                onClick={() => {
+                  if (pkg.status === 'completed') {
+                    window.open(`/api/packages/${id}/export`, '_blank');
+                  } else {
+                    toast({
+                      title: "Export Not Available",
+                      description: `Package must be fully completed before export. Current status: ${pkg.status}`,
+                      variant: "destructive",
+                    });
+                  }
+                }}
+                data-testid="button-export"
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Export Package
+              </Button>
             </div>
           </div>
         </div>
@@ -245,6 +269,16 @@ function ScriptConceptCard({
             <Badge variant="secondary" data-testid={`badge-generated-${script.id}`}>
               ✓ Script Generated (ID: {script.generationId})
             </Badge>
+          </div>
+        )}
+        {script.status === 'failed' && script.errorMessage && (
+          <div className="mt-4 pt-4 border-t">
+            <Badge variant="destructive" data-testid={`badge-error-${script.id}`}>
+              Failed
+            </Badge>
+            <p className="mt-2 text-sm text-destructive" data-testid={`text-error-${script.id}`}>
+              Error: {script.errorMessage}
+            </p>
           </div>
         )}
       </CardContent>

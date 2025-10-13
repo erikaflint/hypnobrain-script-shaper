@@ -216,7 +216,8 @@ export const packageScripts = pgTable("package_scripts", {
   generationId: integer("generation_id").references(() => generations.id, { onDelete: 'set null' }), // Links to actual generated script
   
   // Status & ordering
-  status: varchar("status", { length: 50 }).default("concept").notNull(), // 'concept', 'ready', 'generating', 'completed'
+  status: varchar("status", { length: 50 }).default("concept").notNull(), // 'concept', 'ready', 'generating', 'completed', 'failed'
+  errorMessage: text("error_message"), // Persisted error details if generation fails
   sortOrder: integer("sort_order").notNull(),
   
   createdAt: timestamp("created_at").defaultNow().notNull(),
