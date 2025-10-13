@@ -7,6 +7,7 @@ import { templateManager } from "./template-manager";
 import { templateSelector } from "./template-selector";
 import { dimensionAssembler } from "./dimension-assembler";
 import { setupAuth, isAuthenticated } from "./replitAuth";
+import { isAdmin } from "./adminAuth";
 import { z } from "zod";
 import { validateContent, validateMultipleFields } from "./content-validator";
 
@@ -580,8 +581,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Admin: Get all generations
-  app.get("/api/admin/generations", async (req, res) => {
+  // Admin: Get all generations (protected route)
+  app.get("/api/admin/generations", isAuthenticated, isAdmin, async (req, res) => {
     try {
       const allGenerations = await storage.getAllGenerations();
       res.json(allGenerations);

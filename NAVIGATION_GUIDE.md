@@ -3,6 +3,9 @@
 ## Overview
 All pages now use the **centralized `AppHeader` component** for consistent navigation across the entire application. No more copy-pasting header code!
 
+## ✨ NEW: Role-Based Navigation
+The AppHeader now supports **role-based access control** with automatic admin link visibility!
+
 ## AppHeader Component
 
 Located at: `client/src/components/app-header.tsx`
@@ -29,17 +32,69 @@ interface AppHeaderProps {
   showAuth?: boolean;            // Show login/logout buttons
   showDashboard?: boolean;       // Show dashboard link
   showCreateScript?: boolean;    // Show "Create Script" button
+  showAdminLink?: boolean;       // Show admin link (🔒 only visible to admins!)
   rightContent?: React.ReactNode; // Custom components on right side
 }
 ```
 
+## 🔐 Role-Based Features
+
+### Admin Detection
+The `useAuth()` hook now returns:
+```tsx
+const { user, isLoading, isAuthenticated, isAdmin } = useAuth();
+```
+
+### Admin-Only Links
+```tsx
+// This link ONLY shows to admins!
+<AppHeader showAdminLink={true} />
+```
+
+The admin link:
+- ✅ Automatically hidden from regular users
+- ✅ Shows Shield icon for admins
+- ✅ Protected by backend middleware
+- ✅ No conditional logic needed in your pages!
+
+### Setting Admin Users
+
+**Option 1: Migrate existing admin_users**
+```bash
+# Automatically mark all users in admin_users table as isAdmin=true
+npx tsx server/scripts/migrate-admin-users.ts
+```
+
+**Option 2: Set individual user as admin**
+```bash
+# Make any specific user an admin by email
+npx tsx server/scripts/set-admin.ts user@example.com
+```
+
+### Backend Protection
+Admin routes are protected with middleware:
+```typescript
+app.get("/api/admin/generations", isAuthenticated, isAdmin, async (req, res) => {
+  // Only accessible to authenticated admin users
+});
+```
+
+The `isAdmin` middleware:
+- ✅ Checks user.claims.sub (Replit Auth format)
+- ✅ Verifies isAdmin=true in database
+- ✅ Returns 403 Forbidden for non-admins
+- ✅ Returns 401 Unauthorized if not logged in
+
 ## Usage Examples
 
-### 1. Landing Page (with Auth)
+### 1. Landing Page (with Auth + Admin)
 ```tsx
-<AppHeader showAuth={true} />
+<AppHeader showAuth={true} showAdminLink={true} />
 ```
-Shows: Logo | Login/Logout + Dashboard (when logged in)
+Shows: 
+- Logo | Login (when logged out)
+- Logo | Admin 🛡️ (admins only) | Dashboard | Logout (when admin)
+- Logo | Dashboard | Logout (when regular user)
 
 ### 2. DREAM Page (Back + Title + Dashboard)
 ```tsx

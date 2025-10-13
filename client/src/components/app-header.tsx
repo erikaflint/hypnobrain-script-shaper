@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Brain, Home, LayoutDashboard, LogIn, LogOut, ArrowLeft, Wand2 } from "lucide-react";
+import { Brain, Home, LayoutDashboard, LogIn, LogOut, ArrowLeft, Wand2, Shield } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
 export interface AppHeaderProps {
@@ -13,6 +13,7 @@ export interface AppHeaderProps {
   showAuth?: boolean;
   showDashboard?: boolean;
   showCreateScript?: boolean;
+  showAdminLink?: boolean; // New: Show admin panel link (only visible to admins)
   rightContent?: React.ReactNode;
 }
 
@@ -26,9 +27,10 @@ export function AppHeader({
   showAuth = false,
   showDashboard = false,
   showCreateScript = false,
+  showAdminLink = false,
   rightContent,
 }: AppHeaderProps) {
-  const { user, isLoading: authLoading } = useAuth();
+  const { user, isLoading: authLoading, isAdmin } = useAuth();
 
   return (
     <header className="border-b sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -80,6 +82,15 @@ export function AppHeader({
               <Button variant="default" size="sm" data-testid="button-create-script">
                 <Wand2 className="w-4 h-4 mr-2" />
                 Create Script
+              </Button>
+            </Link>
+          )}
+
+          {showAdminLink && isAdmin && (
+            <Link href="/admin" data-testid="link-admin">
+              <Button variant="outline" size="sm" data-testid="button-admin">
+                <Shield className="w-4 h-4 mr-2" />
+                Admin
               </Button>
             </Link>
           )}

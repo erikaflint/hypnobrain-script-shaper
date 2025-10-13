@@ -80,6 +80,7 @@ export default function Dashboard() {
       <AppHeader 
         title="HypnoBrain Script Shaper"
         showCreateScript={true}
+        showAdminLink={true}
         rightContent={
           <Link href="/packages/create" data-testid="link-create-package">
             <Button variant="outline" size="sm">
