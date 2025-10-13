@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { VoicePlayer } from "@/components/voice-player";
+import { LoadingDream } from "@/components/loading-dream";
 import { Moon, Sparkles } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -13,6 +14,7 @@ import { apiRequest } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/useAuth";
 import { validateContent } from "@/lib/contentValidator";
 import { AppHeader } from "@/components/app-header";
+import { useLullaby } from "@/hooks/useLullaby";
 
 const JOURNEY_EXAMPLES = [
   "Take me on a peaceful walk through an enchanted forest where I meet wise talking animals",
@@ -39,6 +41,9 @@ export default function Dream() {
   const [generatedScript, setGeneratedScript] = useState<string | null>(null);
   const [generationId, setGenerationId] = useState<number | null>(null);
   const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(null);
+  
+  // Lullaby music hook
+  const lullaby = useLullaby();
 
   // Fetch blended archetypes for DREAM
   const { data: archetypes = [] } = useQuery<Archetype[]>({
@@ -55,12 +60,15 @@ export default function Dream() {
     },
     onSuccess: (data) => {
       setExpandedStory(data.expandedStory);
+      lullaby.stop(); // Stop lullaby when story is ready
       toast({
         title: "Story Shaped!",
         description: `Expanded to ${data.storyLength} words. Review and edit if needed.`,
       });
     },
     onError: (error: any) => {
+      lullaby.stop(); // Stop lullaby on error
+      
       // Handle authentication errors (consistent with Step 2)
       if (error.message?.includes('Unauthorized') || error.message?.includes('401')) {
         toast({
@@ -91,12 +99,15 @@ export default function Dream() {
       setGeneratedScript(data.fullScript);
       setGenerationId(data.generationId);
       setThumbnailUrl(data.thumbnailUrl || null);
+      lullaby.stop(); // Stop lullaby when DREAM is ready
       toast({
         title: "DREAM Script Created!",
         description: `"${data.title}" has been saved to your library`,
       });
     },
     onError: (error: any) => {
+      lullaby.stop(); // Stop lullaby on error
+      
       // Handle authentication errors
       if (error.message?.includes('Unauthorized') || error.message?.includes('401')) {
         toast({
@@ -185,7 +196,14 @@ export default function Dream() {
               </p>
             </div>
 
-            {!expandedStory ? (
+            {/* Loading state for Story Shaper */}
+            {shapeStory.isPending ? (
+              <LoadingDream 
+                message="Your story is being shaped"
+                onToggleSound={lullaby.toggle}
+                isSoundPlaying={lullaby.isPlaying}
+              />
+            ) : !expandedStory ? (
               // Step 1: Journey Idea Form
               <Card className="p-8">
                 <form onSubmit={handleShapeStory} className="space-y-6">
@@ -280,6 +298,13 @@ export default function Dream() {
                 </Button>
               </form>
             </Card>
+            ) : generateDreamScript.isPending ? (
+              // Loading state for DREAM Script Generation
+              <LoadingDream 
+                message="Your DREAM is coming to life"
+                onToggleSound={lullaby.toggle}
+                isSoundPlaying={lullaby.isPlaying}
+              />
             ) : (
               // Step 2: Story Editor
               <Card className="p-8">
