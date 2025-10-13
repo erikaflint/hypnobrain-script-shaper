@@ -361,6 +361,67 @@ Format as JSON:
     const result = JSON.parse(cleanJsonResponse(textContent.text));
     return result;
   }
+
+  /**
+   * Generate script package concepts - AI creates themed script ideas
+   */
+  async generatePackageConcepts(params: {
+    theme: string;
+    count: number;
+    description?: string;
+  }): Promise<Array<{
+    title: string;
+    description: string;
+    presentingIssue: string;
+    desiredOutcome: string;
+  }>> {
+    const systemPrompt = `You are an expert hypnotherapist using Erika Flint's 8-Dimensional Hypnosis Framework. 
+You specialize in creating themed script collections that work together as a comprehensive package.
+
+Your task: Generate ${params.count} unique, complementary hypnosis script concepts for a package about "${params.theme}".
+
+Each script should:
+- Address a specific aspect or angle of the theme
+- Have a unique presenting issue and desired outcome
+- Complement the other scripts in the package
+- Follow evidence-based hypnotherapy principles
+- Be practical and immediately usable for therapists
+
+The collection should cover different dimensions of the theme, creating a complete, sellable package.`;
+
+    const userPrompt = `Theme: ${params.theme}
+${params.description ? `Additional Context: ${params.description}` : ''}
+
+Generate exactly ${params.count} script concepts that work together as a cohesive package.
+
+Format as JSON array:
+[
+  {
+    "title": "Memorable, specific title",
+    "description": "2-3 sentence overview of what this script addresses",
+    "presentingIssue": "Specific issue client brings (e.g., 'stress at bedtime')",
+    "desiredOutcome": "Specific desired state (e.g., 'fall asleep easily and naturally')"
+  },
+  ...
+]
+
+Make each concept distinct and valuable. Think like a professional creating a sellable product.`;
+
+    const response = await anthropic.messages.create({
+      model: DEFAULT_MODEL_STR,
+      max_tokens: 4000,
+      system: systemPrompt,
+      messages: [{ role: 'user', content: userPrompt }],
+    });
+
+    const textContent = response.content[0];
+    if (textContent.type !== 'text') {
+      throw new Error('Expected text response from AI');
+    }
+    
+    const result = JSON.parse(cleanJsonResponse(textContent.text));
+    return result;
+  }
 }
 
 export const aiService = new AIService();
