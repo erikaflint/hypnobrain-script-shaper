@@ -94,7 +94,8 @@ The ScriptEngine (`server/script-engine/`) is the portable IP layer responsible 
     -   High somatic/symbolic emphasis (≥70) for rich sensory experience
     -   **Frontend**: `/dream` route with journey idea input
     -   **Backend**: Same generation pipeline with emergenceType='sleep', longer word count, different dimension emphasis
-    -   Future: DREAM-specific narrative arcs and archetypes (TBD)
+    -   **13 DREAM-Specific Narrative Arcs**: 3 foundation (always included), 1 somatic (PMR), 8 landscape themes, 1 enhancement
+    -   **8 Blended Archetypes**: Specialized voice blends optimized for sleep/DREAM scripts (e.g., "Compassionate Truth-Teller" = 70% Nurturer + 30% Truth Teller, "Fierce Mama Bear" = 75% Nurturer + 25% Rebel). Stored as JSON metadata in archetypes.prompt_modifier field
 
 ### UI/UX Decisions
 -   **Design System**: Purple accent colors (hsl(260 70% 62%)), dark mode optimized, DAW-inspired interface.
