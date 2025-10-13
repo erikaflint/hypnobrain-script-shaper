@@ -170,6 +170,62 @@ export const userTemplateLibraries = pgTable("user_template_libraries", {
   userTemplateUniq: uniqueIndex("user_template_unique_idx").on(table.userId, table.templateId),
 }));
 
+// Script Packages (collections of themed scripts)
+export const scriptPackages = pgTable("script_packages", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: 'cascade' }),
+  
+  // Package metadata
+  title: varchar("title", { length: 255 }).notNull(),
+  description: text("description"),
+  theme: varchar("theme", { length: 255 }).notNull(), // e.g., "weight loss", "anxiety relief"
+  scriptCount: integer("script_count").notNull(), // How many scripts in package (e.g., 12)
+  
+  // Status tracking
+  status: varchar("status", { length: 50 }).default("draft").notNull(), // 'draft', 'generating', 'completed'
+  
+  // Export tracking
+  exportedAt: timestamp("exported_at"),
+  exportFormat: varchar("export_format", { length: 50 }), // 'pdf', 'docx', 'bundle'
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+}, (table) => ({
+  userIdIdx: index("script_packages_user_id_idx").on(table.userId),
+  statusIdx: index("script_packages_status_idx").on(table.status),
+}));
+
+// Package Scripts (individual scripts within a package)
+export const packageScripts = pgTable("package_scripts", {
+  id: serial("id").primaryKey(),
+  packageId: integer("package_id").notNull().references(() => scriptPackages.id, { onDelete: 'cascade' }),
+  
+  // Script concept (AI-generated idea)
+  conceptTitle: varchar("concept_title", { length: 255 }).notNull(),
+  conceptDescription: text("concept_description"),
+  suggestedPresentingIssue: varchar("suggested_presenting_issue", { length: 255 }),
+  suggestedDesiredOutcome: text("suggested_desired_outcome"),
+  
+  // User modifications
+  userModifiedTitle: varchar("user_modified_title", { length: 255 }),
+  userModifiedIssue: varchar("user_modified_issue", { length: 255 }),
+  userModifiedOutcome: text("user_modified_outcome"),
+  
+  // Template & Generation
+  assignedTemplateId: varchar("assigned_template_id", { length: 255 }).references(() => templates.templateId, { onDelete: 'set null' }),
+  generationId: integer("generation_id").references(() => generations.id, { onDelete: 'set null' }), // Links to actual generated script
+  
+  // Status & ordering
+  status: varchar("status", { length: 50 }).default("concept").notNull(), // 'concept', 'ready', 'generating', 'completed'
+  sortOrder: integer("sort_order").notNull(),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+}, (table) => ({
+  packageIdIdx: index("package_scripts_package_id_idx").on(table.packageId),
+  generationIdIdx: index("package_scripts_generation_id_idx").on(table.generationId),
+}));
+
 // Relations - only define where actual FK relationships exist
 export const generationsRelations = relations(generations, ({ one }) => ({
   archetype: one(archetypes, {
@@ -218,6 +274,18 @@ export const insertAdminUserSchema = createInsertSchema(adminUsers).omit({
   createdAt: true,
 });
 
+export const insertScriptPackageSchema = createInsertSchema(scriptPackages).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertPackageScriptSchema = createInsertSchema(packageScripts).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 // Select types
 export type Dimension = typeof dimensions.$inferSelect;
 export type InsertDimension = z.infer<typeof insertDimensionSchema>;
@@ -239,6 +307,12 @@ export type InsertFreeScriptUsage = z.infer<typeof insertFreeScriptUsageSchema>;
 
 export type AdminUser = typeof adminUsers.$inferSelect;
 export type InsertAdminUser = z.infer<typeof insertAdminUserSchema>;
+
+export type ScriptPackage = typeof scriptPackages.$inferSelect;
+export type InsertScriptPackage = z.infer<typeof insertScriptPackageSchema>;
+
+export type PackageScript = typeof packageScripts.$inferSelect;
+export type InsertPackageScript = z.infer<typeof insertPackageScriptSchema>;
 
 // V2: Template schemas and types
 export const insertTemplateSchema = createInsertSchema(templates).omit({
