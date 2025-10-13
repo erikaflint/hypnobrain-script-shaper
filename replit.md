@@ -72,6 +72,19 @@ The ScriptEngine (`server/script-engine/`) is the portable IP layer responsible 
     -   Templates stored in `templates` table with userId linkage
     -   Frontend UI: "Save Mix" button with dialog to name template, "Apply Saved Mix" button showing count and list of saved templates
     -   Clicking a saved template instantly applies its dimension values to sliders
+-   **Script Package Generator (NEW)**:
+    -   Create sellable collections of themed scripts (e.g., "12 Weight Loss Scripts")
+    -   AI generates unique, complementary script concepts based on theme
+    -   User workflow: Enter theme → AI generates concepts → Modify concepts → Generate all scripts → Export package
+    -   **Database**: `script_packages` table (title, theme, scriptCount, status) + `package_scripts` junction table (concepts, modifications, generationId links)
+    -   **Backend Routes**:
+        - POST `/api/packages` - create package & generate concepts
+        - GET `/api/packages` - get user's packages
+        - GET `/api/packages/:id` - get package with scripts
+        - PATCH `/api/packages/:packageId/scripts/:scriptId` - update script concept
+        - POST `/api/packages/:id/generate` - generate all scripts in package
+    -   **Frontend Pages**: `/packages/create` (package creator), `/packages/:id/edit` (concept editor & generator)
+    -   Error handling: Failed generations mark package as 'failed' status for retry/cleanup
 
 ### UI/UX Decisions
 -   **Design System**: Purple accent colors (hsl(260 70% 62%)), dark mode optimized, DAW-inspired interface.

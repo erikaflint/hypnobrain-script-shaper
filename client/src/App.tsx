@@ -10,6 +10,8 @@ import AppPage from "@/pages/app";
 import AppV2 from "@/pages/app-v2";
 import Admin from "@/pages/admin";
 import Dashboard from "@/pages/dashboard";
+import CreatePackage from "@/pages/packages/create";
+import EditPackage from "@/pages/packages/edit";
 
 function Router() {
   return (
@@ -20,6 +22,8 @@ function Router() {
       <Route path="/app-v2" component={AppV2} />
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/admin" component={Admin} />
+      <Route path="/packages/create" component={CreatePackage} />
+      <Route path="/packages/:id/edit" component={EditPackage} />
       <Route component={NotFound} />
     </Switch>
   );
