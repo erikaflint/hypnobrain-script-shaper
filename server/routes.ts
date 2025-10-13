@@ -563,10 +563,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
         clientNotes: data.clientNotes || '',
       });
       
+      // Generate a memorable title from presenting issue and desired outcome
+      const generateTitle = (issue: string, outcome: string): string => {
+        // Clean and trim inputs
+        const cleanIssue = issue.trim().replace(/[^\w\s-]/g, '');
+        const cleanOutcome = outcome.trim().replace(/[^\w\s-]/g, '');
+        
+        // Take first 2-3 words from issue, ensure we have content
+        const issueWords = cleanIssue.split(/\s+/).filter(w => w.length > 0).slice(0, 3).join(' ');
+        const outcomeWords = cleanOutcome.split(/\s+/).filter(w => w.length > 0).slice(0, 4).join(' ');
+        
+        if (!issueWords) return 'Hypnosis Session'; // Fallback if no issue
+        
+        // Create variations based on template category
+        const category = (template.jsonData as any)?.category || 'therapeutic';
+        if (category === 'beginner' || category === 'rapid') {
+          return `${issueWords} Relief`;
+        } else if (category === 'specialized') {
+          return `${issueWords} Transformation`;
+        } else if (outcomeWords) {
+          return `${issueWords} to ${outcomeWords}`;
+        } else {
+          return `${issueWords} Session`;
+        }
+      };
+      
+      const generatedTitle = data.title || generateTitle(data.presentingIssue, data.desiredOutcome);
+      
       // Save to database with userId
       const generation = await storage.createGeneration({
         userId, // Save authenticated user's ID
-        title: data.title,
+        title: generatedTitle,
         generationMode: 'create_new',
         isFree: false,
         presentingIssue: data.presentingIssue,

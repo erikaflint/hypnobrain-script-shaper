@@ -44,7 +44,12 @@ The ScriptEngine (`server/script-engine/`) is the portable IP layer responsible 
 
 ### Feature Specifications
 -   **8-Dimensional Framework**: Implements Erika Flint's 8D Hypnosis Framework (Somatic, Temporal, Symbolic, Psychological, Perspective, Spiritual, Relational, Language) as independent emphasis levels (0-100%).
--   **AI Script Generation**: Offers a 150-200 word preview, a 1500-2000 word full hypnosis script, and 6 marketing assets per script. Includes Remix Analysis for detecting dimensional emphasis in existing scripts.
+-   **AI Script Generation**: 
+    -   150-200 word preview, 1500-2000 word full hypnosis script, 6 marketing assets per script
+    -   **Auto-Generated Titles**: AI creates memorable, unique titles from presenting issue and desired outcome
+        - Format varies by template category: "Issue Relief" (beginner), "Issue Transformation" (specialized), "Issue to Outcome" (therapeutic/advanced)
+        - Examples: "Anxiety Relief", "Chronic Pain Transformation", "Weight Loss to Feel energized"
+    -   Remix Analysis for detecting dimensional emphasis in existing scripts
 -   **Three-Tier Pricing Model**:
     -   **Free Tier**: Weekly script (email-gated, 7-day rate limiting) with balanced dimension values, default archetype, default style, and no marketing assets.
     -   **Create New Mode ($3)**: Full customization with 8-dimensional sliders, 6 archetype options, 3 style approaches, 6 marketing assets, PDF/Word download, and unlimited previews.

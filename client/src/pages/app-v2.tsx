@@ -110,7 +110,6 @@ export default function AppV2() {
   const [step, setStep] = useState<Step>("intake");
 
   // Intake form state
-  const [scriptTitle, setScriptTitle] = useState("");
   const [presentingIssue, setPresentingIssue] = useState("");
   const [desiredOutcome, setDesiredOutcome] = useState("");
   const [notes, setNotes] = useState("");
@@ -294,7 +293,6 @@ export default function AppV2() {
       return await apiRequest(`/api/templates/${selectedTemplate.template.templateId}/preview`, {
         method: 'POST',
         body: JSON.stringify({
-          title: scriptTitle.trim() || undefined,
           presentingIssue,
           desiredOutcome,
           clientNotes: notes.trim() || undefined,
@@ -326,7 +324,6 @@ export default function AppV2() {
       return await apiRequest(`/api/templates/${selectedTemplate.template.templateId}/generate`, {
         method: 'POST',
         body: JSON.stringify({
-          title: scriptTitle.trim() || undefined,
           presentingIssue,
           desiredOutcome,
           clientNotes: notes.trim() || undefined,
@@ -426,22 +423,6 @@ export default function AppV2() {
               </div>
 
               <div className="space-y-6">
-                <div className="space-y-2">
-                  <Label htmlFor="script-title">
-                    Script Title
-                  </Label>
-                  <Input
-                    id="script-title"
-                    placeholder="e.g., Anxiety Relief Session, Confidence Building, etc."
-                    value={scriptTitle}
-                    onChange={(e) => setScriptTitle(e.target.value)}
-                    data-testid="input-script-title"
-                  />
-                  <p className="text-xs text-muted-foreground">
-                    Give your script a memorable name (optional)
-                  </p>
-                </div>
-
                 <div className="space-y-2">
                   <Label htmlFor="presenting-issue">
                     Presenting Issue <span className="text-destructive">*</span>
