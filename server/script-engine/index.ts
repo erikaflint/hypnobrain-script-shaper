@@ -30,6 +30,9 @@ export interface ScriptEngineInput {
   // Client experience level
   clientLevel?: 'beginner' | 'intermediate' | 'advanced';
   targetTranceDep?: 'light' | 'medium' | 'deep';
+  
+  // Emergence type
+  emergenceType?: 'regular' | 'sleep'; // regular = count to alert, sleep = drift to sleep
 }
 
 export interface ScriptEngineOutput {

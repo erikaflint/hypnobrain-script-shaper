@@ -34,6 +34,7 @@ export interface TemplateScriptGenerationParams {
   presentingIssue: string;
   desiredOutcome: string;
   clientNotes?: string;
+  emergenceType?: 'regular' | 'sleep'; // How to bring them out of trance
 }
 
 // Remix generation parameters
@@ -166,6 +167,7 @@ Format as JSON:
     );
     
     // Step 2: Get IP-enhanced directives from ScriptEngine
+    const emergenceType = params.emergenceType || 'regular';
     const engineOutput = await scriptEngine.generate({
       presentingIssue: params.presentingIssue,
       desiredOutcome: params.desiredOutcome,
@@ -173,7 +175,8 @@ Format as JSON:
       symbolicDimensionLevel: params.template.dimensions.symbolic.level,
       somaticDimensionLevel: params.template.dimensions.somatic.level,
       clientLevel: 'intermediate', // Full scripts assume some experience
-      targetTranceDep: 'medium'
+      targetTranceDep: 'medium',
+      emergenceType: emergenceType
     });
     
     // Step 3: Combine both into enhanced prompts
@@ -199,7 +202,9 @@ Requirements:
    - Induction (guide client into trance) - Use somatic anchoring early (first 100-150 words)
    - Deepening (deepen the trance state) - Apply selected narrative arcs
    - Therapeutic work (address the issue) - Maintain metaphor consistency, use all selected arcs
-   - Emergence (guide client out of trance safely) - Include ego strengthening closure
+   - Emergence ${emergenceType === 'sleep' 
+     ? '(allow them to drift into sleep) - Keep metaphor flowing, no counting up, let them rest peacefully'
+     : '(guide client out of trance safely) - Include ego strengthening closure, count from 1-5 to full alert'}
    
 2. Six marketing assets to help promote this therapeutic approach
 

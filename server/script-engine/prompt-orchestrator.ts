@@ -24,6 +24,7 @@ export interface OrchestrationInput {
   desiredOutcome: string;
   dimensionPrompt: string; // From DimensionAssembler
   targetWordCount?: number;
+  emergenceType?: 'regular' | 'sleep'; // How to bring them out
 }
 
 export interface OrchestrationResult {
@@ -76,7 +77,7 @@ export class PromptOrchestrator {
    * Stage 1: Generate structural outline
    */
   private async generateOutline(input: OrchestrationInput): Promise<string> {
-    const { engineOutput, presentingIssue, desiredOutcome } = input;
+    const { engineOutput, presentingIssue, desiredOutcome, emergenceType = 'regular' } = input;
 
     const systemPrompt = `${engineOutput.enhancedSystemPrompt}
 
@@ -108,8 +109,9 @@ TASK: Create a STRUCTURAL OUTLINE (not full script) with 4 phases:
    - What's the progression of language (permissive → directive)?
 
 4. EMERGENCE (3-5 bullet points)
-   - How will you bring them out safely?
-   - Where is the ego strengthening? (Principle 6)
+   ${emergenceType === 'sleep' 
+     ? '- How will you allow them to drift naturally into sleep?\n   - Keep the metaphor flowing as they settle into rest\n   - No counting up, no "alert and awake" - let them sleep peacefully'
+     : '- How will you bring them out safely?\n   - Where is the ego strengthening? (Principle 6)\n   - Count from 1-5 to full alert awareness'}
 
 Output the outline as clear, structured bullet points. This is architectural planning, not script writing.`;
 
