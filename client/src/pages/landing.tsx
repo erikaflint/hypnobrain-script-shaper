@@ -17,7 +17,7 @@ export default function Landing() {
         <div className="relative z-10 max-w-7xl mx-auto px-6 py-16 text-center">
           <div className="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full bg-primary/10 border border-primary/20">
             <Sparkles className="w-4 h-4 text-primary" data-testid="icon-framework-badge" />
-            <span className="text-sm text-primary">Powered by Erika Flint's 8D Hypnosis Framework</span>
+            <span className="text-sm text-primary">Powered by 8D Hypnosis Framework</span>
           </div>
           
           <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold mb-6">
@@ -145,7 +145,7 @@ export default function Landing() {
             Eight Dimensions of Hypnotic Language
           </h2>
           <p className="text-center text-muted-foreground mb-16 max-w-2xl mx-auto">
-            Every script is crafted using Erika Flint's 8D Framework - each dimension can be emphasized independently.
+            Every script is crafted using the 8D Hypnosis Framework - each dimension can be emphasized independently.
           </p>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
