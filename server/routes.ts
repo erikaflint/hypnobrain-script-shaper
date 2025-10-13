@@ -974,10 +974,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
             throw new Error(`No template available for script: ${script.conceptTitle}`);
           }
           
-          // Parse template JSON
-          const templateJson = typeof template.templateJson === 'string' 
-            ? JSON.parse(template.templateJson) 
-            : template.templateJson;
+          // Parse template JSON (field is jsonData, not templateJson)
+          const templateJson = typeof template.jsonData === 'string' 
+            ? JSON.parse(template.jsonData) 
+            : template.jsonData;
           
           // Generate full script
           const result = await aiService.generateFullScript({
