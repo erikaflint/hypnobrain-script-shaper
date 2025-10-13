@@ -92,7 +92,8 @@ export class ScriptEngine {
     const enforcerInput: EnforcerInput = {
       clientLevel: input.clientLevel || 'beginner',
       symbolicDimensionLevel: input.symbolicDimensionLevel || 30,
-      targetTranceDep: input.targetTranceDep || 'medium'
+      targetTranceDep: input.targetTranceDep || 'medium',
+      emergenceType: input.emergenceType || 'regular'
     };
 
     const principleDirectives = this.enforcer.generateDirectives(enforcerInput);

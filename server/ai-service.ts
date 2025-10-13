@@ -35,6 +35,7 @@ export interface TemplateScriptGenerationParams {
   desiredOutcome: string;
   clientNotes?: string;
   emergenceType?: 'regular' | 'sleep'; // How to bring them out of trance
+  targetWordCount?: number; // Default 1500-2000 for regular, 3000+ for DREAM
 }
 
 // Remix generation parameters
@@ -168,6 +169,7 @@ Format as JSON:
     
     // Step 2: Get IP-enhanced directives from ScriptEngine
     const emergenceType = params.emergenceType || 'regular';
+    const targetWordCount = params.targetWordCount || 1750; // Default to mid-range of 1500-2000
     const engineOutput = await scriptEngine.generate({
       presentingIssue: params.presentingIssue,
       desiredOutcome: params.desiredOutcome,
@@ -198,7 +200,7 @@ ${engineOutput.structuredInstructions.join('\n')}
 **TASK**: Generate a COMPLETE hypnosis script following ALL the instructions above.
 
 Requirements:
-1. FULL SCRIPT (1500-2000 words) with all phases:
+1. FULL SCRIPT (~${targetWordCount} words) with all phases:
    - Induction (guide client into trance) - Use somatic anchoring early (first 100-150 words)
    - Deepening (deepen the trance state) - Apply selected narrative arcs
    - Therapeutic work (address the issue) - Maintain metaphor consistency, use all selected arcs
@@ -214,7 +216,7 @@ The script should flow naturally while emphasizing the specified dimensions AND 
 
 Format as JSON:
 {
-  "fullScript": "complete 1500-2000 word script here...",
+  "fullScript": "complete ${targetWordCount}-word script here...",
   "marketingAssets": {
     "postTitle": "Social media post title",
     "postBody": "Social media post body (2-3 sentences)",

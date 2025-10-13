@@ -17,6 +17,7 @@ export interface EnforcerInput {
   clientLevel?: 'beginner' | 'intermediate' | 'advanced';
   symbolicDimensionLevel?: number;
   targetTranceDep?: 'light' | 'medium' | 'deep';
+  emergenceType?: 'regular' | 'sleep';
 }
 
 export class PrincipleEnforcer {
@@ -33,7 +34,8 @@ export class PrincipleEnforcer {
     const {
       clientLevel = 'beginner',
       symbolicDimensionLevel = 30,
-      targetTranceDep = 'medium'
+      targetTranceDep = 'medium',
+      emergenceType = 'regular'
     } = input;
 
     // Build system prompt embedding all principles
@@ -43,7 +45,8 @@ export class PrincipleEnforcer {
     const structuredInstructions = this.buildStructuredInstructions(
       clientLevel,
       symbolicDimensionLevel,
-      targetTranceDep
+      targetTranceDep,
+      emergenceType
     );
     
     // Build quality reminders (what to check)
@@ -87,7 +90,8 @@ Remember: The client is whole, not broken. Your role is to remind them of what t
   private buildStructuredInstructions(
     clientLevel: string,
     symbolicLevel: number,
-    tranceDepth: string
+    tranceDepth: string,
+    emergenceType: string
   ): string[] {
     const instructions: string[] = [];
 
@@ -125,10 +129,20 @@ Remember: The client is whole, not broken. Your role is to remind them of what t
       instructions.push(...specificityPrinciple.prompt_directives);
     }
 
-    // Principle 6: Inherent Wholeness
+    // Principle 6: Inherent Wholeness / Emergence
     const wholenessPrinciple = this.principles.find(p => p.id === 'inherent-wholeness');
     if (wholenessPrinciple) {
-      instructions.push(...wholenessPrinciple.prompt_directives);
+      if (emergenceType === 'sleep') {
+        // Sleep emergence: No counting up, allow natural drift to sleep
+        instructions.push('EMERGENCE (Sleep): Allow client to drift naturally into peaceful sleep');
+        instructions.push('- Continue metaphor and somatic language as they settle deeper into rest');
+        instructions.push('- Use language like "drifting", "settling", "resting peacefully"');
+        instructions.push('- NO counting up, NO "alert and awake", NO return to full consciousness');
+        instructions.push('- Let the script gently fade as they transition into natural sleep');
+      } else {
+        // Regular emergence: Standard ego strengthening + count up
+        instructions.push(...wholenessPrinciple.prompt_directives);
+      }
     }
 
     return instructions;

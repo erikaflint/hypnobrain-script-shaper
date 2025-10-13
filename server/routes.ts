@@ -296,6 +296,57 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Generate DREAM script (sleep hypnosis journey)
+  app.post("/api/generate-dream-script", async (req, res) => {
+    try {
+      const schema = z.object({
+        journeyIdea: z.string(),
+      });
+      
+      const { journeyIdea } = schema.parse(req.body);
+      
+      // Get a template suitable for DREAM (high somatic, high symbolic)
+      // For now, use template selector with journey idea
+      const recommendations = await templateSelector.recommendTemplates(
+        journeyIdea,
+        "deep rest and peaceful sleep"
+      );
+      
+      if (recommendations.length === 0) {
+        return res.status(404).json({ message: "No suitable template found for DREAM hypnosis" });
+      }
+      
+      const template = recommendations[0].template;
+      const templateJson = typeof template.jsonData === 'string' 
+        ? JSON.parse(template.jsonData) 
+        : template.jsonData;
+      
+      // Enhance template for DREAM: boost somatic and symbolic
+      const dreamTemplate = {
+        ...templateJson,
+        dimensions: {
+          ...templateJson.dimensions,
+          somatic: { ...templateJson.dimensions.somatic, level: Math.max(70, templateJson.dimensions.somatic.level) },
+          symbolic: { ...templateJson.dimensions.symbolic, level: Math.max(70, templateJson.dimensions.symbolic.level) },
+        }
+      };
+      
+      // Generate DREAM script (30 minutes = ~3000 words)
+      const result = await aiService.generateFullScript({
+        template: dreamTemplate,
+        presentingIssue: journeyIdea,
+        desiredOutcome: "Experience a peaceful, restful journey into natural sleep",
+        emergenceType: 'sleep',  // Key difference: sleep emergence
+        targetWordCount: 3000,  // 30-minute script
+      });
+      
+      res.json({ fullScript: result.fullScript });
+    } catch (error: any) {
+      console.error("DREAM generation error:", error);
+      res.status(400).json({ message: error.message });
+    }
+  });
+
   // Create payment intent (mock for now)
   app.post("/api/create-payment-intent", async (req, res) => {
     try {
