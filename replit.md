@@ -60,6 +60,12 @@ The ScriptEngine (`server/script-engine/`) is the portable IP layer responsible 
     -   Star scripts as favorites (appears in dedicated "Favorites" section in dashboard)
     -   Parent-child tracking for script remixes with version labels (v2, v3, etc.)
     -   `/api/generations/:id/favorite` (PATCH) and `/api/generations/:id/remix` (POST) endpoints
+-   **Save/Apply Mix (Custom Templates)**:
+    -   Users can save their current dimension configuration as a custom template for later reuse
+    -   Backend: POST `/api/templates` (protected) saves user templates with name and dimension values
+    -   Backend: GET `/api/user/templates` (protected) retrieves user's saved dimension mixes
+    -   Templates stored in `templates` table with userId linkage
+    -   Frontend UI: Save Mix button + dropdown to apply saved mixes (pending implementation)
 
 ### UI/UX Decisions
 -   **Design System**: Purple accent colors (hsl(260 70% 62%)), dark mode optimized, DAW-inspired interface.

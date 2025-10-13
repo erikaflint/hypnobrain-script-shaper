@@ -7,7 +7,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { VoicePlayer } from "@/components/voice-player";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
-import { ArrowLeft, ArrowRight, Sparkles, Check, Sliders, User, MessageSquare, Eye, Wand2, FileText, Dices, ChevronsUpDown } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { ArrowLeft, ArrowRight, Sparkles, Check, Sliders, User, MessageSquare, Eye, Wand2, FileText, Dices, ChevronsUpDown, Save, Download } from "lucide-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
@@ -133,6 +134,10 @@ export default function AppV2() {
   const [previewResult, setPreviewResult] = useState<{ preview: string; estimatedLength: string } | null>(null);
   const [fullScriptResult, setFullScriptResult] = useState<{ fullScript: string } | null>(null);
   
+  // Save Mix state
+  const [saveMixDialogOpen, setSaveMixDialogOpen] = useState(false);
+  const [templateName, setTemplateName] = useState("");
+  
   // Load dimension values from selected template when it changes
   useEffect(() => {
     if (selectedTemplate?.template.jsonData) {
@@ -178,6 +183,12 @@ export default function AppV2() {
     queryKey: ['/api/styles'],
     enabled: step === "mixer"
   });
+  
+  // Fetch user's saved templates
+  const { data: userTemplates = [], refetch: refetchUserTemplates } = useQuery<any[]>({
+    queryKey: ['/api/user/templates'],
+    enabled: step === "mixer"
+  });
 
   // Get template recommendations mutation
   const getRecommendationsMutation = useMutation({
@@ -201,6 +212,32 @@ export default function AppV2() {
       toast({
         title: "Recommendation Failed",
         description: error.message || "Failed to get recommendations",
+        variant: "destructive",
+      });
+    },
+  });
+
+  // Save template mutation
+  const saveTemplateMutation = useMutation({
+    mutationFn: async (data: { name: string; dimensionValues: Record<string, number> }) => {
+      return await apiRequest('/api/templates', {
+        method: 'POST',
+        body: JSON.stringify(data),
+      });
+    },
+    onSuccess: () => {
+      refetchUserTemplates();
+      setSaveMixDialogOpen(false);
+      setTemplateName("");
+      toast({
+        title: "Mix Saved",
+        description: "Your dimension mix has been saved successfully",
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Save Failed",
+        description: error.message || "Failed to save mix",
         variant: "destructive",
       });
     },
@@ -834,6 +871,101 @@ export default function AppV2() {
                   })}
               </div>
             </Card>
+
+            {/* Save/Apply Mix Controls */}
+            <div className="flex gap-3">
+              {/* Save Mix Button */}
+              <Dialog open={saveMixDialogOpen} onOpenChange={setSaveMixDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button variant="outline" className="flex-1" data-testid="button-save-mix">
+                    <Save className="w-4 h-4 mr-2" />
+                    Save Mix
+                  </Button>
+                </DialogTrigger>
+                <DialogContent data-testid="dialog-save-mix">
+                  <DialogHeader>
+                    <DialogTitle>Save Dimension Mix</DialogTitle>
+                    <DialogDescription>
+                      Save your current dimension configuration as a custom template for later use.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="space-y-4 py-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="template-name">Template Name</Label>
+                      <Input
+                        id="template-name"
+                        placeholder="e.g., My Anxiety Protocol"
+                        value={templateName}
+                        onChange={(e) => setTemplateName(e.target.value)}
+                        data-testid="input-template-name"
+                      />
+                    </div>
+                  </div>
+                  <DialogFooter>
+                    <Button
+                      onClick={() => {
+                        if (!templateName.trim()) {
+                          toast({
+                            title: "Name Required",
+                            description: "Please enter a name for your template",
+                            variant: "destructive",
+                          });
+                          return;
+                        }
+                        saveTemplateMutation.mutate({
+                          name: templateName,
+                          dimensionValues,
+                        });
+                      }}
+                      disabled={saveTemplateMutation.isPending}
+                      data-testid="button-confirm-save-mix"
+                    >
+                      {saveTemplateMutation.isPending ? "Saving..." : "Save Mix"}
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+
+              {/* Apply Mix Dropdown */}
+              {userTemplates.length > 0 && (
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button variant="outline" className="flex-1" data-testid="button-apply-mix">
+                      <Download className="w-4 h-4 mr-2" />
+                      Apply Saved Mix ({userTemplates.length})
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent data-testid="dialog-apply-mix">
+                    <DialogHeader>
+                      <DialogTitle>Apply Saved Mix</DialogTitle>
+                      <DialogDescription>
+                        Choose a saved dimension mix to apply to your current script.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="space-y-2 max-h-[400px] overflow-y-auto">
+                      {userTemplates.map((template: any) => (
+                        <Button
+                          key={template.id}
+                          variant="outline"
+                          className="w-full justify-start hover-elevate"
+                          onClick={() => {
+                            setDimensionValues(template.dimensionValues);
+                            toast({
+                              title: "Mix Applied",
+                              description: `Applied "${template.name}" to your dimension sliders`,
+                            });
+                          }}
+                          data-testid={`button-apply-template-${template.id}`}
+                        >
+                          <Sliders className="w-4 h-4 mr-2" />
+                          {template.name}
+                        </Button>
+                      ))}
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              )}
+            </div>
 
             {/* Archetype & Style Selection */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
