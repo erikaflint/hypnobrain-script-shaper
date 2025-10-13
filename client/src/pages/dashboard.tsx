@@ -3,11 +3,12 @@ import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { VoicePlayer } from "@/components/voice-player";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { isUnauthorizedError } from "@/lib/authUtils";
-import { Copy, FileText, Calendar, Tag, Sparkles, Home, Wand2, Star, RotateCcw } from "lucide-react";
+import { Copy, FileText, Calendar, Tag, Sparkles, Home, Wand2, Star, RotateCcw, Package } from "lucide-react";
 import { format } from "date-fns";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import type { Generation } from "@shared/schema";
@@ -33,6 +34,11 @@ export default function Dashboard() {
 
   const { data: generations, isLoading, error } = useQuery<Generation[]>({
     queryKey: ["/api/user/generations"],
+    enabled: isAuthenticated,
+  });
+
+  const { data: packages } = useQuery<any[]>({
+    queryKey: ["/api/packages"],
     enabled: isAuthenticated,
   });
 
@@ -82,6 +88,12 @@ export default function Dashboard() {
                   Home
                 </Button>
               </Link>
+              <Link href="/packages/create" data-testid="link-create-package">
+                <Button variant="outline" size="sm">
+                  <Package className="w-4 h-4 mr-2" />
+                  Create Package
+                </Button>
+              </Link>
               <Link href="/app-v2" data-testid="link-create-script">
                 <Button variant="default" size="sm">
                   <Wand2 className="w-4 h-4 mr-2" />
@@ -96,11 +108,45 @@ export default function Dashboard() {
       <div className="container mx-auto px-4 py-8 max-w-6xl">
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2" data-testid="dashboard-title">
-            My Scripts
+            My Dashboard
           </h1>
           <p className="text-muted-foreground">
-            View and manage your generated hypnosis scripts
+            View and manage your generated scripts and packages
           </p>
+        </div>
+
+        {/* Script Packages Section */}
+        {packages && packages.length > 0 && (
+          <div className="mb-12">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-2xl font-semibold">Script Packages</h2>
+              <Link href="/packages/create">
+                <Button size="sm" data-testid="button-create-package">
+                  <Package className="w-4 h-4 mr-2" />
+                  New Package
+                </Button>
+              </Link>
+            </div>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {packages.map((pkg: any) => (
+                <Link key={pkg.id} href={`/packages/${pkg.id}/edit`}>
+                  <Card className="p-4 hover-elevate cursor-pointer" data-testid={`package-card-${pkg.id}`}>
+                    <div className="flex items-start justify-between mb-2">
+                      <h3 className="font-semibold" data-testid={`package-title-${pkg.id}`}>{pkg.title}</h3>
+                      <Badge data-testid={`package-status-${pkg.id}`}>{pkg.status}</Badge>
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-2">Theme: {pkg.theme}</p>
+                    <p className="text-sm text-muted-foreground">{pkg.scriptCount} scripts</p>
+                  </Card>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* My Scripts Heading */}
+        <div className="mb-6">
+          <h2 className="text-2xl font-semibold">My Scripts</h2>
         </div>
 
         {/* Loading State */}
