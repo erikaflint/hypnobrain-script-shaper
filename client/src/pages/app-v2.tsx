@@ -654,43 +654,43 @@ export default function AppV2() {
               </p>
             </div>
 
-            {/* Template Cards */}
-            <div className="space-y-6">
+            {/* Template Cards - Compact Grid */}
+            <div className="grid gap-4 md:grid-cols-2">
               {recommendations.map((rec, index) => {
                 const templateData = rec.template.jsonData;
                 const dimensionValues = templateData?.dimension_values || {};
                 
                 return (
-                  <Card key={rec.template.id} className="p-6" data-testid={`recommendation-${index}`}>
-                    <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
-                      {/* Left: Template Info */}
+                  <Card key={rec.template.id} className="p-4" data-testid={`recommendation-${index}`}>
+                    <div className="flex flex-col gap-4">
+                      {/* Template Info */}
                       <div className="flex-1">
-                        <div className="flex items-start gap-3 mb-3">
-                          <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-primary/10 shrink-0">
-                            <Sparkles className="w-5 h-5 text-primary" />
+                        <div className="flex items-start gap-2 mb-3">
+                          <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-primary/10 shrink-0">
+                            <Sparkles className="w-4 h-4 text-primary" />
                           </div>
                           <div>
-                            <h3 className="font-semibold text-xl mb-1" data-testid={`template-name-${index}`}>
+                            <h3 className="font-semibold text-lg mb-0.5" data-testid={`template-name-${index}`}>
                               {rec.template.name}
                             </h3>
-                            <p className="text-sm text-muted-foreground">
-                              {rec.template.category} • Match Score: {rec.matchScore}
+                            <p className="text-xs text-muted-foreground">
+                              {rec.template.category} • Score: {rec.matchScore}
                             </p>
                           </div>
                         </div>
                         
-                        <p className="text-muted-foreground mb-4" data-testid={`template-description-${index}`}>
+                        <p className="text-sm text-muted-foreground mb-3 line-clamp-2" data-testid={`template-description-${index}`}>
                           {rec.template.description}
                         </p>
                         
-                        {/* Match Reasons */}
+                        {/* Match Reasons - Compact */}
                         {rec.matchReasons.length > 0 && (
-                          <div className="space-y-2 mb-4">
-                            <p className="text-sm font-medium">Why this template works:</p>
-                            <ul className="space-y-1">
-                              {rec.matchReasons.slice(0, 3).map((reason, i) => (
-                                <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
-                                  <Check className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+                          <div className="space-y-1 mb-3">
+                            <p className="text-xs font-medium">Why it works:</p>
+                            <ul className="space-y-0.5">
+                              {rec.matchReasons.slice(0, 2).map((reason, i) => (
+                                <li key={i} className="text-xs text-muted-foreground flex items-start gap-1">
+                                  <Check className="w-3 h-3 text-primary shrink-0 mt-0.5" />
                                   <span>{reason}</span>
                                 </li>
                               ))}
@@ -698,18 +698,18 @@ export default function AppV2() {
                           </div>
                         )}
                         
-                        {/* Dimension Preview */}
-                        <div className="space-y-2">
-                          <p className="text-sm font-medium">Dimension Emphasis:</p>
-                          <div className="flex flex-wrap gap-2">
+                        {/* Dimension Preview - Compact */}
+                        <div className="space-y-1.5">
+                          <p className="text-xs font-medium">Top Dimensions:</p>
+                          <div className="flex flex-wrap gap-1.5">
                             {Object.entries(dimensionValues)
                               .filter(([_, value]) => (value as number) > 40)
                               .sort(([, a], [, b]) => (b as number) - (a as number))
-                              .slice(0, 5)
+                              .slice(0, 3)
                               .map(([dim, value]) => (
                                 <div
                                   key={dim}
-                                  className="px-3 py-1 rounded-full bg-primary/10 text-sm"
+                                  className="px-2 py-0.5 rounded-full bg-primary/10 text-xs"
                                   data-testid={`dimension-${dim}-${index}`}
                                 >
                                   {dim.charAt(0).toUpperCase() + dim.slice(1)}: {value as number}%
@@ -719,10 +719,11 @@ export default function AppV2() {
                         </div>
                       </div>
                       
-                      {/* Right: Actions */}
-                      <div className="flex flex-col gap-3 md:w-48">
+                      {/* Actions */}
+                      <div className="flex gap-2">
                         <Button 
-                          className="w-full" 
+                          size="sm"
+                          className="flex-1" 
                           data-testid={`button-use-template-${index}`}
                           onClick={() => {
                             setSelectedTemplate(rec);
@@ -733,11 +734,12 @@ export default function AppV2() {
                             });
                           }}
                         >
-                          Use This Template
+                          Use Template
                         </Button>
                         <Button 
+                          size="sm"
                           variant="outline" 
-                          className="w-full"
+                          className="flex-1"
                           data-testid={`button-customize-${index}`}
                           onClick={() => {
                             setSelectedTemplate(rec);
@@ -748,7 +750,7 @@ export default function AppV2() {
                             });
                           }}
                         >
-                          Customize First
+                          Customize
                         </Button>
                       </div>
                     </div>

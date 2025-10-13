@@ -34,8 +34,12 @@ export class TemplateSelector implements ITemplateSelector {
     const systemTemplates = await templateManager.getSystemTemplates();
     const publicTemplates = await templateManager.getPublicTemplates();
     
+    console.log(`[TemplateSelector] System templates: ${systemTemplates.length}, Public templates: ${publicTemplates.length}`);
+    
     // Combine and dedupe
     const allTemplates = this.dedupeTemplates([...systemTemplates, ...publicTemplates]);
+    
+    console.log(`[TemplateSelector] Total templates after dedupe: ${allTemplates.length}`);
     
     // Score each template
     const scored = allTemplates.map((template) => {
@@ -89,6 +93,7 @@ export class TemplateSelector implements ITemplateSelector {
     
     // Return all matched templates (up to 20)
     const count = Math.min(20, scored.length);
+    console.log(`[TemplateSelector] Returning ${count} templates out of ${scored.length} total`);
     return scored.slice(0, count);
   }
 
