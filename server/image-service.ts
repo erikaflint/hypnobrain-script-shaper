@@ -20,6 +20,9 @@ export async function generateImage(options: ImageGenerationOptions): Promise<st
   } = options;
 
   try {
+    console.log('[IMAGE-SERVICE] Calling DALL-E with prompt:', prompt.substring(0, 100) + '...');
+    console.log('[IMAGE-SERVICE] Settings:', { model: 'dall-e-3', size, quality, style });
+    
     const response = await openai.images.generate({
       model: 'dall-e-3',
       prompt,
@@ -30,14 +33,17 @@ export async function generateImage(options: ImageGenerationOptions): Promise<st
     });
 
     const imageUrl = response.data[0]?.url;
+    console.log('[IMAGE-SERVICE] DALL-E response received, URL:', imageUrl ? 'YES' : 'NO');
     
     if (!imageUrl) {
       throw new Error('No image URL returned from DALL-E');
     }
 
+    console.log('[IMAGE-SERVICE] ✓ Image URL:', imageUrl);
     return imageUrl;
   } catch (error: any) {
-    console.error('DALL-E image generation error:', error);
+    console.error('[IMAGE-SERVICE] ✗ DALL-E image generation error:', error.message);
+    console.error('[IMAGE-SERVICE] Error details:', error);
     throw new Error(`Failed to generate image: ${error.message}`);
   }
 }

@@ -461,27 +461,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Content moderation check before image generation
       let thumbnailUrl: string | undefined;
       try {
+        console.log('[DREAM] Starting thumbnail generation for journey:', journeyIdea.substring(0, 50));
         const OpenAI = (await import('openai')).default;
         const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
         
         // Check if journey idea contains inappropriate content
+        console.log('[DREAM] Running content moderation check...');
         const moderation = await openai.moderations.create({
           input: journeyIdea,
         });
         
         const isFlagged = moderation.results[0]?.flagged;
+        console.log('[DREAM] Moderation result - flagged:', isFlagged);
         
         if (isFlagged) {
-          console.log('Journey idea flagged by moderation, skipping image generation');
+          console.log('[DREAM] Journey idea flagged by moderation, skipping image generation');
           // Don't generate image for flagged content, but allow script to continue
         } else {
           // Content is safe - generate thumbnail
+          console.log('[DREAM] Content safe, calling DALL-E to generate thumbnail...');
           const { generateDreamThumbnail } = await import('./image-service');
           thumbnailUrl = await generateDreamThumbnail(journeyIdea, archetype.name);
-          console.log('Generated DREAM thumbnail:', thumbnailUrl);
+          console.log('[DREAM] ✓ Thumbnail generated successfully:', thumbnailUrl);
         }
       } catch (imageError: any) {
-        console.error('Failed to generate thumbnail, continuing without image:', imageError.message);
+        console.error('[DREAM] ✗ Thumbnail generation FAILED:', imageError.message);
+        console.error('[DREAM] Full error:', imageError);
         // Continue without image - don't fail the entire request
       }
       
