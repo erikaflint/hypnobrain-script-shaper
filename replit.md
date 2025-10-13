@@ -45,11 +45,12 @@ The ScriptEngine (`server/script-engine/`) is the portable IP layer responsible 
 ### Feature Specifications
 -   **8-Dimensional Framework**: Implements Erika Flint's 8D Hypnosis Framework (Somatic, Temporal, Symbolic, Psychological, Perspective, Spiritual, Relational, Language) as independent emphasis levels (0-100%).
 -   **AI Script Generation**: 
-    -   150-200 word preview, 1500-2000 word full hypnosis script, 6 marketing assets per script
+    -   150-200 word preview, 1500-2000 word full hypnosis script (3000 words for DREAM scripts), 6 marketing assets per script
     -   **Auto-Generated Titles**: AI creates memorable, unique titles from presenting issue and desired outcome
         - Format varies by template category: "Issue Relief" (beginner), "Issue Transformation" (specialized), "Issue to Outcome" (therapeutic/advanced)
         - Examples: "Anxiety Relief", "Chronic Pain Transformation", "Weight Loss to Feel energized"
     -   Remix Analysis for detecting dimensional emphasis in existing scripts
+    -   **Emergence Types**: Scripts support two endings - 'regular' (counting 1-5 to alert wakefulness) or 'sleep' (natural drift without alertness cues for bedtime use)
 -   **Three-Tier Pricing Model**:
     -   **Free Tier**: Weekly script (email-gated, 7-day rate limiting) with balanced dimension values, default archetype, default style, and no marketing assets.
     -   **Create New Mode ($3)**: Full customization with 8-dimensional sliders, 6 archetype options, 3 style approaches, 6 marketing assets, PDF/Word download, and unlimited previews.
@@ -85,6 +86,15 @@ The ScriptEngine (`server/script-engine/`) is the portable IP layer responsible 
         - POST `/api/packages/:id/generate` - generate all scripts in package
     -   **Frontend Pages**: `/packages/create` (package creator), `/packages/:id/edit` (concept editor & generator)
     -   Error handling: Failed generations mark package as 'failed' status for retry/cleanup
+-   **DREAM Hypnosis Series (NEW)**:
+    -   Non-clinical sleep/meditation scripts - "bedtime stories for adults"
+    -   30-minute immersive journeys (3000 words) with no therapeutic goals
+    -   Journey-based input (not issue/outcome) - e.g., "walking through an enchanted forest"
+    -   Sleep emergence by default - natural drift without alertness cues
+    -   High somatic/symbolic emphasis (≥70) for rich sensory experience
+    -   **Frontend**: `/dream` route with journey idea input
+    -   **Backend**: Same generation pipeline with emergenceType='sleep', longer word count, different dimension emphasis
+    -   Future: DREAM-specific narrative arcs and archetypes (TBD)
 
 ### UI/UX Decisions
 -   **Design System**: Purple accent colors (hsl(260 70% 62%)), dark mode optimized, DAW-inspired interface.
@@ -94,6 +104,7 @@ The ScriptEngine (`server/script-engine/`) is the portable IP layer responsible 
     -   `/` - Landing page
     -   `/free` - Free tier script generation
     -   `/app-v2` - **Current production version** with template recommendations and full features
+    -   `/dream` - DREAM Hypnosis series generator (sleep/meditation scripts)
     -   `/dashboard` - Admin dashboard for viewing/managing generated scripts
     -   `/admin` - Admin panel
     -   Note: `/app` is deprecated (old v1 architecture)
