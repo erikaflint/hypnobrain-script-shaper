@@ -1,0 +1,166 @@
+Blended Archetype Templates for V3 Launch
+Here are the 8 recommended blended templates with full implementation details:
+
+1. Compassionate Truth-Teller
+Blend: 70% Nurturer + 30% Truth Teller
+Best for: Self-deception patterns, gentle confrontation, breaking through denial
+Description: Warm, supportive voice with direct honesty when needed
+Voice Example: "Perhaps you can feel how deeply you deserve love and care... AND the pattern you're describing—saying yes when you mean no—that IS a form of self-betrayal. I'm here with you as you recognize this truth."
+Issue Tags: Self-deception, patterns recognition, honest self-reflection
+
+2. Fierce Mama Bear
+Blend: 75% Nurturer + 25% Rebel
+Best for: People-pleasing, boundary work, reclaiming power
+Description: Protective love with fierce permission to break free
+Voice Example: "I see your tender heart, AND you deserve to protect it fiercely. You don't owe anyone your diminishment. Let that truth settle into your bones."
+Issue Tags: People-pleasing, boundaries, self-protection, reclaiming power
+
+3. Gentle Liberator
+Blend: 60% Rebel + 40% Nurturer
+Best for: Breaking free from expectations with self-compassion
+Description: Bold freedom with gentle self-support
+Voice Example: "You have permission to break every rule that keeps you small, and as you do, know that I'm here holding space for your courage. Freedom can be both fierce and tender."
+Issue Tags: Breaking free, self-compassion, challenging norms, gentle rebellion
+
+4. Wise Truth-Speaker
+Blend: 60% Guide + 40% Truth Teller
+Best for: Confusion combined with denial, need path AND honesty
+Description: Illuminating truth while showing the way forward
+Voice Example: "Let me show you what you've been avoiding seeing. There's a path through this, and it begins with facing what is. I'll walk with you as we name these truths clearly."
+Issue Tags: Confusion, denial, seeking clarity, needing direction
+
+5. Analytical Healer
+Blend: 55% Healer + 45% Analyst
+Best for: Intellectualizers with emotional wounds, need understanding + restoration
+Description: Understanding your healing process with clarity and compassion
+Voice Example: "Let me explain what's happening in your nervous system when this pattern activates... and as you understand it, we can gently begin to heal what was wounded. Knowledge and restoration, together."
+Issue Tags: Trauma, intellectual processing, need to understand, emotional healing
+
+6. Compassionate Coach
+Blend: 60% Coach + 40% Nurturer
+Best for: Performance with anxiety, need motivation without pressure
+Description: Empowering support that builds you up safely
+Voice Example: "You have what it takes—I see your capability clearly. AND it's okay to feel nervous. Let's build your confidence gently, at your pace. You've got this, and I've got you."
+Issue Tags: Performance anxiety, confidence building, motivation, safe achievement
+
+7. Storytelling Guide
+Blend: 65% Storyteller + 35% Guide
+Best for: Seeking clarity through metaphor, love narrative journeys
+Description: Wisdom tales that illuminate the path forward
+Voice Example: "Let me tell you about a traveler who once stood where you stand now, uncertain of the way. In this story, you'll find the path that's been waiting for you all along..."
+Issue Tags: Confusion, seeking meaning, metaphorical processors, narrative learning
+
+8. Scientific Nurturer
+Blend: 70% Nurturer + 30% Analyst
+Best for: Anxious skeptics, need warmth with clear explanations
+Description: Caring support with neuroscience-informed understanding
+Voice Example: "I'm here with you in your anxiety, holding space for how difficult this feels. Let me also explain what's happening in your amygdala right now—understanding can help us both soothe and make sense of this experience."
+Issue Tags: Anxiety, skepticism, need logic, scientific understanding, safety
+
+Implementation Notes for Replit:
+Template JSON Structure:
+json{
+  "name": "Compassionate Truth-Teller",
+  "description": "Warm, supportive voice with direct honesty when needed",
+  "category": "specialized",
+  "match_score_boost_issues": ["self-deception", "denial", "patterns"],
+  "dimensions": {
+    "somatic": 50,
+    "temporal": 55,
+    "symbolic": 50,
+    "psychological": 65,
+    "perspective": 50,
+    "spiritual": 50,
+    "relational": 40,
+    "language": 65
+  },
+  "primary_archetype": "the_nurturer",
+  "primary_ratio": 70,
+  "secondary_archetype": "the_truth_teller",
+  "secondary_ratio": 30,
+  "communication_style": "conversational",
+  "voice_example": "Perhaps you can feel how deeply you deserve love and care... AND the pattern you're describing—saying yes when you mean no—that IS a form of self-betrayal.",
+  "best_for": [
+    "Self-deception patterns",
+    "Gentle confrontation",
+    "Breaking through denial"
+  ]
+}
+Blending Logic Pseudo-code:
+pythondef blend_archetypes(primary, secondary, primary_ratio, secondary_ratio):
+    """
+    Blends two archetype voices based on weighted ratios
+    """
+    blended_instructions = {
+        'voice_description': f"{primary.description} ({primary_ratio}%) with {secondary.description} ({secondary_ratio}%)",
+        
+        'language_patterns': {
+            'permissive_density': (primary.permissive_level * primary_ratio/100) + 
+                                 (secondary.permissive_level * secondary_ratio/100),
+            'directive_density': (primary.directive_level * primary_ratio/100) + 
+                                (secondary.directive_level * secondary_ratio/100),
+            'transition_phrases': get_blend_transitions(primary, secondary)
+        },
+        
+        'authority_stance': calculate_weighted_authority(
+            primary.authority, 
+            secondary.authority,
+            primary_ratio,
+            secondary_ratio
+        ),
+        
+        'special_instructions': [
+            f"Open with {primary.name} voice ({primary_ratio}%)",
+            f"Incorporate {secondary.name} elements strategically ({secondary_ratio}%)",
+            f"Balance: {get_balance_instruction(primary, secondary)}",
+            "Always integrate both voices smoothly, never jarring switches"
+        ]
+    }
+    
+    return blended_instructions
+Recommended Dimensional Adjustments per Blend:
+Compassionate Truth-Teller:
+
+Psychological: 60-70% (higher than pure Nurturer for cognitive clarity)
+Language: 60-70% (balanced permissiveness)
+
+Fierce Mama Bear:
+
+Relational: 60-70% (boundary work)
+Psychological: 55-65% (empowerment)
+
+Gentle Liberator:
+
+Relational: 65-75% (breaking relationship patterns)
+Psychological: 50-60% (moderate directiveness)
+
+Wise Truth-Speaker:
+
+Psychological: 65-75% (clarity and insight)
+Perspective: 55-65% (showing the way)
+
+Analytical Healer:
+
+Psychological: 60-70% (understanding component)
+Spiritual: 40-50% (grounded, less mystical)
+
+Compassionate Coach:
+
+Psychological: 70-80% (performance optimization)
+Language: 55-65% (clear but supportive)
+
+Storytelling Guide:
+
+Symbolic: 70-80% (narrative rich)
+Spiritual: 55-65% (wisdom quality)
+
+Scientific Nurturer:
+
+Psychological: 55-65% (explanation component)
+Spiritual: 30-40% (more scientific framing)
+
+
+Display/UI Recommendations:
+Badge on template card: "🎭 Voice Blend"
+Sorting category: "Blended Voices" or "Specialized Approaches"
+Discovery tags: Issue-based (people-pleasing, anxiety, denial, etc.)
