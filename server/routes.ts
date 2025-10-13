@@ -377,12 +377,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ? `DREAM: ${journeyIdea.substring(0, 47)}...`
         : `DREAM: ${journeyIdea}`;
       
-      // Generate thumbnail image using DALL-E 3
+      // Content moderation check before image generation
       let thumbnailUrl: string | undefined;
       try {
-        const { generateDreamThumbnail } = await import('./image-service');
-        thumbnailUrl = await generateDreamThumbnail(journeyIdea, archetype.name);
-        console.log('Generated DREAM thumbnail:', thumbnailUrl);
+        const OpenAI = (await import('openai')).default;
+        const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+        
+        // Check if journey idea contains inappropriate content
+        const moderation = await openai.moderations.create({
+          input: journeyIdea,
+        });
+        
+        const isFlagged = moderation.results[0]?.flagged;
+        
+        if (isFlagged) {
+          console.log('Journey idea flagged by moderation, skipping image generation');
+          // Don't generate image for flagged content, but allow script to continue
+        } else {
+          // Content is safe - generate thumbnail
+          const { generateDreamThumbnail } = await import('./image-service');
+          thumbnailUrl = await generateDreamThumbnail(journeyIdea, archetype.name);
+          console.log('Generated DREAM thumbnail:', thumbnailUrl);
+        }
       } catch (imageError: any) {
         console.error('Failed to generate thumbnail, continuing without image:', imageError.message);
         // Continue without image - don't fail the entire request
