@@ -317,6 +317,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { journeyIdea, archetypeId } = schema.parse(req.body);
       const userId = req.user.claims.sub;
       
+      // Backend content validation - double check for inappropriate keywords
+      const inappropriateKeywords = [
+        'sex', 'sexy', 'nude', 'naked', 'porn', 'explicit', 'adult',
+        'violent', 'kill', 'murder', 'blood', 'gore', 'death',
+        'hate', 'racist', 'discrimination',
+        'drug', 'cocaine', 'heroin', 'meth',
+      ];
+      
+      const lowerInput = journeyIdea.toLowerCase();
+      const foundBadWord = inappropriateKeywords.find(word => lowerInput.includes(word));
+      
+      if (foundBadWord) {
+        console.warn(`🚨 FLAGGED CONTENT from user ${userId}: "${journeyIdea}"`);
+        return res.status(400).json({ 
+          message: "DREAM scripts are for peaceful sleep journeys only. Inappropriate content detected." 
+        });
+      }
+      
       // Fetch selected archetype or use first blended archetype
       let archetype;
       if (archetypeId) {

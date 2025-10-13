@@ -90,6 +90,26 @@ export default function Dream() {
       return;
     }
 
+    // Client-side content validation - block obviously inappropriate content
+    const inappropriateKeywords = [
+      'sex', 'sexy', 'nude', 'naked', 'porn', 'explicit', 'adult',
+      'violent', 'kill', 'murder', 'blood', 'gore', 'death',
+      'hate', 'racist', 'discrimination',
+      'drug', 'cocaine', 'heroin', 'meth',
+    ];
+
+    const lowerInput = journeyIdea.toLowerCase();
+    const foundBadWord = inappropriateKeywords.find(word => lowerInput.includes(word));
+    
+    if (foundBadWord) {
+      toast({
+        title: "Inappropriate Content Detected",
+        description: "DREAM scripts are for peaceful sleep journeys only. Please revise your journey idea.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     await generateDreamScript.mutateAsync({ 
       journeyIdea,
       archetypeId: selectedArchetypeId || undefined 
