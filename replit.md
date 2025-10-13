@@ -144,6 +144,7 @@ The ScriptEngine (`server/script-engine/`) is the portable IP layer responsible 
 - **How:** TBD - could include:
   - Automated scanning of generated content for therapeutic keywords
   - Confidence scoring based on content type
+  - **Auto-refinement pipeline:** Flagged content ("rejects") automatically goes through AI refinement to fix issues, then re-validated until passes
   - Admin review queue for flagged content
   - User-facing warning labels for scripts with therapeutic elements
   - Option to regenerate if content doesn't match expectations
