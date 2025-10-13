@@ -94,7 +94,7 @@ The ScriptEngine (`server/script-engine/`) is the portable IP layer responsible 
     -   High somatic/symbolic emphasis (≥70) for rich sensory experience
     -   **Frontend**: `/dream` route with journey idea input, archetype selector, VoicePlayer for TTS playback
     -   **Backend**: POST `/api/generate-dream-script` (authenticated) - saves to database with generationMode='dream', auto-generates title
-    -   **AI-Generated Thumbnails**: DALL-E 3 creates serene, dreamlike 1024x1024 landscape images for each DREAM script (~$0.04/image), stored in generations.imageUrl. Images show ONLY environments and landscapes (no people/human figures) - view as if looking through a window
+    -   **AI-Generated Thumbnails**: DALL-E 3 creates serene, dreamlike 1024x1024 landscape images for each DREAM script (~$0.04/image), stored in generations.imageUrl. Images show ONLY environments and landscapes with strict constraints: NO people/human figures, NO text/words, NO scary/dark elements - ONLY gentle, peaceful, calming imagery as if looking through a window
     -   **Dashboard Integration**: DREAM scripts visible with Moon icon indicator and thumbnail image display
     -   **13 DREAM-Specific Narrative Arcs**: 3 foundation (always included), 1 somatic (PMR), 8 landscape themes, 1 enhancement
     -   **8 Blended Archetypes**: Specialized voice blends optimized for sleep/DREAM scripts (e.g., "Compassionate Truth-Teller" = 70% Nurturer + 30% Truth Teller, "Fierce Mama Bear" = 75% Nurturer + 25% Rebel). Stored as JSON metadata in archetypes.prompt_modifier field
