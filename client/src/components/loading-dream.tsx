@@ -3,14 +3,14 @@ import { Card } from "@/components/ui/card";
 import { Moon, Sparkles, Star, Volume2, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-// Peaceful thumbnail placeholders - these will rotate during loading
+// Peaceful thumbnail placeholders - curated serene landscapes for calming DREAM experience
 const PEACEFUL_IMAGES = [
-  { url: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop", alt: "Serene sunset" },
-  { url: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=300&fit=crop", alt: "Peaceful forest" },
-  { url: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=300&fit=crop", alt: "Tranquil lake" },
-  { url: "https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=400&h=300&fit=crop", alt: "Starry night" },
-  { url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop", alt: "Mountain peace" },
-  { url: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=400&h=300&fit=crop", alt: "Ocean calm" },
+  { url: "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?w=400&h=300&fit=crop", alt: "Misty purple mountains" },
+  { url: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=300&fit=crop", alt: "Foggy forest path" },
+  { url: "https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?w=400&h=300&fit=crop", alt: "Serene sunset lake" },
+  { url: "https://images.unsplash.com/photo-1444080748397-f442aa95c3e5?w=400&h=300&fit=crop", alt: "Soft starfield" },
+  { url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop", alt: "Mountain landscape" },
+  { url: "https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=400&h=300&fit=crop", alt: "Calm ocean beach" },
 ];
 
 interface LoadingDreamProps {
