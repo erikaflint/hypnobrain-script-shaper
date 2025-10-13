@@ -8,6 +8,7 @@ import {
   generations,
   freeScriptUsage,
   users,
+  templates,
   type Dimension,
   type Archetype,
   type Style,
@@ -54,6 +55,9 @@ export interface IStorage {
   checkFreeEligibility(email: string): Promise<boolean>;
   recordFreeUsage(usage: InsertFreeScriptUsage): Promise<FreeScriptUsage>;
   getLastFreeUsage(email: string): Promise<FreeScriptUsage | undefined>;
+  
+  // User templates (custom mixes)
+  getUserTemplates(userId: string): Promise<any[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -210,6 +214,15 @@ export class DatabaseStorage implements IStorage {
       .limit(1);
     
     return result[0];
+  }
+  
+  // User templates (custom mixes)
+  async getUserTemplates(userId: string): Promise<any[]> {
+    return await db
+      .select()
+      .from(templates)
+      .where(eq(templates.userId, userId))
+      .orderBy(desc(templates.createdAt));
   }
 }
 

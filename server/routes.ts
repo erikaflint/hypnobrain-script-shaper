@@ -461,6 +461,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
+  // Get user's saved templates (custom mixes)
+  app.get("/api/user/templates", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const userTemplates = await storage.getUserTemplates(userId);
+      res.json(userTemplates);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
   // Get template recommendations
   app.post("/api/templates/recommend", async (req, res) => {
     try {
@@ -653,8 +664,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  // Create new user template
-  app.post("/api/templates", async (req, res) => {
+  // Create new user template (Save Mix) - requires auth
+  app.post("/api/templates", isAuthenticated, async (req: any, res) => {
     try {
       const schema = z.object({
         templateId: z.string(),
@@ -663,11 +674,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         description: z.string().optional(),
         category: z.string().optional(),
         tags: z.array(z.string()).optional(),
-        userId: z.string(),
         isPublic: z.boolean().optional(),
       });
       
       const data = schema.parse(req.body);
+      const userId = req.user.claims.sub; // Get authenticated user ID
       
       // Validate the JSON data structure
       templateManager.validateTemplateJSON(data.jsonData);
@@ -680,7 +691,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         category: data.category,
         tags: data.tags,
         createdBy: "user",
-        userId: data.userId,
+        userId: userId,
         isPublic: data.isPublic || false,
         isSystem: false,
       });
