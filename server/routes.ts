@@ -345,9 +345,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ? JSON.parse(template.jsonData) 
         : template.jsonData;
       
-      // Enhance template for DREAM: boost somatic and symbolic
+      // Enhance template for DREAM: boost somatic and symbolic, set archetype
       const dreamTemplate = {
         ...templateJson,
+        archetype: {
+          name: archetype.name,
+          description: archetype.description || '',
+        },
         dimensions: {
           ...templateJson.dimensions,
           somatic: { ...templateJson.dimensions.somatic, level: Math.max(70, templateJson.dimensions.somatic.level) },
@@ -360,8 +364,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
         template: dreamTemplate,
         presentingIssue: journeyIdea,
         desiredOutcome: "Experience a peaceful, restful journey into natural sleep",
-        archetype: archetype.name,
-        archetypeDescription: archetype.description || '',
         emergenceType: 'sleep',  // Key difference: sleep emergence
         targetWordCount: 3000,  // 30-minute script
       });
