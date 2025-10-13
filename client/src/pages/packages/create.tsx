@@ -50,7 +50,7 @@ export default function CreatePackage() {
     createPackageMutation.mutate({
       title,
       theme,
-      scriptCount,
+      scriptCount: Number(scriptCount), // Ensure it's a number
       description: description || undefined,
     });
   };
