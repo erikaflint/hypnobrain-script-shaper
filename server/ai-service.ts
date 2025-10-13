@@ -370,6 +370,64 @@ Format as JSON:
   }
 
   /**
+   * DREAM Story Shaper - Expand a journey idea into a detailed, vivid story
+   * This is Step 1 of 2-step DREAM generation
+   */
+  async shapeDreamStory(params: {
+    journeyIdea: string;
+    archetypeName: string;
+    archetypeDescription: string;
+  }): Promise<{
+    expandedStory: string;
+    storyLength: string;
+  }> {
+    const systemPrompt = `You are a master storyteller specializing in creating rich, immersive sleep journeys.
+
+Your task: Take a brief journey idea and expand it into a detailed, vivid story (800-1200 words) that will become the foundation for a sleep hypnosis script.
+
+Key Principles:
+- CREATE VARIETY: Each section should introduce new elements, scenes, or sensations - avoid repetitive language
+- SENSORY RICHNESS: Engage all senses with specific, concrete details
+- NATURAL FLOW: The story should unfold like a gentle journey, not a repetitive pattern
+- DREAM LOGIC: Allow the story to shift and transform naturally, like a dream
+- SLEEP-CONDUCIVE: Maintain a peaceful, calming tone throughout
+
+The story should be a standalone narrative - vivid enough that a hypnotist could easily convert it into a script.`;
+
+    const userPrompt = `Journey Idea: ${params.journeyIdea}
+
+Voice/Archetype: ${params.archetypeName} - ${params.archetypeDescription}
+
+Expand this into a rich, detailed story (800-1200 words) that captures:
+1. The setting and atmosphere in vivid detail
+2. A progression through different scenes or moments
+3. Specific sensory experiences (sights, sounds, textures, scents, sensations)
+4. A natural flow that builds toward deep rest
+
+IMPORTANT: Vary your language throughout. Don't repeat the same phrases or patterns. Each paragraph should introduce something NEW while maintaining the peaceful journey.
+
+Format as JSON:
+{
+  "expandedStory": "The full 800-1200 word story here...",
+  "storyLength": "approximate word count"
+}`;
+
+    const response = await anthropic.messages.create({
+      model: DEFAULT_MODEL_STR,
+      max_tokens: 3000,
+      system: systemPrompt,
+      messages: [{ role: 'user', content: userPrompt }],
+    });
+
+    const textContent = response.content[0];
+    if (textContent.type !== 'text') {
+      throw new Error('Expected text response from AI');
+    }
+    const result = JSON.parse(cleanJsonResponse(textContent.text));
+    return result;
+  }
+
+  /**
    * Generate script package concepts - AI creates themed script ideas
    */
   async generatePackageConcepts(params: {

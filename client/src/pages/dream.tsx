@@ -35,6 +35,7 @@ export default function Dream() {
   const [, navigate] = useLocation();
   const [journeyIdea, setJourneyIdea] = useState("");
   const [selectedArchetypeId, setSelectedArchetypeId] = useState<number | null>(null);
+  const [expandedStory, setExpandedStory] = useState<string | null>(null); // NEW: Story shaper result
   const [generatedScript, setGeneratedScript] = useState<string | null>(null);
   const [generationId, setGenerationId] = useState<number | null>(null);
   const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(null);
@@ -44,9 +45,43 @@ export default function Dream() {
     queryKey: ['/api/archetypes/blended'],
   });
 
-  // Generate DREAM script mutation
-  const generateDreamScript = useMutation({
+  // NEW: Shape story mutation (Step 1)
+  const shapeStory = useMutation({
     mutationFn: async (data: { journeyIdea: string; archetypeId?: number }) => {
+      return await apiRequest('/api/shape-dream-story', {
+        method: 'POST',
+        body: JSON.stringify(data),
+      });
+    },
+    onSuccess: (data) => {
+      setExpandedStory(data.expandedStory);
+      toast({
+        title: "Story Shaped!",
+        description: `Expanded to ${data.storyLength} words. Review and edit if needed.`,
+      });
+    },
+    onError: (error: any) => {
+      // Handle authentication errors (consistent with Step 2)
+      if (error.message?.includes('Unauthorized') || error.message?.includes('401')) {
+        toast({
+          title: "Login Required",
+          description: "Please log in to shape your DREAM story",
+          variant: "destructive",
+        });
+        setTimeout(() => navigate('/'), 2000);
+      } else {
+        toast({
+          title: "Error",
+          description: error.message || "Failed to shape story",
+          variant: "destructive",
+        });
+      }
+    },
+  });
+
+  // Generate DREAM script mutation (Step 2)
+  const generateDreamScript = useMutation({
+    mutationFn: async (data: { journeyIdea: string; expandedStory?: string; archetypeId?: number }) => {
       return await apiRequest('/api/generate-dream-script', {
         method: 'POST',
         body: JSON.stringify(data),
@@ -80,7 +115,8 @@ export default function Dream() {
     },
   });
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  // Step 1: Shape the story from journey idea
+  const handleShapeStory = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!journeyIdea.trim()) {
@@ -103,8 +139,19 @@ export default function Dream() {
       return;
     }
 
-    await generateDreamScript.mutateAsync({ 
+    await shapeStory.mutateAsync({ 
       journeyIdea,
+      archetypeId: selectedArchetypeId || undefined 
+    });
+  };
+
+  // Step 2: Generate final script from shaped story
+  const handleGenerateScript = async () => {
+    if (!expandedStory) return;
+
+    await generateDreamScript.mutateAsync({ 
+      journeyIdea, // Original idea for title/metadata
+      expandedStory, // Shaped story for script content
       archetypeId: selectedArchetypeId || undefined 
     });
   };
@@ -138,9 +185,10 @@ export default function Dream() {
               </p>
             </div>
 
-            {/* Journey Idea Form */}
-            <Card className="p-8">
-              <form onSubmit={handleSubmit} className="space-y-6">
+            {!expandedStory ? (
+              // Step 1: Journey Idea Form
+              <Card className="p-8">
+                <form onSubmit={handleShapeStory} className="space-y-6">
                 <div className="space-y-3">
                   <Label htmlFor="journey-idea" className="text-lg">
                     Describe Your Journey
@@ -202,7 +250,7 @@ export default function Dream() {
                         onClick={() => handleExampleClick(example)}
                         className="text-left p-3 rounded-lg border bg-card hover-elevate active-elevate-2 transition-colors text-sm"
                         data-testid={`button-example-${idx}`}
-                        disabled={generateDreamScript.isPending}
+                        disabled={shapeStory.isPending}
                       >
                         {example}
                       </button>
@@ -215,23 +263,76 @@ export default function Dream() {
                   type="submit"
                   size="lg"
                   className="w-full"
-                  disabled={generateDreamScript.isPending}
-                  data-testid="button-generate-dream"
+                  disabled={shapeStory.isPending}
+                  data-testid="button-shape-story"
                 >
-                  {generateDreamScript.isPending ? (
+                  {shapeStory.isPending ? (
                     <>
-                      <Moon className="w-4 h-4 mr-2 animate-pulse" />
-                      Creating Your Journey...
+                      <Sparkles className="w-4 h-4 mr-2 animate-pulse" />
+                      Shaping Your Story...
                     </>
                   ) : (
                     <>
-                      <Moon className="w-4 h-4 mr-2" />
-                      Create DREAM Journey (30 min)
+                      <Sparkles className="w-4 h-4 mr-2" />
+                      Shape Story
                     </>
                   )}
                 </Button>
               </form>
             </Card>
+            ) : (
+              // Step 2: Story Editor
+              <Card className="p-8">
+                <div className="space-y-6">
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="expanded-story" className="text-lg">
+                        Your Shaped Story
+                      </Label>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setExpandedStory(null)}
+                        data-testid="button-back-to-journey"
+                      >
+                        ← Back to Journey Idea
+                      </Button>
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      Review and edit your story before generating the final hypnosis script
+                    </p>
+                    <Textarea
+                      id="expanded-story"
+                      data-testid="textarea-expanded-story"
+                      value={expandedStory || ""}
+                      onChange={(e) => setExpandedStory(e.target.value)}
+                      className="min-h-[400px] text-base font-mono"
+                      disabled={generateDreamScript.isPending}
+                    />
+                  </div>
+
+                  <Button
+                    onClick={handleGenerateScript}
+                    size="lg"
+                    className="w-full"
+                    disabled={generateDreamScript.isPending}
+                    data-testid="button-generate-script"
+                  >
+                    {generateDreamScript.isPending ? (
+                      <>
+                        <Moon className="w-4 h-4 mr-2 animate-pulse" />
+                        Generating DREAM Script...
+                      </>
+                    ) : (
+                      <>
+                        <Moon className="w-4 h-4 mr-2" />
+                        Generate DREAM Script (30 min)
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </Card>
+            )}
 
             {/* Info Card */}
             <Card className="p-6 bg-primary/5 border-primary/20">
@@ -262,7 +363,7 @@ export default function Dream() {
             </Card>
           </div>
         ) : (
-          /* Generated Script Display */
+          // Generated Script Display
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <h2 className="text-2xl font-bold">Your DREAM Journey</h2>
@@ -270,6 +371,7 @@ export default function Dream() {
                 variant="outline"
                 onClick={() => {
                   setGeneratedScript(null);
+                  setExpandedStory(null); // Reset story shaper
                   setJourneyIdea("");
                   setThumbnailUrl(null);
                 }}

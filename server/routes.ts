@@ -323,8 +323,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Generate DREAM script (sleep hypnosis journey) - requires authentication
-  app.post("/api/generate-dream-script", isAuthenticated, async (req: any, res) => {
+  // Step 1: Shape DREAM story - expand journey idea into detailed story
+  app.post("/api/shape-dream-story", isAuthenticated, async (req: any, res) => {
     try {
       const schema = z.object({
         journeyIdea: z.string(),
@@ -334,8 +334,59 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { journeyIdea, archetypeId } = schema.parse(req.body);
       const userId = req.user.claims.sub;
       
-      // Backend content validation using centralized validator
+      // Backend content validation
       const validation = validateContent(journeyIdea, userId);
+      if (!validation.isValid) {
+        return res.status(400).json({ 
+          message: "DREAM stories are for peaceful sleep journeys only. " + validation.reason
+        });
+      }
+      
+      // Fetch selected archetype or use first blended archetype
+      let archetype;
+      if (archetypeId) {
+        archetype = await storage.getArchetypeById(archetypeId);
+      } else {
+        const blendedArchetypes = await storage.getBlendedArchetypes();
+        archetype = blendedArchetypes[0];
+      }
+      
+      if (!archetype) {
+        return res.status(404).json({ message: "Archetype not found" });
+      }
+      
+      // Shape the story using AI
+      const storyResult = await aiService.shapeDreamStory({
+        journeyIdea,
+        archetypeName: archetype.name,
+        archetypeDescription: archetype.description || '',
+      });
+      
+      res.json({
+        expandedStory: storyResult.expandedStory,
+        storyLength: storyResult.storyLength,
+        archetypeId: archetype.id,
+        archetypeName: archetype.name,
+      });
+    } catch (error: any) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+
+  // Step 2: Generate DREAM script from shaped story - requires authentication
+  app.post("/api/generate-dream-script", isAuthenticated, async (req: any, res) => {
+    try {
+      const schema = z.object({
+        journeyIdea: z.string(),
+        expandedStory: z.string().optional(), // NEW: Accept pre-shaped story
+        archetypeId: z.number().optional(),
+      });
+      
+      const { journeyIdea, expandedStory, archetypeId } = schema.parse(req.body);
+      const userId = req.user.claims.sub;
+      
+      // Backend content validation using centralized validator
+      const validation = validateContent(expandedStory || journeyIdea, userId);
       if (!validation.isValid) {
         return res.status(400).json({ 
           message: "DREAM scripts are for peaceful sleep journeys only. " + validation.reason
@@ -389,9 +440,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       };
       
       // Generate DREAM script (30 minutes = ~3000 words)
+      // If expandedStory is provided (two-step flow), use it instead of the brief journey idea
+      const scriptInput = expandedStory || journeyIdea;
+      
       const result = await aiService.generateFullScript({
         template: dreamTemplate,
-        presentingIssue: journeyIdea,
+        presentingIssue: scriptInput, // Use expanded story if available
         desiredOutcome: "Experience a peaceful, restful journey into natural sleep",
         emergenceType: 'sleep',  // Key difference: sleep emergence
         targetWordCount: 3000,  // 30-minute script
