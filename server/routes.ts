@@ -800,6 +800,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
       
       const data = schema.parse(req.body);
+      
+      // Debug: Log what's in req.user
+      console.log('[DEBUG] req.user:', JSON.stringify(req.user, null, 2));
+      
       const userId = req.user!.id;
       
       // Create the package with 'generating' status
