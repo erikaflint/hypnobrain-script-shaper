@@ -1,7 +1,7 @@
 # HypnoBrain Script Shaper v2.0
 
 ## Overview
-HypnoBrain Script Shaper is a DAW-style web application designed for hypnotherapists. Its primary purpose is to generate customized hypnosis scripts based on Erika Flint's 8-Dimensional Hypnosis Framework. The project aims to provide a robust, methodology-driven platform for script creation, leveraging AI while ensuring adherence to established hypnotherapy principles. This application targets professional hypnotherapists seeking to streamline script generation with a focus on customizable, high-quality content.
+HypnoBrain Script Shaper is a DAW-style web application for hypnotherapists, designed to generate customized hypnosis scripts based on Erika Flint's 8-Dimensional Hypnosis Framework. The project aims to provide a robust, methodology-driven platform for script creation, leveraging AI to streamline the process while adhering to established hypnotherapy principles. It targets professional hypnotherapists seeking high-quality, customizable content. The application also includes a "DREAM Hypnosis Series" for generating non-clinical sleep/meditation scripts, offering immersive journeys without therapeutic goals.
 
 ## User Preferences
 I prefer detailed explanations.
@@ -13,154 +13,50 @@ Do not make changes to the file Y.
 ## System Architecture
 
 ### Tech Stack
-- **Frontend**: React + TypeScript + Vite
-- **Backend**: Express.js + TypeScript
-- **Database**: PostgreSQL (Neon) + Drizzle ORM
-- **Authentication**: Replit Auth (OpenID Connect) with Google, GitHub, email/password support
-- **AI**: Anthropic Claude Sonnet 4
-- **Styling**: Tailwind CSS + shadcn/ui components
-- **State Management**: TanStack Query (React Query v5)
+-   **Frontend**: React + TypeScript + Vite
+-   **Backend**: Express.js + TypeScript
+-   **Database**: PostgreSQL (Neon) + Drizzle ORM
+-   **Authentication**: Replit Auth (OpenID Connect)
+-   **AI**: Anthropic Claude Sonnet 4
+-   **Styling**: Tailwind CSS + shadcn/ui components
+-   **State Management**: TanStack Query (React Query v5)
 
-### Core Architecture - v2.0 (JSON Template Architecture)
-The system employs a "separation of concerns" approach:
-1.  **Templates (JSON)**: Dimension mixes are stored as data within PostgreSQL JSONB.
-2.  **ScriptEngine**: Acts as the core IP layer, orchestrating Erika Flint's methodology through a config-driven system.
-3.  **AI Service**: The execution engine that receives comprehensive directives from the ScriptEngine for script generation.
+### Core Architecture (JSON Template Architecture)
+The system separates concerns: Templates (JSON) for dimension mixes in PostgreSQL JSONB, a ScriptEngine as the core IP layer orchestrating Erika Flint's methodology, and an AI Service executing script generation directives. The data flow is: Client Intake → TemplateSelector → DimensionAssembler → ScriptEngine → AI Service.
 
-**Data Flow:** Client Intake → TemplateSelector → DimensionAssembler → ScriptEngine → AI Service
-
-### ScriptEngine: The IP Core
-The ScriptEngine (`server/script-engine/`) is the portable IP layer responsible for transforming template-based generation into methodology-driven transformation.
-
-**Components:**
--   **Config System**: Contains `principles.json` (6 core principles), `narrative-arcs.json` (14 narrative arcs), and `metaphor-library.json`.
--   **StrategyPlanner**: Detects presenting issues, selects narrative arcs, and chooses primary metaphors.
--   **PrincipleEnforcer**: Translates the 6 core principles into AI prompt directives, adapting to client levels and building language hierarchies.
--   **Main Orchestrator**: Combines StrategyPlanner and PrincipleEnforcer to generate comprehensive AI directives and reasoning logs.
-
-**6 Core Principles:** Somatic Anchoring Early, Metaphor Consistency, Adaptive Language Complexity, Permissive-to-Directive Gradient, Safety Language Always, Ego Strengthening Closure.
-
-**14 Narrative Arcs:** Effortlessness of Change, Re-Minding (Not Learning), Two Tempos of Change, Recognition & Ego Strengthening, Relief to New Life, Emotional-Physical Chain, Brain as Master Skill, Mind-Body Unity, Parts Integration, Future Self Connection, Inner Wisdom Access, Sensory Amplification, Resource Activation, **Playful Learning** (new - learning through play, curiosity, and exploration).
+The ScriptEngine (`server/script-engine/`) is the IP layer transforming template-based generation into methodology-driven transformation. It includes a Config System (principles, narrative arcs, metaphor library), a StrategyPlanner, a PrincipleEnforcer, and a Main Orchestrator to generate AI directives. Key elements include 6 Core Principles and 14 Narrative Arcs (including a new "Playful Learning" arc).
 
 ### Feature Specifications
--   **8-Dimensional Framework**: Implements Erika Flint's 8D Hypnosis Framework (Somatic, Temporal, Symbolic, Psychological, Perspective, Spiritual, Relational, Language) as independent emphasis levels (0-100%).
--   **AI Script Generation**: 
-    -   150-200 word preview, 1500-2000 word full hypnosis script (3000 words for DREAM scripts), 6 marketing assets per script
-    -   **Auto-Generated Titles**: AI creates memorable, unique titles from presenting issue and desired outcome
-        - Format varies by template category: "Issue Relief" (beginner), "Issue Transformation" (specialized), "Issue to Outcome" (therapeutic/advanced)
-        - Examples: "Anxiety Relief", "Chronic Pain Transformation", "Weight Loss to Feel energized"
-    -   Remix Analysis for detecting dimensional emphasis in existing scripts
-    -   **Emergence Types**: Scripts support two endings - 'regular' (counting 1-5 to alert wakefulness) or 'sleep' (natural drift without alertness cues for bedtime use)
--   **Three-Tier Pricing Model**:
-    -   **Free Tier**: Weekly script (email-gated, 7-day rate limiting) with balanced dimension values, default archetype, default style, and no marketing assets.
-    -   **Create New Mode ($3)**: Full customization with 8-dimensional sliders, 6 archetype options, 3 style approaches, 6 marketing assets, PDF/Word download, and unlimited previews.
-    -   **Remix Mode ($3)**: AI dimension analysis of existing scripts, adjustable dimensional emphasis, before/after comparison, 6 marketing assets, PDF/Word download.
--   **Rate Limiting (Free Tier)**: Email-based tracking with a 7-day cooldown period using upsert logic.
--   **Dice Mix Helper (New)**: Randomly pre-fills presenting issue + contextually matched desired outcome for quick inspiration. 10 issue types, 4 curated outcomes each (40 total suggestions).
--   **Type-Ahead Autocomplete (New)**:
-    -   **Presenting Issue**: Fully editable text input with 10 common issue suggestions (not forced selection - users can type anything)
-    -   **Desired Outcome**: Context-aware suggestions based on presenting issue + free-text input for custom outcomes
-    -   Both fields allow free typing while offering helpful suggestions
-    -   Helps hypnotherapists explore different script framing options
--   **Version Control & Favorites**: 
-    -   Star scripts as favorites (appears in dedicated "Favorites" section in dashboard)
-    -   Parent-child tracking for script remixes with version labels (v2, v3, etc.)
-    -   `/api/generations/:id/favorite` (PATCH) and `/api/generations/:id/remix` (POST) endpoints
--   **Save/Apply Mix (Custom Templates)**:
-    -   Users can save their current dimension configuration as a custom template for later reuse
-    -   Backend: POST `/api/templates` (protected) saves user templates with name and dimension values
-    -   Backend: GET `/api/user/templates` (protected) retrieves user's saved dimension mixes
-    -   Templates stored in `templates` table with userId linkage
-    -   Frontend UI: "Save Mix" button with dialog to name template, "Apply Saved Mix" button showing count and list of saved templates
-    -   Clicking a saved template instantly applies its dimension values to sliders
--   **Script Package Generator (NEW)**:
-    -   Create sellable collections of themed scripts (e.g., "12 Weight Loss Scripts")
-    -   AI generates unique, complementary script concepts based on theme
-    -   User workflow: Enter theme → AI generates concepts → Modify concepts → Generate all scripts → Export package
-    -   **Database**: `script_packages` table (title, theme, scriptCount, status) + `package_scripts` junction table (concepts, modifications, generationId links)
-    -   **Backend Routes**:
-        - POST `/api/packages` - create package & generate concepts
-        - GET `/api/packages` - get user's packages
-        - GET `/api/packages/:id` - get package with scripts
-        - PATCH `/api/packages/:packageId/scripts/:scriptId` - update script concept
-        - POST `/api/packages/:id/generate` - generate all scripts in package
-    -   **Frontend Pages**: `/packages/create` (package creator), `/packages/:id/edit` (concept editor & generator)
-    -   Error handling: Failed generations mark package as 'failed' status for retry/cleanup
--   **DREAM Hypnosis Series (NEW)**:
-    -   Non-clinical sleep/meditation scripts - "bedtime stories for adults"
-    -   30-minute immersive journeys (3000 words) with no therapeutic goals
-    -   Journey-based input (not issue/outcome) - e.g., "walking through an enchanted forest"
-    -   Sleep emergence by default - natural drift without alertness cues
-    -   High somatic/symbolic emphasis (≥70) for rich sensory experience
-    -   **Two-Step Story Shaper (NEW)**: Reduces AI repetition by breaking generation into smaller steps
-        - Step 1: Shape Story - AI expands brief journey idea into detailed 800-1200 word story with variety and sensory richness
-        - Step 2: Generate Script - AI converts shaped story into 3000-word hypnosis script
-        - Users can review and edit the shaped story before final generation
-    -   **Frontend**: `/dream` route with journey idea input, archetype selector, story editor, VoicePlayer for TTS playback
-    -   **Backend**: 
-        - POST `/api/shape-dream-story` (authenticated) - expands journey ideas into detailed stories
-        - POST `/api/generate-dream-script` (authenticated) - accepts optional `expandedStory` parameter, saves to database with generationMode='dream', auto-generates title
-    -   **AI-Generated Thumbnails**: DALL-E 3 creates serene, dreamlike 1024x1024 landscape images for each DREAM script (~$0.04/image), stored in generations.imageUrl. Images show ONLY environments and landscapes with strict constraints: NO people/human figures, NO text/words, NO scary/dark elements - ONLY gentle, peaceful, calming imagery as if looking through a window
-    -   **Dashboard Integration**: DREAM scripts visible with Moon icon indicator and thumbnail image display
-    -   **13 DREAM-Specific Narrative Arcs**: 3 foundation (always included), 1 somatic (PMR), 8 landscape themes, 1 enhancement
-    -   **8 Blended Archetypes**: Specialized voice blends optimized for sleep/DREAM scripts (e.g., "Compassionate Truth-Teller" = 70% Nurturer + 30% Truth Teller, "Fierce Mama Bear" = 75% Nurturer + 25% Rebel). Stored as JSON metadata in archetypes.prompt_modifier field
-    -   **Voice Controls**: Play/Pause/Stop, Speed (50-150%), Pause intensity (0-4), Pitch (0.5-1.5x), Voice selection
+-   **8-Dimensional Framework**: Implements Erika Flint's 8D Hypnosis Framework with independent emphasis levels (0-100%).
+-   **AI Script Generation**: Generates script previews (150-200 words), full scripts (1500-2000 words, 3000 for DREAM), and 6 marketing assets. Includes AI-generated titles and supports "regular" or "sleep" emergence types.
+-   **Three-Tier Pricing Model**: Free (weekly script), Create New ($3 for full customization), Remix Mode ($3 for AI analysis and adjustment of existing scripts).
+-   **Rate Limiting**: Email-based 7-day cooldown for the Free Tier.
+-   **Dice Mix Helper**: Randomly pre-fills presenting issue and desired outcome for inspiration.
+-   **Type-Ahead Autocomplete**: Suggestions for "Presenting Issue" and context-aware "Desired Outcome" while allowing free-text input.
+-   **Version Control & Favorites**: Star scripts, parent-child tracking for remixes, and API endpoints for managing them.
+-   **Save/Apply Mix (Custom Templates)**: Users can save and apply custom dimension configurations.
+-   **Script Package Generator**: Allows creating sellable collections of themed scripts, with AI generating concepts, and user modification and generation.
+-   **DREAM Hypnosis Series**: Generates non-clinical, 30-minute immersive sleep/meditation scripts (3000 words). Features journey-based input, sleep emergence, high somatic/symbolic emphasis, a Two-Step Story Shaper to reduce AI repetition, playful loading experience, and AI-generated serene thumbnails (DALL-E 3). Includes 13 DREAM-specific Narrative Arcs and 8 Blended Archetypes. Also offers voice controls for playback.
 
 ### UI/UX Decisions
--   **Design System**: Purple accent colors (hsl(260 70% 62%)), dark mode optimized, DAW-inspired interface.
--   **Fonts**: Inter (body), DM Sans (display), JetBrains Mono (code).
--   **Components**: shadcn/ui with custom dimension sliders and archetype cards.
--   **Page Routes**:
-    -   `/` - Landing page
-    -   `/free` - Free tier script generation
-    -   `/app-v2` - **Current production version** with template recommendations and full features
-    -   `/dream` - DREAM Hypnosis series generator (sleep/meditation scripts)
-    -   `/dashboard` - Admin dashboard for viewing/managing generated scripts
-    -   `/admin` - Admin panel
-    -   Note: `/app` is deprecated (old v1 architecture)
+-   **Design System**: Purple accent colors, dark mode, DAW-inspired interface, Inter, DM Sans, and JetBrains Mono fonts. Uses shadcn/ui components.
+-   **Page Routes**: `/` (Landing), `/free`, `/app-v2` (Current production), `/dream`, `/dashboard`, `/admin`.
 
-###  Authentication System
--   **Provider**: Replit Auth (OpenID Connect)
--   **Login Methods**: Google, GitHub, X (Twitter), Apple, Email/Password
--   **Session Management**: PostgreSQL-backed sessions (`sessions` table) with 7-day TTL
--   **User Storage**: `users` table with UUID primary keys, stores email, first/last name, profile image
--   **Protected Routes**: Script generation and dashboard require authentication
--   **Client Integration**: `useAuth()` hook provides authentication state, automatic redirect to login when unauthorized
--   **Middleware**: `isAuthenticated` middleware protects API routes, handles token refresh automatically
+### Authentication System
+-   **Provider**: Replit Auth (OpenID Connect) supporting Google, GitHub, X, Apple, and Email/Password.
+-   **Session Management**: PostgreSQL-backed sessions with 7-day TTL.
+-   **User Storage**: `users` table for user information.
+-   **Protected Routes**: Script generation and dashboard require authentication.
+-   **Client Integration**: `useAuth()` hook for authentication state and automatic redirects.
+-   **Middleware**: `isAuthenticated` middleware for API route protection and token refresh.
 
 ### Database Schema Highlights
 -   **Core Tables**: `users`, `sessions`, `dimensions`, `archetypes`, `styles`, `pricing`, `generations`, `free_script_usage`, `admin_users`.
--   **User Ownership**: `generations.userId` links scripts to authenticated users
--   **Naming Convention**: `snake_case` in database, `camelCase` in Drizzle ORM TypeScript schema.
-
-## Future Enhancements / To-Do
-
-### Post-Creation Content Review Process (Priority: Future)
-**Problem:** AI-generated content can be unpredictable. While we validate user input before generation, the AI output itself (especially DREAM stories and therapeutic scripts) may contain unintended therapeutic language, sensitive topics, or content that doesn't align with intended use cases.
-
-**Proposed Solution:** Implement **pluggable multi-layer refinement system** for ALL scripts:
-- **What:** Modular, post-creation AI refinement layers that automatically polish and enhance scripts
-- **Philosophy:** "Really good → Automatically refined → Excellent" - Don't expect perfect scripts, expect really good ones that get systematically improved
-- **Why:** 
-  - Scripts can be iteratively improved through targeted refinement passes rather than full regeneration
-  - Pluggable architecture allows mixing and matching refinement passes for different purposes
-  - Two-level improvement: (1) Refine prompts for better initial output + (2) Refinement layers to polish
-- **How:** TBD - **Pluggable refinement passes** could include:
-  - 🔒 **Safety refinement** - Adjust problematic language, validate appropriateness
-  - 🎨 **Tone refinement** - Fine-tune voice consistency, adjust emotional gradient
-  - 🌍 **Translation refinement** - Convert to Spanish, French, or other languages
-  - ✨ **Sensory enhancement** - Enrich with vivid details, varied language
-  - 📏 **Length optimization** - Expand or condense to target word count
-  - 🎭 **Voice consistency** - Ensure archetype voice stays consistent throughout
-  - ⚡ **Quality scoring** - Confidence metrics to determine which layers to apply
-  - 🔄 **Iterative loops** - Run refinement passes until quality thresholds met
-- **Architecture:** Each refinement pass is independent and reusable - can run individually or chain together
-- **Benefits:** Much more efficient than regenerating from scratch, preserves core narrative while improving details, enables new capabilities like translation without full regeneration
-
-**Note:** Not currently a blocker, but important for production quality assurance and could unlock powerful script enhancement capabilities.
+-   **User Ownership**: `generations.userId` links scripts to users.
+-   **Naming Convention**: `snake_case` in database, `camelCase` in Drizzle ORM.
 
 ## External Dependencies
 -   **Database**: PostgreSQL (via Neon)
 -   **ORM**: Drizzle ORM
 -   **AI Service**: Anthropic Claude Sonnet 4
--   **Payment Gateway**: Stripe (currently mocked, `STRIPE_ENABLED=false` feature flag)
+-   **Payment Gateway**: Stripe (currently mocked)
