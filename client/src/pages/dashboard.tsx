@@ -8,7 +8,8 @@ import { VoicePlayer } from "@/components/voice-player";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { isUnauthorizedError } from "@/lib/authUtils";
-import { Copy, FileText, Calendar, Tag, Sparkles, Home, Wand2, Star, RotateCcw, Package, Moon } from "lucide-react";
+import { Copy, FileText, Calendar, Tag, Sparkles, Wand2, Star, Package, Moon } from "lucide-react";
+import { AppHeader } from "@/components/app-header";
 import { format } from "date-fns";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import type { Generation } from "@shared/schema";
@@ -76,34 +77,18 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header Navigation */}
-      <div className="border-b">
-        <div className="container mx-auto px-4 py-4 max-w-6xl">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold">HypnoBrain Script Shaper</h2>
-            <div className="flex gap-2">
-              <Link href="/" data-testid="link-home">
-                <Button variant="ghost" size="sm">
-                  <Home className="w-4 h-4 mr-2" />
-                  Home
-                </Button>
-              </Link>
-              <Link href="/packages/create" data-testid="link-create-package">
-                <Button variant="outline" size="sm">
-                  <Package className="w-4 h-4 mr-2" />
-                  Create Package
-                </Button>
-              </Link>
-              <Link href="/app-v2" data-testid="link-create-script">
-                <Button variant="default" size="sm">
-                  <Wand2 className="w-4 h-4 mr-2" />
-                  Create Script
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
+      <AppHeader 
+        title="HypnoBrain Script Shaper"
+        showCreateScript={true}
+        rightContent={
+          <Link href="/packages/create" data-testid="link-create-package">
+            <Button variant="outline" size="sm">
+              <Package className="w-4 h-4 mr-2" />
+              Create Package
+            </Button>
+          </Link>
+        }
+      />
 
       <div className="container mx-auto px-4 py-8 max-w-6xl">
         <div className="mb-8">

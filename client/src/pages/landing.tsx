@@ -1,55 +1,13 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Brain, Sparkles, Sliders, Zap, Check, Play, FileText, Wand2, LogIn, LogOut, LayoutDashboard } from "lucide-react";
-import { useAuth } from "@/hooks/useAuth";
+import { Brain, Sparkles, Sliders, Zap, Check, Play, FileText, Wand2 } from "lucide-react";
+import { AppHeader } from "@/components/app-header";
 
 export default function Landing() {
-  const { user, isLoading: authLoading } = useAuth();
-
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <Link href="/" data-testid="link-home">
-            <div className="flex items-center gap-2 hover-elevate active-elevate-2 px-3 py-1 rounded-md transition-colors">
-              <Brain className="w-6 h-6 text-primary" data-testid="icon-logo" />
-              <span className="font-display font-bold text-lg">HypnoBrain</span>
-            </div>
-          </Link>
-          
-          <div className="flex items-center gap-3">
-            {!authLoading && (
-              <>
-                {user ? (
-                  <>
-                    <Link href="/dashboard" data-testid="link-dashboard">
-                      <Button variant="ghost" size="sm" data-testid="button-dashboard">
-                        <LayoutDashboard className="w-4 h-4 mr-2" />
-                        Dashboard
-                      </Button>
-                    </Link>
-                    <a href="/api/auth/logout" data-testid="link-logout">
-                      <Button variant="outline" size="sm" data-testid="button-logout">
-                        <LogOut className="w-4 h-4 mr-2" />
-                        Logout
-                      </Button>
-                    </a>
-                  </>
-                ) : (
-                  <a href="/api/auth/login" data-testid="link-login">
-                    <Button variant="default" size="sm" data-testid="button-login">
-                      <LogIn className="w-4 h-4 mr-2" />
-                      Login
-                    </Button>
-                  </a>
-                )}
-              </>
-            )}
-          </div>
-        </div>
-      </header>
+      <AppHeader showAuth={true} />
 
       {/* Hero Section */}
       <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">

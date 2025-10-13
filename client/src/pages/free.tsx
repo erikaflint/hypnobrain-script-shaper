@@ -12,10 +12,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ArrowLeft, Sparkles, Lock, Crown } from "lucide-react";
+import { Sparkles, Lock, Crown } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
+import { AppHeader } from "@/components/app-header";
 
 const PRESENTING_ISSUES = [
   "Anxiety",
@@ -114,21 +115,11 @@ export default function Free() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" data-testid="link-back-home">
-            <Button variant="ghost" size="sm" data-testid="button-back">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back
-            </Button>
-          </Link>
-          <div className="flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-primary" />
-            <span className="font-semibold">Free Weekly Script</span>
-          </div>
-        </div>
-      </header>
+      <AppHeader 
+        showBack={true}
+        title="Free Weekly Script"
+        icon={<Sparkles className="w-5 h-5 text-primary" />}
+      />
 
       <div className="max-w-4xl mx-auto px-6 py-12">
         <div className="text-center mb-12">

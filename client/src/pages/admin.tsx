@@ -12,9 +12,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ArrowLeft, Eye, Calendar, Sparkles } from "lucide-react";
+import { Eye, Calendar, Sparkles } from "lucide-react";
 import type { Generation } from "@shared/schema";
 import { VoicePlayer } from "@/components/voice-player";
+import { AppHeader } from "@/components/app-header";
 
 export default function Admin() {
   const { data: generations, isLoading } = useQuery<Generation[]>({
@@ -31,26 +32,16 @@ export default function Admin() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b sticky top-0 bg-background z-10">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Link href="/" data-testid="link-back-home">
-              <Button variant="ghost" size="sm" data-testid="button-back">
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back
-              </Button>
-            </Link>
-            <div className="flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-primary" />
-              <h1 className="font-semibold">Admin: All Generations</h1>
-            </div>
-          </div>
+      <AppHeader 
+        showBack={true}
+        title="Admin: All Generations"
+        icon={<Sparkles className="w-5 h-5 text-primary" />}
+        rightContent={
           <Badge variant="secondary" data-testid="text-count">
             {generations?.length || 0} Total
           </Badge>
-        </div>
-      </header>
+        }
+      />
 
       <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="space-y-4">

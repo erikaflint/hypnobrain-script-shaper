@@ -9,6 +9,7 @@ import { VoicePlayer } from "@/components/voice-player";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { ArrowLeft, ArrowRight, Sparkles, Check, Sliders, User, MessageSquare, Eye, Wand2, FileText, Dices, ChevronsUpDown, Save, Download } from "lucide-react";
+import { AppHeader } from "@/components/app-header";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
@@ -349,44 +350,25 @@ export default function AppV2() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b sticky top-0 z-10 bg-background/95 backdrop-blur">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Link href="/" data-testid="link-back-home">
-              <Button variant="ghost" size="icon" data-testid="button-back">
-                <ArrowLeft className="w-5 h-5" />
-              </Button>
-            </Link>
-            <div>
-              <h1 className="font-display text-xl font-semibold">HypnoBrain Script Shaper</h1>
-              <p className="text-sm text-muted-foreground">
-                {step === "intake" && "Step 1: Client Intake"}
-                {step === "recommendations" && "Step 2: Choose Template"}
-                {step === "mixer" && "Step 3: Customize Mix"}
-                {step === "results" && "Your Script"}
-              </p>
-            </div>
+      <AppHeader 
+        showBack={true}
+        title="HypnoBrain Script Shaper"
+        subtitle={
+          step === "intake" ? "Step 1: Client Intake" :
+          step === "recommendations" ? "Step 2: Choose Template" :
+          step === "mixer" ? "Step 3: Customize Mix" :
+          "Your Script"
+        }
+        showDashboard={true}
+        rightContent={
+          <div className="flex items-center gap-2">
+            <div className={`w-2 h-2 rounded-full ${step === "intake" ? "bg-primary" : "bg-muted"}`} />
+            <div className={`w-2 h-2 rounded-full ${step === "recommendations" ? "bg-primary" : "bg-muted"}`} />
+            <div className={`w-2 h-2 rounded-full ${step === "mixer" ? "bg-primary" : "bg-muted"}`} />
+            <div className={`w-2 h-2 rounded-full ${step === "results" ? "bg-primary" : "bg-muted"}`} />
           </div>
-          
-          <div className="flex items-center gap-4">
-            <Link href="/dashboard" data-testid="link-dashboard">
-              <Button variant="outline" size="sm">
-                <FileText className="w-4 h-4 mr-2" />
-                My Scripts
-              </Button>
-            </Link>
-            
-            {/* Progress indicator */}
-            <div className="flex items-center gap-2">
-              <div className={`w-2 h-2 rounded-full ${step === "intake" ? "bg-primary" : "bg-muted"}`} />
-              <div className={`w-2 h-2 rounded-full ${step === "recommendations" ? "bg-primary" : "bg-muted"}`} />
-              <div className={`w-2 h-2 rounded-full ${step === "mixer" ? "bg-primary" : "bg-muted"}`} />
-              <div className={`w-2 h-2 rounded-full ${step === "results" ? "bg-primary" : "bg-muted"}`} />
-            </div>
-          </div>
-        </div>
-      </header>
+        }
+      />
 
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-6 py-12">

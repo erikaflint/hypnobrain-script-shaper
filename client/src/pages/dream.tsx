@@ -6,12 +6,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { VoicePlayer } from "@/components/voice-player";
-import { ArrowLeft, Moon, Sparkles, Volume2 } from "lucide-react";
+import { Moon, Sparkles } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/useAuth";
 import { validateContent } from "@/lib/contentValidator";
+import { AppHeader } from "@/components/app-header";
 
 const JOURNEY_EXAMPLES = [
   "Take me on a peaceful walk through an enchanted forest where I meet wise talking animals",
@@ -114,26 +115,12 @@ export default function Dream() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" data-testid="link-back-home">
-            <Button variant="ghost" size="sm" data-testid="button-back">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back
-            </Button>
-          </Link>
-          <div className="flex items-center gap-2">
-            <Moon className="w-5 h-5 text-primary" />
-            <span className="font-medium">DREAM Hypnosis</span>
-          </div>
-          <Link href="/dashboard" data-testid="link-dashboard">
-            <Button variant="outline" size="sm" data-testid="button-dashboard">
-              My Scripts
-            </Button>
-          </Link>
-        </div>
-      </header>
+      <AppHeader 
+        showBack={true}
+        title="DREAM Hypnosis"
+        icon={<Moon className="w-5 h-5 text-primary" />}
+        showDashboard={true}
+      />
 
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-6 py-12">
