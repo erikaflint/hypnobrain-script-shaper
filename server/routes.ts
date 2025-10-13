@@ -801,10 +801,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       const data = schema.parse(req.body);
       
-      // Debug: Log what's in req.user
-      console.log('[DEBUG] req.user:', JSON.stringify(req.user, null, 2));
-      
-      const userId = req.user!.id;
+      // Get user ID from claims (for compatibility with existing sessions)
+      const userId = (req.user as any)?.id || (req.user as any)?.claims?.sub;
       
       // Create the package with 'generating' status
       const pkg = await storage.createPackage({
@@ -871,7 +869,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Get all packages for the authenticated user
   app.get("/api/packages", isAuthenticated, async (req, res) => {
     try {
-      const userId = req.user!.id;
+      const userId = (req.user as any)?.id || (req.user as any)?.claims?.sub;
       const packages = await storage.getPackagesByUserId(userId);
       res.json(packages);
     } catch (error: any) {
@@ -890,7 +888,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       // Verify ownership
-      if (pkg.userId !== req.user!.id) {
+      const currentUserId = (req.user as any)?.id || (req.user as any)?.claims?.sub;
+      if (pkg.userId !== currentUserId) {
         return res.status(403).json({ message: 'Unauthorized' });
       }
       
@@ -918,7 +917,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Verify package ownership
       const pkg = await storage.getPackageById(packageId);
-      if (!pkg || pkg.userId !== req.user!.id) {
+      const currentUserId = (req.user as any)?.id || (req.user as any)?.claims?.sub;
+      if (!pkg || pkg.userId !== currentUserId) {
         return res.status(403).json({ message: 'Unauthorized' });
       }
       
@@ -935,7 +935,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const packageId = parseInt(req.params.id);
       const pkg = await storage.getPackageById(packageId);
       
-      if (!pkg || pkg.userId !== req.user!.id) {
+      const currentUserId = (req.user as any)?.id || (req.user as any)?.claims?.sub;
+      if (!pkg || pkg.userId !== currentUserId) {
         return res.status(403).json({ message: 'Unauthorized' });
       }
       
@@ -982,7 +983,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           
           // Save generation
           const generation = await storage.createGeneration({
-            userId: req.user!.id,
+            userId: currentUserId,
             title: script.userModifiedTitle || script.conceptTitle,
             generationMode: 'create_new',
             isFree: false,
@@ -1039,7 +1040,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Re-fetch package to ensure fresh status (not stale cached data)
       const pkg = await storage.getPackageById(packageId);
       
-      if (!pkg || pkg.userId !== req.user!.id) {
+      const currentUserId = (req.user as any)?.id || (req.user as any)?.claims?.sub;
+      if (!pkg || pkg.userId !== currentUserId) {
         return res.status(403).json({ message: 'Unauthorized' });
       }
       
