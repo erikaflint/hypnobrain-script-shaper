@@ -35,6 +35,7 @@ export default function Dream() {
   const [selectedArchetypeId, setSelectedArchetypeId] = useState<number | null>(null);
   const [generatedScript, setGeneratedScript] = useState<string | null>(null);
   const [generationId, setGenerationId] = useState<number | null>(null);
+  const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(null);
 
   // Fetch blended archetypes for DREAM
   const { data: archetypes = [] } = useQuery<Archetype[]>({
@@ -52,6 +53,7 @@ export default function Dream() {
     onSuccess: (data) => {
       setGeneratedScript(data.fullScript);
       setGenerationId(data.generationId);
+      setThumbnailUrl(data.thumbnailUrl || null);
       toast({
         title: "DREAM Script Created!",
         description: `"${data.title}" has been saved to your library`,
@@ -270,12 +272,25 @@ export default function Dream() {
                 onClick={() => {
                   setGeneratedScript(null);
                   setJourneyIdea("");
+                  setThumbnailUrl(null);
                 }}
                 data-testid="button-create-another"
               >
                 Create Another
               </Button>
             </div>
+
+            {/* Thumbnail Image */}
+            {thumbnailUrl && (
+              <Card className="overflow-hidden">
+                <img 
+                  src={thumbnailUrl} 
+                  alt="DREAM Journey Visualization"
+                  className="w-full h-auto"
+                  data-testid="img-dream-thumbnail"
+                />
+              </Card>
+            )}
 
             {/* Voice Player */}
             <VoicePlayer text={generatedScript} title="Listen to Your Journey" />

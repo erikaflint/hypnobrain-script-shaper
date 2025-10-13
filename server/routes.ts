@@ -377,10 +377,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ? `DREAM: ${journeyIdea.substring(0, 47)}...`
         : `DREAM: ${journeyIdea}`;
       
+      // Generate thumbnail image using DALL-E 3
+      let thumbnailUrl: string | undefined;
+      try {
+        const { generateDreamThumbnail } = await import('./image-service');
+        thumbnailUrl = await generateDreamThumbnail(journeyIdea, archetype.name);
+        console.log('Generated DREAM thumbnail:', thumbnailUrl);
+      } catch (imageError: any) {
+        console.error('Failed to generate thumbnail, continuing without image:', imageError.message);
+        // Continue without image - don't fail the entire request
+      }
+      
       // Save to database
       const generation = await storage.createGeneration({
         userId,
         title: dreamTitle,
+        imageUrl: thumbnailUrl,  // Save the generated image URL
         generationMode: 'dream', // New mode for DREAM scripts
         isFree: false,
         presentingIssue: journeyIdea,
@@ -392,7 +404,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({ 
         fullScript: result.fullScript,
         generationId: generation.id,
-        title: dreamTitle
+        title: dreamTitle,
+        thumbnailUrl
       });
     } catch (error: any) {
       console.error("DREAM generation error:", error);

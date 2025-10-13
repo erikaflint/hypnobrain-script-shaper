@@ -297,6 +297,18 @@ export default function Dashboard() {
           </div>
         </div>
 
+        {/* Thumbnail Image for DREAM scripts */}
+        {generation.generationMode === "dream" && generation.imageUrl && (
+          <div className="border-t pt-4">
+            <img 
+              src={generation.imageUrl} 
+              alt="DREAM Journey Visualization"
+              className="w-full h-auto rounded-lg"
+              data-testid={`img-dream-thumbnail-${generation.id}`}
+            />
+          </div>
+        )}
+
         {/* Desired Outcome */}
         {generation.desiredOutcome && (
           <div>
