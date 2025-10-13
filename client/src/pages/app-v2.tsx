@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { VoicePlayer } from "@/components/voice-player";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { ArrowLeft, ArrowRight, Sparkles, Check, Sliders, User, MessageSquare, Eye, Wand2, FileText, Dices, ChevronsUpDown } from "lucide-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -117,6 +116,7 @@ export default function AppV2() {
   // Type-ahead state
   const [issueOpen, setIssueOpen] = useState(false);
   const [outcomeOpen, setOutcomeOpen] = useState(false);
+  const [issueSearch, setIssueSearch] = useState("");
   const [outcomeSearch, setOutcomeSearch] = useState("");
 
   // Recommendations state
@@ -215,6 +215,11 @@ export default function AppV2() {
     setPresentingIssue(randomIssue);
     setDesiredOutcome(randomOutcome);
   };
+
+  // Filter issues based on dropdown search input, or show all if no search
+  const filteredIssues = PRESENTING_ISSUES.filter(issue =>
+    issue.toLowerCase().includes(issueSearch.toLowerCase())
+  );
 
   // Get suggested outcomes based on selected issue
   const suggestedOutcomes = presentingIssue && ISSUE_OUTCOME_PAIRS[presentingIssue] 
@@ -384,53 +389,88 @@ export default function AppV2() {
                 <div className="space-y-2">
                   <Label htmlFor="presenting-issue">
                     Presenting Issue <span className="text-destructive">*</span>
+                    {PRESENTING_ISSUES.length > 0 && (
+                      <span className="ml-2 text-xs text-muted-foreground">
+                        ({PRESENTING_ISSUES.length} suggestions available)
+                      </span>
+                    )}
                   </Label>
-                  <Popover open={issueOpen} onOpenChange={setIssueOpen}>
-                    <PopoverTrigger asChild>
+                  <div className="relative">
+                    <Input
+                      id="presenting-issue"
+                      placeholder="Type or select presenting issue..."
+                      value={presentingIssue}
+                      onChange={(e) => setPresentingIssue(e.target.value)}
+                      onFocus={() => {
+                        if (PRESENTING_ISSUES.length > 0) {
+                          setIssueOpen(true);
+                        }
+                      }}
+                      onBlur={() => {
+                        setTimeout(() => setIssueOpen(false), 200);
+                      }}
+                      data-testid="input-presenting-issue"
+                      className="pr-10"
+                    />
+                    {PRESENTING_ISSUES.length > 0 && (
                       <Button
-                        id="presenting-issue"
-                        variant="outline"
-                        role="combobox"
-                        aria-expanded={issueOpen}
-                        className="w-full justify-between font-normal"
-                        data-testid="select-presenting-issue"
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="absolute right-0 top-0 h-full"
+                        onClick={() => setIssueOpen(!issueOpen)}
+                        data-testid="button-show-issue-suggestions"
                       >
-                        {presentingIssue || "Select or type an issue..."}
-                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        <ChevronsUpDown className="h-4 w-4" />
                       </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-full p-0" align="start">
-                      <Command>
-                        <CommandInput placeholder="Search issues..." />
-                        <CommandList>
-                          <CommandEmpty>No issue found.</CommandEmpty>
-                          <CommandGroup>
-                            {PRESENTING_ISSUES.map((issue) => (
-                              <CommandItem
-                                key={issue}
-                                value={issue}
-                                onSelect={(currentValue) => {
-                                  setPresentingIssue(currentValue === presentingIssue ? "" : currentValue);
-                                  setIssueOpen(false);
-                                }}
-                                data-testid={`option-issue-${issue.toLowerCase().replace(/\s+/g, '-')}`}
-                              >
-                                <Check
-                                  className={cn(
-                                    "mr-2 h-4 w-4",
-                                    presentingIssue === issue ? "opacity-100" : "opacity-0"
-                                  )}
-                                />
-                                {issue}
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
-                        </CommandList>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
+                    )}
+                    {issueOpen && (
+                      <div className="absolute z-50 w-full mt-1 rounded-md border bg-popover text-popover-foreground shadow-md">
+                        <Command shouldFilter={false}>
+                          <CommandInput 
+                            placeholder="Search suggestions..." 
+                            value={issueSearch}
+                            onValueChange={setIssueSearch}
+                            className="border-b"
+                          />
+                          <CommandList>
+                            {filteredIssues.length === 0 ? (
+                              <CommandEmpty>
+                                <div className="p-2 text-sm text-muted-foreground">
+                                  No matching suggestions
+                                </div>
+                              </CommandEmpty>
+                            ) : (
+                              <CommandGroup>
+                                {filteredIssues.map((issue) => (
+                                  <CommandItem
+                                    key={issue}
+                                    value={issue}
+                                    onSelect={(currentValue) => {
+                                      setPresentingIssue(currentValue);
+                                      setIssueOpen(false);
+                                      setIssueSearch("");
+                                    }}
+                                    data-testid={`option-issue-${issue.toLowerCase().replace(/\s+/g, '-')}`}
+                                  >
+                                    <Check
+                                      className={cn(
+                                        "mr-2 h-4 w-4",
+                                        presentingIssue === issue ? "opacity-100" : "opacity-0"
+                                      )}
+                                    />
+                                    {issue}
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            )}
+                          </CommandList>
+                        </Command>
+                      </div>
+                    )}
+                  </div>
                   <p className="text-xs text-muted-foreground">
-                    What challenge is your client facing?
+                    What challenge is your client facing? Type freely or select from suggestions.
                   </p>
                 </div>
 

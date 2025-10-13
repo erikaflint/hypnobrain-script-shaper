@@ -52,8 +52,9 @@ The ScriptEngine (`server/script-engine/`) is the portable IP layer responsible 
 -   **Rate Limiting (Free Tier)**: Email-based tracking with a 7-day cooldown period using upsert logic.
 -   **Dice Mix Helper (New)**: Randomly pre-fills presenting issue + contextually matched desired outcome for quick inspiration. 10 issue types, 4 curated outcomes each (40 total suggestions).
 -   **Type-Ahead Autocomplete (New)**:
-    -   **Presenting Issue**: Searchable combobox with 10 common issues
-    -   **Desired Outcome**: Context-aware suggestions based on selected issue + free-text input for custom outcomes
+    -   **Presenting Issue**: Fully editable text input with 10 common issue suggestions (not forced selection - users can type anything)
+    -   **Desired Outcome**: Context-aware suggestions based on presenting issue + free-text input for custom outcomes
+    -   Both fields allow free typing while offering helpful suggestions
     -   Helps hypnotherapists explore different script framing options
 -   **Version Control & Favorites**: 
     -   Star scripts as favorites (appears in dedicated "Favorites" section in dashboard)
