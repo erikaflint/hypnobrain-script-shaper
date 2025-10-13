@@ -27,7 +27,10 @@ export default function EditPackage() {
       scriptId: number;
       updates: any;
     }) => {
-      return await apiRequest("PATCH", `/api/packages/${id}/scripts/${scriptId}`, updates);
+      return await apiRequest(`/api/packages/${id}/scripts/${scriptId}`, {
+        method: "PATCH",
+        body: JSON.stringify(updates),
+      });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [`/api/packages/${id}`] });
@@ -36,7 +39,9 @@ export default function EditPackage() {
 
   const generateAllMutation = useMutation({
     mutationFn: async () => {
-      return await apiRequest("POST", `/api/packages/${id}/generate`, {});
+      return await apiRequest(`/api/packages/${id}/generate`, {
+        method: "POST",
+      });
     },
     onSuccess: (response) => {
       const failedCount = response.failedScripts?.length || 0;
