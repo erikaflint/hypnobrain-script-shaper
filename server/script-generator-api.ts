@@ -36,16 +36,7 @@ scriptGeneratorRouter.post('/clinical',
       const schema = z.object({
         presentingIssue: z.string().min(10, 'Presenting issue must be at least 10 characters'),
         desiredOutcome: z.string().min(10, 'Desired outcome must be at least 10 characters'),
-        dimensions: z.object({
-          cognitive: z.number().min(0).max(100),
-          emotional: z.number().min(0).max(100),
-          somatic: z.number().min(0).max(100),
-          behavioral: z.number().min(0).max(100),
-          symbolic: z.number().min(0).max(100),
-          perspective: z.number().min(0).max(100),
-          relational: z.number().min(0).max(100),
-          spiritual: z.number().min(0).max(100),
-        }),
+        templateId: z.number().optional(), // Use a specific template directly
         archetypeId: z.number().optional(),
         styleId: z.number().optional(),
         clientName: z.string().optional(),
@@ -96,20 +87,32 @@ scriptGeneratorRouter.post('/clinical',
         style = allStyles[0]; // Use first as default
       }
 
-      // Get recommended template based on issue/outcome
-      const recommendations = await templateSelector.recommendTemplates(
-        data.presentingIssue,
-        data.desiredOutcome
-      );
+      // Get template: either specified directly or via recommendation
+      let template;
+      if (data.templateId) {
+        template = await storage.getTemplateById(data.templateId);
+        if (!template) {
+          return res.status(404).json({ 
+            error: 'Template not found',
+            message: `Template with ID ${data.templateId} does not exist`
+          });
+        }
+      } else {
+        // Get recommended template based on issue/outcome
+        const recommendations = await templateSelector.recommendTemplates(
+          data.presentingIssue,
+          data.desiredOutcome
+        );
 
-      if (recommendations.length === 0) {
-        return res.status(500).json({ 
-          error: 'Template not found',
-          message: 'No suitable template found for this request'
-        });
+        if (recommendations.length === 0) {
+          return res.status(500).json({ 
+            error: 'Template not found',
+            message: 'No suitable template found for this request'
+          });
+        }
+
+        template = recommendations[0].template;
       }
-
-      const template = recommendations[0].template;
       const templateJson = typeof template.jsonData === 'string' 
         ? JSON.parse(template.jsonData) 
         : template.jsonData;
@@ -139,7 +142,6 @@ scriptGeneratorRouter.post('/clinical',
           text: result.fullScript,
           wordCount: result.fullScript.split(' ').length,
           emergenceType: data.emergenceType,
-          dimensions: data.dimensions,
         },
         metadata: {
           apiKeyId: req.apiKey.id,
@@ -147,6 +149,7 @@ scriptGeneratorRouter.post('/clinical',
           archetypeUsed: archetype?.name,
           styleUsed: style?.name,
           templateUsed: template.name,
+          templateId: template.id,
         }
       });
 
