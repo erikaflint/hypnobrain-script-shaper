@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useRoute, Link } from "wouter";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { VoicePlayer } from "@/components/voice-player";
@@ -15,13 +15,24 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
+import type { CarouselApi } from "@/components/ui/carousel";
 
 export default function DreamView() {
   const [, params] = useRoute("/dream/:id/view");
   const dreamId = params?.id;
+  const [api, setApi] = useState<CarouselApi>();
+  const [currentSlide, setCurrentSlide] = useState(0);
   const autoplayPlugin = useRef(
     Autoplay({ delay: 8000, stopOnInteraction: false })
   );
+
+  useEffect(() => {
+    if (!api) return;
+
+    api.on("select", () => {
+      setCurrentSlide(api.selectedScrollSnap());
+    });
+  }, [api]);
 
   const { data: dream, isLoading } = useQuery<Generation>({
     queryKey: [`/api/generations/${dreamId}`],
@@ -58,43 +69,13 @@ export default function DreamView() {
 
   return (
     <div className="relative min-h-screen">
-      {/* Full-screen background with cinematic carousel */}
+      {/* Full-screen blurred background - syncs with carousel */}
       {displayImages.length > 0 && (
-        <div className="fixed inset-0">
-          {hasMultipleImages ? (
-            <Carousel
-              opts={{
-                align: "start",
-                loop: true,
-              }}
-              plugins={[autoplayPlugin.current]}
-              className="w-full h-full"
-            >
-              <CarouselContent className="h-screen">
-                {displayImages.map((imageUrl, index) => (
-                  <CarouselItem key={index} className="h-screen">
-                    <div 
-                      className="w-full h-full bg-cover bg-center transition-all duration-1000"
-                      style={{ backgroundImage: `url(${imageUrl})` }}
-                    >
-                      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
-                    </div>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-2">
-                <CarouselPrevious className="relative inset-0 transform-none bg-background/80 backdrop-blur-sm" />
-                <CarouselNext className="relative inset-0 transform-none bg-background/80 backdrop-blur-sm" />
-              </div>
-            </Carousel>
-          ) : (
-            <div 
-              className="w-full h-full bg-cover bg-center"
-              style={{ backgroundImage: `url(${displayImages[0]})` }}
-            >
-              <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
-            </div>
-          )}
+        <div 
+          className="fixed inset-0 bg-cover bg-center transition-all duration-1000"
+          style={{ backgroundImage: `url(${displayImages[currentSlide] || displayImages[0]})` }}
+        >
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-md" />
         </div>
       )}
 
@@ -102,6 +83,51 @@ export default function DreamView() {
       <div className="relative z-10">
         <AppHeader showDreamboard={true} />
       </div>
+
+      {/* Prominent Image Carousel at Top */}
+      {displayImages.length > 0 && (
+        <div className="relative z-10 container mx-auto px-4 pt-4">
+          <div className="max-w-6xl mx-auto">
+            {hasMultipleImages ? (
+              <Carousel
+                setApi={setApi}
+                opts={{
+                  align: "start",
+                  loop: true,
+                }}
+                plugins={[autoplayPlugin.current]}
+                className="w-full"
+              >
+                <CarouselContent>
+                  {displayImages.map((imageUrl, index) => (
+                    <CarouselItem key={index}>
+                      <div className="relative aspect-[21/9] rounded-lg overflow-hidden">
+                        <img 
+                          src={imageUrl} 
+                          alt={`Scene ${index + 1}`}
+                          className="w-full h-full object-cover transition-all duration-1000"
+                        />
+                      </div>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+                  <CarouselPrevious className="relative inset-0 transform-none bg-background/80 backdrop-blur-sm" />
+                  <CarouselNext className="relative inset-0 transform-none bg-background/80 backdrop-blur-sm" />
+                </div>
+              </Carousel>
+            ) : (
+              <div className="relative aspect-[21/9] rounded-lg overflow-hidden">
+                <img 
+                  src={displayImages[0]} 
+                  alt="Dream scene"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 py-8">
