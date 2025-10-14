@@ -205,7 +205,7 @@ export default function Dreamboard() {
         {/* Header */}
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1">
-            <h2 className="text-2xl font-bold mb-2" data-testid={`script-title-${generation.id}`}>
+            <h2 className="text-3xl font-bold mb-2 text-primary" data-testid={`script-title-${generation.id}`}>
               {generation.title || generation.presentingIssue || "Hypnosis Script"}
               {generation.versionLabel && (
                 <span className="ml-2 text-base font-normal text-muted-foreground">
