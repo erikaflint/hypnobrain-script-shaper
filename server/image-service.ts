@@ -100,3 +100,56 @@ High-quality digital art with soothing visual elements perfect for relaxation an
     style: 'natural', // 'natural' style is better for calm, peaceful imagery
   });
 }
+
+/**
+ * Generate 3 cinematic scene images (beginning, middle, end) for a DREAM journey
+ * @param scenes - Object with beginning, middle, end scene descriptions
+ * @param archetypeName - Optional archetype name for style influence
+ * @returns Array of 3 image URLs in order [beginning, middle, end]
+ */
+export async function generateDreamSceneImages(
+  scenes: { beginning: string; middle: string; end: string },
+  archetypeName?: string
+): Promise<string[]> {
+  console.log('[IMAGE-SERVICE] Generating 3 cinematic scene images...');
+  
+  const archetypeModifier = archetypeName 
+    ? ` Incorporate the essence of "${archetypeName}" archetype in the visual mood and atmosphere (keeping it gentle and peaceful).`
+    : '';
+
+  // Generate all 3 images in parallel for speed
+  const imagePromises = [
+    generateImage({
+      prompt: `Create a serene, dreamlike landscape illustration: ${scenes.beginning}. 
+Style: Soft, ethereal, calming colors with gentle gradients. Peaceful, safe, and inviting atmosphere.
+CRITICAL: NO people, NO text, ONLY gentle peaceful landscape.
+High-quality digital art with soothing visual elements perfect for relaxation and sleep.${archetypeModifier}`,
+      size: '1024x1024',
+      quality: 'standard',
+      style: 'natural',
+    }),
+    generateImage({
+      prompt: `Create a serene, dreamlike landscape illustration: ${scenes.middle}. 
+Style: Soft, ethereal, calming colors with gentle gradients. Peaceful, safe, and inviting atmosphere.
+CRITICAL: NO people, NO text, ONLY gentle peaceful landscape.
+High-quality digital art with soothing visual elements perfect for relaxation and sleep.${archetypeModifier}`,
+      size: '1024x1024',
+      quality: 'standard',
+      style: 'natural',
+    }),
+    generateImage({
+      prompt: `Create a serene, dreamlike landscape illustration: ${scenes.end}. 
+Style: Soft, ethereal, calming colors with gentle gradients. Peaceful, safe, and inviting atmosphere.
+CRITICAL: NO people, NO text, ONLY gentle peaceful landscape.
+High-quality digital art with soothing visual elements perfect for relaxation and sleep.${archetypeModifier}`,
+      size: '1024x1024',
+      quality: 'standard',
+      style: 'natural',
+    }),
+  ];
+
+  const imageUrls = await Promise.all(imagePromises);
+  console.log('[IMAGE-SERVICE] ✓ All 3 scene images generated successfully');
+  
+  return imageUrls;
+}

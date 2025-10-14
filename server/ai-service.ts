@@ -533,6 +533,59 @@ Format as JSON:
     const result = JSON.parse(cleanJsonResponse(textContent.text));
     return result.title;
   }
+
+  /**
+   * Generate 3 distinct scene descriptions (beginning, middle, end) for cinematic DREAM imagery
+   */
+  async generateDreamScenes(params: { 
+    journeyIdea: string; 
+    archetypeName: string;
+    fullScript: string;
+  }): Promise<{ beginning: string; middle: string; end: string }> {
+    const systemPrompt = `You are an expert at extracting visual scenes from sleep hypnosis scripts for image generation.
+
+Your task is to identify 3 distinct moments in the journey that would make beautiful, cinematic scenes:
+1. BEGINNING - The opening scene/setting where the journey starts
+2. MIDDLE - The peak moment of exploration or discovery
+3. END - The peaceful resolution or final resting place
+
+For each scene, describe ONLY the environment and landscape in visual terms - no people, no actions, just the setting itself.`;
+
+    const userPrompt = `Journey Idea: ${params.journeyIdea}
+Archetype: ${params.archetypeName}
+
+Full Script:
+${params.fullScript}
+
+Extract 3 visual scenes from this journey. Each description should be:
+- 1-2 sentences describing ONLY the landscape/environment
+- Peaceful, serene, and calming
+- Specific enough to create a distinct visual image
+- NO people, human figures, or characters
+- NO text or words in the scene
+
+Format as JSON:
+{
+  "beginning": "Visual description of the opening scene/setting",
+  "middle": "Visual description of the peak exploration moment",
+  "end": "Visual description of the peaceful ending place"
+}`;
+
+    const response = await anthropic.messages.create({
+      model: DEFAULT_MODEL_STR,
+      max_tokens: 500,
+      system: systemPrompt,
+      messages: [{ role: 'user', content: userPrompt }],
+    });
+
+    const textContent = response.content[0];
+    if (textContent.type !== 'text') {
+      throw new Error('Expected text response from AI');
+    }
+    
+    const result = JSON.parse(cleanJsonResponse(textContent.text));
+    return result;
+  }
 }
 
 export const aiService = new AIService();

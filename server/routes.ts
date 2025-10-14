@@ -510,8 +510,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Content moderation check before image generation
       let thumbnailUrl: string | undefined;
+      let imageUrls: string[] | undefined;
       try {
-        console.log('[DREAM] Starting thumbnail generation for journey:', journeyIdea.substring(0, 50));
+        console.log('[DREAM] Starting cinematic scene generation for journey:', journeyIdea.substring(0, 50));
         const OpenAI = (await import('openai')).default;
         const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
         
@@ -528,23 +529,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
           console.log('[DREAM] Journey idea flagged by moderation, skipping image generation');
           // Don't generate image for flagged content, but allow script to continue
         } else {
-          // Content is safe - generate thumbnail
-          console.log('[DREAM] Content safe, calling DALL-E to generate thumbnail...');
-          const { generateDreamThumbnail } = await import('./image-service');
-          thumbnailUrl = await generateDreamThumbnail(journeyIdea, archetype.name);
-          console.log('[DREAM] ✓ Thumbnail generated successfully:', thumbnailUrl);
+          // Content is safe - generate 3 cinematic scene images
+          console.log('[DREAM] Content safe, extracting 3 scenes from script...');
+          const scenes = await aiService.generateDreamScenes({
+            journeyIdea,
+            archetypeName: archetype.name,
+            fullScript: result.fullScript,
+          });
+          console.log('[DREAM] ✓ Scenes extracted:', { beginning: scenes.beginning.substring(0, 50), middle: scenes.middle.substring(0, 50), end: scenes.end.substring(0, 50) });
+          
+          console.log('[DREAM] Generating 3 DALL-E images (beginning, middle, end)...');
+          const { generateDreamSceneImages } = await import('./image-service');
+          imageUrls = await generateDreamSceneImages(scenes, archetype.name);
+          thumbnailUrl = imageUrls[0]; // First image for backwards compatibility
+          console.log('[DREAM] ✓ All 3 scene images generated successfully');
         }
       } catch (imageError: any) {
-        console.error('[DREAM] ✗ Thumbnail generation FAILED:', imageError.message);
+        console.error('[DREAM] ✗ Scene image generation FAILED:', imageError.message);
         console.error('[DREAM] Full error:', imageError);
-        // Continue without image - don't fail the entire request
+        // Continue without images - don't fail the entire request
       }
       
       // Save to database
       const generation = await storage.createGeneration({
         userId,
         title: dreamTitle,
-        imageUrl: thumbnailUrl,  // Save the generated image URL
+        imageUrl: thumbnailUrl,  // First image for backwards compatibility
+        imageUrls,  // NEW: All 3 scene images
         generationMode: 'dream', // New mode for DREAM scripts
         isFree: false,
         presentingIssue: journeyIdea,
