@@ -4,8 +4,8 @@
  */
 
 import { createApiKey } from './server/admin-tools';
-import { db } from './db';
-import { users } from '@shared/schema';
+import { db } from './server/db';
+import { users } from './shared/schema';
 import { eq } from 'drizzle-orm';
 
 async function main() {

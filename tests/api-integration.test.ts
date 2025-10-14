@@ -4,7 +4,7 @@
  */
 
 import { describe, it, expect, beforeAll } from 'vitest';
-import { db } from '../db';
+import { db } from '../server/db';
 import { apiKeys, users } from '../shared/schema';
 import { generateApiKey, hashApiKey } from '../server/apiKeyAuth';
 import { eq } from 'drizzle-orm';

@@ -60,12 +60,33 @@ export async function analyzeScript(
   }
 
   try {
-    const analysis = JSON.parse(content.text);
+    const cleanedText = stripMarkdownCodeFences(content.text);
+    const analysis = JSON.parse(cleanedText);
     return analysis;
   } catch (error) {
     console.error('Failed to parse analysis response:', content.text);
     throw new Error('Failed to parse analysis results');
   }
+}
+
+/**
+ * Strips markdown code fences (```json ... ```) from AI responses
+ */
+function stripMarkdownCodeFences(text: string): string {
+  // Remove ```json at start and ``` at end
+  let cleaned = text.trim();
+  
+  if (cleaned.startsWith('```json')) {
+    cleaned = cleaned.replace(/^```json\s*\n?/, '');
+  } else if (cleaned.startsWith('```')) {
+    cleaned = cleaned.replace(/^```\s*\n?/, '');
+  }
+  
+  if (cleaned.endsWith('```')) {
+    cleaned = cleaned.replace(/\n?```\s*$/, '');
+  }
+  
+  return cleaned.trim();
 }
 
 function getClinicalAnalysisPrompt(scriptText: string): string {
