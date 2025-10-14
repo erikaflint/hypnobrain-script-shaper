@@ -412,79 +412,98 @@ export default function Dream() {
             </Card>
           </div>
         ) : (
-          // Generated Script Display
-          <div className="space-y-6">
-            <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold">Your DREAM Journey</h2>
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setGeneratedScript(null);
-                  setExpandedStory(null); // Reset story shaper
-                  setJourneyIdea("");
-                  setThumbnailUrl(null);
-                }}
-                data-testid="button-create-another"
-              >
-                Create Another
-              </Button>
-            </div>
-
-            {/* Thumbnail Image */}
+          // Generated Script Display with Full Background
+          <div className="fixed inset-0 z-40">
+            {/* Full-screen background image */}
             {thumbnailUrl && (
-              <Card className="overflow-hidden">
+              <div className="absolute inset-0">
                 <img 
                   src={thumbnailUrl} 
-                  alt="DREAM Journey Visualization"
-                  className="w-full h-auto"
-                  data-testid="img-dream-thumbnail"
+                  alt="DREAM Journey Background"
+                  className="w-full h-full object-cover"
                 />
-              </Card>
+                {/* Dark overlay for text readability */}
+                <div className="absolute inset-0 bg-black/40" />
+              </div>
             )}
 
-            {/* Voice Player */}
-            <VoicePlayer text={generatedScript} title="Listen to Your Journey" />
+            {/* Content overlay - scrollable */}
+            <div className="relative z-10 h-full overflow-y-auto">
+              <div className="container max-w-4xl mx-auto p-6 space-y-6">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-2xl font-bold text-white">Your DREAM Journey</h2>
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setGeneratedScript(null);
+                      setExpandedStory(null); // Reset story shaper
+                      setJourneyIdea("");
+                      setThumbnailUrl(null);
+                    }}
+                    data-testid="button-create-another"
+                    className="bg-background/80 backdrop-blur-sm hover:bg-background/90"
+                  >
+                    Create Another
+                  </Button>
+                </div>
 
-            {/* Script Display */}
-            <Card className="p-8">
-              <div className="prose prose-lg max-w-none dark:prose-invert">
-                <pre className="whitespace-pre-wrap font-sans text-base leading-relaxed">
-                  {generatedScript}
-                </pre>
+                {/* Thumbnail Image Hero */}
+                {thumbnailUrl && (
+                  <Card className="overflow-hidden">
+                    <img 
+                      src={thumbnailUrl} 
+                      alt="DREAM Journey Visualization"
+                      className="w-full h-auto"
+                      data-testid="img-dream-thumbnail"
+                    />
+                  </Card>
+                )}
+
+                {/* Voice Player */}
+                <VoicePlayer text={generatedScript} title="Listen to Your Journey" />
+
+                {/* Script Display */}
+                <Card className="p-8 bg-background/95 backdrop-blur-sm">
+                  <div className="prose prose-lg max-w-none dark:prose-invert">
+                    <pre className="whitespace-pre-wrap font-sans text-base leading-relaxed">
+                      {generatedScript}
+                    </pre>
+                  </div>
+                </Card>
+
+                {/* Download Options */}
+                <div className="flex gap-4 pb-6">
+                  <Button
+                    variant="outline"
+                    className="flex-1 bg-background/80 backdrop-blur-sm hover:bg-background/90"
+                    onClick={() => {
+                      const blob = new Blob([generatedScript], { type: 'text/plain' });
+                      const url = URL.createObjectURL(blob);
+                      const a = document.createElement('a');
+                      a.href = url;
+                      a.download = 'dream-hypnosis-journey.txt';
+                      a.click();
+                    }}
+                    data-testid="button-download-txt"
+                  >
+                    Download as TXT
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="flex-1 bg-background/80 backdrop-blur-sm hover:bg-background/90"
+                    onClick={() => {
+                      navigator.clipboard.writeText(generatedScript);
+                      toast({
+                        title: "Copied!",
+                        description: "Script copied to clipboard",
+                      });
+                    }}
+                    data-testid="button-copy"
+                  >
+                    Copy to Clipboard
+                  </Button>
+                </div>
               </div>
-            </Card>
-
-            {/* Download Options */}
-            <div className="flex gap-4">
-              <Button
-                variant="outline"
-                className="flex-1"
-                onClick={() => {
-                  const blob = new Blob([generatedScript], { type: 'text/plain' });
-                  const url = URL.createObjectURL(blob);
-                  const a = document.createElement('a');
-                  a.href = url;
-                  a.download = 'dream-hypnosis-journey.txt';
-                  a.click();
-                }}
-                data-testid="button-download-txt"
-              >
-                Download as TXT
-              </Button>
-              <Button
-                variant="outline"
-                className="flex-1"
-                onClick={() => {
-                  navigator.clipboard.writeText(generatedScript);
-                  toast({
-                    title: "Copied!",
-                    description: "Script copied to clipboard",
-                  });
-                }}
-                data-testid="button-copy"
-              >
-                Copy to Clipboard
-              </Button>
             </div>
           </div>
         )}
