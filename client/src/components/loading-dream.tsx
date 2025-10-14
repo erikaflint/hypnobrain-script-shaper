@@ -38,12 +38,15 @@ export function LoadingDream({
       ? userThumbnails 
       : PEACEFUL_IMAGES.map(img => img.url);
 
-  // Reset to index 0 when final image arrives
+  // Reset to index 0 when final image arrives OR when imagesToShow changes
   useEffect(() => {
     if (finalImage) {
       setCurrentImageIndex(0); // Show the final image
+    } else {
+      // Reset to 0 when imagesToShow array changes (e.g., query completes)
+      setCurrentImageIndex(prev => prev >= imagesToShow.length ? 0 : prev);
     }
-  }, [finalImage]);
+  }, [finalImage, imagesToShow.length]);
 
   // Rotate through images every 3 seconds (but stop if final image is set)
   useEffect(() => {
