@@ -199,15 +199,18 @@ export class DatabaseStorage implements IStorage {
         )
       )
       .orderBy(desc(generations.createdAt))
-      .limit(100); // Get up to 100 to filter, then limit to 50 permanent URLs
+      .limit(100); // Get up to 100 to filter, then limit to 50 valid URLs
     
-    // Filter out expired DALL-E URLs (only keep permanent object storage URLs)
-    const permanentUrls = results
+    // Filter out expired DALL-E URLs (keep permanent storage + Unsplash placeholders)
+    const validUrls = results
       .map(r => r.imageUrl as string)
-      .filter(url => url.startsWith('/public-objects/'))
+      .filter(url => 
+        url.startsWith('/public-objects/') || // Permanent storage
+        url.startsWith('https://images.unsplash.com/') // Unsplash placeholders
+      )
       .slice(0, 50); // Limit to 50 after filtering
     
-    return permanentUrls;
+    return validUrls;
   }
   
   async updateGenerationPaymentStatus(id: number, paymentStatus: string): Promise<void> {
