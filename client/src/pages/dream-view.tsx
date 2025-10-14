@@ -1,15 +1,27 @@
 import { useQuery } from "@tanstack/react-query";
 import { useRoute, Link } from "wouter";
+import { useRef } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { VoicePlayer } from "@/components/voice-player";
 import { ArrowLeft } from "lucide-react";
 import { AppHeader } from "@/components/app-header";
 import type { Generation } from "@shared/schema";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
 
 export default function DreamView() {
   const [, params] = useRoute("/dream/:id/view");
   const dreamId = params?.id;
+  const autoplayPlugin = useRef(
+    Autoplay({ delay: 8000, stopOnInteraction: false })
+  );
 
   const { data: dream, isLoading } = useQuery<Generation>({
     queryKey: [`/api/generations/${dreamId}`],
@@ -40,15 +52,49 @@ export default function DreamView() {
     );
   }
 
+  // Check if we have multiple images for cinematic experience
+  const hasMultipleImages = dream.imageUrls && dream.imageUrls.length > 1;
+  const displayImages = hasMultipleImages ? dream.imageUrls : (dream.imageUrl ? [dream.imageUrl] : []);
+
   return (
     <div className="relative min-h-screen">
-      {/* Full-screen background with dream thumbnail */}
-      {dream.imageUrl && (
-        <div 
-          className="fixed inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${dream.imageUrl})` }}
-        >
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
+      {/* Full-screen background with cinematic carousel */}
+      {displayImages.length > 0 && (
+        <div className="fixed inset-0">
+          {hasMultipleImages ? (
+            <Carousel
+              opts={{
+                align: "start",
+                loop: true,
+              }}
+              plugins={[autoplayPlugin.current]}
+              className="w-full h-full"
+            >
+              <CarouselContent className="h-screen">
+                {displayImages.map((imageUrl, index) => (
+                  <CarouselItem key={index} className="h-screen">
+                    <div 
+                      className="w-full h-full bg-cover bg-center transition-all duration-1000"
+                      style={{ backgroundImage: `url(${imageUrl})` }}
+                    >
+                      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-2">
+                <CarouselPrevious className="relative inset-0 transform-none bg-background/80 backdrop-blur-sm" />
+                <CarouselNext className="relative inset-0 transform-none bg-background/80 backdrop-blur-sm" />
+              </div>
+            </Carousel>
+          ) : (
+            <div 
+              className="w-full h-full bg-cover bg-center"
+              style={{ backgroundImage: `url(${displayImages[0]})` }}
+            >
+              <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
+            </div>
+          )}
         </div>
       )}
 
