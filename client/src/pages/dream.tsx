@@ -197,6 +197,7 @@ export default function Dream() {
       <AppHeader 
         showBack={true}
         title="DREAM Hypnosis"
+        showDreamLibrary={true}
         icon={<Moon className="w-5 h-5 text-primary" />}
         showDreamboard={true}
       />

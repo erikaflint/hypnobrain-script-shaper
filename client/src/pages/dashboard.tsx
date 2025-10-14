@@ -80,6 +80,7 @@ export default function Dreamboard() {
       <AppHeader 
         title="HypnoBrain Script Shaper"
         showDreamLink={true}
+        showDreamLibrary={true}
         showCreateScript={true}
         showAdminLink={true}
         rightContent={

@@ -353,6 +353,7 @@ export default function AppV2() {
       <AppHeader 
         showBack={true}
         title="HypnoBrain Script Shaper"
+        showDreamLibrary={true}
         subtitle={
           step === "intake" ? "Step 1: Client Intake" :
           step === "recommendations" ? "Step 2: Choose Template" :
