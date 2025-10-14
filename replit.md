@@ -17,7 +17,8 @@ Do not make changes to the file Y.
 -   **Backend**: Express.js + TypeScript
 -   **Database**: PostgreSQL (Neon) + Drizzle ORM
 -   **Authentication**: Replit Auth (OpenID Connect)
--   **AI**: Anthropic Claude Sonnet 4
+-   **AI**: Anthropic Claude Sonnet 4, OpenAI DALL-E 3
+-   **Object Storage**: Replit App Storage (Google Cloud Storage)
 -   **Styling**: Tailwind CSS + shadcn/ui components
 -   **State Management**: TanStack Query (React Query v5)
 
@@ -36,7 +37,9 @@ The ScriptEngine (`server/script-engine/`) is the IP layer transforming template
 -   **Version Control & Favorites**: Star scripts, parent-child tracking for remixes, and API endpoints for managing them.
 -   **Save/Apply Mix (Custom Templates)**: Users can save and apply custom dimension configurations.
 -   **Script Package Generator**: Allows creating sellable collections of themed scripts, with AI generating concepts, and user modification and generation.
--   **DREAM Hypnosis Series**: Generates non-clinical, 30-minute immersive sleep/meditation scripts (3000 words). Features journey-based input, sleep emergence, high somatic/symbolic emphasis, a Two-Step Story Shaper to reduce AI repetition, playful loading experience, and AI-generated serene thumbnails (DALL-E 3). Includes 13 DREAM-specific Narrative Arcs and 8 Blended Archetypes. Also offers voice controls for playback.
+-   **DREAM Hypnosis Series**: Generates non-clinical, 30-minute immersive sleep/meditation scripts (3000 words). Features journey-based input, sleep emergence, high somatic/symbolic emphasis, a Two-Step Story Shaper to reduce AI repetition, full-screen crowdsourced loading carousel, and AI-generated serene thumbnails (DALL-E 3) with permanent storage. Includes 13 DREAM-specific Narrative Arcs and 8 Blended Archetypes. Also offers voice controls for playback.
+-   **Permanent Thumbnail Storage**: DALL-E generated images are immediately downloaded and stored permanently in Replit App Storage (expires in 1 hour if not saved). Thumbnails are served via `/public-objects/dream-thumbnails/{uuid}.png` with 1-year cache headers.
+-   **Crowdsourced Loading Carousel**: Full-screen immersive loading experience displays up to 50 recent DREAM thumbnails from ALL users (not just current user) to create a community-driven calming experience. Falls back to curated Unsplash landscapes for first-time users.
 
 ### UI/UX Decisions
 -   **Design System**: Purple accent colors, dark mode, DAW-inspired interface, Inter, DM Sans, and JetBrains Mono fonts. Uses shadcn/ui components.
