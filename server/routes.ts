@@ -13,10 +13,23 @@ import { analyzeScript } from "./script-analyzer";
 import { z } from "zod";
 import { validateContent, validateMultipleFields } from "./content-validator";
 import { ObjectStorageService } from "./objectStorage";
+import express from "express";
+import path from "path";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Set up Replit Auth
   await setupAuth(app);
+
+  // Serve static files from public directory via dedicated route
+  app.get('/static/:filename', (req, res) => {
+    const filename = req.params.filename;
+    const filePath = path.join(process.cwd(), 'public', filename);
+    res.sendFile(filePath, (err) => {
+      if (err) {
+        res.status(404).json({ error: 'File not found' });
+      }
+    });
+  });
 
   // From blueprint: javascript_object_storage - Serve public objects (DALL-E images)
   app.get("/public-objects/:filePath(*)", async (req, res) => {
