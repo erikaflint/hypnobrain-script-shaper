@@ -1,4 +1,5 @@
 import OpenAI from 'openai';
+import { ObjectStorageService } from './objectStorage';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -32,19 +33,34 @@ export async function generateImage(options: ImageGenerationOptions): Promise<st
       style,
     });
 
-    const imageUrl = response.data[0]?.url;
-    console.log('[IMAGE-SERVICE] DALL-E response received, URL:', imageUrl ? 'YES' : 'NO');
+    const tempImageUrl = response.data[0]?.url;
+    console.log('[IMAGE-SERVICE] DALL-E response received, temp URL:', tempImageUrl ? 'YES' : 'NO');
     
-    if (!imageUrl) {
+    if (!tempImageUrl) {
       throw new Error('No image URL returned from DALL-E');
     }
 
-    console.log('[IMAGE-SERVICE] ✓ Image URL:', imageUrl);
-    return imageUrl;
+    console.log('[IMAGE-SERVICE] ✓ Temp URL received, downloading image...');
+    
+    // Download the image from DALL-E (URLs expire after 1 hour)
+    const imageResponse = await fetch(tempImageUrl);
+    if (!imageResponse.ok) {
+      throw new Error(`Failed to download image from DALL-E: ${imageResponse.statusText}`);
+    }
+    
+    const imageBuffer = Buffer.from(await imageResponse.arrayBuffer());
+    console.log('[IMAGE-SERVICE] ✓ Image downloaded, size:', imageBuffer.length, 'bytes');
+    
+    // Store permanently in object storage
+    const objectStorageService = new ObjectStorageService();
+    const permanentUrl = await objectStorageService.uploadDreamImage(imageBuffer);
+    console.log('[IMAGE-SERVICE] ✓ Image stored permanently:', permanentUrl);
+    
+    return permanentUrl;
   } catch (error: any) {
-    console.error('[IMAGE-SERVICE] ✗ DALL-E image generation error:', error.message);
+    console.error('[IMAGE-SERVICE] ✗ Image generation/storage error:', error.message);
     console.error('[IMAGE-SERVICE] Error details:', error);
-    throw new Error(`Failed to generate image: ${error.message}`);
+    throw new Error(`Failed to generate and store image: ${error.message}`);
   }
 }
 

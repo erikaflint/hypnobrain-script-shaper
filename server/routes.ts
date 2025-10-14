@@ -10,10 +10,27 @@ import { setupAuth, isAuthenticated } from "./replitAuth";
 import { isAdmin } from "./adminAuth";
 import { z } from "zod";
 import { validateContent, validateMultipleFields } from "./content-validator";
+import { ObjectStorageService } from "./objectStorage";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Set up Replit Auth
   await setupAuth(app);
+
+  // From blueprint: javascript_object_storage - Serve public objects (DALL-E images)
+  app.get("/public-objects/:filePath(*)", async (req, res) => {
+    const filePath = req.params.filePath;
+    const objectStorageService = new ObjectStorageService();
+    try {
+      const file = await objectStorageService.searchPublicObject(filePath);
+      if (!file) {
+        return res.status(404).json({ error: "File not found" });
+      }
+      objectStorageService.downloadObject(file, res);
+    } catch (error) {
+      console.error("Error searching for public object:", error);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  });
 
   // Auth user endpoint
   app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
@@ -78,11 +95,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  // Get authenticated user's DREAM thumbnails for loading carousel
-  app.get("/api/user/dream-thumbnails", isAuthenticated, async (req: any, res) => {
+  // Get ALL DREAM thumbnails for crowdsourced loading carousel (no auth required)
+  app.get("/api/user/dream-thumbnails", async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
-      const thumbnails = await storage.getDreamThumbnailsByUserId(userId);
+      const thumbnails = await storage.getAllDreamThumbnails();
       res.json(thumbnails);
     } catch (error: any) {
       res.status(500).json({ message: error.message });

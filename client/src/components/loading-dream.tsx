@@ -93,7 +93,7 @@ export function LoadingDream({
               
               <p className="text-muted-foreground">
                 {userThumbnails.length > 0 
-                  ? `Surrounded by your ${imagesToShow.length} previous DREAM journey${imagesToShow.length === 1 ? '' : 's'}`
+                  ? `Surrounded by ${imagesToShow.length} peaceful journey${imagesToShow.length === 1 ? '' : 's'} from our community`
                   : 'Weaving together gentle landscapes and soothing imagery just for you'
                 }
               </p>
