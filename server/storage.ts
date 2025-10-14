@@ -59,6 +59,7 @@ export interface IStorage {
   updateGenerationPaymentStatus(id: number, paymentStatus: string): Promise<void>;
   updateGenerationScript(id: number, fullScript: string): Promise<void>;
   updateGenerationFavorite(id: number, isFavorite: boolean): Promise<Generation>;
+  deleteGeneration(id: number): Promise<void>;
   
   // Free script usage tracking
   checkFreeEligibility(email: string): Promise<boolean>;
@@ -240,6 +241,10 @@ export class DatabaseStorage implements IStorage {
       .where(eq(generations.id, id))
       .returning();
     return result[0];
+  }
+  
+  async deleteGeneration(id: number): Promise<void> {
+    await db.delete(generations).where(eq(generations.id, id));
   }
   
   // Free script usage tracking

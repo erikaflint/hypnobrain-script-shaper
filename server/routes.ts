@@ -160,6 +160,55 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Update script text
+  app.patch("/api/generations/:id/script", isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const { fullScript } = req.body;
+      const userId = req.user.claims.sub;
+      
+      const generation = await storage.getGenerationById(id);
+      if (!generation) {
+        return res.status(404).json({ error: "Generation not found" });
+      }
+      
+      // Verify ownership
+      if (generation.userId !== userId) {
+        return res.status(403).json({ error: "Not authorized to edit this generation" });
+      }
+      
+      await storage.updateGenerationScript(id, fullScript);
+      res.json({ success: true });
+    } catch (error: any) {
+      console.error("Error updating script:", error);
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // Delete a generation
+  app.delete("/api/generations/:id", isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      const generation = await storage.getGenerationById(id);
+      
+      if (!generation) {
+        return res.status(404).json({ error: "Generation not found" });
+      }
+      
+      // Verify ownership
+      if (generation.userId !== userId) {
+        return res.status(403).json({ error: "Not authorized to delete this generation" });
+      }
+      
+      await storage.deleteGeneration(id);
+      res.json({ success: true });
+    } catch (error: any) {
+      console.error("Error deleting generation:", error);
+      res.status(500).json({ error: error.message });
+    }
+  });
+
   // Create a remix from an existing generation
   app.post("/api/generations/:id/remix", async (req, res) => {
     try {

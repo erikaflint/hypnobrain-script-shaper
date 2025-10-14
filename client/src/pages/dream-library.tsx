@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -11,11 +11,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
 import { AppHeader } from "@/components/app-header";
 import { VoicePlayer } from "@/components/voice-player";
-import { Search, Star, Calendar, Play, X, ChevronLeft, ChevronRight, Maximize2, Minimize2 } from "lucide-react";
+import { Search, Star, Calendar, Play, X, ChevronLeft, ChevronRight, Maximize2, Minimize2, Trash2, Edit } from "lucide-react";
 import type { Generation } from "@shared/schema";
 import { format } from "date-fns";
+import { queryClient, apiRequest } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
 import {
   Carousel,
   CarouselContent,
@@ -43,6 +54,85 @@ export default function DreamLibrary() {
     queryKey: ["/api/generations", selectedDream?.id],
     enabled: !!selectedDream?.id,
   });
+
+  const { toast } = useToast();
+
+  // Delete mutation
+  const deleteMutation = useMutation({
+    mutationFn: async (id: number) => {
+      return apiRequest(`/api/generations/${id}`, { method: "DELETE" });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/user/generations"] });
+      toast({
+        title: "Dream deleted",
+        description: "Your dream journey has been removed.",
+      });
+      // Close player if the deleted dream was selected
+      if (selectedDream && deletedDreamId === selectedDream.id) {
+        closeDreamPlayer();
+      }
+    },
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Failed to delete dream. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const [deletedDreamId, setDeletedDreamId] = useState<number | null>(null);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [editedScript, setEditedScript] = useState("");
+
+  const handleDelete = (e: React.MouseEvent, dreamId: number) => {
+    e.stopPropagation(); // Prevent card click
+    setDeletedDreamId(dreamId);
+    if (confirm("Are you sure you want to delete this dream journey?")) {
+      deleteMutation.mutate(dreamId);
+    }
+  };
+
+  // Edit mutation
+  const editMutation = useMutation({
+    mutationFn: async ({ id, script }: { id: number; script: string }) => {
+      return apiRequest(`/api/generations/${id}/script`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ fullScript: script }),
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/user/generations"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/generations", selectedDream?.id] });
+      setIsEditDialogOpen(false);
+      toast({
+        title: "Script updated",
+        description: "Your dream script has been saved.",
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Failed to update script. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleEditClick = () => {
+    if (dreamDetails?.fullScript) {
+      setEditedScript(dreamDetails.fullScript);
+      setIsEditDialogOpen(true);
+    }
+  };
+
+  const handleSaveEdit = () => {
+    if (selectedDream && editedScript) {
+      editMutation.mutate({ id: selectedDream.id, script: editedScript });
+    }
+  };
 
   // Filter only DREAM journeys
   const dreams = generations?.filter(g => g.generationMode === "dream") || [];
@@ -281,6 +371,17 @@ export default function DreamLibrary() {
                         <Star className="w-5 h-5 text-primary fill-current drop-shadow-md" />
                       </div>
                     )}
+
+                    {/* Delete Button (shows on hover) */}
+                    <Button
+                      variant="destructive"
+                      size="icon"
+                      className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity h-8 w-8"
+                      onClick={(e) => handleDelete(e, dream.id)}
+                      data-testid={`button-delete-${dream.id}`}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
                   </div>
 
                   {/* Dream Info */}
@@ -427,7 +528,18 @@ export default function DreamLibrary() {
               {dreamDetails.fullScript && (
                 <Card className="bg-card/90 backdrop-blur-sm">
                   <div className="p-6">
-                    <h3 className="text-lg font-semibold mb-4">Full Script</h3>
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-lg font-semibold">Full Script</h3>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleEditClick}
+                        data-testid="button-edit-script"
+                      >
+                        <Edit className="w-4 h-4 mr-2" />
+                        Edit Script
+                      </Button>
+                    </div>
                     <div className="prose prose-sm dark:prose-invert max-w-none">
                       <p className="whitespace-pre-wrap text-sm leading-relaxed">
                         {dreamDetails.fullScript}
@@ -593,6 +705,41 @@ export default function DreamLibrary() {
           </div>
         </div>
       )}
+
+      {/* Edit Script Dialog */}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="max-w-4xl max-h-[80vh]">
+          <DialogHeader>
+            <DialogTitle>Edit Dream Script</DialogTitle>
+            <DialogDescription>
+              Make changes to your dream journey script. Your edits will be saved immediately.
+            </DialogDescription>
+          </DialogHeader>
+          <Textarea
+            value={editedScript}
+            onChange={(e) => setEditedScript(e.target.value)}
+            className="min-h-[400px] font-mono text-sm"
+            placeholder="Enter your script here..."
+            data-testid="textarea-edit-script"
+          />
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setIsEditDialogOpen(false)}
+              data-testid="button-cancel-edit"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleSaveEdit}
+              disabled={editMutation.isPending}
+              data-testid="button-save-edit"
+            >
+              {editMutation.isPending ? "Saving..." : "Save Changes"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
