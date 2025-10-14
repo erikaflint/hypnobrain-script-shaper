@@ -27,6 +27,16 @@ The system separates concerns: Templates (JSON) for dimension mixes in PostgreSQ
 
 The ScriptEngine (`server/script-engine/`) is the IP layer transforming template-based generation into methodology-driven transformation. It includes a Config System (principles, narrative arcs, metaphor library), a StrategyPlanner, a PrincipleEnforcer, and a Main Orchestrator to generate AI directives. Key elements include 6 Core Principles and 14 Narrative Arcs (including a new "Playful Learning" arc).
 
+### 4-Stage DREAM Quality Pipeline
+To prevent quality degradation and ensure consistency, DREAM scripts pass through a 4-stage pipeline where each AI call has ONE focused responsibility:
+
+1. **Story Shaper (Stage 1)**: Expands journey idea into detailed 800-1200 word story outline with rich sensory details. Saved to database for transparency.
+2. **Dream Maker (Stage 2)**: Generates full 3000-word hypnosis script from story outline using ScriptEngine methodology.
+3. **Pattern Refiner (Stage 3)**: Analyzes script for repetitive sentence patterns (e.g., "you might...", "as you...") and rewrites overused openers for variety. Preserves ALL content and context.
+4. **Quality Guard (Stage 4)**: Validates emergence type matches (sleep vs regular), checks for 15+ functional suggestions, verifies word count within 15% of target, ensures metaphor consistency. Applies micro-polish to fix issues.
+
+**Key Innovation**: Separation of concerns prevents the "50% degradation problem" where AI trying to do everything (plan + write + variety + quality) resulted in generic content. Each stage focuses on ONE job, with explicit "PRESERVE ALL details" instructions to maintain historical/contextual integrity.
+
 ### Feature Specifications
 -   **8-Dimensional Framework**: Implements Erika Flint's 8D Hypnosis Framework with independent emphasis levels (0-100%).
 -   **AI Script Generation**: Generates script previews (150-200 words), full scripts (1500-2000 words, 3000 for DREAM), and 6 marketing assets. Includes AI-generated titles and supports "regular" or "sleep" emergence types.
@@ -37,7 +47,7 @@ The ScriptEngine (`server/script-engine/`) is the IP layer transforming template
 -   **Version Control & Favorites**: Star scripts, parent-child tracking for remixes, and API endpoints for managing them.
 -   **Save/Apply Mix (Custom Templates)**: Users can save and apply custom dimension configurations.
 -   **Script Package Generator**: Allows creating sellable collections of themed scripts, with AI generating concepts, and user modification and generation.
--   **DREAM Hypnosis Series**: Generates non-clinical, 30-minute immersive sleep/meditation scripts (3000 words). Features journey-based input, sleep emergence, high somatic/symbolic emphasis, a Two-Step Story Shaper to reduce AI repetition, full-screen crowdsourced loading carousel, and AI-generated serene thumbnails (DALL-E 3) with permanent storage. Includes 13 DREAM-specific Narrative Arcs and 8 Blended Archetypes. Also offers voice controls for playback. **Story Outline Preservation**: The 800-1200 word story outline from Step 1 (Story Shaper) is now saved in the database and displayed in the UI for full transparency of the creative journey from user input → story outline → final script.
+-   **DREAM Hypnosis Series**: Generates non-clinical, 30-minute immersive sleep/meditation scripts (3000 words). Features journey-based input, sleep emergence, high somatic/symbolic emphasis, full-screen crowdsourced loading carousel, and AI-generated serene thumbnails (DALL-E 3) with permanent storage. Includes 13 DREAM-specific Narrative Arcs and 8 Blended Archetypes. Also offers voice controls for playback. **4-Stage Quality Pipeline**: Story Shaper (800-1200 word outline) → Dream Maker (script generation) → Pattern Refiner (fix repetitive patterns) → Quality Guard (validate emergence, suggestions, word count, metaphors). **Story Outline Preservation**: The story outline from Stage 1 is saved in the database and displayed in the UI for full creative journey transparency.
 -   **Permanent Thumbnail Storage**: DALL-E generated images are immediately downloaded and stored permanently in Replit App Storage (expires in 1 hour if not saved). Thumbnails are served via `/public-objects/dream-thumbnails/{uuid}.png` with 1-year cache headers.
 -   **Crowdsourced Loading Carousel**: Full-screen immersive loading experience displays up to 50 recent DREAM thumbnails from ALL users (not just current user) to create a community-driven calming experience. Falls back to curated Unsplash landscapes for first-time users.
 

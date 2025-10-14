@@ -116,6 +116,57 @@ function checkWordCount(script: string, targetWordCount: number): QualityCheck {
 }
 
 /**
+ * Check sentence variety (no excessive repetition of openers)
+ */
+function checkSentenceVariety(script: string): QualityCheck {
+  // Split on sentence boundaries
+  const sentences = script
+    .split(/[.!?]+/)
+    .map(s => s.trim())
+    .filter(s => s.length > 10);
+  
+  if (sentences.length === 0) {
+    return {
+      name: "Sentence Variety",
+      passed: false,
+      details: "No sentences found to analyze"
+    };
+  }
+  
+  // Extract first 2-3 words of each sentence
+  const openers = sentences.map(s => {
+    const words = s.toLowerCase().split(/\s+/).slice(0, 3);
+    return words.join(' ');
+  });
+  
+  // Count frequency of each opener
+  const openerCounts: { [key: string]: number } = {};
+  openers.forEach(opener => {
+    openerCounts[opener] = (openerCounts[opener] || 0) + 1;
+  });
+  
+  // Find most common opener
+  const entries = Object.entries(openerCounts);
+  const maxEntry = entries.reduce((max, entry) => 
+    entry[1] > max[1] ? entry : max
+  );
+  
+  const [mostCommonOpener, maxCount] = maxEntry;
+  const percentage = (maxCount / sentences.length) * 100;
+  
+  // Fail if any opener is used more than 12% of the time
+  const passed = percentage <= 12;
+  
+  return {
+    name: "Sentence Variety",
+    passed,
+    details: passed
+      ? `Good variety - most common opener "${mostCommonOpener}" used ${maxCount}x (${Math.round(percentage)}%)`
+      : `Too repetitive - "${mostCommonOpener}" used ${maxCount}x (${Math.round(percentage)}% of sentences, limit: 12%)`
+  };
+}
+
+/**
  * Check metaphor consistency (same metaphor family)
  */
 function checkMetaphorConsistency(script: string): QualityCheck {
@@ -236,6 +287,7 @@ export async function runQualityGuard(
     checkEmergence(script, options.emergenceType),
     checkFunctionalSuggestions(script),
     checkWordCount(script, options.targetWordCount),
+    checkSentenceVariety(script),
     checkMetaphorConsistency(script)
   ];
   
@@ -272,6 +324,7 @@ export async function runQualityGuard(
         checkEmergence(polishedScript, options.emergenceType),
         checkFunctionalSuggestions(polishedScript),
         checkWordCount(polishedScript, options.targetWordCount),
+        checkSentenceVariety(polishedScript),
         checkMetaphorConsistency(polishedScript)
       ];
       

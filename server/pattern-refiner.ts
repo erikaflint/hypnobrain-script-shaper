@@ -27,42 +27,63 @@ interface RefinerResult {
 }
 
 /**
- * Common repetitive patterns to detect
+ * Common repetitive patterns to detect (sentence openers)
  */
-const COMMON_PATTERNS = [
-  { regex: /^you might/gmi, name: "You might", threshold: 8 },
-  { regex: /^as you/gmi, name: "As you", threshold: 10 },
-  { regex: /^perhaps you/gmi, name: "Perhaps you", threshold: 6 },
-  { regex: /^the [a-z]+/gmi, name: "The [element]", threshold: 15 },
-  { regex: /^your [a-z]+/gmi, name: "Your [element]", threshold: 12 },
-  { regex: /^and you/gmi, name: "And you", threshold: 8 },
-  { regex: /^notice how/gmi, name: "Notice how", threshold: 6 },
-  { regex: /^feel the/gmi, name: "Feel the", threshold: 8 },
+const PATTERN_PHRASES = [
+  { phrase: "you might", threshold: 8 },
+  { phrase: "as you", threshold: 10 },
+  { phrase: "perhaps you", threshold: 6 },
+  { phrase: "the ", threshold: 15 }, // Generic article opener
+  { phrase: "your ", threshold: 12 },
+  { phrase: "and you", threshold: 8 },
+  { phrase: "notice how", threshold: 6 },
+  { phrase: "feel the", threshold: 8 },
+  { phrase: "you find", threshold: 6 },
+  { phrase: "you can", threshold: 8 },
 ];
 
 /**
- * Analyze script for repetitive patterns
+ * Analyze script for repetitive patterns at TRUE sentence boundaries
  */
 export function analyzePatterns(script: string): PatternAnalysis {
-  const sentences = script.split(/[.!?]+/).filter(s => s.trim().length > 0);
+  // Split on sentence boundaries (period, exclamation, question mark)
+  const sentences = script
+    .split(/[.!?]+/)
+    .map(s => s.trim())
+    .filter(s => s.length > 10); // Ignore very short fragments
+  
   const totalSentences = sentences.length;
   
-  const overusedPatterns = COMMON_PATTERNS.map(({ regex, name, threshold }) => {
-    const matches = script.match(regex) || [];
-    const count = matches.length;
+  // Count how many sentences start with each pattern
+  const overusedPatterns = PATTERN_PHRASES.map(({ phrase, threshold }) => {
+    let count = 0;
+    
+    sentences.forEach(sentence => {
+      const normalized = sentence.toLowerCase();
+      // Check if sentence starts with this phrase (allowing for whitespace)
+      if (normalized.startsWith(phrase)) {
+        count++;
+      }
+    });
+    
     const needsRewrite = count > threshold;
     
     return {
-      pattern: name,
+      pattern: phrase.trim(),
       count,
       threshold,
       needsRewrite
     };
   });
 
-  // Calculate diversity score
+  // Calculate diversity score based on pattern concentration
   const patternsNeedingRewrite = overusedPatterns.filter(p => p.needsRewrite).length;
-  const diversityScore = Math.max(0, 100 - (patternsNeedingRewrite * 15));
+  
+  // Also penalize high concentration of any single pattern
+  const maxPatternCount = Math.max(...overusedPatterns.map(p => p.count));
+  const concentrationPenalty = maxPatternCount > 15 ? 10 : 0;
+  
+  const diversityScore = Math.max(0, 100 - (patternsNeedingRewrite * 15) - concentrationPenalty);
 
   return {
     overusedPatterns,
