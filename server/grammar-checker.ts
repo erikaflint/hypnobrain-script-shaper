@@ -36,7 +36,7 @@ function checkMissingArticles(script: string): GrammarIssue | null {
     totalMatches += matches.length;
   });
   
-  if (totalMatches > 5) {
+  if (totalMatches > 2) { // Stricter: Even 3 instances make it sound robotic
     return {
       type: "Missing Articles",
       severity: 'high',
@@ -64,7 +64,7 @@ function checkAwkwardConstructions(script: string): GrammarIssue | null {
     totalMatches += matches.length;
   });
   
-  if (totalMatches > 3) {
+  if (totalMatches > 1) { // Stricter: Even 2 instances break hypnotic flow
     return {
       type: "Awkward Constructions",
       severity: 'high',
@@ -83,10 +83,10 @@ function checkGenericPlurals(script: string): GrammarIssue | null {
   const genericPluralPattern = /\b(bodies|minds|hearts|eyes)\s+(know|remember|understand|feel|become)/gi;
   const matches = script.match(genericPluralPattern) || [];
   
-  if (matches.length > 8) { // Some use is OK, but too much sounds robotic
+  if (matches.length > 3) { // Stricter: Even 4 instances sound robotic
     return {
       type: "Generic Plurals",
-      severity: 'medium',
+      severity: 'high', // Upgraded to high severity
       description: `Found ${matches.length} generic plural constructions (bodies/minds know) - should be "your body knows"`,
       count: matches.length
     };
@@ -149,9 +149,16 @@ export function analyzeGrammar(script: string): GrammarReport {
   // Calculate score based on severity
   let deductions = 0;
   issues.forEach(issue => {
-    if (issue.severity === 'high') deductions += 25;
-    else if (issue.severity === 'medium') deductions += 15;
-    else deductions += 5;
+    // Stricter deductions: Missing articles and awkward constructions are critical
+    if (issue.type === "Missing Articles" || issue.type === "Awkward Constructions") {
+      deductions += 35; // Increased from 25 to ensure 3 instances fail
+    } else if (issue.severity === 'high') {
+      deductions += 25;
+    } else if (issue.severity === 'medium') {
+      deductions += 15;
+    } else {
+      deductions += 5;
+    }
   });
   
   const score = Math.max(0, 100 - deductions);
