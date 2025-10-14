@@ -1,6 +1,8 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { dimensionAssembler, type AssembledPrompt } from './dimension-assembler';
 import { scriptEngine } from './script-engine';
+import { runPatternRefiner } from './pattern-refiner';
+import { runQualityGuard } from './quality-guard';
 import type { TemplateJSON } from '@shared/schema';
 
 /*
@@ -227,6 +229,8 @@ Format as JSON:
   }
 }`;
 
+    // Stage 2: Dream Maker (generate script)
+    console.log('[STAGE 2] Dream Maker - Generating script...');
     const response = await anthropic.messages.create({
       model: DEFAULT_MODEL_STR,
       max_tokens: 4000,
@@ -239,10 +243,25 @@ Format as JSON:
       throw new Error('Expected text response from AI');
     }
     const result = JSON.parse(cleanJsonResponse(textContent.text));
+    console.log('[STAGE 2] ✓ Script generated');
+    
+    // Stage 3: Pattern Refiner (fix repetitive patterns)
+    const refinerResult = await runPatternRefiner(result.fullScript);
+    const refinedScript = refinerResult.refinedScript;
+    
+    // Stage 4: Quality Guard (validate and polish)
+    const qualityResult = await runQualityGuard(refinedScript, {
+      emergenceType: emergenceType,
+      targetWordCount: targetWordCount,
+      allowRetry: true
+    });
+    
+    console.log(`[4-STAGE PIPELINE] Complete! Final quality score: ${qualityResult.score}%`);
     
     // Include prompts for tracking/debugging
     return {
       ...result,
+      fullScript: qualityResult.finalScript, // Use quality-checked script
       systemPrompt: enhancedSystemPrompt,
       userPrompt: fullScriptPrompt,
     };
