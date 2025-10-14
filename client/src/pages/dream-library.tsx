@@ -243,7 +243,7 @@ export default function DreamLibrary() {
             overflowY: selectedDream ? 'auto' : 'visible'
           }}
         >
-          <div className={`px-4 ${selectedDream ? 'py-4' : 'py-8'}`}>
+          <div className={`px-6 ${selectedDream ? 'py-4' : 'py-8'}`}>
           {/* Header Section */}
           <div className="mb-8">
             <h1 className="text-4xl font-bold mb-2 text-primary" data-testid="page-title">
