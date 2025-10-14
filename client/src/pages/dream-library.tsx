@@ -141,15 +141,15 @@ export default function DreamLibrary() {
         <AppHeader showDreamboard={true} showDreamLink={true} />
       </div>
 
-      {/* Main Content Area */}
+      {/* Main Content Area - Library Section */}
       <div 
         className={`relative z-10 transition-all duration-500 ${selectedDream && isFullscreen ? 'hidden' : ''}`}
         style={{ 
-          maxHeight: selectedDream ? 'calc(100vh - 70vh - 4rem)' : 'auto',
+          height: selectedDream ? '30vh' : 'auto',
           overflowY: selectedDream ? 'auto' : 'visible'
         }}
       >
-        <div className={`container mx-auto px-4 ${selectedDream ? 'py-4' : 'py-8'}`}>
+        <div className={`container mx-auto px-4 ${selectedDream ? 'py-2' : 'py-8'}`}>
           {/* Header Section */}
           <div className="mb-8">
             <h1 className="text-4xl font-bold mb-2 text-primary" data-testid="page-title">
@@ -302,14 +302,10 @@ export default function DreamLibrary() {
         </div>
       </div>
 
-      {/* Immersive Dream Player (overlay when selected) */}
-      {selectedDream && dreamDetails && (
+      {/* Selected Dream Content Section (split-screen, no overlay) */}
+      {selectedDream && dreamDetails && !isFullscreen && (
         <div 
-          className={`fixed z-20 left-0 right-0 transition-all duration-500 ${
-            isFullscreen 
-              ? 'top-0 bottom-0' 
-              : 'top-auto bottom-0'
-          }`}
+          className="relative z-10 h-[70vh] overflow-y-auto border-t border-border/50"
         >
           {/* Hidden Carousel (always mounted for API - visually hidden but layout preserved) */}
           {displayImages.length > 0 && (
@@ -332,63 +328,38 @@ export default function DreamLibrary() {
             </div>
           )}
 
-          {isFullscreen ? (
-            /* Fullscreen Mode - Full Immersive Experience */
-            <div className="h-full flex flex-col overflow-hidden">
-              {/* Close/Minimize Controls */}
-              <div className="absolute top-4 right-4 flex gap-2 z-30">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => setIsFullscreen(false)}
-                  className="bg-background/80 backdrop-blur-sm"
-                  data-testid="button-minimize"
-                >
-                  <Minimize2 className="w-4 h-4" />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={closeDreamPlayer}
-                  className="bg-background/80 backdrop-blur-sm"
-                  data-testid="button-close-player"
-                >
-                  <X className="w-4 h-4" />
-                </Button>
-              </div>
-
-              {/* Visual Carousel Display */}
-              {displayImages.length > 0 && (
-                <div className="relative container mx-auto px-4 pt-20 pb-8">
+          <div className="container mx-auto px-4 py-6">
+            {/* Large Thumbnail Section */}
+            <div className="mb-6">
+              <div className="relative">
+                {displayImages[0] && (
                   <div className="relative aspect-[21/9] rounded-lg overflow-hidden shadow-2xl">
                     <img
-                      src={displayImages[activeImageIndex]}
-                      alt={`Scene ${activeImageIndex + 1}`}
+                      src={displayImages[activeImageIndex] || displayImages[0]}
+                      alt="Scene"
                       className="w-full h-full object-cover"
                     />
                   </div>
+                )}
 
-                  {/* Navigation Arrows */}
-                  {displayImages.length > 1 && (
-                    <>
-                      <button
-                        onClick={() => carouselApi?.scrollPrev()}
-                        className="absolute left-4 top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur-sm hover-elevate active-elevate-2 rounded-full p-3"
-                      >
-                        <ChevronLeft className="w-6 h-6" />
-                      </button>
-                      <button
-                        onClick={() => carouselApi?.scrollNext()}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur-sm hover-elevate active-elevate-2 rounded-full p-3"
-                      >
-                        <ChevronRight className="w-6 h-6" />
-                      </button>
-                    </>
-                  )}
-
-                  {/* Carousel Indicators */}
-                  {displayImages.length > 1 && (
-                    <div className="flex justify-center gap-2 mt-4">
+                {/* Navigation Controls (if multiple images) */}
+                {displayImages.length > 1 && (
+                  <>
+                    <button
+                      onClick={() => carouselApi?.scrollPrev()}
+                      className="absolute left-4 top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur-sm hover-elevate active-elevate-2 rounded-full p-3"
+                    >
+                      <ChevronLeft className="w-6 h-6" />
+                    </button>
+                    <button
+                      onClick={() => carouselApi?.scrollNext()}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur-sm hover-elevate active-elevate-2 rounded-full p-3"
+                    >
+                      <ChevronRight className="w-6 h-6" />
+                    </button>
+                    
+                    {/* Scene Indicators */}
+                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
                       {displayImages.map((_, index) => (
                         <button
                           key={index}
@@ -396,175 +367,190 @@ export default function DreamLibrary() {
                           className={`w-2 h-2 rounded-full transition-all ${
                             index === activeImageIndex ? 'bg-primary w-8' : 'bg-white/50'
                           }`}
-                          data-testid={`indicator-${index}`}
                         />
                       ))}
                     </div>
-                  )}
-                </div>
+                  </>
+                )}
+
+                {/* Close Button */}
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={closeDreamPlayer}
+                  className="absolute top-4 right-4 bg-background/80 backdrop-blur-sm"
+                  data-testid="button-close-player"
+                >
+                  <X className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+
+            {/* Title and Content */}
+            <div className="space-y-4">
+              {/* Title */}
+              <div>
+                <h2 className="text-3xl font-bold text-primary mb-2">
+                  {dreamDetails.title || dreamDetails.presentingIssue || "Dream Journey"}
+                </h2>
+                {dreamDetails.createdAt && (
+                  <p className="text-sm text-muted-foreground flex items-center gap-2">
+                    <Calendar className="w-4 h-4" />
+                    {format(new Date(dreamDetails.createdAt), "MMMM d, yyyy 'at' h:mm a")}
+                  </p>
+                )}
+              </div>
+
+              {/* Full Script */}
+              {dreamDetails.fullScript && (
+                <Card className="bg-card/90 backdrop-blur-sm">
+                  <div className="p-6">
+                    <h3 className="text-lg font-semibold mb-4">Full Script</h3>
+                    <div className="prose prose-sm dark:prose-invert max-w-none">
+                      <p className="whitespace-pre-wrap text-sm leading-relaxed">
+                        {dreamDetails.fullScript}
+                      </p>
+                    </div>
+                  </div>
+                </Card>
               )}
 
-              {/* Content Cards */}
-              <div className="flex-1 overflow-y-auto">
-                <div className="container mx-auto px-4 pb-8 space-y-4">
-                  <Card className="bg-card/90 backdrop-blur-sm">
-                    <div className="p-6">
-                      <h2 className="text-3xl font-bold text-primary mb-2">
-                        {dreamDetails.title || dreamDetails.presentingIssue || "Dream Journey"}
-                      </h2>
-                      {dreamDetails.createdAt && (
-                        <p className="text-sm text-muted-foreground flex items-center gap-2">
-                          <Calendar className="w-4 h-4" />
-                          {format(new Date(dreamDetails.createdAt), "MMMM d, yyyy 'at' h:mm a")}
-                        </p>
-                      )}
-                    </div>
-                  </Card>
+              {/* Voice Player */}
+              {dreamDetails.fullScript && (
+                <Card className="bg-card/90 backdrop-blur-sm">
+                  <div className="p-6">
+                    <h3 className="text-lg font-semibold mb-4">Listen</h3>
+                    <VoicePlayer text={dreamDetails.fullScript} />
+                  </div>
+                </Card>
+              )}
 
-                  {dreamDetails.fullScript && (
-                    <Card className="bg-card/90 backdrop-blur-sm">
-                      <div className="p-6">
-                        <h3 className="text-lg font-semibold mb-4">Full Script</h3>
-                        <div className="prose prose-sm dark:prose-invert max-w-none">
-                          <p className="whitespace-pre-wrap text-sm leading-relaxed">
-                            {dreamDetails.fullScript}
-                          </p>
-                        </div>
-                      </div>
-                    </Card>
-                  )}
-
-                  {dreamDetails.fullScript && (
-                    <Card className="bg-card/90 backdrop-blur-sm">
-                      <div className="p-6">
-                        <h3 className="text-lg font-semibold mb-4">Listen</h3>
-                        <VoicePlayer text={dreamDetails.fullScript} />
-                      </div>
-                    </Card>
-                  )}
-                </div>
+              {/* Fullscreen Button */}
+              <div className="flex justify-center pt-4">
+                <Button
+                  variant="outline"
+                  onClick={() => setIsFullscreen(true)}
+                  data-testid="button-fullscreen"
+                >
+                  <Maximize2 className="w-4 h-4 mr-2" />
+                  Fullscreen View
+                </Button>
               </div>
             </div>
-          ) : (
-            // Docked Mode - Content + Compact Player Bar
-            <div className="h-[70vh] flex flex-col bg-background/95 backdrop-blur-lg border-t">
-              {/* Scrollable Content Area */}
-              <div className="flex-1 overflow-y-auto">
-                <div className="container mx-auto px-4 py-6 space-y-4">
-                  {/* Title Card */}
-                  <Card className="bg-card/90 backdrop-blur-sm">
-                    <div className="p-6">
-                      <h2 className="text-2xl font-bold text-primary mb-2">
-                        {dreamDetails.title || dreamDetails.presentingIssue || "Dream Journey"}
-                      </h2>
-                      {dreamDetails.createdAt && (
-                        <p className="text-sm text-muted-foreground flex items-center gap-2">
-                          <Calendar className="w-4 h-4" />
-                          {format(new Date(dreamDetails.createdAt), "MMMM d, yyyy 'at' h:mm a")}
-                        </p>
-                      )}
-                    </div>
-                  </Card>
+          </div>
+        </div>
+      )}
 
-                  {/* Full Script Card */}
-                  {dreamDetails.fullScript && (
-                    <Card className="bg-card/90 backdrop-blur-sm">
-                      <div className="p-6">
-                        <h3 className="text-lg font-semibold mb-4">Full Script</h3>
-                        <div className="prose prose-sm dark:prose-invert max-w-none">
-                          <p className="whitespace-pre-wrap text-sm leading-relaxed">
-                            {dreamDetails.fullScript}
-                          </p>
-                        </div>
-                      </div>
-                    </Card>
-                  )}
+      {/* Fullscreen Mode */}
+      {selectedDream && dreamDetails && isFullscreen && (
+        <div className="fixed inset-0 z-30 bg-background overflow-y-auto">
+          {/* Close/Minimize Controls */}
+          <div className="absolute top-4 right-4 flex gap-2 z-40">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => setIsFullscreen(false)}
+              className="bg-background/80 backdrop-blur-sm"
+              data-testid="button-minimize"
+            >
+              <Minimize2 className="w-4 h-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={closeDreamPlayer}
+              className="bg-background/80 backdrop-blur-sm"
+              data-testid="button-close-player-fullscreen"
+            >
+              <X className="w-4 h-4" />
+            </Button>
+          </div>
 
-                  {/* Voice Player Card */}
-                  {dreamDetails.fullScript && (
-                    <Card className="bg-card/90 backdrop-blur-sm">
-                      <div className="p-6">
-                        <h3 className="text-lg font-semibold mb-4">Listen</h3>
-                        <VoicePlayer text={dreamDetails.fullScript} />
-                      </div>
-                    </Card>
-                  )}
-                </div>
+          {/* Visual Carousel Display */}
+          {displayImages.length > 0 && (
+            <div className="relative container mx-auto px-4 pt-20 pb-8">
+              <div className="relative aspect-[21/9] rounded-lg overflow-hidden shadow-2xl">
+                <img
+                  src={displayImages[activeImageIndex]}
+                  alt={`Scene ${activeImageIndex + 1}`}
+                  className="w-full h-full object-cover"
+                />
               </div>
 
-              {/* Compact Player Bar (fixed at bottom) */}
-              <div className="flex items-center gap-4 p-4 bg-card border-t">
-                {/* Thumbnail */}
-                {displayImages[0] && (
-                  <div className="relative w-16 h-16 flex-shrink-0 rounded-md overflow-hidden shadow-lg">
-                    <img
-                      src={displayImages[activeImageIndex] || displayImages[0]}
-                      alt="Now playing"
-                      className="w-full h-full object-cover"
+              {/* Navigation Arrows */}
+              {displayImages.length > 1 && (
+                <>
+                  <button
+                    onClick={() => carouselApi?.scrollPrev()}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur-sm hover-elevate active-elevate-2 rounded-full p-3"
+                  >
+                    <ChevronLeft className="w-6 h-6" />
+                  </button>
+                  <button
+                    onClick={() => carouselApi?.scrollNext()}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur-sm hover-elevate active-elevate-2 rounded-full p-3"
+                  >
+                    <ChevronRight className="w-6 h-6" />
+                  </button>
+                </>
+              )}
+
+              {/* Carousel Indicators */}
+              {displayImages.length > 1 && (
+                <div className="flex justify-center gap-2 mt-4">
+                  {displayImages.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => carouselApi?.scrollTo(index)}
+                      className={`w-2 h-2 rounded-full transition-all ${
+                        index === activeImageIndex ? 'bg-primary w-8' : 'bg-white/50'
+                      }`}
+                      data-testid={`indicator-${index}`}
                     />
-                  </div>
-                )}
-
-                {/* Info */}
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-sm truncate">
-                    {dreamDetails.title || dreamDetails.presentingIssue || "Dream Journey"}
-                  </h3>
-                  {dreamDetails.createdAt && (
-                    <p className="text-xs text-muted-foreground truncate">
-                      {format(new Date(dreamDetails.createdAt), "MMM d, yyyy")}
-                    </p>
-                  )}
+                  ))}
                 </div>
-
-                {/* Carousel Navigation (if multiple images) */}
-                {displayImages.length > 1 && (
-                  <div className="flex items-center gap-2">
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      onClick={() => carouselApi?.scrollPrev()}
-                      className="h-8 w-8"
-                    >
-                      <ChevronLeft className="w-4 h-4" />
-                    </Button>
-                    <span className="text-xs text-muted-foreground whitespace-nowrap">
-                      {activeImageIndex + 1}/{displayImages.length}
-                    </span>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      onClick={() => carouselApi?.scrollNext()}
-                      className="h-8 w-8"
-                    >
-                      <ChevronRight className="w-4 h-4" />
-                    </Button>
-                  </div>
-                )}
-
-                {/* Controls */}
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setIsFullscreen(true)}
-                    data-testid="button-fullscreen"
-                  >
-                    <Maximize2 className="w-4 h-4 mr-2" />
-                    Fullscreen
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={closeDreamPlayer}
-                    data-testid="button-close-player"
-                  >
-                    <X className="w-4 h-4" />
-                  </Button>
-                </div>
-              </div>
+              )}
             </div>
           )}
+
+          {/* Content Cards */}
+          <div className="container mx-auto px-4 pb-8 space-y-4">
+            <Card className="bg-card/90 backdrop-blur-sm">
+              <div className="p-6">
+                <h2 className="text-3xl font-bold text-primary mb-2">
+                  {dreamDetails.title || dreamDetails.presentingIssue || "Dream Journey"}
+                </h2>
+                {dreamDetails.createdAt && (
+                  <p className="text-sm text-muted-foreground flex items-center gap-2">
+                    <Calendar className="w-4 h-4" />
+                    {format(new Date(dreamDetails.createdAt), "MMMM d, yyyy 'at' h:mm a")}
+                  </p>
+                )}
+              </div>
+            </Card>
+
+            {dreamDetails.fullScript && (
+              <Card className="bg-card/90 backdrop-blur-sm">
+                <div className="p-6">
+                  <h3 className="text-lg font-semibold mb-4">Full Script</h3>
+                  <div className="prose prose-sm dark:prose-invert max-w-none">
+                    <p className="whitespace-pre-wrap text-sm leading-relaxed">
+                      {dreamDetails.fullScript}
+                    </p>
+                  </div>
+                </div>
+              </Card>
+            )}
+
+            {dreamDetails.fullScript && (
+              <Card className="bg-card/90 backdrop-blur-sm">
+                <div className="p-6">
+                  <h3 className="text-lg font-semibold mb-4">Listen</h3>
+                  <VoicePlayer text={dreamDetails.fullScript} />
+                </div>
+              </Card>
+            )}
+          </div>
         </div>
       )}
     </div>
