@@ -214,14 +214,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // ============================================================================
   // EXTERNAL API ENDPOINTS (B2B Integration)
   // ============================================================================
+  
+  // Import and mount script generator API routes
+  const { scriptGeneratorRouter } = await import('./script-generator-api');
+  app.use('/api/generate', scriptGeneratorRouter);
 
-  /**
-   * Analyze Clinical Hypnosis Script
-   * POST /api/analyze/clinical
-   * 
-   * Analyzes a clinical hypnosis script using Erika Flint's 8D Framework
-   * Requires API key with 'analyze:clinical' scope
-   */
+  // Legacy analyzer endpoint (kept for backwards compatibility - redirects to main app)
   app.post("/api/analyze/clinical", requireApiKey(['analyze:clinical']), async (req: any, res) => {
     try {
       const schema = z.object({
