@@ -141,15 +141,19 @@ export default function DreamLibrary() {
         <AppHeader showDreamboard={true} showDreamLink={true} />
       </div>
 
-      {/* Main Content Area - Library Section */}
-      <div 
-        className={`relative z-10 transition-all duration-500 ${selectedDream && isFullscreen ? 'hidden' : ''}`}
-        style={{ 
-          height: selectedDream ? '30vh' : 'auto',
-          overflowY: selectedDream ? 'auto' : 'visible'
-        }}
-      >
-        <div className={`container mx-auto px-4 ${selectedDream ? 'py-2' : 'py-8'}`}>
+      {/* Main Content Wrapper - Horizontal Split */}
+      <div className={`relative z-10 flex ${selectedDream && isFullscreen ? 'hidden' : ''}`}>
+        {/* Left Sidebar - Library */}
+        <div 
+          className={`transition-all duration-500 border-r border-border/50 ${
+            selectedDream ? 'w-80' : 'w-full'
+          }`}
+          style={{ 
+            height: selectedDream ? 'calc(100vh - 4rem)' : 'auto',
+            overflowY: selectedDream ? 'auto' : 'visible'
+          }}
+        >
+          <div className={`px-4 ${selectedDream ? 'py-4' : 'py-8'}`}>
           {/* Header Section */}
           <div className="mb-8">
             <h1 className="text-4xl font-bold mb-2 text-primary" data-testid="page-title">
@@ -299,14 +303,15 @@ export default function DreamLibrary() {
               ))}
             </div>
           )}
+          </div>
         </div>
-      </div>
 
-      {/* Selected Dream Content Section (split-screen, no overlay) */}
-      {selectedDream && dreamDetails && !isFullscreen && (
-        <div 
-          className="relative z-10 h-[70vh] overflow-y-auto border-t border-border/50"
-        >
+        {/* Right Main Area - Selected Dream Content */}
+        {selectedDream && dreamDetails && (
+          <div 
+            className="flex-1 overflow-y-auto"
+            style={{ height: 'calc(100vh - 4rem)' }}
+          >
           {/* Hidden Carousel (always mounted for API - visually hidden but layout preserved) */}
           {displayImages.length > 0 && (
             <div className="absolute -z-50 opacity-0 pointer-events-none" aria-hidden="true">
@@ -438,8 +443,9 @@ export default function DreamLibrary() {
               </div>
             </div>
           </div>
-        </div>
-      )}
+          </div>
+        )}
+      </div>
 
       {/* Fullscreen Mode */}
       {selectedDream && dreamDetails && isFullscreen && (
