@@ -99,7 +99,7 @@ export default function EditPackage() {
             data-testid="button-back"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Dashboard
+            Back to Dreamboard
           </Button>
 
           <div className="flex items-start justify-between gap-4">

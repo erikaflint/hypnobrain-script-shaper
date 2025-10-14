@@ -11,7 +11,7 @@ export interface AppHeaderProps {
   subtitle?: string;
   icon?: React.ReactNode;
   showAuth?: boolean;
-  showDashboard?: boolean;
+  showDreamboard?: boolean;
   showDreamLink?: boolean; // Show DREAM Hypnosis link
   showCreateScript?: boolean;
   showAdminLink?: boolean; // New: Show admin panel link (only visible to admins)
@@ -26,7 +26,7 @@ export function AppHeader({
   subtitle,
   icon,
   showAuth = false,
-  showDashboard = false,
+  showDreamboard = false,
   showDreamLink = false,
   showCreateScript = false,
   showAdminLink = false,
@@ -70,11 +70,11 @@ export function AppHeader({
         <div className="flex items-center gap-3">
           {rightContent}
 
-          {showDashboard && (
-            <Link href="/dashboard" data-testid="link-dashboard">
-              <Button variant="ghost" size="sm" data-testid="button-dashboard">
+          {showDreamboard && (
+            <Link href="/dashboard" data-testid="link-dreamboard">
+              <Button variant="ghost" size="sm" data-testid="button-dreamboard">
                 <LayoutDashboard className="w-4 h-4 mr-2" />
-                Dashboard
+                Dreamboard
               </Button>
             </Link>
           )}
@@ -110,11 +110,11 @@ export function AppHeader({
             <>
               {user ? (
                 <>
-                  {!showDashboard && (
-                    <Link href="/dashboard" data-testid="link-dashboard">
-                      <Button variant="ghost" size="sm" data-testid="button-dashboard">
+                  {!showDreamboard && (
+                    <Link href="/dashboard" data-testid="link-dreamboard">
+                      <Button variant="ghost" size="sm" data-testid="button-dreamboard">
                         <LayoutDashboard className="w-4 h-4 mr-2" />
-                        Dashboard
+                        Dreamboard
                       </Button>
                     </Link>
                   )}

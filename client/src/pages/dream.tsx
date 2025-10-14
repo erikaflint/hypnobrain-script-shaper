@@ -198,7 +198,7 @@ export default function Dream() {
         showBack={true}
         title="DREAM Hypnosis"
         icon={<Moon className="w-5 h-5 text-primary" />}
-        showDashboard={true}
+        showDreamboard={true}
       />
 
       {/* Main Content */}

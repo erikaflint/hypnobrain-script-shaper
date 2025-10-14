@@ -79,7 +79,7 @@ export default function CreatePackage() {
             className="mb-4"
             data-testid="button-back"
           >
-            ← Back to Dashboard
+            ← Back to Dreamboard
           </Button>
           <h1 className="text-4xl font-bold mb-2">Create Script Package</h1>
           <p className="text-muted-foreground">

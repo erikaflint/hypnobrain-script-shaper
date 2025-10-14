@@ -360,7 +360,7 @@ export default function AppV2() {
           "Your Script"
         }
         showDreamLink={true}
-        showDashboard={true}
+        showDreamboard={true}
         rightContent={
           <div className="flex items-center gap-2">
             <div className={`w-2 h-2 rounded-full ${step === "intake" ? "bg-primary" : "bg-muted"}`} />
