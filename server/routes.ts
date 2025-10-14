@@ -78,6 +78,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
+  // Get authenticated user's DREAM thumbnails for loading carousel
+  app.get("/api/user/dream-thumbnails", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const thumbnails = await storage.getDreamThumbnailsByUserId(userId);
+      res.json(thumbnails);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+  
   // Get user's saved generations by email (legacy - for backwards compatibility)
   app.get("/api/generations", async (req, res) => {
     try {

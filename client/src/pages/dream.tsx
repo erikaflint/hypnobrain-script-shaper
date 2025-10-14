@@ -50,6 +50,13 @@ export default function Dream() {
     queryKey: ['/api/archetypes/blended'],
   });
 
+  // Fetch user's DREAM thumbnails for full-screen loading carousel
+  const isAuthenticated = !!user;
+  const { data: userThumbnails = [] } = useQuery<string[]>({
+    queryKey: ["/api/user/dream-thumbnails"],
+    enabled: isAuthenticated,
+  });
+
   // NEW: Shape story mutation (Step 1)
   const shapeStory = useMutation({
     mutationFn: async (data: { journeyIdea: string; archetypeId?: number }) => {
@@ -202,6 +209,7 @@ export default function Dream() {
                 message="Your story is being shaped"
                 onToggleSound={lullaby.toggle}
                 isSoundPlaying={lullaby.isPlaying}
+                userThumbnails={userThumbnails}
               />
             ) : !expandedStory ? (
               // Step 1: Journey Idea Form
@@ -304,6 +312,7 @@ export default function Dream() {
                 message="Your DREAM is coming to life"
                 onToggleSound={lullaby.toggle}
                 isSoundPlaying={lullaby.isPlaying}
+                userThumbnails={userThumbnails}
               />
             ) : (
               // Step 2: Story Editor

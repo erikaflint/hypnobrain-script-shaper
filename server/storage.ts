@@ -53,6 +53,7 @@ export interface IStorage {
   getAllGenerations(): Promise<Generation[]>;
   getGenerationsByEmail(email: string): Promise<Generation[]>;
   getGenerationsByUserId(userId: string): Promise<Generation[]>;
+  getDreamThumbnailsByUserId(userId: string): Promise<string[]>;
   getGenerationsByParentId(parentId: number): Promise<Generation[]>;
   updateGenerationPaymentStatus(id: number, paymentStatus: string): Promise<void>;
   updateGenerationScript(id: number, fullScript: string): Promise<void>;
@@ -165,6 +166,24 @@ export class DatabaseStorage implements IStorage {
       .from(generations)
       .where(eq(generations.userId, userId))
       .orderBy(desc(generations.createdAt));
+  }
+  
+  async getDreamThumbnailsByUserId(userId: string): Promise<string[]> {
+    const { isNotNull } = await import('drizzle-orm');
+    const results = await db
+      .select({ imageUrl: generations.imageUrl })
+      .from(generations)
+      .where(
+        and(
+          eq(generations.userId, userId),
+          eq(generations.generationMode, 'dream'),
+          isNotNull(generations.imageUrl)
+        )
+      )
+      .orderBy(desc(generations.createdAt))
+      .limit(20); // Get up to 20 recent DREAM thumbnails
+    
+    return results.map(r => r.imageUrl as string);
   }
   
   async updateGenerationPaymentStatus(id: number, paymentStatus: string): Promise<void> {
