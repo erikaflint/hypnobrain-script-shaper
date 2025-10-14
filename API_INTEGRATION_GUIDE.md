@@ -9,7 +9,7 @@ The HypnoBrain Script Shaper provides external REST API endpoints for **generati
 ```
 POST /api/generate/clinical
 ```
-Generates clinical hypnosis scripts using Erika Flint's 8-Dimensional Framework with full customization.
+Generates clinical hypnosis scripts using professionally curated templates with customizable parameters.
 
 ### 2. DREAM Script Generation
 ```
@@ -69,27 +69,17 @@ Authorization: Bearer YOUR_API_KEY_HERE
 |-------|------|----------|-------------|
 | `presentingIssue` | string | Yes | The client's presenting issue (min 10 chars) |
 | `desiredOutcome` | string | Yes | The desired therapeutic outcome (min 10 chars) |
-| `dimensions` | object | Yes | 8D dimension levels (0-100 each) |
+| `templateId` | number | No | Use a specific template directly by ID |
 | `archetypeId` | number | No | Archetype ID (defaults to first available) |
 | `styleId` | number | No | Style ID (defaults to first available) |
 | `clientName` | string | No | Client name for personalization |
 | `emergenceType` | string | No | 'regular' or 'sleep' (default: 'regular') |
 | `targetWordCount` | number | No | Target word count (default: 1800) |
 
-### Dimensions Object
-
-```typescript
-{
-  cognitive: number,      // 0-100: Reframes, perspective shifts
-  emotional: number,      // 0-100: Emotional processing, regulation
-  somatic: number,        // 0-100: Body awareness, physical relaxation
-  behavioral: number,     // 0-100: Action steps, habit change
-  symbolic: number,       // 0-100: Metaphors, imagery
-  perspective: number,    // 0-100: Dissociation, observer perspective
-  relational: number,     // 0-100: Connection to others
-  spiritual: number       // 0-100: Meaning, purpose, transcendence
-}
-```
+**Template Selection:**
+- If `templateId` is provided, that specific template will be used
+- If `templateId` is omitted, the system automatically recommends the most suitable template using AI-powered semantic matching based on the presenting issue and desired outcome
+- The selected template's ID and name are returned in the response metadata
 
 ### Example Request
 
@@ -100,16 +90,6 @@ curl -X POST https://your-replit-app.replit.app/api/generate/clinical \
   -d '{
     "presentingIssue": "Chronic anxiety and worry about future events",
     "desiredOutcome": "Feel calm, confident, and present in the moment",
-    "dimensions": {
-      "cognitive": 75,
-      "emotional": 70,
-      "somatic": 85,
-      "behavioral": 60,
-      "symbolic": 50,
-      "perspective": 65,
-      "relational": 40,
-      "spiritual": 45
-    },
     "archetypeId": 2,
     "styleId": 1,
     "emergenceType": "regular",
@@ -126,24 +106,15 @@ curl -X POST https://your-replit-app.replit.app/api/generate/clinical \
     "title": "Feel calm, confident, and present in the moment Hypnosis Script",
     "text": "Close your eyes and take a deep breath...",
     "wordCount": 1847,
-    "emergenceType": "regular",
-    "dimensions": {
-      "cognitive": 75,
-      "emotional": 70,
-      "somatic": 85,
-      "behavioral": 60,
-      "symbolic": 50,
-      "perspective": 65,
-      "relational": 40,
-      "spiritual": 45
-    }
+    "emergenceType": "regular"
   },
   "metadata": {
     "apiKeyId": 1,
     "generatedAt": "2025-10-14T15:42:00.000Z",
     "archetypeUsed": "The Healer",
     "styleUsed": "Conversational",
-    "templateUsed": "Cognitive Reframe + Somatic Grounding"
+    "templateUsed": "Cognitive Reframe + Somatic Grounding",
+    "templateId": 5
   }
 }
 ```
@@ -264,16 +235,7 @@ curl -X GET https://your-replit-app.replit.app/api/styles \
 interface GenerateClinicalRequest {
   presentingIssue: string;
   desiredOutcome: string;
-  dimensions: {
-    cognitive: number;
-    emotional: number;
-    somatic: number;
-    behavioral: number;
-    symbolic: number;
-    perspective: number;
-    relational: number;
-    spiritual: number;
-  };
+  templateId?: number;  // Optional: use specific template
   archetypeId?: number;
   styleId?: number;
   clientName?: string;
@@ -294,7 +256,6 @@ interface ScriptResponse {
     text: string;
     wordCount: number;
     emergenceType: 'regular' | 'sleep';
-    dimensions?: any;
   };
   metadata: {
     apiKeyId: number;
@@ -302,6 +263,7 @@ interface ScriptResponse {
     archetypeUsed?: string;
     styleUsed?: string;
     templateUsed: string;
+    templateId: number;
   };
 }
 
@@ -376,31 +338,32 @@ class ScriptShaperAPI {
 // Usage in HypnoBrain Analyzer
 const client = new ScriptShaperAPI(process.env.SCRIPT_SHAPER_API_KEY!);
 
-// Generate a clinical script
+// Example 1: Auto-recommendation (no templateId specified)
 const clinicalScript = await client.generateClinical({
   presentingIssue: "Chronic anxiety and worry",
   desiredOutcome: "Feel calm and present",
-  dimensions: {
-    cognitive: 75,
-    emotional: 70,
-    somatic: 85,
-    behavioral: 60,
-    symbolic: 50,
-    perspective: 65,
-    relational: 40,
-    spiritual: 45
-  },
   archetypeId: 2,
   styleId: 1,
+  targetWordCount: 1800,
 });
 
 console.log('Generated script:', clinicalScript.script.text);
 console.log('Word count:', clinicalScript.script.wordCount);
+console.log('Template used:', clinicalScript.metadata.templateUsed);
+
+// Example 2: Using specific template
+const specificScript = await client.generateClinical({
+  presentingIssue: "Sleep difficulties",
+  desiredOutcome: "Deep, restful sleep",
+  templateId: 7,  // Use specific template by ID
+  emergenceType: 'sleep',
+});
 
 // Generate a DREAM script
 const dreamScript = await client.generateDream({
   journeyIdea: "A peaceful walk through an ancient forest",
   archetypeId: 5,
+  targetWordCount: 3000,
 });
 
 console.log('Dream title:', dreamScript.script.title);
