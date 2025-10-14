@@ -69,11 +69,11 @@ export default function DreamView() {
           </Link>
 
           {/* Title Card */}
-          <Card className="p-6 bg-background/80 backdrop-blur-md">
-            <h1 className="text-3xl font-bold text-primary mb-2">
+          <Card className="p-8 bg-background/80 backdrop-blur-md">
+            <h1 className="text-4xl md:text-5xl font-bold text-primary mb-4">
               {dream.title || dream.presentingIssue || "Dream Journey"}
             </h1>
-            <p className="text-muted-foreground">
+            <p className="text-lg text-muted-foreground">
               {dream.desiredOutcome || "Experience a peaceful, restful journey into natural sleep"}
             </p>
           </Card>
