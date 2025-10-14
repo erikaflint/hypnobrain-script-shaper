@@ -41,6 +41,7 @@ export default function Dream() {
   const [generatedScript, setGeneratedScript] = useState<string | null>(null);
   const [generationId, setGenerationId] = useState<number | null>(null);
   const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(null);
+  const [revealingFinalImage, setRevealingFinalImage] = useState(false);
   
   // Lullaby music hook
   const lullaby = useLullaby();
@@ -104,11 +105,26 @@ export default function Dream() {
       setGeneratedScript(data.fullScript);
       setGenerationId(data.generationId);
       setThumbnailUrl(data.thumbnailUrl || null);
-      lullaby.stop(); // Stop lullaby when DREAM is ready
-      toast({
-        title: "DREAM Script Created!",
-        description: `"${data.title}" has been saved to your library`,
-      });
+      
+      // Start final image reveal if thumbnail exists
+      if (data.thumbnailUrl) {
+        setRevealingFinalImage(true);
+        // Keep revealing for 3 seconds before showing the script
+        setTimeout(() => {
+          setRevealingFinalImage(false);
+          lullaby.stop(); // Stop lullaby after reveal
+          toast({
+            title: "DREAM Script Created!",
+            description: `"${data.title}" has been saved to your library`,
+          });
+        }, 3000);
+      } else {
+        lullaby.stop(); // Stop immediately if no thumbnail
+        toast({
+          title: "DREAM Script Created!",
+          description: `"${data.title}" has been saved to your library`,
+        });
+      }
     },
     onError: (error: any) => {
       lullaby.stop(); // Stop lullaby on error
@@ -304,13 +320,14 @@ export default function Dream() {
                 </Button>
               </form>
             </Card>
-            ) : generateDreamScript.isPending ? (
-              // Loading state for DREAM Script Generation
+            ) : generateDreamScript.isPending || revealingFinalImage ? (
+              // Loading state for DREAM Script Generation + Final Image Reveal
               <LoadingDream 
-                message="Your DREAM is coming to life"
+                message={revealingFinalImage ? "✨ Behold your DREAM ✨" : "Your DREAM is coming to life"}
                 onToggleSound={lullaby.toggle}
                 isSoundPlaying={lullaby.isPlaying}
                 userThumbnails={dreamThumbnails}
+                finalImage={revealingFinalImage ? thumbnailUrl || undefined : undefined}
               />
             ) : (
               // Step 2: Story Editor

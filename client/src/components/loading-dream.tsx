@@ -17,31 +17,44 @@ interface LoadingDreamProps {
   message?: string;
   onToggleSound?: () => void;
   isSoundPlaying?: boolean;
-  userThumbnails?: string[]; // User's previously generated DREAM thumbnails
+  userThumbnails?: string[]; // Crowdsourced DREAM thumbnails
+  finalImage?: string; // The final generated thumbnail to reveal
 }
 
 export function LoadingDream({ 
   message = "Your DREAM is being created...", 
   onToggleSound,
   isSoundPlaying = false,
-  userThumbnails = []
+  userThumbnails = [],
+  finalImage
 }: LoadingDreamProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [dots, setDots] = useState("");
 
-  // Use user's DREAM thumbnails if available, otherwise fallback to Unsplash
-  const imagesToShow = userThumbnails.length > 0 
-    ? userThumbnails 
-    : PEACEFUL_IMAGES.map(img => img.url);
+  // Use final image if available, otherwise carousel
+  const imagesToShow = finalImage 
+    ? [finalImage] // Show only the final image (reveal!)
+    : userThumbnails.length > 0 
+      ? userThumbnails 
+      : PEACEFUL_IMAGES.map(img => img.url);
 
-  // Rotate through images every 3 seconds (slower for immersive experience)
+  // Reset to index 0 when final image arrives
   useEffect(() => {
+    if (finalImage) {
+      setCurrentImageIndex(0); // Show the final image
+    }
+  }, [finalImage]);
+
+  // Rotate through images every 3 seconds (but stop if final image is set)
+  useEffect(() => {
+    if (finalImage) return; // Stop rotation on final reveal
+    
     const imageInterval = setInterval(() => {
       setCurrentImageIndex((prev) => (prev + 1) % imagesToShow.length);
     }, 3000);
 
     return () => clearInterval(imageInterval);
-  }, [imagesToShow.length]);
+  }, [imagesToShow.length, finalImage]);
 
   // Animate dots (., .., ...)
   useEffect(() => {
