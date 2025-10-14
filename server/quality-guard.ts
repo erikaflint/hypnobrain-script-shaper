@@ -287,6 +287,48 @@ Return as JSON:
 }
 
 /**
+ * Quality validation metrics (exported for testing)
+ */
+export interface QualityMetrics {
+  emergenceTypeMatch: boolean;
+  emergenceIssue?: string;
+  functionalSuggestionsCount: number;
+  wordCountInRange: boolean;
+  actualWordCount: number;
+  overallScore: number;
+}
+
+/**
+ * Validate script quality without AI polish (for testing)
+ */
+export function validateScriptQuality(
+  script: string,
+  emergenceType: 'sleep' | 'regular',
+  targetWordCount: number = 3000
+): QualityMetrics {
+  const emergenceCheck = checkEmergence(script, emergenceType);
+  const suggestionsCheck = checkFunctionalSuggestions(script);
+  const wordCountCheck = checkWordCount(script, targetWordCount);
+  
+  const words = script.split(/\s+/).filter(w => w.length > 0);
+  
+  // Calculate score
+  let score = 100;
+  if (!emergenceCheck.passed) score -= 40;
+  if (!suggestionsCheck.passed) score -= 30;
+  if (!wordCountCheck.passed) score -= 30;
+  
+  return {
+    emergenceTypeMatch: emergenceCheck.passed,
+    emergenceIssue: emergenceCheck.passed ? undefined : emergenceCheck.details,
+    functionalSuggestionsCount: parseInt(suggestionsCheck.details.match(/\d+/)?.[0] || '0'),
+    wordCountInRange: wordCountCheck.passed,
+    actualWordCount: words.length,
+    overallScore: Math.max(0, score)
+  };
+}
+
+/**
  * Main Quality Guard entry point
  */
 export async function runQualityGuard(
