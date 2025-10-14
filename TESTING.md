@@ -12,6 +12,51 @@
 ./run-tests.sh
 ```
 
+## ⚡ Vitest Framework Tests (NEW - Recommended for CI)
+
+**Fast, deterministic tests without AI calls - perfect for CI/CD**
+
+### Unit Tests (1-2 seconds)
+```bash
+# All unit tests
+npx vitest run tests/unit/
+
+# Watch mode for development
+npx vitest watch tests/unit/
+
+# Specific test file
+npx vitest run tests/unit/grammar-checker.test.ts
+```
+
+### Mocked Integration Test (< 1 second)
+```bash
+# Full 4-stage pipeline test (mocked AI responses)
+npx vitest run tests/integration/
+
+# Watch mode
+npx vitest watch tests/integration/
+```
+
+### Coverage Reports
+```bash
+# Generate coverage report
+npx vitest run --coverage
+```
+
+**What's Tested:**
+- ✅ **Grammar Checker Logic** - Pattern detection, thresholds, scoring (16 tests)
+- ✅ **Pattern Refiner Logic** - Sentence analysis, diversity scoring (19 tests)
+- ✅ **Quality Guard Logic** - Validation rules, scoring (20 tests)
+- ✅ **4-Stage Pipeline** - Full integration without AI costs (20 tests)
+
+**Benefits:**
+- 🚀 **Fast** - All tests run in < 2 seconds
+- 💰 **No AI Costs** - Uses mocked responses
+- 🎯 **Deterministic** - Same results every time
+- 🔄 **CI-Ready** - Perfect for automated testing
+
+---
+
 ## 📋 Test Suite Overview
 
 We have **4 test files** organized by scope:
