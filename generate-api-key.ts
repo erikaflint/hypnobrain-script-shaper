@@ -1,21 +1,19 @@
 /**
- * Quick API Key Generator
+ * Quick API Key Generator for Script GENERATION
  * Run: npx tsx generate-api-key.ts
  */
 
 import { createApiKey } from './server/admin-tools';
 import { db } from './server/db';
 import { users } from './shared/schema';
-import { eq } from 'drizzle-orm';
 
 async function main() {
-  console.log('\n🔑 HypnoBrain API Key Generator\n');
+  console.log('\n🔑 HypnoBrain Script Generator API Key\n');
   console.log('════════════════════════════════════════════════════════════════\n');
 
   // Step 1: Find your user account
   console.log('Looking for your user account...');
   
-  // Try to find the first admin user (most likely you)
   const allUsers = await db.select().from(users);
   
   if (allUsers.length === 0) {
@@ -33,20 +31,26 @@ async function main() {
   const selectedUser = allUsers[0];
   console.log(`\n✓ Using: ${selectedUser.email}`);
 
-  // Step 2: Generate API key
-  console.log('\nGenerating API key for HypnoBrain Analyzer...\n');
+  // Step 2: Generate API key with GENERATION scopes
+  console.log('\nGenerating API key for Script Generation...\n');
 
   const apiKey = await createApiKey({
     userId: selectedUser.id,
-    name: 'HypnoBrain Analyzer Integration',
-    scopes: ['analyze:clinical', 'analyze:dream'],
+    name: 'HypnoBrain Analyzer → Script Shaper Integration',
+    scopes: ['generate:clinical', 'generate:dream'], // GENERATION scopes, not analysis!
   });
 
   console.log('\n════════════════════════════════════════════════════════════════');
-  console.log('\n✅ SUCCESS! Your API is ready to use.\n');
-  console.log('Next steps:');
+  console.log('\n✅ SUCCESS! Your Script Generation API is ready.\n');
+  console.log('This API GENERATES scripts (not analyzes them)');
+  console.log('\nEndpoints available:');
+  console.log('  • POST /api/generate/clinical - Generate clinical scripts');
+  console.log('  • POST /api/generate/dream - Generate DREAM sleep scripts');
+  console.log('  • GET  /api/archetypes - List available archetypes');
+  console.log('  • GET  /api/styles - List available styles');
+  console.log('\nNext steps:');
   console.log('1. Copy the API key shown above (starts with sk_live_)');
-  console.log('2. Add it to your HypnoBrain Analyzer app as an environment variable');
+  console.log('2. Add it to your HypnoBrain Analyzer app as SCRIPT_SHAPER_API_KEY');
   console.log('3. See API_INTEGRATION_GUIDE.md for usage examples\n');
   console.log('════════════════════════════════════════════════════════════════\n');
 

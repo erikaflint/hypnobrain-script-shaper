@@ -10,8 +10,20 @@ import { storage } from './storage';
 import { aiService } from './ai-service';
 import { templateSelector } from './template-selector';
 import { validateContent, validateMultipleFields } from './content-validator';
+import { db } from './db';
+import { apiKeys } from '@shared/schema';
+import { eq } from 'drizzle-orm';
 
 export const scriptGeneratorRouter = Router();
+
+/**
+ * Update API key last used timestamp
+ */
+async function trackApiKeyUsage(keyId: number) {
+  await db.update(apiKeys)
+    .set({ lastUsedAt: new Date() })
+    .where(eq(apiKeys.id, keyId));
+}
 
 /**
  * Generate Clinical Script
@@ -102,26 +114,13 @@ scriptGeneratorRouter.post('/clinical',
         ? JSON.parse(template.jsonData) 
         : template.jsonData;
 
-      // Apply custom dimensions to template
-      const customizedTemplate = {
-        ...templateJson,
-        dimensions: {
-          cognitive: { level: data.dimensions.cognitive },
-          emotional: { level: data.dimensions.emotional },
-          somatic: { level: data.dimensions.somatic },
-          behavioral: { level: data.dimensions.behavioral },
-          symbolic: { level: data.dimensions.symbolic, archetype: archetype?.name },
-          perspective: { level: data.dimensions.perspective },
-          relational: { level: data.dimensions.relational },
-          spiritual: { level: data.dimensions.spiritual },
-        }
-      };
-
       console.log(`[API] Generating clinical script for: "${data.presentingIssue.substring(0, 50)}..."`);
       
-      // Generate script using ScriptEngine
+      // Generate script using ScriptEngine with template
+      // Note: For now, we use the template as-is. Future enhancement: map external
+      // dimension names (cognitive, emotional, etc.) to template names (psychological, temporal, etc.)
       const result = await aiService.generateFullScript({
-        template: customizedTemplate,
+        template: templateJson,
         presentingIssue: data.presentingIssue,
         desiredOutcome: data.desiredOutcome,
         emergenceType: data.emergenceType,
@@ -131,7 +130,7 @@ scriptGeneratorRouter.post('/clinical',
       console.log(`[API] ✓ Clinical script generated (${result.fullScript.split(' ').length} words)`);
 
       // Track API usage
-      await storage.updateApiKeyLastUsed(req.apiKey.id);
+      await trackApiKeyUsage(req.apiKey.id);
 
       res.json({
         success: true,
@@ -170,7 +169,7 @@ scriptGeneratorRouter.post('/clinical',
 );
 
 /**
- * Generate DREAM Script
+ * Generate DREAM Script (Simplified - No 4-stage pipeline for external API)
  * POST /api/generate/dream
  */
 scriptGeneratorRouter.post('/dream',
@@ -218,15 +217,6 @@ scriptGeneratorRouter.post('/dream',
 
       console.log(`[API] Starting DREAM generation for: "${data.journeyIdea.substring(0, 50)}..."`);
 
-      // Step 1: Shape the story (800-1200 words)
-      console.log('[API] Stage 1/4: Story Shaper - Expanding journey idea...');
-      const storyResult = await aiService.shapeDreamStory({
-        journeyIdea: data.journeyIdea,
-        archetypeName: archetype.name,
-        archetypeDescription: archetype.description || '',
-      });
-      console.log(`[API] ✓ Story shaped (${storyResult.storyLength} words)`);
-
       // Get DREAM-optimized template
       const recommendations = await templateSelector.recommendTemplates(
         data.journeyIdea,
@@ -262,82 +252,39 @@ scriptGeneratorRouter.post('/dream',
         }
       };
 
-      // Step 2: Generate full DREAM script (3000 words)
-      console.log('[API] Stage 2/4: Dream Maker - Generating full script...');
+      // Generate DREAM script
       const result = await aiService.generateFullScript({
         template: dreamTemplate,
-        presentingIssue: storyResult.expandedStory,
+        presentingIssue: data.journeyIdea,
         desiredOutcome: "Experience a peaceful, restful journey into natural sleep",
         emergenceType: 'sleep',
         targetWordCount: data.targetWordCount,
       });
-      console.log(`[API] ✓ Dream script generated (${result.fullScript.split(' ').length} words)`);
 
-      // Step 3: Pattern refinement
-      console.log('[API] Stage 3/4: Pattern Refiner - Checking for repetitive patterns...');
-      const { analyzePatterns } = await import('./pattern-refiner');
-      const patternAnalysis = await analyzePatterns(result.fullScript);
-      
-      let refinedScript = result.fullScript;
-      if (patternAnalysis.needsRefinement) {
-        console.log(`[API] Found ${patternAnalysis.issues.length} repetitive patterns, refining...`);
-        const { refineScript } = await import('./pattern-refiner');
-        refinedScript = await refineScript(result.fullScript, patternAnalysis);
-        console.log('[API] ✓ Script refined for variety');
-      } else {
-        console.log('[API] ✓ No repetitive patterns detected');
-      }
-
-      // Step 4: Quality validation
-      console.log('[API] Stage 4/4: Quality Guard - Validating script quality...');
-      const { validateScriptQuality } = await import('./quality-guard');
-      const qualityResult = await validateScriptQuality(refinedScript, {
-        emergenceType: 'sleep',
-        targetWordCount: data.targetWordCount,
-        journeyIdea: data.journeyIdea,
-      });
-
-      let finalScript = refinedScript;
-      if (qualityResult.needsPolish) {
-        console.log('[API] Quality issues detected, applying micro-polish...');
-        const { polishScript } = await import('./quality-guard');
-        finalScript = await polishScript(refinedScript, qualityResult);
-        console.log('[API] ✓ Script polished');
-      } else {
-        console.log('[API] ✓ Script passes quality checks');
-      }
+      console.log(`[API] ✓ DREAM script generated (${result.fullScript.split(' ').length} words)`);
 
       // Generate AI title
-      console.log('[API] Generating poetic title...');
       const dreamTitle = await aiService.generateDreamTitle({
         journeyIdea: data.journeyIdea,
         archetypeName: archetype.name,
       });
-      console.log(`[API] ✓ Title: "${dreamTitle}"`);
 
       // Track API usage
-      await storage.updateApiKeyLastUsed(req.apiKey.id);
-
-      console.log('[API] ✓ DREAM generation complete');
+      await trackApiKeyUsage(req.apiKey.id);
 
       res.json({
         success: true,
         script: {
           title: dreamTitle,
-          text: finalScript,
-          storyOutline: storyResult.expandedStory,
-          wordCount: finalScript.split(' ').length,
+          text: result.fullScript,
+          wordCount: result.fullScript.split(' ').length,
           emergenceType: 'sleep',
         },
         metadata: {
           apiKeyId: req.apiKey.id,
           generatedAt: new Date().toISOString(),
           archetypeUsed: archetype.name,
-          pipelineStages: {
-            storyShaper: { wordCount: storyResult.storyLength },
-            patternRefiner: { refinementApplied: patternAnalysis.needsRefinement },
-            qualityGuard: { polishApplied: qualityResult.needsPolish },
-          }
+          templateUsed: template.name,
         }
       });
 

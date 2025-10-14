@@ -1,47 +1,50 @@
-# HypnoBrain External API - Integration Guide
+# HypnoBrain Script Generator API - Integration Guide
 
 ## Overview
-The HypnoBrain Script Shaper provides external REST API endpoints for analyzing hypnosis scripts. This allows your other applications (like HypnoBrain Analyzer) to leverage the AI-powered analysis engine.
+The HypnoBrain Script Shaper provides external REST API endpoints for **generating** hypnosis scripts. This allows your HypnoBrain Analyzer application to request fully customized clinical and DREAM scripts with rich parameter control.
 
 ## Available Endpoints
 
-### 1. Clinical Script Analysis
+### 1. Clinical Script Generation
 ```
-POST /api/analyze/clinical
+POST /api/generate/clinical
 ```
-Analyzes clinical hypnosis scripts using Erika Flint's 8-Dimensional Framework.
+Generates clinical hypnosis scripts using Erika Flint's 8-Dimensional Framework with full customization.
 
-### 2. DREAM Script Analysis
+### 2. DREAM Script Generation
 ```
-POST /api/analyze/dream
+POST /api/generate/dream
 ```
-Analyzes DREAM sleep/meditation scripts with focus on sensory immersion and journey quality.
+Generates DREAM sleep/meditation scripts (3000 words, sleep emergence, high sensory immersion).
+
+### 3. List Archetypes
+```
+GET /api/archetypes
+```
+Returns available archetypes and blended archetypes for script personalization.
+
+### 4. List Styles
+```
+GET /api/styles
+```
+Returns available writing styles for clinical scripts.
 
 ---
 
 ## Getting Your API Key
 
-### Step 1: Get Your User ID
-You need your user ID from the database. You can find this by:
-1. Log into the app
-2. Open browser console
-3. Run: `fetch('/api/auth/user').then(r => r.json()).then(console.log)`
-4. Copy your `id` field
-
-### Step 2: Generate API Key
+### Step 1: Generate Your API Key
 Run this command in the Replit Shell:
 
 ```bash
-npx tsx -e "
-import { createApiKey } from './server/admin-tools';
-
-createApiKey({
-  userId: 'YOUR_USER_ID_HERE',
-  name: 'HypnoBrain Analyzer Integration',
-  scopes: ['analyze:clinical', 'analyze:dream'],
-}).then(() => process.exit(0));
-"
+npx tsx generate-api-key.ts
 ```
+
+This will:
+1. Find your user account automatically
+2. Generate a production API key (starts with `sk_live_...`)
+3. Grant `generate:clinical` and `generate:dream` scopes
+4. Display the key **once** (save it immediately!)
 
 **⚠️ IMPORTANT:** The API key will only be displayed ONCE. Save it immediately!
 
@@ -56,160 +59,253 @@ All requests require an API key in the Authorization header:
 Authorization: Bearer YOUR_API_KEY_HERE
 ```
 
-### Example: Clinical Analysis
+---
 
-**Request:**
-```bash
-curl -X POST https://your-replit-app.replit.app/api/analyze/clinical \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer sk_live_abc123..." \
-  -d '{
-    "script": "Close your eyes and take a deep breath. As you settle into this comfortable position, allow yourself to relax more deeply with each breath..."
-  }'
-```
+## Clinical Script Generation
 
-**Response:**
-```json
+### Request Parameters
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `presentingIssue` | string | Yes | The client's presenting issue (min 10 chars) |
+| `desiredOutcome` | string | Yes | The desired therapeutic outcome (min 10 chars) |
+| `dimensions` | object | Yes | 8D dimension levels (0-100 each) |
+| `archetypeId` | number | No | Archetype ID (defaults to first available) |
+| `styleId` | number | No | Style ID (defaults to first available) |
+| `clientName` | string | No | Client name for personalization |
+| `emergenceType` | string | No | 'regular' or 'sleep' (default: 'regular') |
+| `targetWordCount` | number | No | Target word count (default: 1800) |
+
+### Dimensions Object
+
+```typescript
 {
-  "success": true,
-  "analysis": {
-    "dimensions": {
-      "cognitive": 75,
-      "emotional": 68,
-      "somatic": 85,
-      "behavioral": 45,
-      "symbolic": 60,
-      "perspective": 55,
-      "relational": 30,
-      "spiritual": 40
-    },
-    "narrativeArcs": ["Inner Sanctuary", "Progressive Relaxation", "Future Self"],
-    "qualityMetrics": {
-      "wordCount": 1523,
-      "avgSentenceLength": 18.5,
-      "hypnoticLanguageScore": 82,
-      "metaphorDensity": 65,
-      "suggestionsCount": 18
-    },
-    "emergenceType": "regular",
-    "tranceDepth": "medium",
-    "primaryMetaphor": "Peaceful garden sanctuary",
-    "strengths": [
-      "Strong somatic focus with detailed body awareness",
-      "Effective use of progressive relaxation",
-      "Clear therapeutic suggestions"
-    ],
-    "improvements": [
-      "Could increase behavioral suggestions for post-hypnotic action",
-      "Consider adding more relational elements"
-    ]
-  },
-  "metadata": {
-    "apiKeyId": 1,
-    "analyzedAt": "2025-01-14T14:42:00.000Z"
-  }
+  cognitive: number,      // 0-100: Reframes, perspective shifts
+  emotional: number,      // 0-100: Emotional processing, regulation
+  somatic: number,        // 0-100: Body awareness, physical relaxation
+  behavioral: number,     // 0-100: Action steps, habit change
+  symbolic: number,       // 0-100: Metaphors, imagery
+  perspective: number,    // 0-100: Dissociation, observer perspective
+  relational: number,     // 0-100: Connection to others
+  spiritual: number       // 0-100: Meaning, purpose, transcendence
 }
 ```
 
-### Example: DREAM Analysis
+### Example Request
 
-**Request:**
 ```bash
-curl -X POST https://your-replit-app.replit.app/api/analyze/dream \
+curl -X POST https://your-replit-app.replit.app/api/generate/clinical \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer sk_live_abc123..." \
   -d '{
-    "script": "You find yourself standing at the edge of a tranquil forest. The air is warm and gentle..."
+    "presentingIssue": "Chronic anxiety and worry about future events",
+    "desiredOutcome": "Feel calm, confident, and present in the moment",
+    "dimensions": {
+      "cognitive": 75,
+      "emotional": 70,
+      "somatic": 85,
+      "behavioral": 60,
+      "symbolic": 50,
+      "perspective": 65,
+      "relational": 40,
+      "spiritual": 45
+    },
+    "archetypeId": 2,
+    "styleId": 1,
+    "emergenceType": "regular",
+    "targetWordCount": 1800
   }'
 ```
 
-**Response:**
+### Response
+
 ```json
 {
   "success": true,
-  "analysis": {
+  "script": {
+    "title": "Feel calm, confident, and present in the moment Hypnosis Script",
+    "text": "Close your eyes and take a deep breath...",
+    "wordCount": 1847,
+    "emergenceType": "regular",
     "dimensions": {
-      "cognitive": 25,
+      "cognitive": 75,
       "emotional": 70,
-      "somatic": 95,
-      "behavioral": 15,
-      "symbolic": 90,
+      "somatic": 85,
+      "behavioral": 60,
+      "symbolic": 50,
       "perspective": 65,
       "relational": 40,
-      "spiritual": 75
-    },
-    "narrativeArcs": ["Nature Immersion", "Cosmic Journey"],
-    "qualityMetrics": {
-      "wordCount": 2847,
-      "avgSentenceLength": 22.3,
-      "hypnoticLanguageScore": 88,
-      "metaphorDensity": 92,
-      "suggestionsCount": 12
-    },
-    "emergenceType": "sleep",
-    "tranceDepth": "deep",
-    "primaryMetaphor": "Forest journey into peaceful rest",
-    "strengths": [
-      "Exceptional sensory detail and imagery",
-      "Strong symbolic journey structure",
-      "Effective sleep emergence"
-    ],
-    "improvements": [
-      "Already highly optimized for sleep induction"
-    ]
+      "spiritual": 45
+    }
   },
   "metadata": {
     "apiKeyId": 1,
-    "analyzedAt": "2025-01-14T14:45:00.000Z"
+    "generatedAt": "2025-10-14T15:42:00.000Z",
+    "archetypeUsed": "The Healer",
+    "styleUsed": "Conversational",
+    "templateUsed": "Cognitive Reframe + Somatic Grounding"
   }
 }
 ```
 
 ---
 
-## Integration in HypnoBrain Analyzer
+## DREAM Script Generation
 
-### TypeScript/JavaScript Example
+### Request Parameters
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `journeyIdea` | string | Yes | The sleep journey concept (min 20 chars) |
+| `archetypeId` | number | No | Archetype ID (defaults to first blended) |
+| `targetWordCount` | number | No | Target word count (default: 3000) |
+
+### Example Request
+
+```bash
+curl -X POST https://your-replit-app.replit.app/api/generate/dream \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer sk_live_abc123..." \
+  -d '{
+    "journeyIdea": "A peaceful walk through an ancient forest at twilight, where each tree holds a different dream",
+    "archetypeId": 5,
+    "targetWordCount": 3000
+  }'
+```
+
+### Response
+
+```json
+{
+  "success": true,
+  "script": {
+    "title": "Whispers of the Dream Forest",
+    "text": "You find yourself standing at the edge of a tranquil forest...",
+    "wordCount": 2987,
+    "emergenceType": "sleep"
+  },
+  "metadata": {
+    "apiKeyId": 1,
+    "generatedAt": "2025-10-14T15:45:00.000Z",
+    "archetypeUsed": "The Mystic Explorer",
+    "templateUsed": "DREAM: Nature Immersion"
+  }
+}
+```
+
+---
+
+## Get Available Options
+
+### Get Archetypes
+
+```bash
+curl -X GET https://your-replit-app.replit.app/api/archetypes \
+  -H "Authorization: Bearer sk_live_abc123..."
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "archetypes": [
+    {
+      "id": 1,
+      "name": "The Healer",
+      "description": "Nurturing, compassionate, restorative energy"
+    },
+    {
+      "id": 2,
+      "name": "The Guide",
+      "description": "Wise, patient, illuminating presence"
+    }
+  ],
+  "blendedArchetypes": [
+    {
+      "id": 10,
+      "name": "Healer + Explorer",
+      "description": "Nurturing journey through discovery"
+    }
+  ]
+}
+```
+
+### Get Styles
+
+```bash
+curl -X GET https://your-replit-app.replit.app/api/styles \
+  -H "Authorization: Bearer sk_live_abc123..."
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "styles": [
+    {
+      "id": 1,
+      "name": "Conversational",
+      "description": "Natural, flowing, everyday language"
+    },
+    {
+      "id": 2,
+      "name": "Poetic",
+      "description": "Lyrical, metaphorical, evocative"
+    }
+  ]
+}
+```
+
+---
+
+## TypeScript Client Example
 
 ```typescript
-interface AnalysisRequest {
-  script: string;
+interface GenerateClinicalRequest {
+  presentingIssue: string;
+  desiredOutcome: string;
+  dimensions: {
+    cognitive: number;
+    emotional: number;
+    somatic: number;
+    behavioral: number;
+    symbolic: number;
+    perspective: number;
+    relational: number;
+    spiritual: number;
+  };
+  archetypeId?: number;
+  styleId?: number;
+  clientName?: string;
+  emergenceType?: 'regular' | 'sleep';
+  targetWordCount?: number;
 }
 
-interface AnalysisResponse {
+interface GenerateDreamRequest {
+  journeyIdea: string;
+  archetypeId?: number;
+  targetWordCount?: number;
+}
+
+interface ScriptResponse {
   success: boolean;
-  analysis: {
-    dimensions: {
-      cognitive: number;
-      emotional: number;
-      somatic: number;
-      behavioral: number;
-      symbolic: number;
-      perspective: number;
-      relational: number;
-      spiritual: number;
-    };
-    narrativeArcs: string[];
-    qualityMetrics: {
-      wordCount: number;
-      avgSentenceLength: number;
-      hypnoticLanguageScore: number;
-      metaphorDensity: number;
-      suggestionsCount: number;
-    };
+  script: {
+    title: string;
+    text: string;
+    wordCount: number;
     emergenceType: 'regular' | 'sleep';
-    tranceDepth: 'light' | 'medium' | 'deep';
-    primaryMetaphor?: string;
-    strengths: string[];
-    improvements: string[];
+    dimensions?: any;
   };
   metadata: {
     apiKeyId: number;
-    analyzedAt: string;
+    generatedAt: string;
+    archetypeUsed?: string;
+    styleUsed?: string;
+    templateUsed: string;
   };
 }
 
-class HypnoBrainAPI {
+class ScriptShaperAPI {
   private apiKey: string;
   private baseUrl: string;
 
@@ -218,50 +314,97 @@ class HypnoBrainAPI {
     this.baseUrl = baseUrl;
   }
 
-  async analyzeClinical(script: string): Promise<AnalysisResponse> {
-    const response = await fetch(`${this.baseUrl}/api/analyze/clinical`, {
+  async generateClinical(request: GenerateClinicalRequest): Promise<ScriptResponse> {
+    const response = await fetch(`${this.baseUrl}/api/generate/clinical`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${this.apiKey}`,
       },
-      body: JSON.stringify({ script }),
+      body: JSON.stringify(request),
     });
 
     if (!response.ok) {
       const error = await response.json();
-      throw new Error(error.message || 'Analysis failed');
+      throw new Error(error.message || 'Generation failed');
     }
 
     return response.json();
   }
 
-  async analyzeDream(script: string): Promise<AnalysisResponse> {
-    const response = await fetch(`${this.baseUrl}/api/analyze/dream`, {
+  async generateDream(request: GenerateDreamRequest): Promise<ScriptResponse> {
+    const response = await fetch(`${this.baseUrl}/api/generate/dream`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${this.apiKey}`,
       },
-      body: JSON.stringify({ script }),
+      body: JSON.stringify(request),
     });
 
     if (!response.ok) {
       const error = await response.json();
-      throw new Error(error.message || 'Analysis failed');
+      throw new Error(error.message || 'Generation failed');
     }
 
+    return response.json();
+  }
+
+  async getArchetypes() {
+    const response = await fetch(`${this.baseUrl}/api/archetypes`, {
+      headers: {
+        'Authorization': `Bearer ${this.apiKey}`,
+      },
+    });
+
+    if (!response.ok) throw new Error('Failed to fetch archetypes');
+    return response.json();
+  }
+
+  async getStyles() {
+    const response = await fetch(`${this.baseUrl}/api/styles`, {
+      headers: {
+        'Authorization': `Bearer ${this.apiKey}`,
+      },
+    });
+
+    if (!response.ok) throw new Error('Failed to fetch styles');
     return response.json();
   }
 }
 
-// Usage
-const client = new HypnoBrainAPI('sk_live_your_api_key_here');
+// Usage in HypnoBrain Analyzer
+const client = new ScriptShaperAPI(process.env.SCRIPT_SHAPER_API_KEY!);
 
-const result = await client.analyzeClinical(myScript);
-console.log('8D Dimensions:', result.analysis.dimensions);
-console.log('Strengths:', result.analysis.strengths);
-console.log('Quality Score:', result.analysis.qualityMetrics.hypnoticLanguageScore);
+// Generate a clinical script
+const clinicalScript = await client.generateClinical({
+  presentingIssue: "Chronic anxiety and worry",
+  desiredOutcome: "Feel calm and present",
+  dimensions: {
+    cognitive: 75,
+    emotional: 70,
+    somatic: 85,
+    behavioral: 60,
+    symbolic: 50,
+    perspective: 65,
+    relational: 40,
+    spiritual: 45
+  },
+  archetypeId: 2,
+  styleId: 1,
+});
+
+console.log('Generated script:', clinicalScript.script.text);
+console.log('Word count:', clinicalScript.script.wordCount);
+
+// Generate a DREAM script
+const dreamScript = await client.generateDream({
+  journeyIdea: "A peaceful walk through an ancient forest",
+  archetypeId: 5,
+});
+
+console.log('Dream title:', dreamScript.script.title);
+console.log('Dream script:', dreamScript.script.text);
 ```
 
 ---
@@ -274,15 +417,7 @@ console.log('Quality Score:', result.analysis.qualityMetrics.hypnoticLanguageSco
 ```json
 {
   "error": "Unauthorized",
-  "message": "Missing or invalid API key. Include 'Authorization: Bearer YOUR_API_KEY' header"
-}
-```
-
-**401 Unauthorized - Invalid API Key:**
-```json
-{
-  "error": "Unauthorized",
-  "message": "Invalid or inactive API key"
+  "message": "Missing or invalid API key"
 }
 ```
 
@@ -290,7 +425,7 @@ console.log('Quality Score:', result.analysis.qualityMetrics.hypnoticLanguageSco
 ```json
 {
   "error": "Forbidden",
-  "message": "API key missing required scopes: analyze:clinical"
+  "message": "API key missing required scopes: generate:clinical"
 }
 ```
 
@@ -301,10 +436,19 @@ console.log('Quality Score:', result.analysis.qualityMetrics.hypnoticLanguageSco
   "details": [
     {
       "code": "too_small",
-      "minimum": 100,
-      "message": "Script must be at least 100 characters"
+      "minimum": 10,
+      "path": ["presentingIssue"],
+      "message": "Presenting issue must be at least 10 characters"
     }
   ]
+}
+```
+
+**500 Internal Server Error:**
+```json
+{
+  "error": "Generation failed",
+  "message": "An unexpected error occurred"
 }
 ```
 
@@ -314,37 +458,9 @@ console.log('Quality Score:', result.analysis.qualityMetrics.hypnoticLanguageSco
 
 1. **Store API keys securely** - Use environment variables, never commit to git
 2. **Handle errors gracefully** - Implement retry logic with exponential backoff
-3. **Minimum script length** - Scripts must be at least 100 characters
-4. **Response time** - Analysis typically takes 3-8 seconds depending on script length
-5. **Cache results** - Analysis results don't change, so cache them if analyzing the same script multiple times
-
----
-
-## API Key Management
-
-### List Your API Keys
-```bash
-npx tsx -e "
-import { listApiKeys } from './server/admin-tools';
-listApiKeys('YOUR_USER_ID').then(console.log).then(() => process.exit(0));
-"
-```
-
-### Revoke an API Key
-```bash
-npx tsx -e "
-import { revokeApiKey } from './server/admin-tools';
-revokeApiKey(KEY_ID).then(() => process.exit(0));
-"
-```
-
-### Reactivate an API Key
-```bash
-npx tsx -e "
-import { reactivateApiKey } from './server/admin-tools';
-reactivateApiKey(KEY_ID).then(() => process.exit(0));
-"
-```
+3. **Minimum input lengths** - presentingIssue/desiredOutcome: 10 chars, journeyIdea: 20 chars
+4. **Response time** - Generation typically takes 8-15 seconds depending on complexity
+5. **Cache results** - Store generated scripts to avoid regenerating the same request
 
 ---
 
@@ -352,7 +468,7 @@ reactivateApiKey(KEY_ID).then(() => process.exit(0));
 
 - API keys are hashed with SHA-256 before storage
 - Keys are only shown once during creation
-- Scopes control which endpoints can be accessed
+- Scopes control which endpoints can be accessed (`generate:clinical`, `generate:dream`)
 - Keys can be revoked instantly if compromised
 - Usage is tracked (last used timestamp)
 
@@ -361,3 +477,19 @@ reactivateApiKey(KEY_ID).then(() => process.exit(0));
 ## Support
 
 For issues or questions about the API, check the server logs or contact the development team.
+
+## Key Differences from Analysis API
+
+❌ **This is NOT an analysis API** - It does not analyze existing scripts  
+✅ **This is a generation API** - It creates NEW scripts based on parameters
+
+**Correct Flow:**
+```
+User fills form in HypnoBrain Analyzer
+  ↓
+Send parameters to Script Shaper API
+  ↓
+Receive freshly generated script
+  ↓
+Display in Analyzer app
+```
