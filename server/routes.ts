@@ -8,6 +8,8 @@ import { templateSelector } from "./template-selector";
 import { dimensionAssembler } from "./dimension-assembler";
 import { setupAuth, isAuthenticated } from "./replitAuth";
 import { isAdmin } from "./adminAuth";
+import { requireApiKey } from "./apiKeyAuth";
+import { analyzeScript } from "./script-analyzer";
 import { z } from "zod";
 import { validateContent, validateMultipleFields } from "./content-validator";
 import { ObjectStorageService } from "./objectStorage";
@@ -208,6 +210,98 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ error: error.message });
     }
   });
+
+  // ============================================================================
+  // EXTERNAL API ENDPOINTS (B2B Integration)
+  // ============================================================================
+
+  /**
+   * Analyze Clinical Hypnosis Script
+   * POST /api/analyze/clinical
+   * 
+   * Analyzes a clinical hypnosis script using Erika Flint's 8D Framework
+   * Requires API key with 'analyze:clinical' scope
+   */
+  app.post("/api/analyze/clinical", requireApiKey(['analyze:clinical']), async (req: any, res) => {
+    try {
+      const schema = z.object({
+        script: z.string().min(100, "Script must be at least 100 characters"),
+      });
+
+      const { script } = schema.parse(req.body);
+
+      // Analyze the script
+      const analysis = await analyzeScript(script, 'clinical');
+
+      res.json({
+        success: true,
+        analysis,
+        metadata: {
+          apiKeyId: req.apiKey.id,
+          analyzedAt: new Date().toISOString(),
+        }
+      });
+    } catch (error: any) {
+      console.error("Clinical script analysis error:", error);
+      
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ 
+          error: "Validation error",
+          details: error.errors 
+        });
+      }
+      
+      res.status(500).json({ 
+        error: "Analysis failed",
+        message: error.message 
+      });
+    }
+  });
+
+  /**
+   * Analyze DREAM Hypnosis Script
+   * POST /api/analyze/dream
+   * 
+   * Analyzes a DREAM sleep/meditation script
+   * Requires API key with 'analyze:dream' scope
+   */
+  app.post("/api/analyze/dream", requireApiKey(['analyze:dream']), async (req: any, res) => {
+    try {
+      const schema = z.object({
+        script: z.string().min(100, "Script must be at least 100 characters"),
+      });
+
+      const { script } = schema.parse(req.body);
+
+      // Analyze the script
+      const analysis = await analyzeScript(script, 'dream');
+
+      res.json({
+        success: true,
+        analysis,
+        metadata: {
+          apiKeyId: req.apiKey.id,
+          analyzedAt: new Date().toISOString(),
+        }
+      });
+    } catch (error: any) {
+      console.error("DREAM script analysis error:", error);
+      
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ 
+          error: "Validation error",
+          details: error.errors 
+        });
+      }
+      
+      res.status(500).json({ 
+        error: "Analysis failed",
+        message: error.message 
+      });
+    }
+  });
+
+  // ============================================================================
 
   // Create a remix from an existing generation
   app.post("/api/generations/:id/remix", async (req, res) => {

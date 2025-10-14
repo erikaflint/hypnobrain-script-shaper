@@ -494,3 +494,18 @@ export const templateJSONSchema = z.object({
     is_public: z.boolean(),
   }),
 });
+
+// API Keys for external integrations
+export const apiKeys = pgTable("api_keys", {
+  id: serial("id").primaryKey(),
+  key: varchar("key", { length: 64 }).notNull().unique(), // SHA-256 hash of the actual key
+  userId: varchar("user_id").references(() => users.id, { onDelete: 'cascade' }).notNull(),
+  name: varchar("name", { length: 100 }).notNull(), // Friendly name for the key
+  scopes: text("scopes").array().notNull(), // e.g., ['analyze:clinical', 'analyze:dream']
+  isActive: boolean("is_active").default(true).notNull(),
+  lastUsedAt: timestamp("last_used_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export type ApiKey = typeof apiKeys.$inferSelect;
+export type InsertApiKey = typeof apiKeys.$inferInsert;
