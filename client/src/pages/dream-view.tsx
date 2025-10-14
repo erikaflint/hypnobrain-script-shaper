@@ -81,7 +81,7 @@ export default function DreamView() {
 
       {/* Header */}
       <div className="relative z-10">
-        <AppHeader showDreamboard={true} />
+        <AppHeader showDreamboard={true} showDreamLibrary={true} />
       </div>
 
       {/* Prominent Image Carousel at Top */}

@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Brain, Home, LayoutDashboard, LogIn, LogOut, ArrowLeft, Wand2, Shield, Moon } from "lucide-react";
+import { Brain, Home, LayoutDashboard, LogIn, LogOut, ArrowLeft, Wand2, Shield, Moon, Library } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
 export interface AppHeaderProps {
@@ -13,6 +13,7 @@ export interface AppHeaderProps {
   showAuth?: boolean;
   showDreamboard?: boolean;
   showDreamLink?: boolean; // Show DREAM Hypnosis link
+  showDreamLibrary?: boolean; // Show Dream Library link
   showCreateScript?: boolean;
   showAdminLink?: boolean; // New: Show admin panel link (only visible to admins)
   rightContent?: React.ReactNode;
@@ -28,6 +29,7 @@ export function AppHeader({
   showAuth = false,
   showDreamboard = false,
   showDreamLink = false,
+  showDreamLibrary = false,
   showCreateScript = false,
   showAdminLink = false,
   rightContent,
@@ -75,6 +77,15 @@ export function AppHeader({
               <Button variant="ghost" size="sm" data-testid="button-dreamboard">
                 <LayoutDashboard className="w-4 h-4 mr-2" />
                 Dreamboard
+              </Button>
+            </Link>
+          )}
+
+          {showDreamLibrary && (
+            <Link href="/dreams" data-testid="link-dream-library">
+              <Button variant="ghost" size="sm" data-testid="button-dream-library">
+                <Library className="w-4 h-4 mr-2" />
+                Library
               </Button>
             </Link>
           )}
