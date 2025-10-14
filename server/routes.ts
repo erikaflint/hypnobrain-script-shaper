@@ -95,6 +95,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
+  // Get a specific generation by ID (with ownership check)
+  app.get("/api/generations/:id", isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      const generation = await storage.getGenerationById(id);
+      
+      if (!generation) {
+        return res.status(404).json({ message: "Generation not found" });
+      }
+      
+      // Verify ownership - only return if this user owns the generation
+      if (generation.userId !== userId) {
+        return res.status(403).json({ message: "Forbidden: You don't have access to this generation" });
+      }
+      
+      res.json(generation);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+  
   // Get ALL DREAM thumbnails for crowdsourced loading carousel (no auth required)
   app.get("/api/user/dream-thumbnails", async (req: any, res) => {
     try {

@@ -8,7 +8,7 @@ import { VoicePlayer } from "@/components/voice-player";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { isUnauthorizedError } from "@/lib/authUtils";
-import { Copy, FileText, Calendar, Tag, Sparkles, Wand2, Star, Package, Moon } from "lucide-react";
+import { Copy, FileText, Calendar, Tag, Sparkles, Wand2, Star, Package, Moon, Play } from "lucide-react";
 import { AppHeader } from "@/components/app-header";
 import { format } from "date-fns";
 import { queryClient, apiRequest } from "@/lib/queryClient";
@@ -286,13 +286,23 @@ export default function Dreamboard() {
 
         {/* Thumbnail Image for DREAM scripts */}
         {generation.generationMode === "dream" && generation.imageUrl && (
-          <div className="border-t pt-4">
+          <div className="border-t pt-4 space-y-4">
             <img 
               src={generation.imageUrl} 
               alt="DREAM Journey Visualization"
               className="w-full h-auto rounded-lg"
               data-testid={`img-dream-thumbnail-${generation.id}`}
             />
+            <Link href={`/dream/${generation.id}/view`}>
+              <Button 
+                className="w-full" 
+                size="lg"
+                data-testid={`button-experience-journey-${generation.id}`}
+              >
+                <Play className="w-5 h-5 mr-2" />
+                Experience Dream Journey
+              </Button>
+            </Link>
           </div>
         )}
 
