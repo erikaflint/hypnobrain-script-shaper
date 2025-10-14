@@ -405,13 +405,14 @@ Format as JSON:
 Your task: Take a brief journey idea and expand it into a detailed, vivid story (800-1200 words) that will become the foundation for a sleep hypnosis script.
 
 Key Principles:
-- CREATE VARIETY: Each section should introduce new elements, scenes, or sensations - avoid repetitive language
-- SENSORY RICHNESS: Engage all senses with specific, concrete details
-- NATURAL FLOW: The story should unfold like a gentle journey, not a repetitive pattern
+- NATURAL HYPNOTIC LANGUAGE: Use proper grammar with articles (the, a, your). Write "notice the breath flowing" NOT "notice breath flowing". Write "your body knows" NOT "bodies know". Sound like a skilled hypnotherapist, not a robot.
+- CREATE VARIETY: Vary sentence structure while maintaining natural flow. Avoid repetitive openers but NEVER sacrifice grammar for variety.
+- SENSORY RICHNESS: Engage all senses with specific, concrete details using natural phrasing
+- FLOWING TRANSITIONS: Use connecting words (and, as, while, perhaps) to create smooth, hypnotic flow
 - DREAM LOGIC: Allow the story to shift and transform naturally, like a dream
 - SLEEP-CONDUCIVE: Maintain a peaceful, calming tone throughout
 
-The story should be a standalone narrative - vivid enough that a hypnotist could easily convert it into a script.`;
+CRITICAL: The language must sound natural and hypnotic. Missing articles ("notice breath" instead of "notice the breath") creates robotic, unnatural text that breaks trance. Always use complete, grammatically correct phrases.`;
 
     const userPrompt = `Journey Idea: ${params.journeyIdea}
 

@@ -123,14 +123,22 @@ export async function refinePatterns(
 - ALL specific details (names, dates, places)
 - The overall flow and structure
 - The peaceful, calming tone
+- NATURAL HYPNOTIC LANGUAGE with proper grammar and articles (the, a, your)
+
+CRITICAL GRAMMAR RULES:
+- Always use articles: "the breath" NOT "breath", "your body" NOT "body", "a gentle feeling" NOT "gentle feeling"
+- Avoid robotic constructions: "you might notice" NOT "perhaps noticing emerges", "your body knows" NOT "bodies know"
+- Use natural phrasing: "feel the warmth" NOT "feeling of warmth occurs"
+- Maintain proper English grammar while varying sentence openers
 
 DO NOT:
 - Change the content or ideas
 - Add new information
 - Remove any details
+- Drop articles or create awkward passive constructions
 - Alter the script length significantly
 
-You will receive a script with repetitive sentence openers. Rewrite ONLY the overused patterns to create more variety.`;
+You will receive a script with repetitive sentence openers. Rewrite ONLY the overused patterns to create more variety while keeping the language natural and hypnotic.`;
 
   const userPrompt = `Script to refine:
 ${script}

@@ -6,6 +6,7 @@
  */
 
 import Anthropic from '@anthropic-ai/sdk';
+import { analyzeGrammar } from './grammar-checker';
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
@@ -112,6 +113,21 @@ function checkWordCount(script: string, targetWordCount: number): QualityCheck {
     details: passed
       ? `${actualCount} words (target: ${targetWordCount} ±15%)`
       : `${actualCount} words - outside target range ${Math.round(minCount)}-${Math.round(maxCount)}`
+  };
+}
+
+/**
+ * Check natural grammar and hypnotic flow
+ */
+function checkNaturalGrammar(script: string): QualityCheck {
+  const grammarReport = analyzeGrammar(script);
+  
+  return {
+    name: "Natural Grammar",
+    passed: grammarReport.isNatural,
+    details: grammarReport.isNatural
+      ? `Natural hypnotic language (score: ${grammarReport.score}%)`
+      : `Unnatural/robotic language (score: ${grammarReport.score}%) - ${grammarReport.issues.map(i => i.type).join(', ')}`
   };
 }
 
@@ -285,6 +301,7 @@ export async function runQualityGuard(
   
   const checks: QualityCheck[] = [
     checkEmergence(script, options.emergenceType),
+    checkNaturalGrammar(script), // CRITICAL: Check for natural, hypnotic language
     checkFunctionalSuggestions(script),
     checkWordCount(script, options.targetWordCount),
     checkSentenceVariety(script),
@@ -322,6 +339,7 @@ export async function runQualityGuard(
       // Re-check polished version
       const recheck: QualityCheck[] = [
         checkEmergence(polishedScript, options.emergenceType),
+        checkNaturalGrammar(polishedScript),
         checkFunctionalSuggestions(polishedScript),
         checkWordCount(polishedScript, options.targetWordCount),
         checkSentenceVariety(polishedScript),
