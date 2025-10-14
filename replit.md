@@ -44,6 +44,7 @@ The ScriptEngine (`server/script-engine/`) is the IP layer transforming template
 ### UI/UX Decisions
 -   **Design System**: Purple accent colors, dark mode, DAW-inspired interface, Inter, DM Sans, and JetBrains Mono fonts. Uses shadcn/ui components.
 -   **Page Routes**: `/` (Landing), `/free`, `/app-v2` (Current production), `/dream`, `/dashboard`, `/admin`.
+-   **DREAM Library Layout**: Horizontal split-screen design - 320px scrollable left sidebar displays condensed dream grid, flex-1 right panel shows large 21:9 hero image with full script content. Both sections scroll independently with `calc(100vh - 4rem)` height. Fullscreen mode available for immersive viewing.
 
 ### Authentication System
 -   **Provider**: Replit Auth (OpenID Connect) supporting Google, GitHub, X, Apple, and Email/Password.
