@@ -47,9 +47,11 @@ To prevent quality degradation and ensure consistency, DREAM scripts pass throug
 -   **Version Control & Favorites**: Star scripts, parent-child tracking for remixes, and API endpoints for managing them.
 -   **Save/Apply Mix (Custom Templates)**: Users can save and apply custom dimension configurations.
 -   **Script Package Generator**: Allows creating sellable collections of themed scripts, with AI generating concepts, and user modification and generation.
+-   **Full CRUD Operations**: Complete Create, Read, Update, Delete functionality for all scripts with ownership verification. Edit modal for script text, delete with confirmation dialog, hover-to-reveal UI controls.
 -   **DREAM Hypnosis Series**: Generates non-clinical, 30-minute immersive sleep/meditation scripts (3000 words). Features journey-based input, sleep emergence, high somatic/symbolic emphasis, full-screen crowdsourced loading carousel, and AI-generated serene thumbnails (DALL-E 3) with permanent storage. Includes 13 DREAM-specific Narrative Arcs and 8 Blended Archetypes. Also offers voice controls for playback. **4-Stage Quality Pipeline**: Story Shaper (800-1200 word outline) → Dream Maker (script generation) → Pattern Refiner (fix repetitive patterns) → Quality Guard (validate emergence, suggestions, word count, metaphors). **Story Outline Preservation**: The story outline from Stage 1 is saved in the database and displayed in the UI for full creative journey transparency.
 -   **Permanent Thumbnail Storage**: DALL-E generated images are immediately downloaded and stored permanently in Replit App Storage (expires in 1 hour if not saved). Thumbnails are served via `/public-objects/dream-thumbnails/{uuid}.png` with 1-year cache headers.
 -   **Crowdsourced Loading Carousel**: Full-screen immersive loading experience displays up to 50 recent DREAM thumbnails from ALL users (not just current user) to create a community-driven calming experience. Falls back to curated Unsplash landscapes for first-time users.
+-   **External API (B2B)**: RESTful endpoints for third-party integrations. API key authentication with scopes, SHA-256 hashed keys, usage tracking. `/api/analyze/clinical` and `/api/analyze/dream` endpoints analyze scripts using AI to extract 8D dimensions, narrative patterns, quality metrics, and improvement recommendations.
 
 ### UI/UX Decisions
 -   **Design System**: Purple accent colors, dark mode, DAW-inspired interface, Inter, DM Sans, and JetBrains Mono fonts. Uses shadcn/ui components.
@@ -65,8 +67,9 @@ To prevent quality degradation and ensure consistency, DREAM scripts pass throug
 -   **Middleware**: `isAuthenticated` middleware for API route protection and token refresh.
 
 ### Database Schema Highlights
--   **Core Tables**: `users`, `sessions`, `dimensions`, `archetypes`, `styles`, `pricing`, `generations`, `free_script_usage`, `admin_users`.
+-   **Core Tables**: `users`, `sessions`, `dimensions`, `archetypes`, `styles`, `pricing`, `generations`, `free_script_usage`, `admin_users`, `api_keys`.
 -   **User Ownership**: `generations.userId` links scripts to users.
+-   **API Keys**: SHA-256 hashed keys with scopes, active/inactive status, usage tracking.
 -   **Naming Convention**: `snake_case` in database, `camelCase` in Drizzle ORM.
 
 ## External Dependencies
