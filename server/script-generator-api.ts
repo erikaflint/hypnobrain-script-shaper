@@ -36,10 +36,11 @@ scriptGeneratorRouter.post('/clinical',
       const schema = z.object({
         presentingIssue: z.string().min(10, 'Presenting issue must be at least 10 characters'),
         desiredOutcome: z.string().min(10, 'Desired outcome must be at least 10 characters'),
-        templateId: z.number().optional(), // Use a specific template directly
-        archetypeId: z.number().optional(),
-        styleId: z.number().optional(),
-        clientName: z.string().optional(),
+        additionalNotes: z.string().optional(), // Client notes/context
+        voiceProfileId: z.number().optional(), // Voice/tone profile
+        archetypeId: z.number().optional(), // Narrative archetype
+        styleId: z.number().optional(), // Writing style
+        templateId: z.number().optional(), // Direct template selection (overrides auto-recommendation)
         emergenceType: z.enum(['regular', 'sleep']).optional().default('regular'),
         targetWordCount: z.number().optional().default(1800),
       });
@@ -90,7 +91,8 @@ scriptGeneratorRouter.post('/clinical',
       // Get template: either specified directly or via recommendation
       let template;
       if (data.templateId) {
-        template = await storage.getTemplateById(data.templateId);
+        const templateManager = await import('./template-manager');
+        template = await templateManager.templateManager.getTemplateByDbId(data.templateId);
         if (!template) {
           return res.status(404).json({ 
             error: 'Template not found',
@@ -120,12 +122,11 @@ scriptGeneratorRouter.post('/clinical',
       console.log(`[API] Generating clinical script for: "${data.presentingIssue.substring(0, 50)}..."`);
       
       // Generate script using ScriptEngine with template
-      // Note: For now, we use the template as-is. Future enhancement: map external
-      // dimension names (cognitive, emotional, etc.) to template names (psychological, temporal, etc.)
       const result = await aiService.generateFullScript({
         template: templateJson,
         presentingIssue: data.presentingIssue,
         desiredOutcome: data.desiredOutcome,
+        clientNotes: data.additionalNotes,
         emergenceType: data.emergenceType,
         targetWordCount: data.targetWordCount,
       });

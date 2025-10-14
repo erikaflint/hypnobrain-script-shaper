@@ -69,10 +69,11 @@ Authorization: Bearer YOUR_API_KEY_HERE
 |-------|------|----------|-------------|
 | `presentingIssue` | string | Yes | The client's presenting issue (min 10 chars) |
 | `desiredOutcome` | string | Yes | The desired therapeutic outcome (min 10 chars) |
+| `additionalNotes` | string | No | Additional client context or notes |
+| `voiceProfileId` | number | No | Voice/tone profile ID |
+| `archetypeId` | number | No | Narrative archetype ID |
+| `styleId` | number | No | Writing style ID |
 | `templateId` | number | No | Use a specific template directly by ID |
-| `archetypeId` | number | No | Archetype ID (defaults to first available) |
-| `styleId` | number | No | Style ID (defaults to first available) |
-| `clientName` | string | No | Client name for personalization |
 | `emergenceType` | string | No | 'regular' or 'sleep' (default: 'regular') |
 | `targetWordCount` | number | No | Target word count (default: 1800) |
 
@@ -90,6 +91,8 @@ curl -X POST https://your-replit-app.replit.app/api/generate/clinical \
   -d '{
     "presentingIssue": "Chronic anxiety and worry about future events",
     "desiredOutcome": "Feel calm, confident, and present in the moment",
+    "additionalNotes": "Client prefers gentle language, avoid medical terms",
+    "voiceProfileId": 1,
     "archetypeId": 2,
     "styleId": 1,
     "emergenceType": "regular",
@@ -235,10 +238,11 @@ curl -X GET https://your-replit-app.replit.app/api/styles \
 interface GenerateClinicalRequest {
   presentingIssue: string;
   desiredOutcome: string;
-  templateId?: number;  // Optional: use specific template
-  archetypeId?: number;
-  styleId?: number;
-  clientName?: string;
+  additionalNotes?: string;  // Additional client context
+  voiceProfileId?: number;   // Voice/tone profile
+  archetypeId?: number;      // Narrative archetype
+  styleId?: number;          // Writing style
+  templateId?: number;       // Optional: use specific template
   emergenceType?: 'regular' | 'sleep';
   targetWordCount?: number;
 }
@@ -342,6 +346,8 @@ const client = new ScriptShaperAPI(process.env.SCRIPT_SHAPER_API_KEY!);
 const clinicalScript = await client.generateClinical({
   presentingIssue: "Chronic anxiety and worry",
   desiredOutcome: "Feel calm and present",
+  additionalNotes: "Client responds well to nature metaphors",
+  voiceProfileId: 1,
   archetypeId: 2,
   styleId: 1,
   targetWordCount: 1800,
@@ -355,6 +361,7 @@ console.log('Template used:', clinicalScript.metadata.templateUsed);
 const specificScript = await client.generateClinical({
   presentingIssue: "Sleep difficulties",
   desiredOutcome: "Deep, restful sleep",
+  additionalNotes: "Avoid references to clocks or time pressure",
   templateId: 7,  // Use specific template by ID
   emergenceType: 'sleep',
 });
