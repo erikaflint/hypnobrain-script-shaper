@@ -221,6 +221,10 @@ export class DatabaseStorage implements IStorage {
     await db.update(generations).set({ fullScript }).where(eq(generations.id, id));
   }
   
+  async updateGenerationTitle(id: number, title: string): Promise<void> {
+    await db.update(generations).set({ title }).where(eq(generations.id, id));
+  }
+  
   async getGenerationsByParentId(parentId: number): Promise<Generation[]> {
     return await db
       .select()

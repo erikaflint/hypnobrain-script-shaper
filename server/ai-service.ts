@@ -487,6 +487,52 @@ Make each concept distinct and valuable. Think like a professional creating a se
     const result = JSON.parse(cleanJsonResponse(textContent.text));
     return result;
   }
+
+  /**
+   * Generate a beautiful, evocative title for a DREAM script
+   */
+  async generateDreamTitle(params: { journeyIdea: string; archetypeName: string }): Promise<string> {
+    const systemPrompt = `You are a master wordsmith specializing in creating evocative, peaceful titles for sleep hypnosis journeys.
+
+Your titles should:
+- Be poetic and calming, evoking peaceful imagery
+- Be 3-8 words long
+- Capture the essence of the journey without being literal
+- Feel like an invitation to a peaceful experience
+- NOT include "DREAM" or "Hypnosis" in the title (we add that elsewhere)
+
+Examples of good titles:
+- "Twilight Stroll Through Parisian Gardens"
+- "Moonlit Forest Sanctuary"
+- "Gentle Waves of the Azure Shore"
+- "Starlit Path to Inner Peace"
+- "Whispers of the Mountain Wind"`;
+
+    const userPrompt = `Journey Description: ${params.journeyIdea}
+Archetype: ${params.archetypeName}
+
+Create a beautiful, evocative title for this peaceful sleep journey.
+
+Format as JSON:
+{
+  "title": "Your beautiful title here"
+}`;
+
+    const response = await anthropic.messages.create({
+      model: DEFAULT_MODEL_STR,
+      max_tokens: 200,
+      system: systemPrompt,
+      messages: [{ role: 'user', content: userPrompt }],
+    });
+
+    const textContent = response.content[0];
+    if (textContent.type !== 'text') {
+      throw new Error('Expected text response from AI');
+    }
+    
+    const result = JSON.parse(cleanJsonResponse(textContent.text));
+    return result.title;
+  }
 }
 
 export const aiService = new AIService();

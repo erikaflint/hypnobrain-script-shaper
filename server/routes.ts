@@ -480,10 +480,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         targetWordCount: 3000,  // 30-minute script
       });
       
-      // Generate meaningful title from journey idea
-      const dreamTitle = journeyIdea.length > 50 
-        ? `DREAM: ${journeyIdea.substring(0, 47)}...`
-        : `DREAM: ${journeyIdea}`;
+      // Generate beautiful AI title for the DREAM script
+      const dreamTitle = await aiService.generateDreamTitle({
+        journeyIdea,
+        archetypeName: archetype.name,
+      });
       
       // Content moderation check before image generation
       let thumbnailUrl: string | undefined;
