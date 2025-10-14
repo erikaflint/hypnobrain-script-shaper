@@ -95,6 +95,7 @@ export const generations = pgTable("generations", {
   archetypeId: integer("archetype_id").references(() => archetypes.id),
   stylesJson: jsonb("styles_json"),
   previewText: text("preview_text"),
+  storyOutline: text("story_outline"), // DREAM: 800-1200 word story outline from Step 1 (Story Shaper)
   fullScript: text("full_script"),
   assetsJson: jsonb("assets_json"),
   pricePaidCents: integer("price_paid_cents").default(0).notNull(),

@@ -560,6 +560,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         isFree: false,
         presentingIssue: journeyIdea,
         desiredOutcome: "Experience a peaceful, restful journey into natural sleep",
+        storyOutline: expandedStory, // Save the 800-1200 word story outline from Step 1
         fullScript: result.fullScript,
         archetypeId: archetype.id,
       });
