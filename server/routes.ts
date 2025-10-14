@@ -567,6 +567,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.json({ 
         fullScript: result.fullScript,
+        storyOutline: expandedStory, // Include story outline for transparency
         generationId: generation.id,
         title: dreamTitle,
         thumbnailUrl

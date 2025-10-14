@@ -406,6 +406,23 @@ export default function DreamLibrary() {
                 )}
               </div>
 
+              {/* Story Outline (if available) */}
+              {dreamDetails.storyOutline && (
+                <Card className="bg-card/90 backdrop-blur-sm border-primary/20">
+                  <div className="p-6">
+                    <h3 className="text-lg font-semibold mb-2 text-primary">Story Outline</h3>
+                    <p className="text-xs text-muted-foreground mb-4">
+                      The detailed 800-1200 word story created by the Story Shaper (Step 1)
+                    </p>
+                    <div className="prose prose-sm dark:prose-invert max-w-none">
+                      <p className="whitespace-pre-wrap text-sm leading-relaxed">
+                        {dreamDetails.storyOutline}
+                      </p>
+                    </div>
+                  </div>
+                </Card>
+              )}
+
               {/* Full Script */}
               {dreamDetails.fullScript && (
                 <Card className="bg-card/90 backdrop-blur-sm">
@@ -534,6 +551,23 @@ export default function DreamLibrary() {
                 )}
               </div>
             </Card>
+
+            {/* Story Outline (if available) */}
+            {dreamDetails.storyOutline && (
+              <Card className="bg-card/90 backdrop-blur-sm border-primary/20">
+                <div className="p-6">
+                  <h3 className="text-lg font-semibold mb-2 text-primary">Story Outline</h3>
+                  <p className="text-xs text-muted-foreground mb-4">
+                    The detailed 800-1200 word story created by the Story Shaper (Step 1)
+                  </p>
+                  <div className="prose prose-sm dark:prose-invert max-w-none">
+                    <p className="whitespace-pre-wrap text-sm leading-relaxed">
+                      {dreamDetails.storyOutline}
+                    </p>
+                  </div>
+                </div>
+              </Card>
+            )}
 
             {dreamDetails.fullScript && (
               <Card className="bg-card/90 backdrop-blur-sm">

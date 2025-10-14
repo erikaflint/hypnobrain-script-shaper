@@ -109,7 +109,7 @@ export const generations = pgTable("generations", {
   
   // Version control fields
   isFavorite: boolean("is_favorite").default(false).notNull(),
-  parentGenerationId: integer("parent_generation_id").references(() => generations.id, { onDelete: 'set null' }),
+  parentGenerationId: integer("parent_generation_id").references((): any => generations.id, { onDelete: 'set null' }),
   versionLabel: varchar("version_label", { length: 100 }),
   
   createdAt: timestamp("created_at").defaultNow().notNull(),
