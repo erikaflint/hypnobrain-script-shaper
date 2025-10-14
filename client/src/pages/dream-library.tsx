@@ -146,7 +146,7 @@ export default function DreamLibrary() {
         {/* Left Sidebar - Library */}
         <div 
           className={`transition-all duration-500 border-r border-border/50 ${
-            selectedDream ? 'w-80' : 'w-full'
+            selectedDream ? 'w-96' : 'w-full'
           }`}
           style={{ 
             height: selectedDream ? 'calc(100vh - 4rem)' : 'auto',
