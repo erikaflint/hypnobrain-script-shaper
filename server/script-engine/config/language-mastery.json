@@ -119,22 +119,23 @@
     "trance_depth_test": "If it requires thinking, choosing, analyzing, or searching memory—REWRITE IT. Hypnosis bypasses the thinking mind. Direct the experience; don't ask them to construct it."
   },
 
-  "body_as_subject": {
-    "description": "Eliminate 'you...you...you' repetition by making body the subject",
-    "rule": "Never stack multiple 'you' constructions in consecutive sentences",
+  "sentence_variety": {
+    "description": "Vary sentence structure while KEEPING personal pronouns for connection",
+    "rule": "Never stack identical sentence starters, but ALWAYS preserve 'you' and 'your' for hypnotic connection",
     "wrong_examples": [
       "You notice your breath. You feel your shoulders. You sense your heartbeat.",
       "You might feel relaxation. You begin to notice calm. You recognize peace."
     ],
     "right_examples": [
-      "Your breath deepens. Shoulders soften. And beneath it all, your heartbeat—steady, certain.",
-      "Relaxation spreads through your body. Calm settles into awareness. Peace arrives naturally."
+      "Your breath deepens. Your shoulders soften. And beneath it all, your heartbeat—steady, certain.",
+      "You feel relaxation spreading through your body. Your awareness settles into calm. Peace arrives naturally within you."
     ],
     "variations": [
-      "Your [body part] + verb (Your breath deepens, Your shoulders soften)",
-      "[Sensation] + verb (Warmth spreads, Tension releases, Peace settles)",
-      "[State] arrives/emerges/unfolds (Calm arrives, Ease emerges, Rest unfolds)"
-    ]
+      "Your [body part] + verb (Your breath deepens, Your shoulders soften, Your jaw releases)",
+      "You [verb] (You notice, You feel, You sense, You discover, You allow)",
+      "[State] + your/you (Warmth spreads through you, Calm settles into your awareness, Peace arrives within you)"
+    ],
+    "critical_rule": "NEVER drop pronouns! 'Shoulders soften' should be 'Your shoulders soften'. Personal connection is MORE important than variety."
   },
 
   "inclusive_sensory_language": {

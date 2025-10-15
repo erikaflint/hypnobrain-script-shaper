@@ -90,7 +90,7 @@ export class TranceDepthValidator {
     }
 
     if (repetitionViolations.length > 0) {
-      suggestions.push('Use body-as-subject to eliminate "you...you...you": "Your breath deepens. Shoulders soften."');
+      suggestions.push('Vary sentence structure while keeping pronouns: "Your breath deepens. Your shoulders soften. Your heartbeat steadies."');
     }
 
     if (visualViolations.length > 0) {
@@ -205,7 +205,7 @@ export class TranceDepthValidator {
           category: 'repetition',
           issue: 'Three consecutive sentences starting with "you"',
           location: sentences.slice(i, i + 3).join('. ').substring(0, 150) + '...',
-          suggested_fix: 'Use body-as-subject: "Your breath deepens. Shoulders soften. Peace settles."'
+          suggested_fix: 'Vary sentence structure while keeping pronouns: "Your breath deepens. Your shoulders soften. Peace settles within you."'
         });
       }
     }

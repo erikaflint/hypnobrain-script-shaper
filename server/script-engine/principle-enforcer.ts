@@ -106,7 +106,7 @@ Remember: The client is whole, not broken. Your role is to remind them of what t
 1. Add "might" or "perhaps" → "You might notice your breath deepening..."
 2. Make observations (not commands) → "Your breath finds its own rhythm..."
 3. Use "as" clauses → "And as you breathe, your jaw softens..."
-4. Body-as-subject → "Your heartbeat surfaces in awareness. Shoulders soften."
+4. Vary sentence structure (KEEP pronouns!) → "Your heartbeat surfaces in awareness. Your shoulders soften."
 5. Awareness-based → "You become aware of..."`;
 
     const antiPatterns = `### CRITICAL: Language That DESTROYS Trance Depth
@@ -127,16 +127,18 @@ ${languageMastery.critical_anti_patterns.forbidden_phrases.map(p => `❌ "${p}"`
 **RULE:** If it requires thinking, choosing, analyzing, or searching memory—REWRITE IT.
 Hypnosis bypasses the thinking mind. Direct the experience; don't ask them to construct it.`;
 
-    const bodyAsSubject = `### Eliminate "You...You...You" Repetition
-**NEVER stack multiple "you" constructions in consecutive sentences**
+    const sentenceVariety = `### Vary Sentence Structure (KEEP Personal Pronouns!)
+**NEVER stack identical sentence starters, but ALWAYS keep "you" and "your" for connection**
 
 ❌ WRONG: "You notice your breath. You feel your shoulders. You sense your heartbeat."
-✅ RIGHT: "Your breath deepens. Shoulders soften. And beneath it all, your heartbeat—steady, certain."
+✅ RIGHT: "Your breath deepens. Your shoulders soften. And beneath it all, your heartbeat—steady, certain."
 
-Use body-as-subject variations:
-- Your [body part] + verb
-- [Sensation] + verb (Warmth spreads, Tension releases)
-- [State] arrives/emerges/unfolds`;
+Variety techniques WHILE keeping pronouns:
+- Your [body part] + verb (Your breath deepens, Your shoulders soften, Your jaw releases)
+- You [verb] (You notice, You feel, You sense, You discover, You allow)
+- [State] + your/you (Warmth spreads through you, Calm settles into your awareness, Peace arrives within you)
+
+CRITICAL: Personal connection > Variety. NEVER drop pronouns to create variety!`;
 
     const sensoryLanguage = `### Inclusive Sensory Language
 **NEVER use visual-only commands:**
@@ -156,7 +158,7 @@ Use body-as-subject variations:
 - Medium for guidance (8-15 words): "Your shoulders soften, releasing the weight they've carried."
 - Long for deepening (18-30 words): "And as you settle deeper into this peaceful state, your body remembers what it's always known..."`;
 
-    return [tonalBalance, antiPatterns, bodyAsSubject, sensoryLanguage, craftRules].join('\n\n');
+    return [tonalBalance, antiPatterns, sentenceVariety, sensoryLanguage, craftRules].join('\n\n');
   }
 
   /**
