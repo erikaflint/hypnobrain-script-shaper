@@ -12,6 +12,7 @@
 
 import { StrategyPlanner, type GenerationContract, type PlannerInput } from './strategy-planner';
 import { PrincipleEnforcer, type PrincipleDirectives, type EnforcerInput } from './principle-enforcer';
+import { EgoModule, type EgoModuleInput, type EgoModuleOutput } from './modules/ego-module';
 import type { ArcJourney } from '@shared/schema';
 
 export interface ScriptEngineInput {
@@ -50,6 +51,9 @@ export interface ScriptEngineOutput {
   // Principles
   principleDirectives: PrincipleDirectives;
   
+  // Ego Strengthening (NEW)
+  egoDirectives: string[];
+  
   // For AI prompting
   enhancedSystemPrompt: string;
   structuredInstructions: string[];
@@ -62,11 +66,13 @@ export interface ScriptEngineOutput {
 export class ScriptEngine {
   private planner: StrategyPlanner;
   private enforcer: PrincipleEnforcer;
+  private egoModule: EgoModule;
   private version = '1.0.0';
 
   constructor() {
     this.planner = new StrategyPlanner();
     this.enforcer = new PrincipleEnforcer();
+    this.egoModule = new EgoModule();
   }
 
   /**
@@ -109,9 +115,26 @@ export class ScriptEngine {
     };
 
     const principleDirectives = this.enforcer.generateDirectives(enforcerInput);
-    reasoningLog.push(`Enforcing ${this.enforcer.getAllPrincipleIds().length} core principles`);
+    reasoningLog.push(`Enforcing ${this.enforcer.getAllPrincipleIds().length} core principles (excluding ego strengthening)`);
     reasoningLog.push(`Client level: ${input.clientLevel || 'beginner'}`);
     reasoningLog.push(`Target trance depth: ${input.targetTranceDep || 'medium'}`);
+    reasoningLog.push('');
+
+    // Step 2.5: Ego Strengthening Module - generate directives
+    reasoningLog.push('STEP 2.5: EGO STRENGTHENING MODULE');
+    const egoInput: EgoModuleInput = {
+      presentingIssue: input.presentingIssue,
+      desiredOutcome: input.desiredOutcome,
+      mode: 'sprinkle', // For clinical scripts, always sprinkle
+      emergenceType: (input.emergenceType === 'sleep') ? 'sleep' : 'wake',
+      intensity: 'moderate',
+      metaphorFamily: generationContract.primaryMetaphor?.family
+    };
+    
+    const egoResult = await this.egoModule.generate(egoInput);
+    reasoningLog.push(`Ego mode: ${egoInput.mode}`);
+    reasoningLog.push(`Emergence type: ${egoInput.emergenceType}`);
+    reasoningLog.push(`Directives: ${egoResult.directives.length} instructions`);
     reasoningLog.push('');
 
     // Step 3: Combine into enhanced AI prompts
@@ -123,7 +146,8 @@ export class ScriptEngine {
 
     const structuredInstructions = this.buildStructuredInstructions(
       principleDirectives,
-      generationContract
+      generationContract,
+      egoResult.directives
     );
 
     reasoningLog.push(`System prompt: ${enhancedSystemPrompt.length} characters`);
@@ -134,6 +158,7 @@ export class ScriptEngine {
     return {
       generationContract,
       principleDirectives,
+      egoDirectives: egoResult.directives,
       enhancedSystemPrompt,
       structuredInstructions,
       reasoningLog,
@@ -210,13 +235,18 @@ export class ScriptEngine {
    */
   private buildStructuredInstructions(
     principles: PrincipleDirectives,
-    contract: GenerationContract
+    contract: GenerationContract,
+    egoDirectives: string[]
   ): string[] {
     const instructions: string[] = [];
 
     // Add principle instructions
     instructions.push('=== CORE PRINCIPLES ===');
     instructions.push(...principles.structuredInstructions);
+    instructions.push('');
+
+    // Add ego strengthening directives (NEW - replaces inherent-wholeness principle)
+    instructions.push(...egoDirectives);
     instructions.push('');
 
     // Add arc-specific guidance

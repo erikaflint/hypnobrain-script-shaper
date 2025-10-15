@@ -1,0 +1,217 @@
+{
+  "version": "1.0.0",
+  "description": "Ego Strengthening Configuration - Based on Hartland's classic approach, modernized",
+  
+  "modes": {
+    "sprinkle": {
+      "description": "3-5 statements scattered throughout script",
+      "min_statements": 3,
+      "max_statements": 5,
+      "distribution": {
+        "opening": 1,
+        "middle": "1-2",
+        "near_end": "1-2"
+      },
+      "statement_length": "1-2 sentences MAX"
+    },
+    "chunk": {
+      "description": "Meaningful 150-250 word segment for script ending",
+      "target_words": [150, 250],
+      "style": "Hartland-inspired, layered improvements"
+    },
+    "standalone": {
+      "description": "Full ego strengthening script",
+      "target_words": [1200, 1800],
+      "structure": {
+        "opening": "200-300 words",
+        "core": "800-1000 words", 
+        "integration": "200-300 words",
+        "emergence": "100-200 words"
+      }
+    }
+  },
+  
+  "emergence_styles": {
+    "wake": {
+      "tone": "Energizing, forward-looking, activating",
+      "tense": "Present progressive (becoming stronger, growing clearer)",
+      "time_reference": "Day ahead (as you move through today)",
+      "emphasis": ["energy", "clarity", "confidence", "alertness"]
+    },
+    "sleep": {
+      "tone": "Calming, settling, restorative",
+      "tense": "Gentle present (your body healing, sleep deepening)",
+      "time_reference": "Night (as you rest tonight, through the night)",
+      "emphasis": ["restoration", "peace", "replenishment", "healing"]
+    }
+  },
+  
+  "functional_categories": {
+    "note": "SELECT 3-5 TOTAL. These are EXAMPLES to inspire phrasing, not exhaustive lists.",
+    
+    "physical_restoration": {
+      "description": "Body healing, immune system, physical strength",
+      "examples": [
+        "Your body healing and replenishing completely",
+        "Immune system strengthening naturally",
+        "Physical vitality returning to every cell",
+        "Body systems finding balance and harmony"
+      ],
+      "wake_emphasis": "Energy, strength, vitality",
+      "sleep_emphasis": "Healing, restoration, replenishment"
+    },
+    
+    "sleep_quality": {
+      "description": "Sleep depth, rest quality, restorative sleep",
+      "examples": [
+        "Your sleep deepening night after night",
+        "Rest becoming more restorative",
+        "Sleep cycles optimizing naturally",
+        "Dreams becoming more peaceful"
+      ],
+      "when_to_use": "Sleep emergence type or insomnia-related issues"
+    },
+    
+    "cognitive_enhancement": {
+      "description": "Memory, focus, mental clarity, concentration",
+      "examples": [
+        "Memory becoming clearer, words flowing easily",
+        "Focus sharpening, concentration improving",
+        "Mental clarity increasing day by day",
+        "Thoughts organizing naturally, effortlessly"
+      ],
+      "wake_emphasis": "Clarity, focus, sharpness",
+      "sleep_emphasis": "Mind settling, thoughts calming"
+    },
+    
+    "energy_vitality": {
+      "description": "Energy levels, vitality, aliveness",
+      "examples": [
+        "Your energy replenishing completely",
+        "Vitality returning to every cell",
+        "Natural energy flowing throughout your day",
+        "Feeling more alive, more present"
+      ],
+      "when_to_use": "Wake emergence type, fatigue-related issues"
+    },
+    
+    "stress_response": {
+      "description": "Nervous system regulation, calm, stress management",
+      "examples": [
+        "Your nervous system learning deeper calm",
+        "Stress response becoming more balanced",
+        "Finding ease in challenging moments",
+        "Nervous system remembering safety"
+      ],
+      "universal": true,
+      "note": "Appropriate for both wake and sleep"
+    },
+    
+    "emotional_wellbeing": {
+      "description": "Emotional stability, calm, resilience",
+      "examples": [
+        "Emotions becoming steadier, more balanced",
+        "Inner calm growing stronger each day",
+        "Resilience building naturally, powerfully",
+        "Peace settling deep within"
+      ],
+      "hartland_inspired": true
+    },
+    
+    "confidence_self_reliance": {
+      "description": "Self-confidence, independence, inner strength",
+      "examples": [
+        "Confidence in yourself growing stronger",
+        "Trusting your own judgment more completely",
+        "Standing your own ground with ease",
+        "Relying on your own inner wisdom"
+      ],
+      "hartland_inspired": true,
+      "wake_emphasis": "Confidence, capability, strength"
+    }
+  },
+  
+  "hartland_principles": {
+    "description": "Core patterns from Hartland's classic approach",
+    
+    "rhythmic_building": {
+      "pattern": "Every day...",
+      "purpose": "Creates momentum and expectation",
+      "examples": [
+        "Every day you become stronger...",
+        "Every day your mind grows clearer...",
+        "Every day you feel more confident..."
+      ]
+    },
+    
+    "contrast_structure": {
+      "pattern": "Much more... much less...",
+      "purpose": "Defines change through opposition",
+      "examples": [
+        "Much more calm, much less agitated",
+        "Much more confident, much less doubtful",
+        "Much more energized, much less tired"
+      ]
+    },
+    
+    "logical_progression": {
+      "pattern": "Because of this... / As a result...",
+      "purpose": "Creates causal chain of improvements",
+      "examples": [
+        "Because of this, you stand stronger...",
+        "As a result of this deep rest, you feel...",
+        "Because all these things happen, you become..."
+      ]
+    },
+    
+    "permission_framework": {
+      "pattern": "Everything you allow into your mind...",
+      "purpose": "Establishes consent and receptivity",
+      "examples": [
+        "Everything you allow sinks deeply...",
+        "What you choose to accept becomes...",
+        "These truths you welcome create..."
+      ]
+    }
+  },
+  
+  "integration_patterns": {
+    "metaphor_tie": {
+      "description": "Connect ego strengthening to script metaphor",
+      "template": "Like the [METAPHOR], your [IMPROVEMENT]...",
+      "examples": [
+        "Like the ocean finding its rhythm, your nervous system remembers calm",
+        "Like the mountain standing firm, your confidence grows stronger",
+        "Like the garden healing itself, your body knows exactly what to do"
+      ]
+    },
+    
+    "narrative_weave": {
+      "description": "Blend into story without breaking flow",
+      "rules": [
+        "1-2 sentences MAX per statement",
+        "Then immediately return to main narrative",
+        "Use transitional phrases: 'And as you...' 'Even as...' 'While...'"
+      ]
+    }
+  },
+  
+  "quality_rules": {
+    "distribution": {
+      "max_keywords_per_paragraph": 3,
+      "max_total_keywords": 10,
+      "keywords": [
+        "sleep", "immune", "memory", "energy", "clarity", "focus",
+        "healing", "replenish", "strengthen", "deepen", "improv",
+        "restor", "vitality", "nervous system", "calm", "stress",
+        "confident", "clear", "strong"
+      ]
+    },
+    
+    "statement_rules": {
+      "max_sentences_per_statement": 2,
+      "avoid_dumps": "Never list benefits in paragraph form",
+      "spacing": "Space naturally throughout narrative flow"
+    }
+  }
+}

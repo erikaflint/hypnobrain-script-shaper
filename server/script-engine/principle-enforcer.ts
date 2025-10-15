@@ -25,7 +25,10 @@ export class PrincipleEnforcer {
   private principles: any[];
 
   constructor() {
-    this.principles = principlesConfig.principles;
+    // Filter out inherent-wholeness principle (now handled by EgoModule)
+    this.principles = principlesConfig.principles.filter(
+      p => p.id !== 'inherent-wholeness'
+    );
   }
 
   /**
