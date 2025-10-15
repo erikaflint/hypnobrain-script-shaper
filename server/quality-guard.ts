@@ -7,6 +7,7 @@
 
 import Anthropic from '@anthropic-ai/sdk';
 import { analyzeGrammar } from './grammar-checker';
+import { EgoModule } from './script-engine/modules/ego-module';
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
@@ -154,9 +155,6 @@ function checkNaturalGrammar(script: string): QualityCheck {
  * Delegates to EgoModule - single source of truth
  */
 function checkEgoStrengtheningDistribution(script: string): QualityCheck {
-  // Import EgoModule dynamically to avoid circular dependencies
-  const { EgoModule } = require('./script-engine/modules/ego-module');
-  
   const result = EgoModule.validateDistribution(script);
   
   return {
