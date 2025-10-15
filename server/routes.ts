@@ -515,9 +515,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         desiredOutcome: parent.desiredOutcome,
         benefits: parent.benefits,
         customNotes: parent.customNotes,
-        dimensionsJson: data.dimensionValues || parent.dimensionsJson,
+        dimensionsJson: data.dimensionValues || (parent.dimensionsJson as any),
         archetypeId: parent.archetypeId,
-        stylesJson: parent.stylesJson,
+        stylesJson: parent.stylesJson as any,
         templateUsed: parent.templateUsed,
         parentGenerationId: parentId,
         versionLabel: data.versionLabel || `v${versionNumber}`,
@@ -607,8 +607,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       const preview = await aiService.generatePreview({
-        mode: data.mode,
-        clientName: data.clientName,
         clientIssue: data.clientIssue,
         archetypeName: archetype.name,
         archetypeDescription: archetype.description || '',
@@ -616,7 +614,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         styleDescription: style.description || '',
         dimensionValues: data.dimensionValues,
         existingScript: data.existingScript,
-      });
+      } as any);
       
       res.json(preview);
     } catch (error: any) {
@@ -665,15 +663,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       };
       
       const result = await aiService.generateFullScript({
-        mode: 'create',
-        clientName: 'valued client',
         clientIssue,
         archetypeName: defaultArchetype.name,
         archetypeDescription: defaultArchetype.description || '',
         styleName: defaultStyle.name,
         styleDescription: defaultStyle.description || '',
         dimensionValues: balancedDimensions,
-      });
+      } as any);
       
       // Record usage
       await storage.recordFreeUsage({
@@ -965,8 +961,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Generate the full script
       const result = await aiService.generateFullScript({
-        mode: data.mode,
-        clientName: data.clientName,
         clientIssue: data.clientIssue,
         archetypeName: archetype.name,
         archetypeDescription: archetype.description || '',
@@ -974,7 +968,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         styleDescription: style.description || '',
         dimensionValues: data.dimensionValues,
         existingScript: data.existingScript,
-      });
+      } as any);
       
       // Save to database (using actual schema field names)
       const generation = await storage.createGeneration({
@@ -1562,7 +1556,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           // Get template if assigned (assignedTemplateId is the numeric database ID)
           let template = null;
           if (script.assignedTemplateId) {
-            template = await templateManager.getTemplateByDbId(script.assignedTemplateId);
+            template = await templateManager.getTemplateByDbId(Number(script.assignedTemplateId));
           }
           
           // If no template assigned, use template selector to find one
