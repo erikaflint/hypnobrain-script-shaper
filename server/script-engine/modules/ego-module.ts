@@ -396,4 +396,63 @@ export class EgoModule {
       details: `${found.length} functional improvement keywords present`
     };
   }
+
+  /**
+   * STATIC: Validate ego strengthening distribution (for Quality Guard)
+   * This is the single source of truth for ego strengthening validation
+   */
+  static validateDistribution(script: string): { passed: boolean; details: string } {
+    const keywords = egoConfig.quality_rules.distribution.keywords;
+    const maxPerParagraph = egoConfig.quality_rules.distribution.max_keywords_per_paragraph;
+    const maxTotal = egoConfig.quality_rules.distribution.max_total_keywords;
+    
+    // Split into paragraphs
+    const paragraphs = script
+      .split(/\n\s*\n/)
+      .map(p => p.trim())
+      .filter(p => p.length > 50);
+    
+    if (paragraphs.length === 0) {
+      return {
+        passed: false,
+        details: "Script too short or improperly formatted"
+      };
+    }
+    
+    // Count actual keyword occurrences per paragraph
+    const keywordsPerParagraph = paragraphs.map(para => {
+      const lowerPara = para.toLowerCase();
+      let count = 0;
+      keywords.forEach(kw => {
+        const regex = new RegExp(kw, 'gi');
+        const matches = lowerPara.match(regex) || [];
+        count += matches.length;
+      });
+      return count;
+    });
+    
+    const maxInOneParagraph = Math.max(...keywordsPerParagraph);
+    const totalKeywords = keywordsPerParagraph.reduce((a, b) => a + b, 0);
+    
+    // Fail if more than maxPerParagraph in one paragraph (indicates dump)
+    if (maxInOneParagraph > maxPerParagraph) {
+      return {
+        passed: false,
+        details: `Functional improvements dumped in one paragraph (${maxInOneParagraph} keywords) - should be scattered throughout`
+      };
+    }
+    
+    // Fail if too many total
+    if (totalKeywords > maxTotal) {
+      return {
+        passed: false,
+        details: `Too many functional improvements (${totalKeywords}) - maximum ${maxTotal}, prefer 3-5`
+      };
+    }
+    
+    return {
+      passed: true,
+      details: `Good distribution - ${totalKeywords} functional improvements scattered naturally`
+    };
+  }
 }

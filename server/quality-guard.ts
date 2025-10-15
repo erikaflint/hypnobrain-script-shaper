@@ -151,67 +151,18 @@ function checkNaturalGrammar(script: string): QualityCheck {
 
 /**
  * Check ego strengthening distribution (not dumped as paragraphs)
+ * Delegates to EgoModule - single source of truth
  */
 function checkEgoStrengtheningDistribution(script: string): QualityCheck {
-  // Functional improvement keywords across all categories
-  const keywords = [
-    'sleep', 'immune', 'memory', 'energy', 'clarity', 'focus',
-    'healing', 'replenish', 'strengthen', 'deepen', 'improv',
-    'restor', 'vitality', 'nervous system', 'calm', 'stress'
-  ];
+  // Import EgoModule dynamically to avoid circular dependencies
+  const { EgoModule } = require('./script-engine/modules/ego-module');
   
-  // Split into paragraphs
-  const paragraphs = script
-    .split(/\n\s*\n/)
-    .map(p => p.trim())
-    .filter(p => p.length > 50); // Ignore very short paragraphs
-  
-  if (paragraphs.length === 0) {
-    return {
-      name: "Ego Strengthening Distribution",
-      passed: false,
-      details: "Script too short or improperly formatted"
-    };
-  }
-  
-  // Count actual keyword occurrences per paragraph (not just unique keywords)
-  const keywordsPerParagraph = paragraphs.map(para => {
-    const lowerPara = para.toLowerCase();
-    let count = 0;
-    keywords.forEach(kw => {
-      // Count ALL occurrences of this keyword, not just whether it exists
-      const regex = new RegExp(kw, 'gi');
-      const matches = lowerPara.match(regex) || [];
-      count += matches.length;
-    });
-    return count;
-  });
-  
-  const maxInOneParagraph = Math.max(...keywordsPerParagraph);
-  const totalKeywords = keywordsPerParagraph.reduce((a, b) => a + b, 0);
-  
-  // Fail if more than 3 functional improvements in one paragraph (indicates dump)
-  if (maxInOneParagraph > 3) {
-    return {
-      name: "Ego Strengthening Distribution",
-      passed: false,
-      details: `Functional improvements dumped in one paragraph (${maxInOneParagraph} keywords) - should be scattered throughout`
-    };
-  }
-  
-  // Fail if too many total (should be 3-5, allow up to 8 for DREAM scripts)
-  if (totalKeywords > 10) {
-    return {
-      name: "Ego Strengthening Distribution",
-      passed: false,
-      details: `Too many functional improvements (${totalKeywords}) - maximum 8-10, prefer 3-5`
-    };
-  }
+  const result = EgoModule.validateDistribution(script);
   
   return {
     name: "Ego Strengthening Distribution",
-    passed: true,
-    details: `Good distribution - ${totalKeywords} functional improvements scattered naturally`
+    passed: result.passed,
+    details: result.details
   };
 }
 
