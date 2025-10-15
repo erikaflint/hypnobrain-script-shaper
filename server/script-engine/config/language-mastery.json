@@ -1,0 +1,221 @@
+{
+  "version": "1.0.0",
+  "description": "Language Mastery Rules - The secret sauce for medicinal hypnosis scripts",
+  
+  "tonal_balance": {
+    "description": "Strategic variation between directive and invitational language",
+    "ratio": "1 direct command → 2-3 soft invitations",
+    "rules": [
+      "Use direct commands sparingly (opening, transitions, key anchors, emergence)",
+      "Use soft invitations predominantly (deepening, metaphor journey, transformation)",
+      "Never stack more than 2 direct commands in a row unless transitioning sections"
+    ],
+    "direct_commands": {
+      "when_to_use": [
+        "Opening 3-4 instructions (establishing presence)",
+        "Section transitions",
+        "Key somatic anchors that need emphasis",
+        "Emergence (bringing client back)"
+      ],
+      "examples": [
+        "Take a breath, slow and easy.",
+        "Feel your shoulders.",
+        "Find yourself settling now.",
+        "Notice your heartbeat now."
+      ],
+      "effect": "Authoritative, grounding, establishes guidance. Use for anchoring moments."
+    },
+    "soft_invitations": {
+      "when_to_use": [
+        "Mid-induction deepening",
+        "Throughout core metaphor journey", 
+        "Transformation section",
+        "Any moment requiring subtlety"
+      ],
+      "softening_techniques": [
+        {
+          "technique": "Add 'might' or 'perhaps'",
+          "examples": [
+            "You might notice your breath deepening...",
+            "Perhaps your shoulders soften..."
+          ]
+        },
+        {
+          "technique": "Make observations (not commands)",
+          "examples": [
+            "Your breath finds its own rhythm...",
+            "Shoulders release their burden...",
+            "Warmth spreads through your chest..."
+          ]
+        },
+        {
+          "technique": "Use 'as' clauses for natural unfolding",
+          "examples": [
+            "And as you breathe, your jaw softens...",
+            "As you settle deeper, ease spreads..."
+          ]
+        },
+        {
+          "technique": "Body-as-subject (eliminates 'you' repetition)",
+          "wrong": "You notice your heartbeat. You feel your shoulders.",
+          "right": "Your heartbeat surfaces in awareness. Shoulders soften."
+        },
+        {
+          "technique": "Awareness-based (gentlest)",
+          "examples": [
+            "You become aware of...",
+            "X surfaces in your awareness...",
+            "You might sense..."
+          ]
+        }
+      ]
+    }
+  },
+
+  "critical_anti_patterns": {
+    "description": "Language that DESTROYS trance depth by pulling client into analytical thinking",
+    "rule": "NEVER ask client to think, search, select, or analyze",
+    "forbidden_phrases": [
+      "Now you think about times when...",
+      "Remember all the times you've...",
+      "Consider the moments when...",
+      "Think back to when...",
+      "Recall a time when...",
+      "Select a memory of...",
+      "Search for a time when..."
+    ],
+    "why_this_fails": [
+      "Creates cognitive load (asking them to search, select, analyze)",
+      "Activates thinking mind instead of subconscious",
+      "Pulls them OUT of trance into analytical mode",
+      "Makes them observers of their experience rather than immersed in it"
+    ],
+    "correct_alternatives": [
+      {
+        "wrong": "Now you think about times when you felt confident, and selecting one, you allow...",
+        "right": "And as you breathe, a memory of strength surfaces naturally... perhaps from long ago, or perhaps more recent... and your body remembers this feeling, the way strength lives in your bones..."
+      },
+      {
+        "wrong": "Remember all the times you've felt strong...",
+        "right": "There's a part of you that already knows what ease feels like... and that knowing spreads through you now, gentle and sure..."
+      },
+      {
+        "wrong": "Think back to when you felt calm...",
+        "right": "Your body carries the memory of every calm moment you've ever lived... and those moments are woven into your cells, your breath, the steady rhythm of your heart..."
+      },
+      {
+        "wrong": "Recall a time when you felt peaceful...",
+        "right": "Peace arrives like an old friend... familiar, welcoming, already present..."
+      }
+    ],
+    "principle": "GUIDE them into states rather than asking them to THINK about states. CREATE the experience directly rather than instructing them to RECALL and SELECT. Let the subconscious surface what it needs WITHOUT cognitive effort.",
+    "replacement_patterns": [
+      "Your body remembers... (not 'remember a time when')",
+      "A feeling of [state] spreads through you... (not 'think about feeling')",
+      "Notice how [state] is already present... (not 'recall when you felt')",
+      "As you breathe, [quality] emerges naturally... (not 'consider times when')",
+      "[State] arrives/surfaces/unfolds... (not 'select a memory of')"
+    ],
+    "trance_depth_test": "If it requires thinking, choosing, analyzing, or searching memory—REWRITE IT. Hypnosis bypasses the thinking mind. Direct the experience; don't ask them to construct it."
+  },
+
+  "body_as_subject": {
+    "description": "Eliminate 'you...you...you' repetition by making body the subject",
+    "rule": "Never stack multiple 'you' constructions in consecutive sentences",
+    "wrong_examples": [
+      "You notice your breath. You feel your shoulders. You sense your heartbeat.",
+      "You might feel relaxation. You begin to notice calm. You recognize peace."
+    ],
+    "right_examples": [
+      "Your breath deepens. Shoulders soften. And beneath it all, your heartbeat—steady, certain.",
+      "Relaxation spreads through your body. Calm settles into awareness. Peace arrives naturally."
+    ],
+    "variations": [
+      "Your [body part] + verb (Your breath deepens, Your shoulders soften)",
+      "[Sensation] + verb (Warmth spreads, Tension releases, Peace settles)",
+      "[State] arrives/emerges/unfolds (Calm arrives, Ease emerges, Rest unfolds)"
+    ]
+  },
+
+  "inclusive_sensory_language": {
+    "description": "Use universal sensory language that works for everyone",
+    "forbidden_visual_commands": [
+      "See the...",
+      "Visualize...",
+      "Picture...",
+      "Imagine seeing..."
+    ],
+    "universal_alternatives": [
+      "Notice...",
+      "Sense...",
+      "Allow...",
+      "Imagine...",
+      "Experience...",
+      "Become aware of..."
+    ],
+    "examples": [
+      {
+        "wrong": "See yourself standing on a beach",
+        "right": "Imagine yourself on a beach, sensing the warmth, hearing the waves"
+      },
+      {
+        "wrong": "Visualize a ball of light",
+        "right": "Notice a sense of warmth and light"
+      }
+    ]
+  },
+
+  "language_craft": {
+    "description": "Fresh, natural, poetic language that maintains trance",
+    "forbidden_cliches": [
+      "Deeper and deeper",
+      "10...9...8... (countdown)",
+      "More and more relaxed",
+      "Drifting down, down, down"
+    ],
+    "forbidden_punctuation": [
+      "Em dashes (—)",
+      "Excessive ellipses (...)",
+      "Multiple exclamation marks (!!)"
+    ],
+    "forbidden_ai_patterns": [
+      "It's important to...",
+      "You may find that...",
+      "As you continue to..."
+    ],
+    "sentence_variety": {
+      "rule": "Vary sentence length for trance modulation",
+      "patterns": [
+        "Short for emphasis: 3-5 words (Feel your breath. Notice now. Rest here.)",
+        "Medium for guidance: 8-15 words (Your shoulders soften, releasing the weight they've carried.)",
+        "Long for deepening: 18-30 words (And as you settle deeper into this peaceful state, your body remembers what it's always known—how to heal, how to rest, how to be at ease.)"
+      ]
+    }
+  },
+
+  "quality_self_check": {
+    "description": "Pre-output verification checklist",
+    "checklist": [
+      "No hypnosis clichés or AI-style phrasing",
+      "NO cognitive/reflective instructions (think about, remember times when, consider, recall)",
+      "ALL language creates direct experience rather than asking client to search/select",
+      "Body awareness anchors throughout",
+      "Inclusive sensory language only (notice not see)",
+      "Natural, invitational tone (never lecturing or instructing)",
+      "Maintains trance depth (never pulls them into analytical thinking)",
+      "Feels restorative and medicinal, not mechanical",
+      "Varied sentence length for rhythm",
+      "No em dashes, no clichés, no 'you...you...you' stacking"
+    ],
+    "trance_depth_test": "Read through the script. If ANY sentence would cause the client to pause and think, search their memory, or make a decision—REWRITE IT. Every sentence should deepen or maintain trance, never lighten it."
+  },
+
+  "core_principles_integration": {
+    "body_as_primary_anchor": "Return to body awareness frequently with sensory language",
+    "one_strong_metaphor": "Simple, sensory, matches client's resources/experiences",
+    "describe_desired_states": "Guide toward what they want, not away from what they fear",
+    "teach_through_experience": "Let the metaphor demonstrate the principle; don't explain",
+    "medicinal_tone": "Every sentence should soothe, nourish, or awaken",
+    "body_as_beloved": "Body treated as beloved, loyal, deserving rest"
+  }
+}

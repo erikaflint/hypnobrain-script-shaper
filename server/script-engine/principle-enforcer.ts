@@ -5,6 +5,7 @@
  */
 
 import principlesConfig from './config/principles.json';
+import languageMastery from './config/language-mastery.json';
 
 export interface PrincipleDirectives {
   systemPrompt: string;
@@ -77,11 +78,82 @@ Your scripts must follow the 6 Core Principles that define transformative hypnos
       `${i + 1}. **${p.name}**: ${p.description}\n   ${p.why}`
     ).join('\n\n');
 
+    const languageMasteryRules = this.buildLanguageMasteryRules();
+
     const closing = `\n\nThese principles are non-negotiable. Every script you generate must honor all six principles.
 
 Remember: The client is whole, not broken. Your role is to remind them of what they already know, remove obstacles, and allow natural healing to unfold.`;
 
-    return intro + principleDescriptions + closing;
+    return intro + principleDescriptions + closing + '\n\n' + languageMasteryRules;
+  }
+
+  /**
+   * Build language mastery rules from secret sauce
+   */
+  private buildLanguageMasteryRules(): string {
+    const tonalBalance = `## LANGUAGE MASTERY RULES (Critical for Medicinal Quality)
+
+### Tonal Balance: Direct Commands vs. Soft Invitations
+**Pattern:** ${languageMastery.tonal_balance.ratio}
+- Use direct commands ONLY for: opening, transitions, key somatic anchors, emergence
+- Use soft invitations predominantly throughout deepening, metaphor journey, transformation
+- NEVER stack more than 2 direct commands in a row
+
+**Softening Techniques:**
+1. Add "might" or "perhaps" → "You might notice your breath deepening..."
+2. Make observations (not commands) → "Your breath finds its own rhythm..."
+3. Use "as" clauses → "And as you breathe, your jaw softens..."
+4. Body-as-subject → "Your heartbeat surfaces in awareness. Shoulders soften."
+5. Awareness-based → "You become aware of..."`;
+
+    const antiPatterns = `### CRITICAL: Language That DESTROYS Trance Depth
+**NEVER use these phrases** (they pull client into analytical thinking):
+${languageMastery.critical_anti_patterns.forbidden_phrases.map(p => `❌ "${p}"`).join('\n')}
+
+**WHY this fails:**
+- Creates cognitive load (asking them to search, select, analyze)
+- Activates thinking mind instead of subconscious
+- Pulls them OUT of trance into analytical mode
+
+**INSTEAD, use direct hypnotic guidance:**
+✅ "Your body remembers..." (not "remember a time when")
+✅ "A feeling of [state] spreads through you..." (not "think about feeling")
+✅ "Notice how [state] is already present..." (not "recall when you felt")
+✅ "[State] arrives/surfaces/unfolds..." (not "select a memory of")
+
+**RULE:** If it requires thinking, choosing, analyzing, or searching memory—REWRITE IT.
+Hypnosis bypasses the thinking mind. Direct the experience; don't ask them to construct it.`;
+
+    const bodyAsSubject = `### Eliminate "You...You...You" Repetition
+**NEVER stack multiple "you" constructions in consecutive sentences**
+
+❌ WRONG: "You notice your breath. You feel your shoulders. You sense your heartbeat."
+✅ RIGHT: "Your breath deepens. Shoulders soften. And beneath it all, your heartbeat—steady, certain."
+
+Use body-as-subject variations:
+- Your [body part] + verb
+- [Sensation] + verb (Warmth spreads, Tension releases)
+- [State] arrives/emerges/unfolds`;
+
+    const sensoryLanguage = `### Inclusive Sensory Language
+**NEVER use visual-only commands:**
+❌ "See the...", "Visualize...", "Picture..."
+
+**ALWAYS use universal alternatives:**
+✅ "Notice...", "Sense...", "Allow...", "Imagine...", "Experience...", "Become aware of..."`;
+
+    const craftRules = `### Language Craft (Fresh, Natural, Poetic)
+**FORBIDDEN:**
+- Clichés: "Deeper and deeper", "10...9...8...", "More and more relaxed"
+- Em dashes (—)
+- AI patterns: "It's important to...", "You may find that...", "As you continue to..."
+
+**Sentence Variety for Trance Modulation:**
+- Short for emphasis (3-5 words): "Feel your breath. Notice now. Rest here."
+- Medium for guidance (8-15 words): "Your shoulders soften, releasing the weight they've carried."
+- Long for deepening (18-30 words): "And as you settle deeper into this peaceful state, your body remembers what it's always known..."`;
+
+    return [tonalBalance, antiPatterns, bodyAsSubject, sensoryLanguage, craftRules].join('\n\n');
   }
 
   /**
@@ -196,6 +268,7 @@ Remember: The client is whole, not broken. Your role is to remind them of what t
   private buildQualityReminders(): string[] {
     const reminders: string[] = [];
 
+    // Core principle quality gates
     for (const principle of this.principles) {
       if (principle.quality_gates) {
         for (const gate of principle.quality_gates) {
@@ -203,6 +276,24 @@ Remember: The client is whole, not broken. Your role is to remind them of what t
         }
       }
     }
+
+    // Language mastery quality checks (from secret sauce)
+    reminders.push('');
+    reminders.push('=== LANGUAGE MASTERY CHECKS ===');
+    reminders.push('✓ No hypnosis clichés or AI-style phrasing');
+    reminders.push('✓ NO cognitive/reflective instructions ("think about", "remember times when", "consider", "recall")');
+    reminders.push('✓ ALL language creates direct experience rather than asking client to search/select');
+    reminders.push('✓ Body awareness anchors throughout');
+    reminders.push('✓ Inclusive sensory language only ("notice" not "see")');
+    reminders.push('✓ Natural, invitational tone (never lecturing or instructing)');
+    reminders.push('✓ Maintains trance depth (never pulls them into analytical thinking)');
+    reminders.push('✓ Feels restorative and medicinal, not mechanical');
+    reminders.push('✓ Varied sentence length for rhythm');
+    reminders.push('✓ No em dashes, no "you...you...you" stacking');
+    reminders.push('');
+    reminders.push('=== TRANCE DEPTH TEST ===');
+    reminders.push('Read through script: If ANY sentence would cause client to pause and think, search memory, or make a decision—REWRITE IT.');
+    reminders.push('Every sentence should deepen or maintain trance, never lighten it.');
 
     return reminders;
   }

@@ -1,0 +1,689 @@
+{
+  "version": "1.0.0",
+  "arcs": [
+    {
+      "id": "effortlessness",
+      "name": "Effortlessness of Change",
+      "description": "Change is natural when we remove blocks, not effortful when we push",
+      "core_message": "Change happens naturally when obstacles are removed, like water finding its path",
+      "when_to_use": ["always", "foundation"],
+      "presenting_issues": ["resistance", "trying too hard", "forcing change", "burnout"],
+      "key_language": [
+        "As naturally as breath",
+        "Effortlessly, the way your body heals a cut",
+        "Without trying, without forcing",
+        "Change happens when we get out of its way",
+        "Like water flowing around obstacles",
+        "Your body knows how to do this"
+      ],
+      "prompt_integration": "Emphasize that change is a natural unfolding, not something that requires effort or force. Use metaphors of natural processes (healing, growth, water flowing)."
+    },
+    {
+      "id": "re-minding",
+      "name": "Re-Minding (Not Learning)",
+      "description": "The brain has been in peaceful states before - we're RE-MINDING it",
+      "core_message": "You're not learning something new; you're remembering what you already know",
+      "when_to_use": ["always", "removes pressure of learning"],
+      "presenting_issues": ["performance anxiety", "learning pressure", "fear of failure"],
+      "key_language": [
+        "Your body remembers how to feel at peace",
+        "Some part of you has always known this",
+        "You're accessing a state you've been in before",
+        "Re-minding yourself of what you already know",
+        "This feeling isn't new - it's a return",
+        "Your system remembers this state"
+      ],
+      "prompt_integration": "Frame all suggestions as remembering or returning to a known state, not acquiring something new. Emphasize recognition over learning."
+    },
+    {
+      "id": "two-tempos",
+      "name": "Two Tempos of Change",
+      "description": "Change can be sudden (bursting) or gradual (slow growth) - both valid",
+      "core_message": "Honor whatever tempo of change feels right for you",
+      "when_to_use": ["always", "gives permission for any pace"],
+      "presenting_issues": ["impatience", "frustration with progress", "comparison", "timeline pressure"],
+      "variations": {
+        "bursting": {
+          "name": "The Bursting (Flower Bud)",
+          "description": "Sudden transformation, ready to bloom",
+          "language": [
+            "Like a flower bud that's been preparing, ready to bloom in an instant",
+            "All the work has been done beneath the surface, and now...",
+            "Sometimes change happens in a moment of recognition",
+            "The breakthrough that's been building, ready to emerge"
+          ]
+        },
+        "slow_growth": {
+          "name": "The Slow Growth (Seed Underground)",
+          "description": "Gradual change, invisible work beneath the surface",
+          "language": [
+            "Like a seed growing beneath the soil - invisible work until breakthrough",
+            "Patient, steady change building beneath awareness",
+            "Trust the process even when you can't see the growth",
+            "Each day, small shifts accumulating"
+          ]
+        }
+      },
+      "key_language": [
+        "Change in its own time - sometimes sudden, sometimes gradual, always natural",
+        "Your body knows the tempo that's right for you",
+        "Fast or slow, both are perfect",
+        "The wisdom to unfold at exactly the right pace"
+      ],
+      "prompt_integration": "Include both possibilities - sudden shift and gradual change. Give explicit permission for whatever tempo emerges naturally."
+    },
+    {
+      "id": "recognition-ego-strengthening",
+      "name": "Recognition Ego Strengthening",
+      "description": "You are MORE than you realize - recognition, not inflation",
+      "core_message": "Recognizing the power, capacity, and wholeness that's always been there",
+      "when_to_use": ["confidence issues", "self-worth", "empowerment", "imposter syndrome"],
+      "presenting_issues": ["low self-esteem", "imposter syndrome", "self-doubt", "lack of confidence"],
+      "key_language": [
+        "You are more powerful than you've been letting yourself remember",
+        "More wonderful, more capable than you've allowed yourself to recognize",
+        "Not becoming something new - recognizing what's always been true",
+        "The strength that's always been yours",
+        "Your inherent capacity, simply covered over",
+        "The truth of your capability, waiting to be recognized"
+      ],
+      "prompt_integration": "Frame ego strengthening as recognition of existing qualities, not creation of new ones. Use 'recognize' and 'remember' language, not 'become' or 'develop'."
+    },
+    {
+      "id": "relief-to-new-life",
+      "name": "Relief → Inspiration → New Life",
+      "description": "The transformation sequence from weight to freedom",
+      "core_message": "As weight lifts, energy returns, and new possibilities open",
+      "when_to_use": ["major transformation", "life changes", "breakthrough work"],
+      "presenting_issues": ["feeling stuck", "carrying burdens", "exhaustion", "seeking life change"],
+      "transformation_sequence": [
+        {
+          "stage": "weight",
+          "description": "Acknowledge the burden at all levels",
+          "language": "The weight you've been carrying - physically, emotionally, mentally, spiritually"
+        },
+        {
+          "stage": "lifting",
+          "description": "Release of emotional baggage and limiting beliefs",
+          "language": "As that weight begins to lift, emotional baggage releasing, old beliefs dissolving"
+        },
+        {
+          "stage": "energy_returns",
+          "description": "Reclaim the energy that was bound up",
+          "language": "And you feel energy returning - energy that was always yours, now freed up, available"
+        },
+        {
+          "stage": "inspiration",
+          "description": "New possibilities become visible",
+          "language": "Relief becomes inspiration, new possibilities opening before you"
+        },
+        {
+          "stage": "new_life",
+          "description": "Living from authentic self",
+          "language": "Inspiration becomes new life, living from your authentic self, your true nature"
+        }
+      ],
+      "key_language": [
+        "As that weight lifts, you feel energy returning",
+        "Energy that was always yours, now freed up",
+        "Relief becomes inspiration. Inspiration becomes new life.",
+        "The natural sequence of transformation unfolding"
+      ],
+      "prompt_integration": "Follow the 5-stage sequence: Weight → Lifting → Energy Returns → Inspiration → New Life. Emphasize that energy returns (not created), and transformation is natural unfolding."
+    },
+    {
+      "id": "emotional-physical-chain",
+      "name": "Emotions Create Physical Tension",
+      "description": "Clear emotions, release tension, return to true self",
+      "core_message": "Unprocessed emotions create physical tension; releasing them reveals who you've always been",
+      "when_to_use": ["anxiety", "physical tension", "stuck emotions", "trauma healing"],
+      "presenting_issues": ["anxiety", "tension", "stuck feelings", "body armoring", "trauma"],
+      "chain_sequence": [
+        "Unprocessed emotions (fear, shame, grief)",
+        "Physical tension in body",
+        "Hesitation, stuckness, lack of confidence",
+        "Isolation",
+        "False narratives and stories"
+      ],
+      "reversal_sequence": [
+        "Acknowledge the emotions",
+        "Allow them to move and release",
+        "Feel physical tension softening",
+        "Confidence and ease returning",
+        "Connection restored",
+        "True story revealed"
+      ],
+      "key_language": [
+        "These layers of protection served you once. Now we're gently removing what you no longer need.",
+        "Returning to who you've always been underneath the armor",
+        "Not becoming someone new. Remembering who you are.",
+        "As emotions clear, tension releases, and you return to yourself",
+        "The real you, beneath the protective layers"
+      ],
+      "prompt_integration": "Frame tension as protective armor, not pathology. Emphasize gentle release and return to authentic self beneath the protection."
+    },
+    {
+      "id": "brain-master-skill",
+      "name": "Brain's Master Skill: Forgetting & Learning",
+      "description": "The same skill that learned the problem can learn the solution",
+      "core_message": "Your brain is masterful at both forgetting and learning - use that power",
+      "when_to_use": ["habit change", "neural rewiring", "overcoming patterns"],
+      "presenting_issues": ["bad habits", "unwanted patterns", "automatic responses", "conditioning"],
+      "key_language": [
+        "Your brain is a master at forgetting what no longer serves and learning something new",
+        "The same skill that learned fear can learn peace",
+        "Forgetting is as natural as learning",
+        "Your brain does this automatically - let it work for you",
+        "The mechanism that created the pattern can create a new one"
+      ],
+      "prompt_integration": "Reframe brain's capacity to form habits as a feature, not a bug. The same neuroplasticity that learned unwanted patterns can learn desired ones."
+    },
+    {
+      "id": "mind-body-unity",
+      "name": "Mind-Body Unity",
+      "description": "Mind and body are one system - changing one changes the other",
+      "core_message": "Your mind and body are unified. A shift in one creates a shift in the other.",
+      "when_to_use": ["psychosomatic issues", "chronic pain", "stress-related symptoms"],
+      "presenting_issues": ["chronic pain", "tension headaches", "stress symptoms", "psychosomatic issues"],
+      "key_language": [
+        "Your mind and body speak the same language",
+        "As your thoughts shift, your body responds",
+        "What changes in the mind, changes in the body",
+        "One system, deeply connected, working together",
+        "The body hears what the mind believes",
+        "Unified, whole, responsive to your intention"
+      ],
+      "prompt_integration": "Emphasize the bidirectional relationship between mind and body. Show how mental/emotional shifts naturally create physical changes and vice versa."
+    },
+    {
+      "id": "parts-integration",
+      "name": "Parts Integration",
+      "description": "All parts of you want the same thing - safety and wellbeing",
+      "core_message": "Even conflicting parts share a common goal when we look beneath the surface",
+      "when_to_use": ["internal conflict", "self-sabotage", "conflicting desires"],
+      "presenting_issues": ["self-sabotage", "inner conflict", "ambivalence", "part of me wants/part of me doesn't"],
+      "key_language": [
+        "Every part of you, even the ones that seem to conflict, wants your wellbeing",
+        "The part that resists and the part that wants change - both protecting you",
+        "When we listen to all parts, integration becomes natural",
+        "No part is the enemy. Each has wisdom to offer.",
+        "Beneath the conflict, a shared desire for your safety and happiness",
+        "All parts coming together, aligned in their true purpose"
+      ],
+      "prompt_integration": "Validate all parts as having positive intent. Frame integration as recognition of shared goals, not elimination of parts. Use dialogue between parts to find common ground."
+    },
+    {
+      "id": "future-self",
+      "name": "Future Self Connection",
+      "description": "Your future self is already there, calling you forward",
+      "core_message": "Connect with the version of you who has already made this transformation",
+      "when_to_use": ["goal achievement", "identity shifts", "major transitions"],
+      "presenting_issues": ["uncertainty about future", "lacking direction", "identity confusion", "major life decisions"],
+      "key_language": [
+        "Imagine the you who has already made this change, looking back with wisdom",
+        "Your future self is already there, waiting, beckoning you forward",
+        "Step into the experience of being that version of you",
+        "What does your future self know that you're beginning to remember now?",
+        "From that future place, looking back, what wisdom arises?",
+        "The path illuminated by the one who's already walked it - you"
+      ],
+      "prompt_integration": "Use temporal perspective shifting to access resourceful future states. Have client experience themselves as already transformed, then bring that wisdom back to present."
+    },
+    {
+      "id": "inner-wisdom",
+      "name": "Inner Wisdom Access",
+      "description": "Deep within, you know what you need - we're creating space to hear it",
+      "core_message": "The answers are within you. We're simply quieting the noise so you can hear them.",
+      "when_to_use": ["decision making", "confusion", "seeking clarity"],
+      "presenting_issues": ["confusion", "indecision", "seeking answers", "lost direction"],
+      "key_language": [
+        "Beneath the noise, a quiet knowing",
+        "Your inner wisdom has been there all along",
+        "In the stillness, your truth becomes clear",
+        "The part of you that already knows, waiting to be heard",
+        "Wisdom rising from within, clear and certain",
+        "You've always known. Now you're ready to hear it."
+      ],
+      "prompt_integration": "Create deep receptive states for inner wisdom to emerge. Use minimal guidance - more space for client's own knowing to surface. Frame therapist as facilitator, not source of answers."
+    },
+    {
+      "id": "sensory-amplification",
+      "name": "Sensory Amplification",
+      "description": "What we notice grows stronger - amplify the desired state through sensory detail",
+      "core_message": "The more vividly you experience something, the more real it becomes",
+      "when_to_use": ["strengthening positive states", "creating new experiences", "embodiment work"],
+      "presenting_issues": ["weak motivation", "difficulty feeling positive states", "disconnection from experience"],
+      "key_language": [
+        "Notice how that feels in your body - really notice",
+        "And as you pay attention to that sensation, it grows stronger",
+        "What do you see? What do you hear? What do you feel?",
+        "The more you notice, the more vivid it becomes",
+        "Amplifying that experience with each breath",
+        "Rich, detailed, alive - growing with your attention"
+      ],
+      "prompt_integration": "Guide detailed sensory exploration of desired states. Layer sensory modalities (visual, kinesthetic, auditory) to deepen experience. What's noticed becomes amplified."
+    },
+    {
+      "id": "resource-activation",
+      "name": "Resource Activation",
+      "description": "You have resources you haven't fully accessed - let's activate them",
+      "core_message": "Strengths, skills, and capacities you already possess, now fully available",
+      "when_to_use": ["building confidence", "facing challenges", "empowerment"],
+      "presenting_issues": ["feeling inadequate", "facing challenges", "need for strength", "overwhelm"],
+      "key_language": [
+        "Accessing resources you already have but perhaps haven't fully used",
+        "Strengths that are yours, now fully available",
+        "Every experience of resilience, every moment of courage - accessible now",
+        "Your inner resources, activated and ready",
+        "Capacity you've built over a lifetime, available in this moment",
+        "Not creating something new - activating what's already yours"
+      ],
+      "prompt_integration": "Guide recall and activation of past resources (times of strength, courage, resilience). Anchor these resources in body. Make them portable and accessible for future use."
+    },
+    {
+      "id": "playful-learning",
+      "name": "Playful Learning",
+      "description": "The play brain structure naturally contains learning - change through curiosity and joy",
+      "core_message": "Your brain learns best through play, curiosity, and exploration - not pressure",
+      "when_to_use": ["learning blocks", "rigid thinking", "perfectionism", "performance pressure"],
+      "presenting_issues": ["perfectionism", "fear of failure", "rigidity", "performance anxiety", "learning pressure", "joylessness", "trying too hard"],
+      "key_language": [
+        "What if this could be playful? Curious? Light?",
+        "Your brain learns naturally through play - that's how you learned everything important",
+        "Experimenting, exploring, discovering - no wrong moves, only feedback",
+        "The play brain holds the learning brain within it",
+        "Lightness in the process, joy in the exploration",
+        "Permission to try, to wonder, to play with possibilities",
+        "Not performing, but exploring. Not proving, but discovering."
+      ],
+      "prompt_integration": "Frame change as playful exploration rather than serious work or performance. Emphasize that the brain's play circuits naturally activate learning. Remove pressure by introducing curiosity, experimentation, and permission to 'try things on' without commitment. The play brain structure neurologically contains learning pathways."
+    }
+  ],
+  "dream_arcs": [
+    {
+      "id": "effortless-release",
+      "name": "Effortless Release (DREAM Foundation)",
+      "type": "foundation",
+      "description": "Letting go happens naturally, no effort required",
+      "core_message": "Release, dissolve, melt - tension leaves without trying",
+      "when_to_use": ["always_in_dream_scripts"],
+      "key_language": [
+        "Release",
+        "Dissolve",
+        "Melt",
+        "No need to...",
+        "Tension dissolves like sugar in warm water",
+        "Letting go as naturally as breath",
+        "Without effort, without forcing, simply allowing"
+      ],
+      "prompt_integration": "Emphasize that release is effortless and natural. Use dissolving/melting imagery. No effort required from listener."
+    },
+    {
+      "id": "safe-drifting",
+      "name": "Safe Drifting (DREAM Foundation)",
+      "type": "foundation",
+      "description": "It's safe to let your mind wander, drift is natural and good",
+      "core_message": "Your mind can drift wherever it wishes - to sleep or rest, whatever feels right",
+      "when_to_use": ["always_in_dream_scripts"],
+      "key_language": [
+        "Drift",
+        "Float",
+        "Wander",
+        "Easy to fall asleep or do whatever is best",
+        "Your mind can drift wherever it wishes",
+        "To sleep or simply rest, whatever feels right",
+        "Safe to let go, safe to wander, safe to sleep"
+      ],
+      "prompt_integration": "Give explicit permission for mind to wander. Frame sleep as one option among many. Emphasize safety of drifting."
+    },
+    {
+      "id": "continuous-replenishment",
+      "name": "Continuous Replenishment (DREAM Foundation)",
+      "type": "foundation",
+      "description": "Each moment, your body is healing, replenishing, restoring",
+      "core_message": "Every breath, every moment - continuous renewal",
+      "when_to_use": ["always_in_dream_scripts"],
+      "key_language": [
+        "Each breath",
+        "Every moment",
+        "Continuously",
+        "Ongoing restoration",
+        "Each moment your body replenishes itself completely",
+        "Cells renewing, systems restoring",
+        "Continuous healing, unfolding naturally"
+      ],
+      "prompt_integration": "Weave replenishment suggestions throughout. Emphasize continuous, ongoing process. Link to breath and natural rhythms."
+    },
+    {
+      "id": "progressive-body-journey",
+      "name": "Progressive Body Journey (DREAM Somatic)",
+      "type": "somatic",
+      "description": "Systematic body scanning, walking up or down the body",
+      "core_message": "Notice each part, release each part, rest completely",
+      "when_to_use": ["when_pmr_needed", "physical_tension", "body_focus"],
+      "variations": {
+        "ascending": {
+          "name": "Feet → Head (Grounding to Release)",
+          "sequence": "Feet/Toes → Ankles/Calves → Knees/Thighs → Hips/Pelvis → Belly/Lower Back → Chest/Upper Back → Shoulders/Arms → Neck/Jaw → Face/Scalp",
+          "description": "Building up to final release in head/face"
+        },
+        "descending": {
+          "name": "Head → Feet (Releasing Down)",
+          "sequence": "Scalp/Crown → Forehead/Temples → Eyes/Cheeks → Jaw/Mouth → Neck/Throat → Shoulders/Upper Back → Upper Arms → Elbows/Forearms → Hands/Fingers → Chest/Ribcage → Belly/Solar Plexus → Lower Back/Pelvis → Upper Legs → Knees → Lower Legs → Feet → Toes",
+          "description": "Releases down into earth, gravity assists"
+        }
+      },
+      "key_language": [
+        "Moving now to...",
+        "And now...",
+        "Noticing now...",
+        "Feel your [body part], releasing...",
+        "Softening, releasing, melting",
+        "Each part releasing, replenishing, renewing"
+      ],
+      "timing": "Each body part: 20-30 seconds = ~7-8 minutes total. Can repeat 2-3 times in 30-minute journey.",
+      "prompt_integration": "Use systematic body progression. Include functional suggestions during PMR ('as your muscles release, your body heals'). Multiple passes get slower and more detailed."
+    },
+    {
+      "id": "enchanted-greenhouse",
+      "name": "Enchanted Interior Greenhouse (DREAM Landscape)",
+      "type": "landscape",
+      "description": "Lush indoor paradise, no wind, magical stillness, complete shelter",
+      "core_message": "Protected, abundant, perfectly still - a magical sanctuary",
+      "when_to_use": ["shelter_seeking", "overstimulation", "need_for_safety"],
+      "elements": [
+        "Glass ceiling showing stars/moon",
+        "Exotic plants, ferns, flowers",
+        "Warm humid air, perfectly still",
+        "Soft moss underfoot",
+        "Gentle light filtering through leaves",
+        "Stone paths winding through greenery",
+        "Pools of still water reflecting plants",
+        "Complete shelter, total safety",
+        "Temperature perfect, constant"
+      ],
+      "key_language": [
+        "Lush",
+        "Still",
+        "Sheltered",
+        "Abundant",
+        "Verdant",
+        "Magical",
+        "Stepping into a vast greenhouse, warm and lush",
+        "Palms reaching toward a glass ceiling revealing stars",
+        "Air perfectly still, fragrant with jasmine and earth"
+      ],
+      "prompt_integration": "Rich sensory detail. Emphasize stillness and shelter. Create magical but peaceful atmosphere. No weather, no wind - perfect control."
+    },
+    {
+      "id": "river-journey",
+      "name": "River Journey (DREAM Landscape)",
+      "type": "landscape",
+      "description": "Floating down gentle river, each moment body replenishing completely",
+      "core_message": "Carried effortlessly, replenishing continuously, timeless flow",
+      "when_to_use": ["exhaustion", "need_for_support", "replenishment_focus"],
+      "elements": [
+        "Floating on back or in gentle boat",
+        "Warm water supporting completely",
+        "Slow, meandering current",
+        "Banks lined with beauty",
+        "No paddling, no effort",
+        "River knows where to take you",
+        "Each moment = complete replenishment",
+        "Timeless, endless journey"
+      ],
+      "key_language": [
+        "Floating",
+        "Drifting",
+        "Carried",
+        "Supported",
+        "Meandering",
+        "Floating on a gentle river, warm water holding you perfectly",
+        "The current carries you, your body replenishes itself completely",
+        "Every cell renewed with each moment"
+      ],
+      "prompt_integration": "Link continuous replenishment to river flow. Emphasize zero effort. Create timeless, dreamlike quality. Water as support and renewal."
+    },
+    {
+      "id": "moonlit-garden",
+      "name": "Moonlit Garden (DREAM Landscape)",
+      "type": "landscape",
+      "description": "Classic peaceful garden bathed in soft moonlight",
+      "core_message": "Beauty, peace, gentle light, timeless tranquility",
+      "when_to_use": ["classic_relaxation", "beauty_seeking", "gentle_peace"],
+      "elements": [
+        "Flowers blooming in moonlight",
+        "Soft paths winding through gardens",
+        "Benches for resting",
+        "Gentle fountains",
+        "Silvery light casting gentle shadows",
+        "Protected outdoor feeling",
+        "Night air soft and perfect"
+      ],
+      "key_language": [
+        "Moonlight",
+        "Silvery",
+        "Gentle shadows",
+        "Night blooming flowers",
+        "Soft paths",
+        "Peaceful garden",
+        "Garden bathed in soft moonlight, flowers glowing"
+      ],
+      "prompt_integration": "Classic peaceful imagery. Emphasize gentleness and beauty. Moonlight as soft, safe illumination."
+    },
+    {
+      "id": "forest-twilight",
+      "name": "Forest at Twilight (DREAM Landscape)",
+      "type": "landscape",
+      "description": "Ancient trees, soft earth, dappled light fading, deep stillness arriving",
+      "core_message": "Grounding, ancient wisdom, natural rhythm of day becoming night",
+      "when_to_use": ["grounding_needed", "nature_connection", "ancient_peace"],
+      "elements": [
+        "Tall ancient trees",
+        "Soft earth and moss underfoot",
+        "Dappled light fading",
+        "Birdsong gently quieting",
+        "Stillness deepening",
+        "Safe among the trees",
+        "Day transitioning naturally to night"
+      ],
+      "key_language": [
+        "Ancient",
+        "Grounding",
+        "Twilight",
+        "Settling",
+        "Trees standing witness",
+        "Forest growing quiet as day ends",
+        "Ancient trees, soft earth, deepening peace"
+      ],
+      "prompt_integration": "Use natural day-to-night transition as metaphor for sleep. Ancient trees as guardians. Earth as grounding presence."
+    },
+    {
+      "id": "ocean-sanctuary",
+      "name": "Ocean Sanctuary (DREAM Landscape)",
+      "type": "landscape",
+      "description": "Protected cove, gentle waves, maternal embrace of water",
+      "core_message": "Rhythmic, maternal, embracing - the ocean as mother",
+      "when_to_use": ["need_for_nurturing", "rhythm_seeking", "emotional_comfort"],
+      "elements": [
+        "Protected cove or bay",
+        "Gentle rhythmic waves",
+        "Warm sand",
+        "Sound of sea",
+        "No harsh weather - perfectly calm",
+        "Maternal embrace of water",
+        "Horizon line peaceful"
+      ],
+      "key_language": [
+        "Rhythmic",
+        "Maternal",
+        "Embracing",
+        "Gentle waves",
+        "Protected cove",
+        "Ocean holding you like a mother",
+        "Waves arriving in perfect rhythm"
+      ],
+      "prompt_integration": "Use wave rhythm to deepen trance. Ocean as nurturing presence. Protected from storms - only gentleness."
+    },
+    {
+      "id": "cosmic-observatory",
+      "name": "Cosmic Observatory (DREAM Landscape)",
+      "type": "landscape",
+      "description": "Vast night sky, infinite stars, peaceful perspective",
+      "core_message": "Awe without overwhelm, perspective, belonging to something vast",
+      "when_to_use": ["perspective_needed", "cosmic_connection", "awe_seeking"],
+      "elements": [
+        "Vast night sky",
+        "Infinite stars",
+        "Planets visible",
+        "Nebulae in soft colors",
+        "Sense of peaceful vastness",
+        "Belonging to the cosmos",
+        "Safe observation point"
+      ],
+      "key_language": [
+        "Vast",
+        "Infinite",
+        "Cosmic",
+        "Perspective",
+        "Stars stretching infinitely",
+        "Part of this vast peaceful universe",
+        "Held by the cosmos, safe in the infinite"
+      ],
+      "prompt_integration": "Create awe without overwhelm. Vastness as peaceful, not scary. Client as safe observer and participant in cosmic peace."
+    },
+    {
+      "id": "mountain-meadow",
+      "name": "Mountain Meadow at Dusk (DREAM Landscape)",
+      "type": "landscape",
+      "description": "High meadow, wildflowers, distant peaks, clear peaceful air",
+      "core_message": "Elevated peace, clarity, gentle transition to night",
+      "when_to_use": ["clarity_seeking", "elevation_needed", "peaceful_transition"],
+      "elements": [
+        "High mountain meadow",
+        "Wildflowers swaying gently",
+        "Distant peaks in soft light",
+        "Clear clean air",
+        "Warm stones from day's heat",
+        "Sky shifting to twilight",
+        "Elevated but safe"
+      ],
+      "key_language": [
+        "Elevated",
+        "Clear",
+        "Meadow",
+        "Twilight",
+        "Mountain peace",
+        "High meadow where air is clear and peaceful",
+        "Wildflowers settling as day ends"
+      ],
+      "prompt_integration": "Use elevation as metaphor for perspective without losing safety. Clear air, clear mind. Gentle transition to night."
+    },
+    {
+      "id": "desert-night",
+      "name": "Desert Night (DREAM Landscape)",
+      "type": "landscape",
+      "description": "Infinite stars, warm rock, profound silence, primordial stillness",
+      "core_message": "Stillness, spaciousness, connection to ancient earth",
+      "when_to_use": ["deep_silence_seeking", "spaciousness_needed", "primordial_connection"],
+      "elements": [
+        "Infinite starry sky",
+        "Warm rock holding day's heat",
+        "Profound silence",
+        "Sense of vast space",
+        "Primordial landscape",
+        "Connection to ancient earth",
+        "Nothing extra, nothing needed"
+      ],
+      "key_language": [
+        "Stillness",
+        "Silence",
+        "Spacious",
+        "Primordial",
+        "Ancient",
+        "Desert night, stars infinite, silence profound",
+        "Rock still warm, holding you gently"
+      ],
+      "prompt_integration": "Deep silence as positive presence. Spaciousness as freedom. Ancient landscape connecting to timeless peace within."
+    },
+    {
+      "id": "multisensory-delight",
+      "name": "Multisensory Delight (DREAM Enhancement)",
+      "type": "enhancement",
+      "description": "Rich sensory detail enhancing immersion in any landscape",
+      "core_message": "See it, hear it, feel it, smell it - fully immersed",
+      "when_to_use": ["enhancement_of_any_landscape", "deep_immersion"],
+      "sensory_categories": {
+        "touch": ["texture", "temperature", "weight", "softness", "smoothness"],
+        "sound": ["gentle", "rhythmic", "natural", "soothing"],
+        "sight": ["color", "light", "shadow", "movement", "detail"],
+        "smell": ["earth", "flowers", "water", "air", "natural scents"],
+        "taste": ["hint of rain", "salt air", "sweetness on the breeze"]
+      },
+      "key_language": [
+        "Notice the texture...",
+        "Feel the temperature...",
+        "Hear the gentle...",
+        "See the way the light...",
+        "The scent of...",
+        "Rich sensory detail bringing this moment fully alive"
+      ],
+      "prompt_integration": "Layer sensory modalities through chosen landscape. Touch, sound, sight, smell, hint of taste. Build rich immersive experience."
+    }
+  ],
+  "dream_arc_selection_rules": {
+    "foundation_arcs_always": ["effortless-release", "safe-drifting", "continuous-replenishment"],
+    "somatic_arc_when_needed": "progressive-body-journey",
+    "landscape_arcs_select_1_or_2": [
+      "enchanted-greenhouse",
+      "river-journey",
+      "moonlit-garden",
+      "forest-twilight",
+      "ocean-sanctuary",
+      "cosmic-observatory",
+      "mountain-meadow",
+      "desert-night"
+    ],
+    "enhancement_arc_optional": "multisensory-delight",
+    "mood_to_landscape_mapping": {
+      "insomnia": ["river-journey", "ocean-sanctuary"],
+      "stressed_anxious": ["enchanted-greenhouse", "forest-twilight"],
+      "restless_mind": ["cosmic-observatory", "desert-night"],
+      "physical_tension": ["moonlit-garden", "mountain-meadow"],
+      "exhausted": ["river-journey", "enchanted-greenhouse"],
+      "general_relaxation": ["moonlit-garden", "forest-twilight", "ocean-sanctuary"]
+    },
+    "structure": {
+      "always_foundation": 3,
+      "optional_somatic": 1,
+      "landscape_choice": "1_or_2",
+      "optional_enhancement": 1
+    },
+    "word_count_targets": {
+      "20_min": "3000-3500",
+      "25_min": "4000-4500",
+      "30_min": "4500-5000"
+    }
+  },
+  "arc_selection_rules": {
+    "always_include": ["effortlessness", "re-minding", "two-tempos"],
+    "issue_mappings": {
+      "anxiety": ["emotional-physical-chain", "effortlessness", "mind-body-unity"],
+      "confidence": ["recognition-ego-strengthening", "resource-activation", "playful-learning"],
+      "stuck": ["relief-to-new-life", "two-tempos", "future-self"],
+      "habits": ["brain-master-skill", "effortlessness", "playful-learning"],
+      "trauma": ["emotional-physical-chain", "two-tempos", "parts-integration"],
+      "self-worth": ["recognition-ego-strengthening", "resource-activation"],
+      "life-change": ["relief-to-new-life", "future-self"],
+      "chronic-pain": ["mind-body-unity", "emotional-physical-chain"],
+      "internal-conflict": ["parts-integration"],
+      "confusion": ["inner-wisdom", "future-self"],
+      "overwhelm": ["resource-activation", "mind-body-unity"],
+      "disconnection": ["sensory-amplification", "mind-body-unity"],
+      "perfectionism": ["playful-learning", "effortlessness", "two-tempos"],
+      "learning-blocks": ["playful-learning", "re-minding", "brain-master-skill"]
+    },
+    "max_arcs_per_script": 5,
+    "priority_order": ["always_include", "issue_specific", "template_preferred"]
+  }
+}

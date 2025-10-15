@@ -210,7 +210,15 @@ TASK: Polish this draft to ensure ALL 6 core principles are perfectly executed:
 5. Safety Language - Present throughout? ✓
 6. Ego Strengthening - Strong closure? ✓
 
-Output the POLISHED FINAL SCRIPT. Preserve the draft's flow but refine for principles.`;
+CRITICAL TONAL BALANCE CHECK:
+- Pattern: 1 direct command → 2-3 soft invitations
+- Scan for "you...you...you" repetition and rewrite using body-as-subject
+- Remove ANY cognitive instructions (think about, remember times when, recall, consider)
+- Replace visual commands (see, visualize) with inclusive language (notice, sense, imagine)
+- Eliminate clichés and em dashes
+- Ensure varied sentence length for trance modulation
+
+Output the POLISHED FINAL SCRIPT. Preserve the draft's flow but refine for principles AND language mastery.`;
 
     const response = await anthropic.messages.create({
       model: DEFAULT_MODEL,
