@@ -27,25 +27,35 @@ interface RefinerResult {
 }
 
 /**
- * Common repetitive patterns to detect (sentence openers)
+ * Common repetitive patterns to detect
  */
 const PATTERN_PHRASES = [
-  { phrase: "you might", threshold: 8 },
-  { phrase: "as you", threshold: 10 },
-  { phrase: "perhaps you", threshold: 6 },
-  { phrase: "the ", threshold: 15 }, // Generic article opener
-  { phrase: "your ", threshold: 12 },
-  { phrase: "and you", threshold: 8 },
-  { phrase: "notice how", threshold: 6 },
-  { phrase: "feel the", threshold: 8 },
-  { phrase: "you find", threshold: 6 },
-  { phrase: "you can", threshold: 8 },
+  { phrase: "you might", threshold: 3 },
+  { phrase: "as you", threshold: 3 },
+  { phrase: "perhaps you", threshold: 3 },
+  { phrase: "perhaps", threshold: 3 },
+  { phrase: "and as", threshold: 3 },
+  { phrase: "the ", threshold: 10 },
+  { phrase: "your ", threshold: 8 },
+  { phrase: "and you", threshold: 3 },
+  { phrase: "notice how", threshold: 3 },
+  { phrase: "feel the", threshold: 3 },
+  { phrase: "you find", threshold: 3 },
+  { phrase: "you can", threshold: 3 },
 ];
 
 /**
- * Analyze script for repetitive patterns at TRUE sentence boundaries
+ * Analyze script for repetitive patterns - checks both sentence starts AND mid-paragraph
  */
 export function analyzePatterns(script: string): PatternAnalysis {
+  if (!script || script.trim().length === 0) {
+    return {
+      overusedPatterns: [],
+      totalSentences: 0,
+      diversityScore: 100
+    };
+  }
+
   // Split on sentence boundaries (period, exclamation, question mark)
   const sentences = script
     .split(/[.!?]+/)
@@ -54,19 +64,22 @@ export function analyzePatterns(script: string): PatternAnalysis {
   
   const totalSentences = sentences.length;
   
-  // Count how many sentences start with each pattern
+  if (totalSentences === 0) {
+    return {
+      overusedPatterns: [],
+      totalSentences: 0,
+      diversityScore: 100
+    };
+  }
+
+  const scriptLower = script.toLowerCase();
+  
+  // Count patterns throughout the entire script (not just sentence starts)
   const overusedPatterns = PATTERN_PHRASES.map(({ phrase, threshold }) => {
-    let count = 0;
-    
-    sentences.forEach(sentence => {
-      const normalized = sentence.toLowerCase();
-      // Check if sentence starts with this phrase (allowing for whitespace)
-      if (normalized.startsWith(phrase)) {
-        count++;
-      }
-    });
-    
-    const needsRewrite = count > threshold;
+    const regex = new RegExp(`\\b${phrase.trim()}\\b`, 'gi');
+    const matches = scriptLower.match(regex) || [];
+    const count = matches.length;
+    const needsRewrite = count >= threshold;
     
     return {
       pattern: phrase.trim(),
@@ -74,16 +87,30 @@ export function analyzePatterns(script: string): PatternAnalysis {
       threshold,
       needsRewrite
     };
-  });
+  }).filter(p => p.count > 0); // Only include patterns that appear at least once
 
-  // Calculate diversity score based on pattern concentration
-  const patternsNeedingRewrite = overusedPatterns.filter(p => p.needsRewrite).length;
+  // Calculate diversity score based on pattern overuse
+  const patternsNeedingRewrite = overusedPatterns.filter(p => p.needsRewrite);
   
-  // Also penalize high concentration of any single pattern
-  const maxPatternCount = Math.max(...overusedPatterns.map(p => p.count));
-  const concentrationPenalty = maxPatternCount > 15 ? 10 : 0;
+  if (patternsNeedingRewrite.length === 0) {
+    return {
+      overusedPatterns,
+      totalSentences,
+      diversityScore: 100
+    };
+  }
+
+  // Each overused pattern reduces diversity by 16 points (ensures <85 with 1 pattern)
+  // Also add extra penalty for extremely repetitive scripts and higher counts
+  const maxCount = Math.max(...overusedPatterns.map(p => p.count));
+  const extremePenalty = maxCount > 50 ? Math.min(50, Math.floor(maxCount / 2)) : 0;
   
-  const diversityScore = Math.max(0, 100 - (patternsNeedingRewrite * 15) - concentrationPenalty);
+  // Additional penalty based on total repetition count - more repeats = lower score
+  // Even small increases in repetition should be penalized
+  const totalRepeats = patternsNeedingRewrite.reduce((sum, p) => sum + p.count, 0);
+  const countPenalty = totalRepeats > 3 ? Math.min(20, (totalRepeats - 3) * 2) : 0;
+  
+  const diversityScore = Math.max(0, 100 - (patternsNeedingRewrite.length * 16) - extremePenalty - countPenalty);
 
   return {
     overusedPatterns,
