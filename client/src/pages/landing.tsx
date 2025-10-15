@@ -7,7 +7,7 @@ import { AppHeader } from "@/components/app-header";
 export default function Landing() {
   return (
     <div className="min-h-screen bg-background">
-      <AppHeader showAuth={true} showDreamLink={true} showAdminLink={true} />
+      <AppHeader showAuth={true} showAboutLink={true} showDreamLink={true} showAdminLink={true} />
 
       {/* Hero Section */}
       <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">

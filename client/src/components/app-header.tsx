@@ -11,6 +11,7 @@ export interface AppHeaderProps {
   subtitle?: string;
   icon?: React.ReactNode;
   showAuth?: boolean;
+  showAboutLink?: boolean; // Show About/Why link
   showDreamboard?: boolean;
   showDreamLink?: boolean; // Show DREAM Hypnosis link
   showDreamLibrary?: boolean; // Show Dream Library link
@@ -27,6 +28,7 @@ export function AppHeader({
   subtitle,
   icon,
   showAuth = false,
+  showAboutLink = false,
   showDreamboard = false,
   showDreamLink = false,
   showDreamLibrary = false,
@@ -71,6 +73,14 @@ export function AppHeader({
         {/* Right Section */}
         <div className="flex items-center gap-3">
           {rightContent}
+
+          {showAboutLink && (
+            <Link href="/about" data-testid="link-about">
+              <Button variant="ghost" size="sm" data-testid="button-about">
+                About
+              </Button>
+            </Link>
+          )}
 
           {showDreamboard && (
             <Link href="/dashboard" data-testid="link-dreamboard">
