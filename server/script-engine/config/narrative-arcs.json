@@ -1155,6 +1155,139 @@
         "Rich sensory detail bringing this moment fully alive"
       ],
       "prompt_integration": "Layer sensory modalities through chosen landscape. Touch, sound, sight, smell, hint of taste. Build rich immersive experience."
+    },
+    {
+      "id": "overprotector-promotion",
+      "name": "The Overprotector Promotion",
+      "description": "Validate the overprotective part for keeping client alive, then promote it to new role now that client has resources",
+      "strategic_move": "Thank the protector profusely, acknowledge the job is complete, give promotion to Adventure Seeker or similar exciting role",
+      "core_message": "You kept me alive when I had nothing. Good job. Now I have resources. You don't have to protect anymore - you get a promotion to Adventure.",
+      "when_to_use": ["overprotective_parts", "hypervigilance", "after_resource_building", "adult_with_childhood_protector"],
+      "presenting_issues": ["anxiety", "hypervigilance", "overcontrol", "risk_avoidance", "adult_still_protected_like_child"],
+      "mechanism": {
+        "validate_thoroughly": "Good job. You kept me alive. Thank you.",
+        "acknowledge_context": "Back then, I had no resources, no power, no escape",
+        "mark_transition": "Now I'm grown. I have money, autonomy, choices, skills",
+        "release_from_duty": "You don't have to protect anymore. That job is complete.",
+        "promote": "You get a promotion: Adventure Seeker, Explorer, Joy Finder"
+      },
+      "key_language": [
+        "Good job, Protector. You kept me alive when I had nothing.",
+        "Back then, you HAD to be hypervigilant. It was survival.",
+        "But now... I'm grown. I have resources. Money. Skills. Choices.",
+        "You don't have to protect me anymore. That time is over.",
+        "You get a PROMOTION. From Protector to Adventure Seeker.",
+        "Same energy, new job: finding joy, seeking delight, exploring safely",
+        "You were brilliant at protection. Now you get to be brilliant at adventure.",
+        "Your job isn't over - it's upgraded."
+      ],
+      "prompt_integration": "Deep validation first - this part saved their life. Then mark the resource shift: adult now, not child. Resources available now that weren't then. The Protector's job is COMPLETE (not wrong, complete). Then the promotion: same vigilant energy now deployed for ADVENTURE, not just survival. The part isn't eliminated or weakened - it's upgraded. Particularly powerful for clients who developed hypervigilance in childhood and still operate from that protective stance as adults.",
+      "caution": {
+        "verify_resources": "Only use if client actually HAS resources now (safety, money, autonomy)",
+        "honor_past_necessity": "Protection wasn't paranoia - it was necessary survival",
+        "not_elimination": "Not killing the part - PROMOTING it to better role"
+      },
+      "pairs_well_with": ["recognition", "energy-reclamation", "playful-learning"],
+      "critical_note": "This is SPECIFIC parts move: validate → mark transition → promote. Different from general parts integration. The promotion is key - same energy, new job. Overprotector becomes Adventure Seeker."
+    },
+    {
+      "id": "the-seeker",
+      "name": "The Seeker",
+      "description": "Permission to delight the brain through play, novelty, weirdness, or weirdly normal things",
+      "strategic_move": "Brain needs to be delighted again - offer suggestions or permission for playful exploration",
+      "core_message": "Your brain is seeking. Let it play. Let it be weird. Let it find delight in the unexpected.",
+      "when_to_use": ["boredom", "stuckness", "rigid_thinking", "aquarius_types", "creative_blocks", "need_for_novelty"],
+      "presenting_issues": ["boredom", "feeling_stuck", "life_feels_flat", "creative_drought", "rigidity", "need_novelty"],
+      "mechanism": {
+        "acknowledge_seeker": "Part of you is seeking, curious, wanting novelty",
+        "give_permission": "Permission to play, be weird, explore",
+        "offer_suggestions": "Maybe try something unexpected, delightfully strange",
+        "normalize_weird": "Weird is good. Weirdly normal is perfect."
+      },
+      "key_language": [
+        "Part of you is seeking. Curious. Wanting something... different.",
+        "Permission now to play. To be weird. To try the unexpected.",
+        "What if you did something delightfully strange today?",
+        "Your brain wants to be surprised, delighted, awakened",
+        "Weird is good. Weirdly normal is perfect.",
+        "The Seeker in you, hungry for novelty, for play",
+        "Let your brain have fun. Let it explore. Let it be delighted.",
+        "What would surprise you? What would make you laugh at yourself?",
+        "Permission to be playfully, joyfully, weirdly alive"
+      ],
+      "prompt_integration": "For brains that need novelty and delight. Aquarius energy - curious, seeking, playful. Give explicit permission for weird/unexpected. Can include playful suggestions (take different route home, eat breakfast for dinner, dance in kitchen). Normalizes 'weird' as healthy. Particularly good for rigid thinkers, people stuck in routines, creative blocks. The brain NEEDS novelty to feel alive. This arc gives permission and invitation.",
+      "pairs_well_with": ["playful-learning", "open-future", "earned-delight"],
+      "critical_note": "About NOVELTY and PLAY as brain food. Different from Playful Learning (which is about learning style) - this is about FEEDING the seeking system in the brain. Permission to be weird, try unexpected things, delight the brain."
+    },
+    {
+      "id": "humor-as-healing",
+      "name": "Humor as Healing Marker",
+      "description": "When you can laugh at yourself/situation, healing has shifted - you're not IN it, you're beyond it with perspective",
+      "strategic_move": "Recognize ability to laugh as sign of healing progress and perspective shift",
+      "core_message": "Once you can see the humor, you've shifted. You're not in it anymore. You have perspective.",
+      "when_to_use": ["after_some_healing", "integration_phase", "when_client_shows_humor", "perspective_gained"],
+      "presenting_issues": ["mid_healing_journey", "gaining_perspective", "lightness_emerging", "self_compassion_growing"],
+      "mechanism": {
+        "recognize_shift": "Notice you can laugh now - that's significant",
+        "mark_perspective": "You're not IN it anymore. You're beyond, looking at it.",
+        "validate_healing": "This humor? It's a sign healing is moving.",
+        "compassionate_lens": "Laughing at how you got into the mess, with love"
+      },
+      "key_language": [
+        "And notice... you can laugh about it now. That's not small.",
+        "When you can see the humor, you've shifted position.",
+        "You're not IN the story anymore. You're beyond it, looking at it.",
+        "This ability to laugh at yourself? It's healing.",
+        "You're laughing at the ways you got into that mess - with compassion",
+        "Humor means perspective. Perspective means you've moved.",
+        "The fact that it's funny now? That's growth.",
+        "You can hold it lightly now. That's powerful."
+      ],
+      "prompt_integration": "Use when client shows humor about their situation - validate this as healing marker. Different from minimizing - this is genuine perspective shift. They can see themselves in the story with compassion AND humor. The ability to laugh (at self, with love) means they're no longer consumed by it. CAUTION: Must be self-compassionate humor, not self-attack or minimizing. The humor comes FROM healing, not instead of it.",
+      "caution": {
+        "self_compassion_required": "Must be laughing WITH self, not AT self cruelly",
+        "not_minimizing": "Humor as perspective, not bypassing or minimizing pain",
+        "timing_matters": "Too early = bypassing. Right time = integration."
+      },
+      "pairs_well_with": ["recognition", "perspective-shift", "integration-phase-arcs"],
+      "critical_note": "Humor as MARKER of healing, not method. When client can laugh, they've gained distance/perspective. This is about RECOGNIZING that shift and validating it as progress."
+    },
+    {
+      "id": "absurdity-grace",
+      "name": "Laughing at Absurdity",
+      "description": "When stuck in absurd situation you can't change, choose to see the absurdity and laugh rather than be consumed",
+      "strategic_move": "Reframe unchangeable absurd situation as opportunity for grace through humor",
+      "core_message": "You know it's absurd. You can't change it. You can choose to laugh at the absurdity rather than let it consume you.",
+      "when_to_use": ["unchangeable_situations", "absurd_circumstances", "difficult_people", "chronic_annoyances"],
+      "presenting_issues": ["mean_boss", "difficult_coworker", "absurd_family_dynamics", "unchangeable_irritations"],
+      "mechanism": {
+        "acknowledge_absurdity": "Yes, it's absurd. You see it clearly.",
+        "accept_unchangeable": "You can't change them or the situation",
+        "offer_choice": "You can focus on chaos OR find humor in absurdity",
+        "grace_through_humor": "Laughing at it brings grace, self-love, understanding"
+      },
+      "key_language": [
+        "Your boss stomps around like a toddler. It's absurd.",
+        "They create a tornado when they enter. You see it.",
+        "You can't change them. But you can choose how you hold it.",
+        "What if you let your brain have fun with the absurdity?",
+        "Laugh at how ridiculous it is, how predictable, how absurd",
+        "This brings grace. Self-love. Understanding.",
+        "You're not dismissing the impact. You're choosing perspective.",
+        "The absurdity is real. Your choice to laugh? That's power.",
+        "Let the brain find the comedy in the chaos"
+      ],
+      "prompt_integration": "For situations client CANNOT change - difficult people, absurd circumstances, chronic annoyances. Validate that it IS absurd, they're not crazy for seeing it. Then offer choice: consumed by chaos OR amused by absurdity. This isn't minimizing - it's choosing lens. The humor creates GRACE and distance. Particularly good for workplace situations, family dynamics, anywhere client is stuck with absurd unchangeable circumstances. The act of laughing AT the absurdity (not dismissing impact) brings self-love and perspective.",
+      "differs_from": {
+        "humor_as_healing": "Healing Humor = marker of past healing. Absurdity = coping tool for current unchangeable situation"
+      },
+      "caution": {
+        "must_be_unchangeable": "Only for truly unchangeable situations, not avoidance of necessary action",
+        "not_minimizing": "Laughing at situation absurdity, not dismissing real impact",
+        "grace_based": "Must come from self-love, not bitterness or cynicism"
+      },
+      "pairs_well_with": ["playful-learning", "perspective-shift", "the-seeker"],
+      "critical_note": "About CHOOSING lens when stuck with absurdity. Not fixing situation but changing relationship to it through humor. Brings grace, self-love. Different from Humor as Healing (which marks progress) - this is active coping tool."
     }
   ],
   "dream_arc_selection_rules": {
@@ -1194,19 +1327,19 @@
   "arc_selection_rules": {
     "always_include": ["effortlessness", "re-minding", "two-tempos"],
     "issue_mappings": {
-      "anxiety": ["emotional-physical-chain", "effortlessness", "mind-body-unity", "attention-direction", "energy-reclamation"],
+      "anxiety": ["emotional-physical-chain", "effortlessness", "mind-body-unity", "attention-direction", "energy-reclamation", "overprotector-promotion"],
       "confidence": ["recognition-ego-strengthening", "resource-activation", "playful-learning", "upward-spiral"],
-      "stuck": ["relief-to-new-life", "two-tempos", "future-self", "earned-delight", "open-future"],
+      "stuck": ["relief-to-new-life", "two-tempos", "future-self", "earned-delight", "open-future", "the-seeker"],
       "habits": ["brain-master-skill", "effortlessness", "playful-learning", "upward-spiral"],
-      "trauma": ["emotional-physical-chain", "two-tempos", "parts-integration", "oasis-rest", "post-traumatic-growth", "energy-reclamation"],
+      "trauma": ["emotional-physical-chain", "two-tempos", "parts-integration", "oasis-rest", "post-traumatic-growth", "energy-reclamation", "overprotector-promotion"],
       "self-worth": ["recognition-ego-strengthening", "resource-activation", "shame-dissolution"],
       "life-change": ["relief-to-new-life", "future-self", "open-future"],
       "chronic-pain": ["mind-body-unity", "emotional-physical-chain", "signal-decoding", "energy-reclamation"],
       "internal-conflict": ["parts-integration"],
       "confusion": ["inner-wisdom", "future-self", "no-clarity", "open-future"],
-      "overwhelm": ["resource-activation", "mind-body-unity", "no-clarity"],
+      "overwhelm": ["resource-activation", "mind-body-unity", "no-clarity", "absurdity-grace"],
       "disconnection": ["sensory-amplification", "mind-body-unity"],
-      "perfectionism": ["playful-learning", "effortlessness", "two-tempos", "open-future"],
+      "perfectionism": ["playful-learning", "effortlessness", "two-tempos", "open-future", "the-seeker"],
       "learning-blocks": ["playful-learning", "re-minding", "brain-master-skill"],
       "weight-loss": ["earned-delight", "brain-master-skill", "signal-decoding"],
       "exhaustion": ["oasis-rest", "two-tempos", "internal-sanctuary", "energy-reclamation"],
@@ -1214,18 +1347,21 @@
       "crisis": ["oasis-rest", "two-tempos"],
       "emotional-eating": ["signal-decoding", "parts-integration", "brain-master-skill"],
       "rumination": ["attention-direction", "mind-body-unity", "playful-learning"],
-      "people-pleasing": ["boundary-reframing", "parts-integration", "recognition-ego-strengthening"],
+      "people-pleasing": ["boundary-reframing", "parts-integration", "recognition-ego-strengthening", "absurdity-grace"],
       "codependency": ["boundary-reframing", "parts-integration"],
-      "resentment": ["forgiveness-protocol", "emotional-physical-chain", "energy-reclamation"],
+      "resentment": ["forgiveness-protocol", "emotional-physical-chain", "energy-reclamation", "absurdity-grace"],
       "shame": ["shame-dissolution", "recognition-ego-strengthening", "parts-integration"],
       "depletion": ["internal-sanctuary", "oasis-rest", "resource-activation", "energy-reclamation"],
-      "hypervigilance": ["internal-sanctuary", "emotional-physical-chain", "oasis-rest"],
+      "hypervigilance": ["internal-sanctuary", "emotional-physical-chain", "oasis-rest", "overprotector-promotion"],
       "family-trauma": ["cycle-breaker", "ancestral-healing", "post-traumatic-growth"],
       "generational-patterns": ["cycle-breaker", "ancestral-healing"],
-      "post-breakthrough": ["energy-reclamation", "open-future", "upward-spiral"],
+      "post-breakthrough": ["energy-reclamation", "open-future", "upward-spiral", "humor-as-healing"],
       "achievement-restlessness": ["self-actualization-cycle", "open-future"],
       "spiritual-growth": ["ancestral-healing", "self-actualization-cycle"],
-      "post-success": ["self-actualization-cycle", "upward-spiral", "open-future"]
+      "post-success": ["self-actualization-cycle", "upward-spiral", "open-future"],
+      "boredom": ["the-seeker", "playful-learning", "earned-delight"],
+      "creative-blocks": ["the-seeker", "playful-learning", "open-future"],
+      "workplace-difficulties": ["absurdity-grace", "boundary-reframing"]
     },
     "max_arcs_per_script": 5,
     "priority_order": ["always_include", "issue_specific", "template_preferred"]
