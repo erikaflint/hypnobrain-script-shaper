@@ -211,10 +211,11 @@ TASK: Polish this draft to ensure ALL 6 core principles are perfectly executed:
 6. Ego Strengthening - Strong closure? ✓
 
 CRITICAL TONAL BALANCE CHECK:
-- Pattern: 1 direct command → 2-3 soft invitations
-- Scan for "you...you...you" repetition and rewrite using body-as-subject
+- Pattern: Soft invitations with "you" and "your" (NEVER use bare imperatives)
+- KEEP personal pronouns: "you feel", "your body", "you notice" - this maintains connection!
+- AVOID impersonal forms: "Feel the breath" → "You feel the breath", "Body knows" → "Your body knows"  
 - Remove ANY cognitive instructions (think about, remember times when, recall, consider)
-- Replace visual commands (see, visualize) with inclusive language (notice, sense, imagine)
+- Replace visual commands (see, visualize) with inclusive language (you notice, you sense, you imagine)
 - Eliminate clichés and em dashes
 - Ensure varied sentence length for trance modulation
 

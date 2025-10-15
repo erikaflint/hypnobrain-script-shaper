@@ -30,16 +30,16 @@ interface RefinerResult {
  * Common repetitive patterns to detect
  */
 const PATTERN_PHRASES = [
-  { phrase: "you might", threshold: 3 },
-  { phrase: "as you", threshold: 3 },
-  { phrase: "perhaps you", threshold: 3 },
+  { phrase: "you might", threshold: 5 },  // Increased - "you" is essential for hypnosis
+  { phrase: "as you", threshold: 5 },     // Increased - personal connection is key
+  { phrase: "perhaps you", threshold: 4 },
   { phrase: "perhaps", threshold: 3 },
   { phrase: "and as", threshold: 3 },
   { phrase: "the ", threshold: 10 },
-  { phrase: "your ", threshold: 8 },
-  { phrase: "and you", threshold: 3 },
+  // REMOVED "your" - it's essential for personal connection in hypnosis!
+  { phrase: "and you", threshold: 5 },    // Increased - "you" keeps client engaged
   { phrase: "notice how", threshold: 3 },
-  { phrase: "feel the", threshold: 3 },
+  { phrase: "feel the", threshold: 4 },   // Slightly increased
   { phrase: "you find", threshold: 3 },
   { phrase: "you can", threshold: 3 },
 ];
@@ -152,20 +152,23 @@ export async function refinePatterns(
 - The peaceful, calming tone
 - NATURAL HYPNOTIC LANGUAGE with proper grammar and articles (the, a, your)
 
-CRITICAL GRAMMAR RULES:
-- Always use articles: "the breath" NOT "breath", "your body" NOT "body", "a gentle feeling" NOT "gentle feeling"
-- Avoid robotic constructions: "you might notice" NOT "perhaps noticing emerges", "your body knows" NOT "bodies know"
-- Use natural phrasing: "feel the warmth" NOT "feeling of warmth occurs"
-- Maintain proper English grammar while varying sentence openers
+CRITICAL HYPNOTIC LANGUAGE RULES:
+- ALWAYS KEEP "YOU" and "YOUR" - These are ESSENTIAL for personal connection, NOT repetition!
+- "You" and "your" keep the client engaged with themselves - this is hypnotic, not redundant
+- Use articles: "the breath" NOT "breath", "your body" NOT "body", "a gentle feeling" NOT "gentle feeling"  
+- Avoid robotic constructions: "you might notice" is fine, just vary it to "you may notice", "you can feel", "you discover"
+- NEVER use impersonal commands: "Take a breath" → "You take a breath", "Let eyes close" → "Your eyes close"
+- Maintain personal pronouns while varying the REST of the sentence
 
 DO NOT:
+- Remove "you" or "your" - these maintain personal connection
+- Use command forms ("Take", "Feel", "Notice") - always include "you" or "your"
 - Change the content or ideas
 - Add new information
 - Remove any details
-- Drop articles or create awkward passive constructions
 - Alter the script length significantly
 
-You will receive a script with repetitive sentence openers. Rewrite ONLY the overused patterns to create more variety while keeping the language natural and hypnotic.`;
+You will receive a script with repetitive sentence openers. Vary the sentence structures while KEEPING all "you" and "your" pronouns intact.`;
 
   const userPrompt = `Script to refine:
 ${script}
@@ -173,12 +176,20 @@ ${script}
 Overused patterns detected:
 ${patternsToFix.map(p => `- "${p.pattern}" used ${p.count} times (threshold: ${p.threshold})`).join('\n')}
 
-Task: Rewrite sentences that start with these patterns to create more variety. Keep the same content, just change how sentences begin.
+Task: Rewrite sentences that start with these patterns to create more variety. KEEP "you" and "your" - just vary the REST of the sentence structure.
 
-Examples of variety:
-- "You might notice..." → "A gentle awareness may arise..."
-- "As you breathe..." → "With each breath..."
-- "Perhaps you feel..." → "There's a quality of..."
+Examples of GOOD variety (keeping personal pronouns):
+- "You might notice..." → "You may discover..." or "You can sense..." or "You begin to feel..."
+- "As you breathe..." → "With each breath you take..." or "You breathe and notice..." or "Your breathing deepens..."
+- "Perhaps you feel..." → "You may feel..." or "You might sense..." or "You discover a feeling..."
+- "Take a breath" → "You take a breath" or "Your breath deepens"
+- "Let your eyes close" → "Your eyes close" or "You let your eyes close"
+- "Feel the warmth" → "You feel the warmth" or "Your body feels the warmth"
+
+Examples of BAD variety (removing personal connection):
+❌ "A gentle awareness may arise..." (loses "you")
+❌ "With each breath..." (loses "you")  
+❌ "There's a quality of..." (loses "you")
 
 Return the refined script as JSON:
 {

@@ -52,6 +52,18 @@ To prevent quality degradation and ensure consistency, DREAM scripts pass throug
 - **Quality Guard Enforcement**: Fails if >3 keyword occurrences in one paragraph or >10 total (counts actual occurrences, not unique keywords)
 - Categories: Physical Restoration, Sleep Quality, Cognitive Enhancement, Energy/Vitality, Stress Response
 
+**Personal Pronouns in Hypnosis (Critical Language Rule)**: "You" and "your" are ESSENTIAL for maintaining personal connection, NOT repetition to avoid!
+- **The Problem Discovered (Oct 2025)**: AI was removing "you/your" and using impersonal commands/passive forms
+- **Root Causes**: 
+  1. Pattern Refiner had "your" threshold of only 8 uses (absurd for 1500-3000 word scripts)
+  2. ScriptEngine had "Scan for 'you...you...you' repetition and rewrite using body-as-subject" instruction
+  3. Examples showed removing pronouns: "You might notice" → "A gentle awareness may arise" (BAD!)
+- **The Fix**: Both prompts now explicitly preserve personal pronouns:
+  - ✅ "You take a breath" NOT "Take a breath"
+  - ✅ "Your eyes close" NOT "Let eyes close"  
+  - ✅ "You feel the warmth" NOT "Feel the warmth"
+- **Why It Matters**: Personal pronouns keep the client engaged with themselves - this is hypnotic language, not redundancy!
+
 ### Feature Specifications
 -   **8-Dimensional Framework**: Implements Erika Flint's 8D Hypnosis Framework with independent emphasis levels (0-100%).
 -   **AI Script Generation**: Generates script previews (150-200 words), full scripts (1500-2000 words, 3000 for DREAM), and 6 marketing assets. Includes AI-generated titles and supports "regular" or "sleep" emergence types.
