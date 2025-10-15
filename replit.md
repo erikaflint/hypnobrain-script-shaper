@@ -33,9 +33,15 @@ To prevent quality degradation and ensure consistency, DREAM scripts pass throug
 1. **Story Shaper (Stage 1)**: Expands journey idea into detailed 800-1200 word story outline with rich sensory details. Saved to database for transparency.
 2. **Dream Maker (Stage 2)**: Generates full 3000-word hypnosis script from story outline using ScriptEngine methodology.
 3. **Pattern Refiner (Stage 3)**: Analyzes script for repetitive sentence patterns (e.g., "you might...", "as you...") and rewrites overused openers for variety. Preserves ALL content and context.
-4. **Quality Guard (Stage 4)**: Validates emergence type matches (sleep vs regular), checks for 15+ functional suggestions, verifies word count within 15% of target, ensures metaphor consistency. Applies micro-polish to fix issues.
+4. **Quality Guard (Stage 4)**: Validates emergence type matches (sleep vs regular), checks for 15+ functional suggestions, verifies word count within 15% of target, ensures metaphor consistency, **detects metaphor overuse (max 8-10 uses per script)**. Applies micro-polish to fix issues.
 
 **Key Innovation**: Separation of concerns prevents the "50% degradation problem" where AI trying to do everything (plan + write + variety + quality) resulted in generic content. Each stage focuses on ONE job, with explicit "PRESERVE ALL details" instructions to maintain historical/contextual integrity.
+
+**Metaphor Usage Guidelines (New)**: To prevent metaphor overload, the system now enforces strict frequency limits:
+- ScriptEngine explicitly instructs AI to use metaphors 5-7 times maximum (not "throughout")
+- Symbolic Dimension levels specify exact metaphor counts (HEAVY: 6-8, MODERATE: 4-6, LIGHT: 2-3)
+- Quality Guard validates metaphor frequency and fails scripts with 10+ metaphor family uses
+- Guideline: "Metaphors should ENHANCE the experience, not dominate it"
 
 ### Feature Specifications
 -   **8-Dimensional Framework**: Implements Erika Flint's 8D Hypnosis Framework with independent emphasis levels (0-100%).

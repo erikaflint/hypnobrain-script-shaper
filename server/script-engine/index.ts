@@ -192,8 +192,14 @@ export class ScriptEngine {
       prompt += `\n## PRIMARY METAPHOR\n\n`;
       prompt += `Use the "${contract.primaryMetaphor.family}" metaphor family.\n`;
       prompt += `Primary images: ${contract.primaryMetaphor.primaryImages.slice(0, 5).join(', ')}\n`;
-      prompt += `Reason: ${contract.primaryMetaphor.reason}\n`;
-      prompt += `IMPORTANT: Maintain metaphor consistency - all imagery must fit within this one metaphor world.\n\n`;
+      prompt += `Reason: ${contract.primaryMetaphor.reason}\n\n`;
+      prompt += `**METAPHOR USAGE GUIDELINES:**\n`;
+      prompt += `- Use metaphorical language 5-7 times maximum throughout the entire script\n`;
+      prompt += `- Metaphors should ENHANCE the experience, not dominate it\n`;
+      prompt += `- Most of the script should describe experiences directly without metaphorical comparison\n`;
+      prompt += `- Avoid repetitive patterns like "like [metaphor thing]" in consecutive sentences\n`;
+      prompt += `- When you do use the metaphor, make it count - use it for key moments and transitions\n`;
+      prompt += `- Consistency means fitting within one metaphor world, NOT repeating it constantly\n\n`;
     }
 
     return prompt;

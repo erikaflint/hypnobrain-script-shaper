@@ -201,6 +201,73 @@ function checkSentenceVariety(script: string): QualityCheck {
 }
 
 /**
+ * Check metaphor frequency (not overused)
+ */
+function checkMetaphorFrequency(script: string, targetWordCount: number = 3000): QualityCheck {
+  const scriptLower = script.toLowerCase();
+  const wordCount = script.split(/\s+/).filter(w => w.length > 0).length;
+  
+  // Detect metaphor families and count usage
+  const metaphorFamilies = {
+    nature: ['tree', 'forest', 'river', 'ocean', 'mountain', 'wind', 'rain', 'cloud', 'meadow', 'garden'],
+    journey: ['path', 'journey', 'walk', 'travel', 'explore', 'wander', 'destination'],
+    water: ['water', 'ocean', 'oceanic', 'river', 'stream', 'wave', 'flow', 'flowing', 'current', 'tide', 'sea'],
+    light: ['light', 'glow', 'shine', 'radiance', 'illuminate', 'brightness', 'dawn']
+  };
+  
+  const familyCounts: { [key: string]: number } = {};
+  const wordCounts: { [key: string]: number } = {};
+  
+  Object.entries(metaphorFamilies).forEach(([family, words]) => {
+    let familyTotal = 0;
+    words.forEach(word => {
+      const regex = new RegExp(`\\b${word}\\w*\\b`, 'gi');
+      const matches = scriptLower.match(regex) || [];
+      const count = matches.length;
+      if (count > 0) {
+        wordCounts[word] = count;
+        familyTotal += count;
+      }
+    });
+    if (familyTotal > 0) {
+      familyCounts[family] = familyTotal;
+    }
+  });
+  
+  if (Object.keys(familyCounts).length === 0) {
+    return {
+      name: "Metaphor Frequency",
+      passed: true,
+      details: "No heavy metaphor use detected"
+    };
+  }
+  
+  // Find dominant family and check if overused
+  const primaryFamily = Object.entries(familyCounts).reduce((a, b) => 
+    b[1] > a[1] ? b : a
+  )[0];
+  const metaphorCount = familyCounts[primaryFamily];
+  
+  // Determine max based on script length
+  const maxMetaphors = wordCount >= 2500 ? 10 : 8; // DREAM scripts get slightly higher limit
+  
+  // Find the most overused specific word
+  const mostUsedWord = Object.entries(wordCounts)
+    .filter(([word]) => metaphorFamilies[primaryFamily as keyof typeof metaphorFamilies]?.includes(word))
+    .reduce((a, b) => b[1] > a[1] ? b : a, ['', 0]);
+  
+  const passed = metaphorCount <= maxMetaphors;
+  
+  return {
+    name: "Metaphor Frequency",
+    passed,
+    details: passed
+      ? `Good balance - ${primaryFamily} metaphor used ${metaphorCount}x (max: ${maxMetaphors})`
+      : `Metaphor overload - ${primaryFamily} used ${metaphorCount}x (max: ${maxMetaphors}). "${mostUsedWord[0]}" appears ${mostUsedWord[1]}x`
+  };
+}
+
+/**
  * Check metaphor consistency (same metaphor family)
  */
 function checkMetaphorConsistency(script: string): QualityCheck {
@@ -382,6 +449,7 @@ export async function runQualityGuard(
     suggestionsCheck,
     checkWordCount(script, options.targetWordCount, functionalCount),
     checkSentenceVariety(script),
+    checkMetaphorFrequency(script, options.targetWordCount), // NEW: Check metaphor isn't overused
     checkMetaphorConsistency(script)
   ];
   
@@ -423,6 +491,7 @@ export async function runQualityGuard(
         polishedSuggestionsCheck,
         checkWordCount(polishedScript, options.targetWordCount, polishedFunctionalCount),
         checkSentenceVariety(polishedScript),
+        checkMetaphorFrequency(polishedScript, options.targetWordCount), // NEW: Check metaphor isn't overused
         checkMetaphorConsistency(polishedScript)
       ];
       

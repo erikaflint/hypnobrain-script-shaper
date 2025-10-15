@@ -169,19 +169,19 @@ export class DimensionAssembler implements IDimensionAssembler {
     }
     
     if (level >= 75) {
-      instruction += `- HEAVY symbolic/metaphorical language: Use rich imagery, archetypal stories, metaphors throughout\n`;
+      instruction += `- HEAVY symbolic/metaphorical language: Use 6-8 metaphorical references, rich imagery, archetypal stories\n`;
       instruction += `- Build elaborate symbolic journeys and visual landscapes\n`;
-      instruction += `- Weave mythic patterns and universal symbols`;
+      instruction += `- Weave mythic patterns and universal symbols at key moments`;
     } else if (level >= 50) {
-      instruction += `- MODERATE symbolic content: Include metaphors, imagery, archetypal elements\n`;
+      instruction += `- MODERATE symbolic content: Use 4-6 metaphorical references, imagery, archetypal elements\n`;
       instruction += `- Use story-based suggestions\n`;
-      instruction += `- Reference symbolic meanings`;
+      instruction += `- Reference symbolic meanings strategically`;
     } else if (level >= 25) {
-      instruction += `- LIGHT symbolic touches: Occasional metaphor or imagery\n`;
+      instruction += `- LIGHT symbolic touches: Use 2-3 metaphorical references or imagery moments\n`;
       instruction += `- Brief symbolic references\n`;
       instruction += `- Subtle archetypal hints`;
     } else {
-      instruction += `- MINIMAL symbolic content: Direct, literal language\n`;
+      instruction += `- MINIMAL symbolic content: 0-1 metaphorical references, use direct, literal language\n`;
       instruction += `- Focus on other dimensions`;
     }
 
