@@ -10,6 +10,8 @@
  * Used by: ScriptEngine (clinical), DREAM pipeline, and standalone generation
  */
 
+import egoConfig from './ego-config.json';
+
 export interface EgoModuleInput {
   // Context
   presentingIssue?: string;
@@ -57,6 +59,11 @@ export interface EgoQualityCheck {
 
 export class EgoModule {
   private version = '1.0.0';
+  private config: typeof egoConfig;
+  
+  constructor() {
+    this.config = egoConfig;
+  }
   
   /**
    * Generate ego strengthening content
@@ -136,73 +143,64 @@ export class EgoModule {
    */
   private buildSprinkleDirectives(input: EgoModuleInput): string[] {
     const directives: string[] = [];
-    const intensity = input.intensity || 'moderate';
+    const sprinkleMode = this.config.modes.sprinkle;
+    const dist = sprinkleMode.distribution;
+    const qualityRules = this.config.quality_rules;
     
     // Core instruction
     directives.push('=== EGO STRENGTHENING: SPRINKLE MODE ===');
     directives.push('');
-    directives.push('SELECT 3-5 FUNCTIONAL IMPROVEMENTS MAXIMUM - choose from categories below');
-    directives.push('DISTRIBUTE across script: 1 in opening, 1-2 in middle, 1-2 near end');
-    directives.push('KEEP EACH STATEMENT TO 1-2 SENTENCES - then continue narrative');
+    directives.push(`SELECT ${sprinkleMode.min_statements}-${sprinkleMode.max_statements} FUNCTIONAL IMPROVEMENTS MAXIMUM - choose from categories below`);
+    directives.push(`DISTRIBUTE across script: ${dist.opening} in opening, ${dist.middle} in middle, ${dist.near_end} near end`);
+    directives.push(`KEEP EACH STATEMENT TO ${sprinkleMode.statement_length} - then continue narrative`);
     
     // Metaphor integration
     if (input.metaphorFamily) {
-      directives.push(`TIE TO METAPHOR when possible: "Like the ${input.metaphorFamily}, your [improvement]..."`);
+      const metaphorPattern = this.config.integration_patterns.metaphor_tie;
+      const example = metaphorPattern.template.replace('[METAPHOR]', input.metaphorFamily).replace('[IMPROVEMENT]', 'functional improvement');
+      directives.push(`TIE TO METAPHOR when possible: "${example}"`);
     }
     
-    directives.push('NEVER DUMP AS A LIST - space naturally throughout the script flow');
+    directives.push(`NEVER DUMP AS A LIST - max ${qualityRules.distribution.max_keywords_per_paragraph} keywords per paragraph`);
     directives.push('');
     
     // Emergence-specific style
-    if (input.emergenceType === 'wake') {
-      directives.push('WAKE-UP STYLE: Energizing, forward-looking, activating');
-      directives.push('- Use present progressive: "becoming stronger", "growing clearer"');
-      directives.push('- Reference the day ahead: "as you move through today"');
-      directives.push('- Emphasis on energy, clarity, confidence');
-    } else {
-      directives.push('SLEEP STYLE: Calming, settling, restorative');
-      directives.push('- Use gentle present tense: "your body healing", "sleep deepening"');
-      directives.push('- Reference the night: "as you rest tonight", "through the night"');
-      directives.push('- Emphasis on restoration, peace, replenishment');
-    }
+    const styleConfig = input.emergenceType === 'wake' 
+      ? this.config.emergence_styles.wake 
+      : this.config.emergence_styles.sleep;
+    
+    directives.push(`${input.emergenceType.toUpperCase()} STYLE: ${styleConfig.tone}`);
+    directives.push(`- Tense: ${styleConfig.tense}`);
+    directives.push(`- Time reference: ${styleConfig.time_reference}`);
+    directives.push(`- Emphasis: ${styleConfig.emphasis.join(', ')}`);
     directives.push('');
     
-    // Functional categories
-    directives.push('Functional Improvement Categories (SELECT 3-5 TOTAL):');
+    // Functional categories from config
+    directives.push(`Functional Improvement Categories (SELECT ${sprinkleMode.min_statements}-${sprinkleMode.max_statements} TOTAL):`);
     directives.push('');
     
-    directives.push('PHYSICAL RESTORATION:');
-    directives.push('- "Your body healing and replenishing completely"');
-    directives.push('- "Immune system strengthening naturally"');
-    directives.push('');
+    const categories = this.config.functional_categories;
+    Object.entries(categories).forEach(([key, category]: [string, any]) => {
+      if (key === 'note') return; // Skip the note field
+      
+      // Check if category is appropriate for emergence type
+      if (category.when_to_use && !category.when_to_use.toLowerCase().includes(input.emergenceType)) {
+        return; // Skip if not appropriate
+      }
+      
+      const categoryName = key.split('_').map((w: string) => w.toUpperCase()).join(' ');
+      directives.push(`${categoryName}:`);
+      
+      // Show 2 examples from the category
+      if (category.examples && category.examples.length > 0) {
+        category.examples.slice(0, 2).forEach((example: string) => {
+          directives.push(`- "${example}"`);
+        });
+      }
+      directives.push('');
+    });
     
-    directives.push('SLEEP QUALITY (if sleep emergence):');
-    directives.push('- "Your sleep deepening night after night"');
-    directives.push('- "Rest becoming more restorative"');
-    directives.push('');
-    
-    directives.push('COGNITIVE ENHANCEMENT:');
-    directives.push('- "Memory becoming clearer, words flowing easily"');
-    directives.push('- "Focus sharpening, concentration improving"');
-    directives.push('');
-    
-    directives.push('ENERGY & VITALITY (if wake emergence):');
-    directives.push('- "Your energy replenishing completely"');
-    directives.push('- "Vitality returning to every cell"');
-    directives.push('');
-    
-    directives.push('STRESS RESPONSE:');
-    directives.push('- "Your nervous system learning deeper calm"');
-    directives.push('- "Stress response becoming more balanced"');
-    directives.push('');
-    
-    // Distribution pattern
-    directives.push('DISTRIBUTION PATTERN:');
-    directives.push('- Opening (1 statement): Tie to body awareness or initial settling');
-    directives.push('- Middle (1-2 statements): Weave into main narrative, tied to metaphor if possible');
-    directives.push('- Near End (1-2 statements): As they prepare to emerge/drift');
-    directives.push('');
-    
+    // Add quality reminder
     directives.push('CRITICAL: Each statement = 1-2 sentences MAX, then return to main narrative');
     
     return directives;
