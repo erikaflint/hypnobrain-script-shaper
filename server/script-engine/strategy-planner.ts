@@ -117,18 +117,22 @@ export class StrategyPlanner {
     const issuePatterns = {
       'anxiety': ['anxiety', 'anxious', 'worry', 'worried', 'nervous', 'stress', 'stressed'],
       'confidence': ['confidence', 'self-esteem', 'self-worth', 'imposter', 'doubt', 'insecure'],
-      'stuck': ['stuck', 'trapped', 'stagnant', 'can\'t move forward', 'blocked'],
+      'stuck': ['stuck', 'trapped', 'stagnant', 'can\'t move forward', 'blocked', 'know what to do but can\'t'],
       'habits': ['habit', 'pattern', 'automatic', 'addiction', 'compulsion', 'routine'],
-      'trauma': ['trauma', 'ptsd', 'past hurt', 'abuse', 'painful memory'],
+      'trauma': ['trauma', 'ptsd', 'past hurt', 'abuse', 'painful memory', 'post-divorce', 'death', 'grief'],
       'self-worth': ['worth', 'value', 'deserve', 'self-love', 'self-acceptance'],
       'life-change': ['transition', 'change', 'new chapter', 'life change', 'transformation'],
       'chronic-pain': ['chronic pain', 'pain', 'headache', 'body pain', 'physical discomfort'],
       'internal-conflict': ['conflict', 'torn', 'ambivalent', 'part of me wants', 'self-sabotage'],
-      'confusion': ['confused', 'unclear', 'don\'t know', 'uncertain', 'lost', 'indecision'],
-      'overwhelm': ['overwhelmed', 'too much', 'can\'t cope', 'drowning', 'exhausted'],
+      'confusion': ['confused', 'unclear', 'don\'t know', 'uncertain', 'lost', 'indecision', 'overwhelmed by options', 'analysis paralysis', 'can\'t see the path'],
+      'overwhelm': ['overwhelmed', 'too much', 'can\'t cope', 'drowning', 'exhausted', 'information overload', 'chaos'],
       'disconnection': ['disconnected', 'numb', 'detached', 'can\'t feel', 'out of touch'],
       'perfectionism': ['perfectionism', 'perfectionist', 'fear of failure', 'not good enough', 'have to be perfect', 'afraid to fail', 'rigid'],
-      'learning-blocks': ['learning', 'can\'t learn', 'struggling to learn', 'difficulty learning', 'learning block']
+      'learning-blocks': ['learning', 'can\'t learn', 'struggling to learn', 'difficulty learning', 'learning block'],
+      'weight-loss': ['weight loss', 'lose weight', 'losing weight', 'diet', 'eating', 'food cravings', 'overeating'],
+      'exhaustion': ['exhausted', 'drained', 'depleted', 'worn out', 'tired', 'no energy', 'can\'t go on'],
+      'burnout': ['burnout', 'burned out', 'burnt out', 'done', 'can\'t keep going'],
+      'crisis': ['crisis', 'emergency', 'breakdown', 'serious illness', 'major disruption', 'life fell apart']
     };
     
     for (const [issue, keywords] of Object.entries(issuePatterns)) {

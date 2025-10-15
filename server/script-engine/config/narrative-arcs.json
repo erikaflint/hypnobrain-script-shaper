@@ -297,6 +297,108 @@
         "Not performing, but exploring. Not proving, but discovering."
       ],
       "prompt_integration": "Frame change as playful exploration rather than serious work or performance. Emphasize that the brain's play circuits naturally activate learning. Remove pressure by introducing curiosity, experimentation, and permission to 'try things on' without commitment. The play brain structure neurologically contains learning pathways."
+    },
+    {
+      "id": "no-clarity",
+      "name": "No Clarity (The Overwhelmed Achiever)",
+      "description": "Cut through the chaos and overwhelm to reveal a clear path forward",
+      "core_message": "You already have the skills - you just need to see where to point them",
+      "when_to_use": ["overwhelm", "confusion", "analysis paralysis", "information overload"],
+      "presenting_issues": ["anxiety from lack of direction", "overwhelmed by options", "paralyzed by complexity", "can't see the path", "information overload", "analysis paralysis"],
+      "blockage_type": "confusion",
+      "dimensional_recipe": {
+        "psychological": "HIGH - clear the mental fog, organize thinking",
+        "temporal": "MEDIUM - future pacing clear path",
+        "perspective": "HIGH - eagle-eye view to see the pattern",
+        "somatic": "MEDIUM - calm the anxious nervous system",
+        "language": "MEDIUM-HIGH - clarity-focused, organizing",
+        "symbolic": "MEDIUM - fog clearing, path emerging"
+      },
+      "key_language": [
+        "The fog clears and you see the path",
+        "One step at a time, crystal clear",
+        "Cutting through the noise to what matters",
+        "Your capable mind organizing naturally",
+        "The overwhelm dissolves into clarity",
+        "Like clouds parting to reveal the mountain path",
+        "Your next step becoming obvious, clear, simple",
+        "Anxiety settling as the way forward reveals itself"
+      ],
+      "prompt_integration": "For high achievers paralyzed by options. Emphasize they're not lacking ability - just clarity. Use fog-clearing, path-revealing metaphors. Calm the anxious system while organizing mental clarity. They already know how to succeed - just need to see the direction. Connect to Arc 4 (Recognition - you ARE capable), Arc 1 (Effortlessness - clarity comes naturally), and Arc 11 (Inner Wisdom - you already know what matters)."
+    },
+    {
+      "id": "earned-delight",
+      "name": "The Stuck (Earned Delight Model)",
+      "description": "When you know what to do but can't do it - delight the brain with earned satisfaction",
+      "core_message": "Your brain isn't broken - it's seeking delight. Feed it with earned satisfaction, not food",
+      "when_to_use": ["weight loss", "consistency challenges", "know but can't do", "willpower depletion"],
+      "presenting_issues": ["weight loss struggles", "can see goal but path too hard", "know what to do but can't do it", "traditional discipline fails", "seeking pleasure from food", "brain depleted and seeking delight"],
+      "blockage_type": "depletion",
+      "dimensional_recipe": {
+        "psychological": "HIGH - reframe discipline as delight-generator",
+        "somatic": "HIGH - body sensations of satisfaction vs food",
+        "relational": "HIGH - relationship with joy, pleasure, satisfaction",
+        "temporal": "MEDIUM - future pacing satisfied life",
+        "symbolic": "MEDIUM-HIGH - filling the cup, brain food metaphors"
+      },
+      "key_language": [
+        "Fulfilled, full-filled with life satisfaction",
+        "Delighting your brain with earned satisfaction",
+        "Brain food - not actual food",
+        "When your brain is delighted, you forget about food",
+        "Discipline creates satisfaction, satisfaction fills you up",
+        "Your brain seeking delight, finding it in life not food",
+        "Small wins generating deep satisfaction",
+        "Filled up with accomplishment, connection, meaning",
+        "The pleasure of earned delight, lasting and real"
+      ],
+      "earned_delight_sequence": [
+        "Use discipline minimally (as little as possible)",
+        "Discipline generates satisfaction (not suffering)",
+        "Satisfaction fills you up (fulfilled, full-filled)",
+        "Brain gets delighted (brain food, not actual food)",
+        "When brain is delighted, food cravings disappear (unless actually hungry)"
+      ],
+      "prompt_integration": "For people who can see the goal but path seems too painful. NOT a willpower problem - brain is seeking satisfaction/delight and only knows food as reliable source. Reframe discipline as delight-generator. Emphasize: minimal discipline → creates satisfaction → fills them up → brain delighted → cravings disappear. Use 'fulfilled' (full-filled), 'satisfied' (from life not food), 'delighting the brain' (brain food), 'earned delight'. Connect to Arc 5 (Relief → Inspiration → New Life as they fill up), Arc 2 (Re-Minding - brain remembers satisfaction from life)."
+    },
+    {
+      "id": "oasis-rest",
+      "name": "Flat Tire (Oasis Rest Stop)",
+      "description": "Permission to rest without guilt - you're at an oasis, not broken down",
+      "core_message": "You're not stuck or broken - you're resting exactly where you need to be",
+      "when_to_use": ["trauma recovery", "crisis aftermath", "major life disruption", "exhaustion", "burnout"],
+      "presenting_issues": ["post-divorce", "death/grief", "serious illness", "addiction recovery", "major trauma", "trying to move when need rest", "exhausted and done", "pressure to keep going"],
+      "blockage_type": "exhaustion",
+      "dimensional_recipe": {
+        "spiritual": "MEDIUM-HIGH - trust in natural timing, divine rest",
+        "somatic": "HIGH - deep rest, body repair, nervous system reset",
+        "temporal": "LOW - NO future pacing, stay in present rest",
+        "psychological": "MEDIUM - reframe rest as healing not failure",
+        "language": "LOW - very permissive, no pressure",
+        "symbolic": "HIGH - oasis, rest stop, winter/dormancy metaphors"
+      },
+      "key_language": [
+        "Permission to do nothing - consistently",
+        "Rest until you're bored",
+        "Boredom is safety - not stressed, just safe",
+        "The oasis, not the breakdown",
+        "Rest until inspired to move",
+        "No need to go anywhere or do anything",
+        "Your body is resting, not stuck",
+        "Like winter - dormant, restoring, preparing",
+        "The oasis where you rest completely",
+        "Honoring the need to stop, to be still, to restore"
+      ],
+      "oasis_protocol": [
+        "Permission to do NOTHING - consistently, over and over",
+        "Rest until BORED (boredom = not stressed = good sign)",
+        "Honor boredom (it means you're safe enough to be bored)",
+        "Wait for inspiration (don't force movement)",
+        "Rest until energy naturally returns",
+        "No timeline (might be weeks, months - and that's okay)"
+      ],
+      "critical_reframe": "NOT: Stuck at a broken-down car on the side of the road. BUT: Resting at a beautiful oasis - exactly what you need.",
+      "prompt_integration": "For trauma/crisis recovery. Reframe rest as exactly what's needed, not failure or being stuck. Give explicit, repeated permission to do nothing. Rest until bored (boredom = safety). Use oasis, rest stop, winter/dormancy metaphors. NO future pacing - stay in present rest. Emphasize: trying to move when need rest is the problem. Connect to Arc 3 (Two Tempos - healing has its own timeline), Arc 1 (Effortlessness - healing happens during rest not effort). Validate exhaustion, normalize the need to completely stop."
     }
   ],
   "dream_arcs": [
@@ -670,18 +772,22 @@
     "issue_mappings": {
       "anxiety": ["emotional-physical-chain", "effortlessness", "mind-body-unity"],
       "confidence": ["recognition-ego-strengthening", "resource-activation", "playful-learning"],
-      "stuck": ["relief-to-new-life", "two-tempos", "future-self"],
+      "stuck": ["relief-to-new-life", "two-tempos", "future-self", "earned-delight"],
       "habits": ["brain-master-skill", "effortlessness", "playful-learning"],
-      "trauma": ["emotional-physical-chain", "two-tempos", "parts-integration"],
+      "trauma": ["emotional-physical-chain", "two-tempos", "parts-integration", "oasis-rest"],
       "self-worth": ["recognition-ego-strengthening", "resource-activation"],
       "life-change": ["relief-to-new-life", "future-self"],
       "chronic-pain": ["mind-body-unity", "emotional-physical-chain"],
       "internal-conflict": ["parts-integration"],
-      "confusion": ["inner-wisdom", "future-self"],
-      "overwhelm": ["resource-activation", "mind-body-unity"],
+      "confusion": ["inner-wisdom", "future-self", "no-clarity"],
+      "overwhelm": ["resource-activation", "mind-body-unity", "no-clarity"],
       "disconnection": ["sensory-amplification", "mind-body-unity"],
       "perfectionism": ["playful-learning", "effortlessness", "two-tempos"],
-      "learning-blocks": ["playful-learning", "re-minding", "brain-master-skill"]
+      "learning-blocks": ["playful-learning", "re-minding", "brain-master-skill"],
+      "weight-loss": ["earned-delight", "brain-master-skill"],
+      "exhaustion": ["oasis-rest", "two-tempos"],
+      "burnout": ["oasis-rest", "relief-to-new-life"],
+      "crisis": ["oasis-rest", "two-tempos"]
     },
     "max_arcs_per_script": 5,
     "priority_order": ["always_include", "issue_specific", "template_preferred"]
