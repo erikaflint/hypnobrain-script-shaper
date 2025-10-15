@@ -826,36 +826,37 @@
     },
     {
       "id": "taking-to-heart",
-      "name": "Taking to Heart (Somatic Integration)",
-      "description": "Moving wisdom from brain (cognitive) to heart (embodied integration) where it truly transforms",
-      "strategic_move": "Heart as sanctuary that ABSORBS and integrates wisdom deeper than mental understanding",
-      "core_message": "Take it to heart. Let your heart absorb this wisdom, integrate it deeper than thought alone.",
-      "when_to_use": ["after_insights", "integration_needed", "cognitive_to_somatic", "embodied_change"],
-      "presenting_issues": ["intellectual_understanding_but_no_change", "stuck_in_head", "knowing_vs_being"],
+      "name": "Taking to Heart (Deep Consideration)",
+      "description": "Truly considering wisdom, taking it to the heart of the self as counsel - not just hearing, but deeply contemplating",
+      "strategic_move": "Invite deep consideration, true contemplation at the heart of the self, not superficial understanding",
+      "core_message": "Take this to heart. Not just hear it, but truly consider it. Take it to the heart of yourself as counsel.",
+      "when_to_use": ["spiritual_clients", "emotional_clients", "after_insights", "deep_contemplation_needed"],
+      "presenting_issues": ["superficial_understanding", "not_truly_considering", "spiritual_seeking", "needing_deep_reflection"],
       "mechanism": {
-        "acknowledge_brain": "Brain understands, processes, computes",
-        "shift_to_heart": "Heart absorbs, integrates, embodies",
-        "somatic_integration": "Sinks down into heart, changes you from within",
-        "barrier_removal": "Removes barrier between knowing and being"
+        "acknowledge_hearing": "You've heard this, you understand it cognitively",
+        "invite_consideration": "Now truly consider it, take it to heart",
+        "heart_as_counsel": "Take it to the heart of yourself, let it be counsel",
+        "deep_contemplation": "Not just knowing - deeply considering, contemplating"
       },
       "key_language": [
-        "Take it to heart",
-        "Heart absorbing this wonderful information",
-        "Brain is the computer, heart does it differently",
-        "Sinks right down into heart",
-        "Changes you by removing the barrier between knowing and being",
-        "Heart as sanctuary, absorbing what resonates",
-        "Deeper than mental understanding",
-        "Embodied integration, felt in the heart",
-        "Not just thinking it - feeling it, being it"
+        "Take this to heart",
+        "Not just hear it - truly consider it",
+        "Take it to the heart of yourself as counsel",
+        "Let your heart truly consider this wisdom",
+        "Deep consideration, not just surface understanding",
+        "Take it to the heart of the self",
+        "Contemplate this deeply, consider it truly",
+        "Your heart knows how to truly consider",
+        "Take this as counsel to the heart of yourself"
       ],
-      "prompt_integration": "Move wisdom from cognitive to somatic. Brain processes, heart integrates. Use language of 'sinking down into heart', 'absorbing', 'embodied'. Heart selectively absorbs what resonates, releases what doesn't. Creates felt change, not just intellectual agreement. Particularly powerful after insights or realizations - this moves them from head to heart to truly transform.",
+      "prompt_integration": "For spiritual/emotional clients who need to deeply contemplate wisdom. This is about TRUE CONSIDERATION - taking something to heart, not just intellectual understanding. The heart of the self as place of deep contemplation and counsel. Use language of 'taking to heart', 'truly considering', 'heart as counsel'. Different from cognitive understanding or somatic integration - this is about deep, heartfelt contemplation. Particularly powerful for spiritual clients who understand contemplative practice.",
       "differs_from": {
-        "recognition": "Recognition is ego strengthening. Taking to Heart is somatic integration.",
-        "re-minding": "Re-minding is remembering. Taking to Heart is embodying."
+        "recognition": "Recognition is ego strengthening. Taking to Heart is deep consideration/contemplation.",
+        "re-minding": "Re-minding is remembering. Taking to Heart is contemplating deeply.",
+        "mind-body-unity": "Mind-Body is somatic. Taking to Heart is contemplative counsel."
       },
-      "pairs_well_with": ["recognition-ego-strengthening", "mind-body-unity", "emotional-physical-chain"],
-      "critical_note": "About SOMATIC integration - heart absorbs wisdom deeper than mental understanding. Not just knowing - BEING. Heart as sanctuary that selectively integrates. Creates embodied change vs cognitive agreement."
+      "pairs_well_with": ["inner-wisdom", "recognition-ego-strengthening", "spiritual-arcs"],
+      "critical_note": "About DEEP CONSIDERATION and CONTEMPLATION - taking wisdom to the heart of the self as counsel. Not somatic, not ego strengthening - this is about truly considering vs. superficial understanding. For spiritual/emotional clients."
     },
     {
       "id": "aversion-installation",
