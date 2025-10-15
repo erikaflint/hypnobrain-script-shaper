@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import Landing from "@/pages/landing";
+import About from "@/pages/about";
 import Free from "@/pages/free";
 import Dream from "@/pages/dream";
 import DreamView from "@/pages/dream-view";
@@ -20,6 +21,7 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={Landing} />
+      <Route path="/about" component={About} />
       <Route path="/free" component={Free} />
       <Route path="/dream" component={Dream} />
       <Route path="/dream/:id/view" component={DreamView} />
