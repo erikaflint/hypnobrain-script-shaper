@@ -157,6 +157,109 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Arc Sequences (Journey system)
+  // Get all arc sequences (system presets + user custom sequences)
+  app.get("/api/arc-sequences", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const systemSequences = await storage.getSystemArcSequences();
+      const userSequences = await storage.getUserArcSequences(userId);
+      
+      res.json({
+        system: systemSequences,
+        user: userSequences,
+      });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Get specific arc sequence by ID
+  app.get("/api/arc-sequences/:id", isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      const sequence = await storage.getArcSequenceById(id);
+      
+      if (!sequence) {
+        return res.status(404).json({ message: "Arc sequence not found" });
+      }
+      
+      // Verify access - allow if system preset OR user owns it
+      if (!sequence.isSystem && sequence.userId !== userId) {
+        return res.status(403).json({ message: "Forbidden: You don't have access to this sequence" });
+      }
+      
+      res.json(sequence);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Create custom arc sequence
+  app.post("/api/arc-sequences", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { arcJourneySchema } = await import("@shared/schema");
+      
+      // Validate journey structure
+      const validationResult = arcJourneySchema.safeParse(req.body.journey);
+      if (!validationResult.success) {
+        return res.status(400).json({ 
+          message: "Invalid arc journey structure", 
+          errors: validationResult.error.errors 
+        });
+      }
+      
+      // Generate unique sequence ID
+      const sequenceId = `user-${userId.slice(0, 8)}-${Date.now()}`;
+      
+      const sequence = await storage.createArcSequence({
+        sequenceId,
+        name: req.body.name,
+        description: req.body.description,
+        category: req.body.category,
+        stagesJson: req.body.journey.stages as any, // JSONB type
+        userId,
+        isSystem: false,
+        isPublic: false,
+        usageCount: 0,
+      });
+      
+      res.json(sequence);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Delete user's custom arc sequence
+  app.delete("/api/arc-sequences/:id", isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      const sequence = await storage.getArcSequenceById(id);
+      
+      if (!sequence) {
+        return res.status(404).json({ message: "Arc sequence not found" });
+      }
+      
+      // Verify ownership - can only delete own sequences
+      if (sequence.userId !== userId) {
+        return res.status(403).json({ message: "Forbidden: You can only delete your own sequences" });
+      }
+      
+      // Cannot delete system presets
+      if (sequence.isSystem) {
+        return res.status(403).json({ message: "Cannot delete system presets" });
+      }
+      
+      await storage.deleteArcSequence(id);
+      res.json({ message: "Arc sequence deleted successfully" });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
   // Get authenticated user's saved generations
   app.get("/api/user/generations", isAuthenticated, async (req: any, res) => {
     try {

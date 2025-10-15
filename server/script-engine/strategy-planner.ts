@@ -9,12 +9,16 @@
 
 import narrativeArcsConfig from './config/narrative-arcs.json';
 import metaphorLibraryConfig from './config/metaphor-library.json';
+import type { ArcJourney } from '@shared/schema';
 
 export interface GenerationContract {
   selectedArcs: SelectedArc[];
   primaryMetaphor: MetaphorSelection | null;
   arcPriority: string[];
   reasoningLog: string[];
+  // Journey-specific fields
+  isJourney?: boolean;
+  journeyStages?: JourneyStage[];
 }
 
 export interface SelectedArc {
@@ -23,6 +27,16 @@ export interface SelectedArc {
   reason: string;
   keyLanguage: string[];
   promptIntegration: string;
+}
+
+export interface JourneyStage {
+  arcId: string;
+  arcName: string;
+  weight: number; // Percentage of word budget
+  transitionGoal?: string;
+  reason: string;
+  keyLanguage: string[];
+  wordBudget?: number; // Calculated word count for this stage
 }
 
 export interface MetaphorSelection {
@@ -39,6 +53,9 @@ export interface PlannerInput {
   templatePreferredArcs?: string[];
   templateFallbackArcs?: string[];
   symbolicDimensionLevel?: number;
+  // Journey system
+  arcJourney?: ArcJourney; // Arc Journey for multi-stage scripts
+  targetWordCount?: number; // For journey word distribution
 }
 
 export class StrategyPlanner {
@@ -57,6 +74,11 @@ export class StrategyPlanner {
    */
   public async plan(input: PlannerInput): Promise<GenerationContract> {
     const reasoningLog: string[] = [];
+    
+    // Check for Arc Journey first (multi-stage scripts)
+    if (input.arcJourney) {
+      return this.planJourney(input, reasoningLog);
+    }
     
     // Check for manual arc selection first (overrides auto-selection)
     if (input.manualArcId) {
@@ -313,5 +335,76 @@ export class StrategyPlanner {
   public getMetaphorExamples(issue: string): any[] {
     const mapping = this.metaphorLibrary.issue_to_metaphor_mapping[issue];
     return mapping?.specific_images || [];
+  }
+  
+  /**
+   * Plan a multi-stage Arc Journey
+   */
+  private planJourney(input: PlannerInput, reasoningLog: string[]): GenerationContract {
+    const journey = input.arcJourney!;
+    const targetWordCount = input.targetWordCount || 2000;
+    
+    reasoningLog.push(`ARC JOURNEY MODE: ${journey.stages.length} stages`);
+    reasoningLog.push(`Target word count: ${targetWordCount} words`);
+    
+    // Detect issues for context
+    const detectedIssues = this.detectIssues(input.presentingIssue, input.clientNotes);
+    reasoningLog.push(`Detected issues: ${detectedIssues.join(', ') || 'none specific'}`);
+    
+    // Build journey stages with word distribution
+    const journeyStages: JourneyStage[] = journey.stages.map((stage, index) => {
+      const arc = this.narrativeArcs.find((a: any) => a.id === stage.arcId);
+      const arcName = arc?.name || stage.arcId;
+      const wordBudget = Math.round((stage.weight / 100) * targetWordCount);
+      
+      const reason = stage.transitionGoal 
+        ? `Stage ${index + 1}: ${stage.transitionGoal}`
+        : `Stage ${index + 1} (${stage.weight}% of script)`;
+      
+      reasoningLog.push(`  - ${arcName} (${stage.weight}%, ${wordBudget} words): ${stage.transitionGoal || 'no specific transition'}`);
+      
+      return {
+        arcId: stage.arcId,
+        arcName,
+        weight: stage.weight,
+        transitionGoal: stage.transitionGoal,
+        reason,
+        keyLanguage: arc?.key_language || [],
+        wordBudget,
+      };
+    });
+    
+    // Also create selectedArcs array for backward compatibility
+    const selectedArcs: SelectedArc[] = journey.stages.map(stage => {
+      const arc = this.narrativeArcs.find((a: any) => a.id === stage.arcId);
+      return {
+        arcId: stage.arcId,
+        arcName: arc?.name || stage.arcId,
+        reason: stage.transitionGoal || `Journey stage (${stage.weight}%)`,
+        keyLanguage: arc?.key_language || [],
+        promptIntegration: arc?.prompt_integration || '',
+      };
+    });
+    
+    // Select primary metaphor if symbolic dimension is high
+    const primaryMetaphor = this.selectMetaphor(
+      detectedIssues,
+      input.symbolicDimensionLevel || 0
+    );
+    
+    if (primaryMetaphor) {
+      reasoningLog.push(`Primary metaphor: ${primaryMetaphor.family} (${primaryMetaphor.reason})`);
+    }
+    
+    const arcPriority = journey.stages.map(s => s.arcId);
+    
+    return {
+      selectedArcs,
+      primaryMetaphor,
+      arcPriority,
+      reasoningLog,
+      isJourney: true,
+      journeyStages,
+    };
   }
 }

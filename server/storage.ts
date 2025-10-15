@@ -11,6 +11,7 @@ import {
   templates,
   scriptPackages,
   packageScripts,
+  arcSequences,
   type Dimension,
   type Archetype,
   type Style,
@@ -25,6 +26,8 @@ import {
   type InsertScriptPackage,
   type PackageScript,
   type InsertPackageScript,
+  type ArcSequence,
+  type InsertArcSequence,
 } from "@shared/schema";
 
 export interface IStorage {
@@ -80,6 +83,16 @@ export interface IStorage {
   getPackageScripts(packageId: number): Promise<PackageScript[]>;
   updatePackageScript(id: number, updates: Partial<InsertPackageScript>): Promise<PackageScript>;
   deletePackageScript(id: number): Promise<void>;
+  
+  // Arc Sequences (Journey system)
+  getSystemArcSequences(): Promise<ArcSequence[]>;
+  getUserArcSequences(userId: string): Promise<ArcSequence[]>;
+  getArcSequenceById(id: number): Promise<ArcSequence | undefined>;
+  getArcSequenceBySequenceId(sequenceId: string): Promise<ArcSequence | undefined>;
+  createArcSequence(sequence: InsertArcSequence): Promise<ArcSequence>;
+  updateArcSequence(id: number, updates: Partial<InsertArcSequence>): Promise<ArcSequence>;
+  deleteArcSequence(id: number): Promise<void>;
+  incrementArcSequenceUsage(id: number): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -357,6 +370,64 @@ export class DatabaseStorage implements IStorage {
 
   async deletePackageScript(id: number): Promise<void> {
     await db.delete(packageScripts).where(eq(packageScripts.id, id));
+  }
+  
+  // Arc Sequences (Journey system)
+  async getSystemArcSequences(): Promise<ArcSequence[]> {
+    return await db
+      .select()
+      .from(arcSequences)
+      .where(eq(arcSequences.isSystem, true))
+      .orderBy(arcSequences.name);
+  }
+  
+  async getUserArcSequences(userId: string): Promise<ArcSequence[]> {
+    return await db
+      .select()
+      .from(arcSequences)
+      .where(eq(arcSequences.userId, userId))
+      .orderBy(desc(arcSequences.createdAt));
+  }
+  
+  async getArcSequenceById(id: number): Promise<ArcSequence | undefined> {
+    const [result] = await db
+      .select()
+      .from(arcSequences)
+      .where(eq(arcSequences.id, id));
+    return result;
+  }
+  
+  async getArcSequenceBySequenceId(sequenceId: string): Promise<ArcSequence | undefined> {
+    const [result] = await db
+      .select()
+      .from(arcSequences)
+      .where(eq(arcSequences.sequenceId, sequenceId));
+    return result;
+  }
+  
+  async createArcSequence(sequence: InsertArcSequence): Promise<ArcSequence> {
+    const [result] = await db.insert(arcSequences).values(sequence).returning();
+    return result;
+  }
+  
+  async updateArcSequence(id: number, updates: Partial<InsertArcSequence>): Promise<ArcSequence> {
+    const [result] = await db
+      .update(arcSequences)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(arcSequences.id, id))
+      .returning();
+    return result;
+  }
+  
+  async deleteArcSequence(id: number): Promise<void> {
+    await db.delete(arcSequences).where(eq(arcSequences.id, id));
+  }
+  
+  async incrementArcSequenceUsage(id: number): Promise<void> {
+    await db
+      .update(arcSequences)
+      .set({ usageCount: sql`${arcSequences.usageCount} + 1` })
+      .where(eq(arcSequences.id, id));
   }
 }
 

@@ -509,3 +509,76 @@ export const apiKeys = pgTable("api_keys", {
 
 export type ApiKey = typeof apiKeys.$inferSelect;
 export type InsertApiKey = typeof apiKeys.$inferInsert;
+
+// Arc Sequences (Journey system for combining multiple arcs)
+export const arcSequences = pgTable("arc_sequences", {
+  id: serial("id").primaryKey(),
+  sequenceId: varchar("sequence_id", { length: 255 }).notNull().unique(),
+  
+  // Metadata
+  name: varchar("name", { length: 255 }).notNull(),
+  description: text("description"),
+  category: varchar("category", { length: 100 }), // 'trauma', 'anxiety', 'transformation', etc.
+  
+  // Journey data stored as JSONB
+  stagesJson: jsonb("stages_json").notNull(), // Array of ArcStage objects
+  
+  // Ownership & visibility
+  userId: varchar("user_id").references(() => users.id, { onDelete: 'cascade' }), // null for system presets
+  isSystem: boolean("is_system").default(false).notNull(), // Curated presets
+  isPublic: boolean("is_public").default(false).notNull(),
+  
+  // Usage tracking
+  usageCount: integer("usage_count").default(0).notNull(),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+}, (table) => ({
+  sequenceIdIdx: index("arc_sequences_sequence_id_idx").on(table.sequenceId),
+  categoryIdx: index("arc_sequences_category_idx").on(table.category),
+  isSystemIdx: index("arc_sequences_is_system_idx").on(table.isSystem),
+}));
+
+export const insertArcSequenceSchema = createInsertSchema(arcSequences).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type ArcSequence = typeof arcSequences.$inferSelect;
+export type InsertArcSequence = z.infer<typeof insertArcSequenceSchema>;
+
+// TypeScript interfaces for Arc Journey structure
+export interface ArcStage {
+  arcId: string; // Reference to narrative arc ID
+  weight: number; // Percentage of word budget (0-100, total should = 100)
+  transitionGoal?: string; // Optional: What state change to achieve by end of this stage
+  dimensionOverrides?: Partial<Record<string, number>>; // Optional: Per-stage dimension adjustments
+}
+
+export interface ArcJourney {
+  stages: ArcStage[];
+  totalStages: number;
+  estimatedWordDistribution?: Record<string, number>; // Calculated word counts per stage
+}
+
+// Zod validator for ArcStage (for validation)
+export const arcStageSchema = z.object({
+  arcId: z.string(),
+  weight: z.number().min(0).max(100),
+  transitionGoal: z.string().optional(),
+  dimensionOverrides: z.record(z.string(), z.number()).optional(),
+});
+
+// Zod validator for ArcJourney (for validation)
+export const arcJourneySchema = z.object({
+  stages: z.array(arcStageSchema).min(1).max(12),
+  totalStages: z.number(),
+  estimatedWordDistribution: z.record(z.string(), z.number()).optional(),
+}).refine(
+  (data) => {
+    const totalWeight = data.stages.reduce((sum, stage) => sum + stage.weight, 0);
+    return Math.abs(totalWeight - 100) < 0.01; // Allow for floating point errors
+  },
+  { message: "Stage weights must sum to 100%" }
+);
