@@ -1,0 +1,59 @@
+{
+  "id": "internal-sanctuary",
+  "name": "Internal Sanctuary Creation",
+  "description": "Create felt sense of being nourished, held, and protected from within",
+  "strategic_move": "Physical sensation of internal nourishment signals safety to nervous system, allowing downregulation",
+  "core_message": "Your body can feel held and resourced from the inside, creating permission to soften and rest",
+  "when_to_use": ["depletion", "burnout", "running_on_empty", "hypervigilance", "capacity_blockage"],
+  "presenting_issues": ["exhaustion", "can't rest", "always on alert", "feeling empty", "nervous system dysregulation", "insomnia from depletion"],
+  
+  "mechanism": {
+    "step_1": "Create visceral sensation of internal nourishment/coating/warmth",
+    "step_2": "Body interprets as 'I'm being taken care of'",
+    "step_3": "Vagus nerve receives safety signal",
+    "step_4": "Nervous system downregulates - permission to soften",
+    "result": "Rest becomes possible because body feels resourced, not empty"
+  },
+  
+  "metaphor_library": [
+    {
+      "name": "The Protective Coating",
+      "concept": "Gentle layer in belly protecting and nourishing from within",
+      "key_elements": ["coating", "warmth", "protection", "belly", "held from inside"]
+    },
+    {
+      "name": "The Inner Well Filling",
+      "concept": "Empty well being filled with warm, nourishing water",
+      "key_elements": ["well", "filling", "depth", "nourishment", "satiation"]
+    },
+    {
+      "name": "The Core Warmth",
+      "concept": "Gentle heat radiating from center outward, softening everything",
+      "key_elements": ["warmth", "radiating", "center", "softening", "melting"]
+    },
+    {
+      "name": "The Internal Embrace",
+      "concept": "Being held gently from the inside, cradled by own body",
+      "key_elements": ["embrace", "held", "cradled", "safety", "internal holding"]
+    }
+  ],
+  
+  "metaphor_selection_instructions": "Choose from library OR generate new metaphor following pattern: internal physical sensation of nourishment/protection. Must include: visceral belly/core sensation, warmth/coating/holding quality, explicit vagus nerve/nervous system safety signaling, permission to soften as result.",
+  
+  "key_language": [
+    "Nourished from within",
+    "A protective layer, gentle coating",
+    "Held from the inside",
+    "Your body recognizing: I'm fed, I'm safe",
+    "Permission to soften now",
+    "Not empty, but full, resourced",
+    "That signal traveling through your vagus nerve",
+    "Your whole system understanding: I can rest now",
+    "Warm, gentle, protective from your very center",
+    "Not running on fumes, but filled, held, safe"
+  ],
+  
+  "prompt_integration": "Create vivid somatic experience of internal nourishment - warmth, coating, protective layer in belly/core. Link this physical sensation explicitly to vagus nerve signaling and nervous system downregulation. Emphasize body's recognition of being 'taken care of' which creates permission to soften and rest. Use slow, sensory-rich language. This is especially powerful for depleted/exhausted clients who can't rest because they feel 'empty' or 'running on fumes.' The internal nourishment creates the safety needed for rest.",
+  
+  "critical_note": "This arc works specifically because it addresses the body's deep need to feel RESOURCED before it can rest. Not just permission to rest (Oasis), but actual felt sense of being filled/nourished that makes rest possible. Particularly effective for people in chronic depletion who've lost connection to internal nourishment signals."
+}
