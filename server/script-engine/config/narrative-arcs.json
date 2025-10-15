@@ -668,6 +668,161 @@
         }
       ],
       "prompt_integration": "Create vivid somatic experience of internal nourishment - warmth, coating, protective layer in belly/core. Link this physical sensation explicitly to vagus nerve signaling and nervous system downregulation. Emphasize body's recognition of being 'taken care of' which creates permission to soften and rest. Use slow, sensory-rich language. Especially powerful for depleted clients who can't rest because they feel 'empty' or 'running on fumes'. This addresses the body's deep need to feel RESOURCED before it can rest."
+    },
+    {
+      "id": "energy-reclamation",
+      "name": "Energy Reclamation",
+      "description": "Energy that was bound in protection, pain, or maintaining the problem is now freed and available",
+      "core_message": "All that energy you were using to hold/manage/protect against the problem is now yours to use",
+      "when_to_use": ["after_excavation", "post_breakthrough", "after_release", "integration_phase"],
+      "presenting_issues": ["post_trauma_work", "after_anxiety_clearing", "post_addiction_work", "after_chronic_pain_release", "any_major_clearing"],
+      "key_language": [
+        "All that energy you were using to hold the pain...",
+        "Energy that was locked up, protecting, defending... now freed",
+        "What was bound is now available",
+        "Notice how much lighter, how much MORE you have",
+        "Energy that was spent managing anxiety, now yours to use",
+        "All that effort, that constant vigilance... released. Available now.",
+        "You have so much more energy than you remember",
+        "What was drained is now replenished. What was bound is now free."
+      ],
+      "mechanism": {
+        "recognition": "Name how much energy was being spent on the problem",
+        "release": "That energy is no longer needed for protection/management",
+        "availability": "Energy is now freed up and available",
+        "curiosity": "What will you do with all this energy?"
+      },
+      "prompt_integration": "Use AFTER clearing/excavation work. Explicitly acknowledge how much energy the problem consumed (holding pain, managing anxiety, protecting against triggers, maintaining defense). Then mark the transition: that energy is no longer needed for that purpose. It's freed. Available. This creates excitement and possibility - client realizes they have resources they didn't know they had. Link to Open Future or Upward Spiral for what comes next."
+    },
+    {
+      "id": "open-future",
+      "name": "Open Future / Possibility Space",
+      "description": "Create undefined openness and curiosity about what becomes possible, rather than prescribing specific outcomes",
+      "core_message": "Now I wonder what you'll do... what becomes possible... what you'll discover",
+      "when_to_use": ["after_clearing", "integration_phase", "when_pressure_would_backfire", "with_perfectionists"],
+      "presenting_issues": ["after_breakthrough", "post_excavation", "when_client_needs_freedom", "perfectionism", "control_issues"],
+      "key_language": [
+        "Now I wonder what you'll do...",
+        "Now I wonder what becomes possible...",
+        "Curious what you'll discover now",
+        "What will emerge in this new space?",
+        "I don't know what you'll create, and that's perfect",
+        "Now I wonder what you'll choose, now that you can",
+        "The future open, undefined, full of possibility",
+        "You get to discover what comes next"
+      ],
+      "mechanism": {
+        "create_space": "Problem is cleared, space is open",
+        "invite_curiosity": "Wonder, not pressure, about what emerges",
+        "trust_organic": "Client discovers their own path",
+        "remove_prescription": "No 'should' about what happens next"
+      },
+      "prompt_integration": "Use when prescriptive future pacing would create pressure. Creates spaciousness and permission for organic discovery. 'I wonder...' language is key - removes pressure while inviting curiosity. Particularly powerful for perfectionists, control-oriented clients, or after major clearing work when client needs freedom to find their own way. Contrast with Future Self (specific, defined success) - this is undefined possibility."
+    },
+    {
+      "id": "upward-spiral",
+      "name": "Upward Spiral",
+      "description": "Positive momentum building on itself - each win creates conditions for the next win",
+      "core_message": "Each success makes the next success easier - momentum compounds naturally",
+      "when_to_use": ["building_confidence", "habit_formation", "after_initial_success", "motivation_building"],
+      "presenting_issues": ["building_momentum", "after_first_breakthrough", "confidence_building", "habit_change", "recovery"],
+      "key_language": [
+        "And as that success builds...",
+        "Each small win creating the next",
+        "Momentum feeding momentum",
+        "The spiral upward, each turn easier than the last",
+        "Success breeding success, naturally",
+        "One win opening the door to the next",
+        "Getting easier, lighter, more natural with each step",
+        "The positive feedback loop, building, accelerating",
+        "Each success making you stronger for the next"
+      ],
+      "mechanism": {
+        "first_success": "Initial win creates positive feeling",
+        "reinforcement": "Positive feeling makes next attempt easier",
+        "acceleration": "Each turn of spiral easier than last",
+        "naturalness": "Momentum builds without effort"
+      },
+      "prompt_integration": "Use to create expectation of ACCELERATION rather than maintenance. Positions change as naturally self-reinforcing - client doesn't have to work as hard to maintain, it actually gets easier. Good for building confidence after initial breakthrough, or for habit formation. Links each success to the next - creates chain of victories rather than isolated wins. Contrast with effortlessness (change is easy from start) - upward spiral acknowledges starting point and shows how it compounds."
+    },
+    {
+      "id": "cycle-breaker",
+      "name": "Cycle Breaker",
+      "description": "Recognition that client STOPPED a generational pattern - broke the chain of trauma/dysfunction",
+      "core_message": "It happened to you, but you didn't let it happen to your children. You ended the cycle.",
+      "when_to_use": ["when_client_actually_broke_cycle", "post_trauma_integration", "parent_clients", "identity_transformation"],
+      "presenting_issues": ["abuse_survivors_who_protected_kids", "addiction_recovery_parents", "breaking_family_patterns"],
+      "key_language": [
+        "It happened to you, but you didn't let it happen to your kids",
+        "You ended the cycle",
+        "It stopped with you",
+        "You protected them from what you weren't protected from",
+        "The pattern that ran through generations... you broke it",
+        "You absorbed the impact so it wouldn't reach them",
+        "What was done to you, you chose not to do",
+        "You are the one who said 'no more'",
+        "The cycle that could have continued... ended with you"
+      ],
+      "mechanism": {
+        "acknowledge_wound": "You experienced the harm",
+        "recognize_choice": "You made different choices",
+        "name_protection": "You protected others from what harmed you",
+        "identity_shift": "From victim to cycle-breaker, from harmed to protector"
+      },
+      "prompt_integration": "ONLY use when client has ACTUALLY broken a cycle - protected children from abuse they experienced, didn't pass down addiction, etc. This is profound identity reframe: not just victim but PROTECTOR. Not just survivor but TRANSFORMER. Extremely powerful for parents who carry guilt/shame but actually made different choices. Validates their strength while honoring their wound. Can lead naturally into Ancestral Healing if client is ready."
+    },
+    {
+      "id": "ancestral-healing",
+      "name": "Ancestral Healing",
+      "description": "Your healing doesn't just free you - it heals backward through the lineage, releases the ancestors",
+      "core_message": "Your healing heals backward through generations and forward to those who come after",
+      "when_to_use": ["after_cycle_breaker", "spiritual_clients", "family_trauma_work", "generational_patterns"],
+      "presenting_issues": ["family_trauma", "cultural_trauma", "inherited_patterns", "after_breaking_cycles"],
+      "key_language": [
+        "Your healing doesn't just free you...",
+        "It heals backward through the line",
+        "The grandmother who couldn't speak, speaks through you now",
+        "Releasing what they carried, what was passed down",
+        "Your healing releases the ancestors from what they couldn't release",
+        "Breaking this pattern frees not just you, but all who came before",
+        "The healing ripples backward and forward through time",
+        "What you release, they are released from",
+        "Your courage serves seven generations back, seven forward"
+      ],
+      "mechanism": {
+        "recognize_lineage": "Pain/pattern traveled through generations",
+        "healing_backward": "Your healing releases those who came before",
+        "healing_forward": "Your healing protects those who come after",
+        "collective_liberation": "One person's healing serves the whole line"
+      },
+      "prompt_integration": "DEEPLY spiritual - check client receptivity first. Use after Cycle Breaker or major family pattern work. Positions individual healing as service to collective/lineage. Can be incredibly powerful for clients who feel ancestral pain or carry family trauma. Language should be reverent, spacious. Can include specific ancestors if client has named them (grandmother, father, etc.). Creates profound meaning and purpose in healing - not just for self but for whole lineage."
+    },
+    {
+      "id": "self-actualization-cycle",
+      "name": "Self-Actualization Cycle",
+      "description": "After reaching one peak, another mountain appears - this is natural and sacred. Honor both the divine spark that reaches and the wisdom to rest between peaks.",
+      "core_message": "One mountain climbed, another appears. We honor your drive to grow AND your wisdom to rest and allow the next inspiration to come.",
+      "when_to_use": ["after_major_breakthrough", "high_achievers", "spiritual_growth", "preventing_burnout", "post_success"],
+      "presenting_issues": ["after_success_restlessness", "perpetual_strivers", "spiritual_seekers", "never_enough_feeling", "post_achievement"],
+      "key_language": [
+        "One mountain climbed, another appears - this is expected",
+        "We honor the divine spark in you that reaches, that strives",
+        "AND we honor your wisdom to rest, to notice, to allow",
+        "Between peaks, you rest. In rest, the next knowing comes",
+        "The drive to grow is sacred. The wisdom to pause is sacred.",
+        "You don't have to climb immediately. The mountain will wait.",
+        "Trust the rhythm: reach, rest, receive inspiration, reach again",
+        "Your spark of the divine wants expression. Your wisdom knows timing.",
+        "Another mountain appears. And you have time. You have breath."
+      ],
+      "mechanism": {
+        "acknowledge_achievement": "You've reached this mountain top",
+        "normalize_next_peak": "Another appears - this is expected, natural",
+        "honor_divine_spark": "The drive to grow, reach, strive is sacred",
+        "honor_rest_wisdom": "AND the wisdom to rest, notice, allow is equally sacred",
+        "allow_inspiration": "In rest, the next knowing comes"
+      },
+      "prompt_integration": "Use after major success or breakthrough, especially with achievers/strivers who immediately look for next challenge. Validates BOTH the drive (divine spark, growth desire) AND the need for rest/integration. Prevents burnout while honoring ambition. Creates permission for cyclical rhythm rather than perpetual pushing. Particularly powerful for spiritual clients who understand 'divine spark' language, but can be framed secularly as 'natural growth drive.' Emphasize: the next inspiration COMES in rest, not in forcing."
     }
   ],
   "dream_arcs": [
@@ -1039,32 +1194,38 @@
   "arc_selection_rules": {
     "always_include": ["effortlessness", "re-minding", "two-tempos"],
     "issue_mappings": {
-      "anxiety": ["emotional-physical-chain", "effortlessness", "mind-body-unity", "attention-direction"],
-      "confidence": ["recognition-ego-strengthening", "resource-activation", "playful-learning"],
-      "stuck": ["relief-to-new-life", "two-tempos", "future-self", "earned-delight"],
-      "habits": ["brain-master-skill", "effortlessness", "playful-learning"],
-      "trauma": ["emotional-physical-chain", "two-tempos", "parts-integration", "oasis-rest", "post-traumatic-growth"],
+      "anxiety": ["emotional-physical-chain", "effortlessness", "mind-body-unity", "attention-direction", "energy-reclamation"],
+      "confidence": ["recognition-ego-strengthening", "resource-activation", "playful-learning", "upward-spiral"],
+      "stuck": ["relief-to-new-life", "two-tempos", "future-self", "earned-delight", "open-future"],
+      "habits": ["brain-master-skill", "effortlessness", "playful-learning", "upward-spiral"],
+      "trauma": ["emotional-physical-chain", "two-tempos", "parts-integration", "oasis-rest", "post-traumatic-growth", "energy-reclamation"],
       "self-worth": ["recognition-ego-strengthening", "resource-activation", "shame-dissolution"],
-      "life-change": ["relief-to-new-life", "future-self"],
-      "chronic-pain": ["mind-body-unity", "emotional-physical-chain", "signal-decoding"],
+      "life-change": ["relief-to-new-life", "future-self", "open-future"],
+      "chronic-pain": ["mind-body-unity", "emotional-physical-chain", "signal-decoding", "energy-reclamation"],
       "internal-conflict": ["parts-integration"],
-      "confusion": ["inner-wisdom", "future-self", "no-clarity"],
+      "confusion": ["inner-wisdom", "future-self", "no-clarity", "open-future"],
       "overwhelm": ["resource-activation", "mind-body-unity", "no-clarity"],
       "disconnection": ["sensory-amplification", "mind-body-unity"],
-      "perfectionism": ["playful-learning", "effortlessness", "two-tempos"],
+      "perfectionism": ["playful-learning", "effortlessness", "two-tempos", "open-future"],
       "learning-blocks": ["playful-learning", "re-minding", "brain-master-skill"],
       "weight-loss": ["earned-delight", "brain-master-skill", "signal-decoding"],
-      "exhaustion": ["oasis-rest", "two-tempos", "internal-sanctuary"],
-      "burnout": ["oasis-rest", "relief-to-new-life", "internal-sanctuary"],
+      "exhaustion": ["oasis-rest", "two-tempos", "internal-sanctuary", "energy-reclamation"],
+      "burnout": ["oasis-rest", "relief-to-new-life", "internal-sanctuary", "self-actualization-cycle"],
       "crisis": ["oasis-rest", "two-tempos"],
       "emotional-eating": ["signal-decoding", "parts-integration", "brain-master-skill"],
       "rumination": ["attention-direction", "mind-body-unity", "playful-learning"],
       "people-pleasing": ["boundary-reframing", "parts-integration", "recognition-ego-strengthening"],
       "codependency": ["boundary-reframing", "parts-integration"],
-      "resentment": ["forgiveness-protocol", "emotional-physical-chain"],
+      "resentment": ["forgiveness-protocol", "emotional-physical-chain", "energy-reclamation"],
       "shame": ["shame-dissolution", "recognition-ego-strengthening", "parts-integration"],
-      "depletion": ["internal-sanctuary", "oasis-rest", "resource-activation"],
-      "hypervigilance": ["internal-sanctuary", "emotional-physical-chain", "oasis-rest"]
+      "depletion": ["internal-sanctuary", "oasis-rest", "resource-activation", "energy-reclamation"],
+      "hypervigilance": ["internal-sanctuary", "emotional-physical-chain", "oasis-rest"],
+      "family-trauma": ["cycle-breaker", "ancestral-healing", "post-traumatic-growth"],
+      "generational-patterns": ["cycle-breaker", "ancestral-healing"],
+      "post-breakthrough": ["energy-reclamation", "open-future", "upward-spiral"],
+      "achievement-restlessness": ["self-actualization-cycle", "open-future"],
+      "spiritual-growth": ["ancestral-healing", "self-actualization-cycle"],
+      "post-success": ["self-actualization-cycle", "upward-spiral", "open-future"]
     },
     "max_arcs_per_script": 5,
     "priority_order": ["always_include", "issue_specific", "template_preferred"]
