@@ -37,11 +37,19 @@ To prevent quality degradation and ensure consistency, DREAM scripts pass throug
 
 **Key Innovation**: Separation of concerns prevents the "50% degradation problem" where AI trying to do everything (plan + write + variety + quality) resulted in generic content. Each stage focuses on ONE job, with explicit "PRESERVE ALL details" instructions to maintain historical/contextual integrity.
 
-**Metaphor Usage Guidelines (New)**: To prevent metaphor overload, the system now enforces strict frequency limits:
+**Metaphor Usage Guidelines**: To prevent metaphor overload, the system now enforces strict frequency limits:
 - ScriptEngine explicitly instructs AI to use metaphors 5-7 times maximum (not "throughout")
 - Symbolic Dimension levels specify exact metaphor counts (HEAVY: 6-8, MODERATE: 4-6, LIGHT: 2-3)
 - Quality Guard validates metaphor frequency and fails scripts with 10+ metaphor family uses
 - Guideline: "Metaphors should ENHANCE the experience, not dominate it"
+
+**Ego Strengthening Distribution (New)**: To prevent functional improvement "dumps" that break script flow:
+- System selects 3-5 functional improvements maximum (not all categories)
+- Distributed across script: 1 in opening, 1-2 in middle, 1-2 near end
+- Each statement limited to 1-2 sentences, then narrative continues
+- Tied to metaphor when possible: "Like the [metaphor], your nervous system remembers calm"
+- Never dumped as paragraph list - scattered naturally throughout
+- Categories: Physical Restoration, Sleep Quality, Cognitive Enhancement, Energy/Vitality, Stress Response
 
 ### Feature Specifications
 -   **8-Dimensional Framework**: Implements Erika Flint's 8D Hypnosis Framework with independent emphasis levels (0-100%).

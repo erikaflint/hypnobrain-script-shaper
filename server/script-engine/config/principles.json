@@ -227,14 +227,26 @@
       "why": "The listener is whole AND their systems can improve. Functional suggestions create real-world transformation.",
       "prompt_directives": [
         "Use language of remembering, not acquiring ('your body already knows')",
-        "Weave functional improvement suggestions throughout (not just at end)",
-        "Physical Restoration: 'Your body healing and replenishing completely, each cell renewing, immune system strengthening'",
-        "Sleep Quality: 'Your sleep deepening, improving night after night, waking more refreshed'",
-        "Cognitive Enhancement: 'Memory strengthening, words coming more easily, mental clarity increasing'",
-        "Energy & Vitality: 'Your energy replenishing completely, natural vitality returning'",
-        "Stress Response: 'Your nervous system learning deeper calm, stress releasing more easily'",
+        "SELECT 3-5 FUNCTIONAL IMPROVEMENTS MAXIMUM - choose from categories below",
+        "DISTRIBUTE these across the script: 1 in opening, 1-2 in middle, 1-2 near end",
+        "KEEP EACH STATEMENT TO 1-2 SENTENCES - then move on with the narrative",
+        "TIE TO METAPHOR when possible: 'Like the [metaphor], your nervous system remembers...'",
+        "NEVER DUMP AS A LIST - space them naturally throughout the script flow",
+        "",
+        "Functional Improvement Categories (SELECT 3-5 TOTAL, NOT ALL):",
+        "- Physical Restoration: 'Your body healing and replenishing completely'",
+        "- Sleep Quality: 'Your sleep deepening night after night'",
+        "- Cognitive Enhancement: 'Memory becoming clearer, words flowing easily'",
+        "- Energy & Vitality: 'Your energy replenishing completely'",
+        "- Stress Response: 'Your nervous system learning deeper calm'",
+        "",
+        "Distribution Pattern:",
+        "- Opening/Deepening (1): 'As you rest, your body begins its natural healing'",
+        "- Middle Work (1-2): 'Like [metaphor], your nervous system remembers calm'",
+        "- Integration/End (1-2): 'This calm continues, your sleep deepening each night'",
+        "",
         "Avoid emotional affirmations like 'you are loved' - focus on FUNCTIONAL improvements",
-        "For regular scripts: Include these throughout + count 1-5 emergence",
+        "For regular scripts: Scatter throughout + count 1-5 emergence",
         "For sleep scripts: Continue these as client drifts, no counting, natural sleep transition"
       ],
       "tone_framework": {
@@ -253,42 +265,34 @@
           "Your nervous system learning deeper calm"
         ],
         "weaving_pattern": [
-          "Early in script: 'As you rest, your body begins its natural healing'",
-          "Throughout: 'Each breath, your memory strengthens, your mind clears'",
-          "Continuous: 'Your sleep deepening night after night'",
-          "For sleep scripts: Continue as they drift, no formal ending"
+          "Opening (1 statement, 1-2 sentences): 'As you rest, your body begins its natural healing'",
+          "Middle (1-2 statements scattered): 'Like [metaphor], your nervous system remembers calm'",
+          "Near End (1-2 statements): 'This peaceful state becoming natural, your sleep deepening each night'",
+          "NEVER as a list or paragraph dump - each statement woven naturally into narrative flow",
+          "For sleep scripts: Continue scattered pattern as they drift, no formal ending"
         ]
       },
       "functional_categories": {
+        "note": "SELECT 3-5 IMPROVEMENTS TOTAL from these categories. These are EXAMPLES - use 1-2 from each category chosen, not entire lists.",
         "physical_restoration": [
           "Your body healing and replenishing completely",
-          "Each cell renewing, each system restoring",
-          "Immune system strengthening naturally",
-          "Muscles releasing tension, fascia softening",
-          "Circulation flowing freely, bringing nourishment"
+          "Immune system strengthening naturally"
         ],
         "sleep_quality": [
-          "Your sleep becoming deeper, more restorative",
-          "Night after night, your body remembers how to rest completely",
-          "Waking more refreshed, more energized",
-          "Sleep cycles optimizing naturally"
+          "Your sleep becoming deeper night after night",
+          "Waking more refreshed, more energized"
         ],
         "cognitive_enhancement": [
-          "Your memory improving, becoming clearer, sharper",
-          "Words coming more easily, thoughts flowing smoothly",
-          "Mental clarity increasing day by day",
-          "Your mind processing and organizing effortlessly",
-          "Concentration strengthening naturally"
+          "Your memory improving, becoming clearer",
+          "Words coming more easily, thoughts flowing smoothly"
         ],
         "energy_vitality": [
           "Your energy replenishing completely",
-          "Each moment of rest creating more vitality",
-          "Your natural energy returning, building, strengthening"
+          "Natural vitality returning, building"
         ],
         "stress_response": [
           "Your nervous system learning deeper calm",
-          "Stress releasing more easily from your body",
-          "Your baseline calm becoming your new normal"
+          "Stress releasing more easily from your body"
         ]
       },
       "quality_gates": [
