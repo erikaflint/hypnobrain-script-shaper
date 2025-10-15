@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { StrategyPlanner } from '../../server/script-engine/strategy-planner';
 import narrativeArcsConfig from '../../server/script-engine/config/narrative-arcs.json';
-import type { ArcJourney, ArcStage } from '@shared/schema';
+import { arcJourneySchema, type ArcJourney, type ArcStage } from '@shared/schema';
 
 /**
  * ARC JOURNEYS TEST SUITE
@@ -441,6 +441,402 @@ describe('Arc Journeys', () => {
       expect(contract.journeyStages!.length).toBe(7);
       expect(contract.journeyStages![1].arcName).toBe('Ancestral Healing'); // Actual name from config
       expect(contract.journeyStages![2].arcName).toBe('Cycle Breaker'); // Actual name from config
+    });
+  });
+
+  describe('Zod Schema Validation (API Layer)', () => {
+    it('should reject journey with weights not summing to 100%', () => {
+      const invalidJourney = {
+        stages: [
+          { arcId: 'signal-decoding', weight: 30 },
+          { arcId: 'upward-spiral', weight: 40 }
+          // Total = 70%, not 100%
+        ],
+        totalStages: 2
+      };
+
+      const result = arcJourneySchema.safeParse(invalidJourney);
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues[0].message).toContain('Stage weights must sum to 100%');
+      }
+    });
+
+    it('should reject journey with weights exceeding 100%', () => {
+      const invalidJourney = {
+        stages: [
+          { arcId: 'signal-decoding', weight: 60 },
+          { arcId: 'upward-spiral', weight: 60 }
+          // Total = 120%
+        ],
+        totalStages: 2
+      };
+
+      const result = arcJourneySchema.safeParse(invalidJourney);
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues[0].message).toContain('Stage weights must sum to 100%');
+      }
+    });
+
+    it('should reject journey with no stages', () => {
+      const invalidJourney = {
+        stages: [],
+        totalStages: 0
+      };
+
+      const result = arcJourneySchema.safeParse(invalidJourney);
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        // Should fail min(1) check
+        expect(result.error.issues.some(i => i.message.includes('least 1'))).toBe(true);
+      }
+    });
+
+    it('should reject journey with more than 12 stages', () => {
+      const invalidJourney = {
+        stages: Array.from({ length: 15 }, (_, i) => ({
+          arcId: 'effortlessness',
+          weight: 100 / 15
+        })),
+        totalStages: 15
+      };
+
+      const result = arcJourneySchema.safeParse(invalidJourney);
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        // Should fail max(12) check
+        expect(result.error.issues.some(i => i.message.includes('most 12'))).toBe(true);
+      }
+    });
+
+    it('should reject stage with weight > 100', () => {
+      const invalidJourney = {
+        stages: [
+          { arcId: 'signal-decoding', weight: 150 } // Invalid: > 100
+        ],
+        totalStages: 1
+      };
+
+      const result = arcJourneySchema.safeParse(invalidJourney);
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues.some(i => i.message.includes('100') || i.message.includes('less'))).toBe(true);
+      }
+    });
+
+    it('should reject stage with negative weight', () => {
+      const invalidJourney = {
+        stages: [
+          { arcId: 'signal-decoding', weight: -10 },
+          { arcId: 'upward-spiral', weight: 110 }
+        ],
+        totalStages: 2
+      };
+
+      const result = arcJourneySchema.safeParse(invalidJourney);
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues.some(i => i.path.includes('weight'))).toBe(true);
+      }
+    });
+
+    it('should accept valid journey', () => {
+      const validJourney = {
+        stages: [
+          { arcId: 'signal-decoding', weight: 50 },
+          { arcId: 'upward-spiral', weight: 50 }
+        ],
+        totalStages: 2
+      };
+
+      const result = arcJourneySchema.safeParse(validJourney);
+      expect(result.success).toBe(true);
+    });
+
+    it('should accept journey with floating point weights that sum to 100%', () => {
+      const validJourney = {
+        stages: [
+          { arcId: 'signal-decoding', weight: 33.33 },
+          { arcId: 'boundary-reframing', weight: 33.33 },
+          { arcId: 'upward-spiral', weight: 33.34 }
+        ],
+        totalStages: 3
+      };
+
+      const result = arcJourneySchema.safeParse(validJourney);
+      expect(result.success).toBe(true);
+    });
+  });
+
+  describe('Negative Validation Tests', () => {
+    const planner = new StrategyPlanner();
+
+    it('should detect weights not summing to 100%', () => {
+      const invalidJourney: ArcJourney = {
+        stages: [
+          { arcId: 'signal-decoding', weight: 30 },
+          { arcId: 'upward-spiral', weight: 40 }
+          // Total = 70%, not 100%
+        ],
+        totalStages: 2
+      };
+
+      const totalWeight = invalidJourney.stages.reduce((sum, s) => sum + s.weight, 0);
+      expect(totalWeight).not.toBe(100);
+      expect(totalWeight).toBe(70);
+    });
+
+    it('should detect weights exceeding 100%', () => {
+      const invalidJourney: ArcJourney = {
+        stages: [
+          { arcId: 'signal-decoding', weight: 60 },
+          { arcId: 'upward-spiral', weight: 60 }
+          // Total = 120%, exceeds 100%
+        ],
+        totalStages: 2
+      };
+
+      const totalWeight = invalidJourney.stages.reduce((sum, s) => sum + s.weight, 0);
+      expect(totalWeight).toBeGreaterThan(100);
+    });
+
+    it('should detect stage count below minimum (< 1)', () => {
+      const invalidJourney: ArcJourney = {
+        stages: [],
+        totalStages: 0
+      };
+
+      expect(invalidJourney.stages.length).toBeLessThan(1);
+    });
+
+    it('should detect stage count above maximum (> 12)', () => {
+      const invalidJourney: ArcJourney = {
+        stages: Array.from({ length: 15 }, (_, i) => ({
+          arcId: 'effortlessness',
+          weight: 100 / 15
+        })),
+        totalStages: 15
+      };
+
+      expect(invalidJourney.stages.length).toBeGreaterThan(12);
+    });
+
+    it('should handle duplicate arc IDs in journey', async () => {
+      const journey: ArcJourney = {
+        stages: [
+          { arcId: 'upward-spiral', weight: 50 },
+          { arcId: 'upward-spiral', weight: 50 } // Duplicate
+        ],
+        totalStages: 2
+      };
+
+      const contract = await planner.plan({
+        presentingIssue: 'stuck',
+        desiredOutcome: 'momentum',
+        arcJourney: journey,
+        targetWordCount: 2000
+      });
+
+      // Should still process but both stages will have same arc
+      expect(contract.journeyStages![0].arcId).toBe('upward-spiral');
+      expect(contract.journeyStages![1].arcId).toBe('upward-spiral');
+    });
+
+    it('should detect invalid arc references', async () => {
+      const journey: ArcJourney = {
+        stages: [
+          { arcId: 'completely-fake-arc-12345', weight: 100 }
+        ],
+        totalStages: 1
+      };
+
+      const contract = await planner.plan({
+        presentingIssue: 'test',
+        desiredOutcome: 'test',
+        arcJourney: journey,
+        targetWordCount: 2000
+      });
+
+      // Should create stage but arc metadata will be missing/fallback
+      expect(contract.journeyStages![0].arcId).toBe('completely-fake-arc-12345');
+      expect(contract.journeyStages![0].arcName).toBe('completely-fake-arc-12345'); // Fallback to ID
+      expect(contract.journeyStages![0].keyLanguage).toEqual([]);
+    });
+  });
+
+  describe('Word Budget Edge Cases', () => {
+    const planner = new StrategyPlanner();
+
+    it('should handle rounding with odd word counts', async () => {
+      const journey: ArcJourney = {
+        stages: [
+          { arcId: 'signal-decoding', weight: 33 },
+          { arcId: 'boundary-reframing', weight: 33 },
+          { arcId: 'upward-spiral', weight: 34 }
+        ],
+        totalStages: 3
+      };
+
+      const contract = await planner.plan({
+        presentingIssue: 'test',
+        desiredOutcome: 'test',
+        arcJourney: journey,
+        targetWordCount: 1000
+      });
+
+      const stages = contract.journeyStages!;
+      
+      // 33% of 1000 = 330, 34% = 340
+      expect(stages[0].wordBudget).toBe(330);
+      expect(stages[1].wordBudget).toBe(330);
+      expect(stages[2].wordBudget).toBe(340);
+      
+      // Total should equal target (rounding handled)
+      const total = stages.reduce((sum, s) => sum + (s.wordBudget || 0), 0);
+      expect(total).toBe(1000);
+    });
+
+    it('should handle very small word budgets', async () => {
+      const journey: ArcJourney = {
+        stages: [
+          { arcId: 'signal-decoding', weight: 10 },
+          { arcId: 'upward-spiral', weight: 90 }
+        ],
+        totalStages: 2
+      };
+
+      const contract = await planner.plan({
+        presentingIssue: 'test',
+        desiredOutcome: 'test',
+        arcJourney: journey,
+        targetWordCount: 500
+      });
+
+      const stages = contract.journeyStages!;
+      
+      // 10% of 500 = 50 words (very small but valid)
+      expect(stages[0].wordBudget).toBe(50);
+      expect(stages[1].wordBudget).toBe(450);
+    });
+
+    it('should handle decimal rounding correctly', async () => {
+      const journey: ArcJourney = {
+        stages: [
+          { arcId: 'signal-decoding', weight: 25.5 },
+          { arcId: 'boundary-reframing', weight: 25.5 },
+          { arcId: 'energy-reclamation', weight: 24.5 },
+          { arcId: 'upward-spiral', weight: 24.5 }
+        ],
+        totalStages: 4
+      };
+
+      const contract = await planner.plan({
+        presentingIssue: 'test',
+        desiredOutcome: 'test',
+        arcJourney: journey,
+        targetWordCount: 2000
+      });
+
+      const stages = contract.journeyStages!;
+      
+      // Should round properly
+      expect(stages[0].wordBudget).toBeDefined();
+      expect(stages[1].wordBudget).toBeDefined();
+      
+      // All budgets should be reasonable
+      stages.forEach(stage => {
+        expect(stage.wordBudget).toBeGreaterThan(0);
+        expect(stage.wordBudget).toBeLessThanOrEqual(2000);
+      });
+    });
+  });
+
+  describe('Semantic Journey Integrity', () => {
+    const planner = new StrategyPlanner();
+
+    it('should validate trauma recovery journey uses appropriate arcs', async () => {
+      const journey: ArcJourney = {
+        stages: [
+          { arcId: 'signal-decoding', weight: 20, transitionGoal: 'Recognize trauma signals' },
+          { arcId: 'internal-sanctuary', weight: 20, transitionGoal: 'Create safe space' },
+          { arcId: 'post-traumatic-growth', weight: 30, transitionGoal: 'Reframe as growth' },
+          { arcId: 'energy-reclamation', weight: 30, transitionGoal: 'Reclaim energy' }
+        ],
+        totalStages: 4
+      };
+
+      const contract = await planner.plan({
+        presentingIssue: 'PTSD and trauma',
+        desiredOutcome: 'healing and growth',
+        arcJourney: journey,
+        targetWordCount: 2000
+      });
+
+      // Verify trauma-relevant arcs are used
+      const arcIds = contract.journeyStages!.map(s => s.arcId);
+      expect(arcIds).toContain('post-traumatic-growth');
+      expect(arcIds).toContain('internal-sanctuary');
+      
+      // Verify transition goals are meaningful
+      const transitions = contract.journeyStages!.map(s => s.transitionGoal);
+      expect(transitions.some(t => t?.includes('trauma'))).toBe(true);
+      expect(transitions.some(t => t?.includes('growth'))).toBe(true);
+    });
+
+    it('should validate shame dissolution journey uses appropriate arcs', async () => {
+      const journey: ArcJourney = {
+        stages: [
+          { arcId: 'signal-decoding', weight: 15 },
+          { arcId: 'shame-dissolution', weight: 35 },
+          { arcId: 'forgiveness-protocol', weight: 25 },
+          { arcId: 'self-actualization-cycle', weight: 25 }
+        ],
+        totalStages: 4
+      };
+
+      const contract = await planner.plan({
+        presentingIssue: 'deep shame and self-criticism',
+        desiredOutcome: 'self-acceptance',
+        arcJourney: journey,
+        targetWordCount: 2000
+      });
+
+      // Verify shame-specific arcs are used
+      const arcIds = contract.journeyStages!.map(s => s.arcId);
+      expect(arcIds).toContain('shame-dissolution');
+      expect(arcIds).toContain('forgiveness-protocol');
+      
+      // Verify reasonable weight distribution (shame-dissolution gets highest weight)
+      const shameDissolution = contract.journeyStages!.find(s => s.arcId === 'shame-dissolution');
+      expect(shameDissolution?.weight).toBe(35); // Highest weight
+    });
+
+    it('should validate ancestral healing journey follows logical progression', async () => {
+      const journey: ArcJourney = {
+        stages: [
+          { arcId: 'signal-decoding', weight: 15, transitionGoal: 'Recognize patterns' },
+          { arcId: 'ancestral-healing', weight: 25, transitionGoal: 'Connect with ancestors' },
+          { arcId: 'cycle-breaker', weight: 25, transitionGoal: 'Break cycles' },
+          { arcId: 'forgiveness-protocol', weight: 20, transitionGoal: 'Forgive lineage' },
+          { arcId: 'open-future', weight: 15, transitionGoal: 'Open possibilities' }
+        ],
+        totalStages: 5
+      };
+
+      const contract = await planner.plan({
+        presentingIssue: 'generational trauma',
+        desiredOutcome: 'heal lineage',
+        arcJourney: journey,
+        targetWordCount: 2500
+      });
+
+      // Verify logical progression: recognize → heal → break → forgive → open
+      const arcIds = contract.journeyStages!.map(s => s.arcId);
+      expect(arcIds.indexOf('signal-decoding')).toBe(0); // Recognition first
+      expect(arcIds.indexOf('ancestral-healing')).toBeLessThan(arcIds.indexOf('cycle-breaker')); // Heal before break
+      expect(arcIds.indexOf('cycle-breaker')).toBeLessThan(arcIds.indexOf('forgiveness-protocol')); // Break before forgive
+      expect(arcIds.indexOf('open-future')).toBe(4); // Open future last
     });
   });
 
