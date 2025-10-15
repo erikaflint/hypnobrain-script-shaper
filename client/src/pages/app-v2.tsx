@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { VoicePlayer } from "@/components/voice-player";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -114,6 +115,7 @@ export default function AppV2() {
   const [presentingIssue, setPresentingIssue] = useState("");
   const [desiredOutcome, setDesiredOutcome] = useState("");
   const [notes, setNotes] = useState("");
+  const [selectedArcId, setSelectedArcId] = useState<string>("");
   
   // Type-ahead state
   const [issueOpen, setIssueOpen] = useState(false);
@@ -182,6 +184,12 @@ export default function AppV2() {
   const { data: styles = [] } = useQuery<any[]>({
     queryKey: ['/api/styles'],
     enabled: step === "mixer"
+  });
+  
+  // Fetch narrative arcs for dropdown (clinical arcs only)
+  const { data: narrativeArcs = [] } = useQuery<any[]>({
+    queryKey: ['/api/narrative-arcs?type=clinical'],
+    enabled: step === "intake"
   });
   
   // Fetch user's saved templates
@@ -297,6 +305,7 @@ export default function AppV2() {
           presentingIssue,
           desiredOutcome,
           clientNotes: notes.trim() || undefined,
+          arcId: selectedArcId || undefined,
         }),
       });
     },
@@ -328,6 +337,7 @@ export default function AppV2() {
           presentingIssue,
           desiredOutcome,
           clientNotes: notes.trim() || undefined,
+          arcId: selectedArcId || undefined,
         }),
       });
     },
@@ -596,6 +606,39 @@ export default function AppV2() {
                   <p className="text-xs text-muted-foreground">
                     Any preferences, sensitivities, or additional context
                   </p>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="arc-selection">
+                    Narrative Arc (Optional)
+                    <span className="ml-2 text-xs text-muted-foreground">
+                      Manual selection - overrides auto-selection
+                    </span>
+                  </Label>
+                  <Select value={selectedArcId} onValueChange={setSelectedArcId}>
+                    <SelectTrigger id="arc-selection" data-testid="select-narrative-arc">
+                      <SelectValue placeholder="Auto-select based on issue (recommended)" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="" data-testid="arc-option-auto">
+                        Auto-select based on issue (recommended)
+                      </SelectItem>
+                      {narrativeArcs.map((arc: any) => (
+                        <SelectItem 
+                          key={arc.id} 
+                          value={arc.id}
+                          data-testid={`arc-option-${arc.id}`}
+                        >
+                          {arc.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {selectedArcId && (
+                    <p className="text-xs text-muted-foreground">
+                      {narrativeArcs.find((arc: any) => arc.id === selectedArcId)?.description}
+                    </p>
+                  )}
                 </div>
 
                 <div className="p-4 bg-muted/50 rounded-lg border border-muted">

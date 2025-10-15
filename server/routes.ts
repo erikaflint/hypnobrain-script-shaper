@@ -89,6 +89,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get narrative arcs
+  app.get("/api/narrative-arcs", async (req, res) => {
+    try {
+      const { getAllNarrativeArcs, getClinicalArcs, getDreamArcs, getNarrativeArcsByCategory } = await import('./script-engine/narrative-arc-loader');
+      
+      const type = req.query.type as string;
+      
+      if (type === 'clinical') {
+        const arcs = getClinicalArcs();
+        return res.json(arcs);
+      } else if (type === 'dream') {
+        const arcs = getDreamArcs();
+        return res.json(arcs);
+      } else if (type === 'grouped') {
+        const arcs = getNarrativeArcsByCategory();
+        return res.json(arcs);
+      } else {
+        const arcs = getAllNarrativeArcs();
+        return res.json(arcs);
+      }
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
   // Get all styles
   app.get("/api/styles", async (req, res) => {
     try {
