@@ -43,12 +43,13 @@ To prevent quality degradation and ensure consistency, DREAM scripts pass throug
 - Quality Guard validates metaphor frequency and fails scripts with 10+ metaphor family uses
 - Guideline: "Metaphors should ENHANCE the experience, not dominate it"
 
-**Ego Strengthening Distribution (New)**: To prevent functional improvement "dumps" that break script flow:
+**Ego Strengthening Distribution**: To prevent functional improvement "dumps" that break script flow:
 - System selects 3-5 functional improvements maximum (not all categories)
 - Distributed across script: 1 in opening, 1-2 in middle, 1-2 near end
 - Each statement limited to 1-2 sentences, then narrative continues
 - Tied to metaphor when possible: "Like the [metaphor], your nervous system remembers calm"
 - Never dumped as paragraph list - scattered naturally throughout
+- **Quality Guard Enforcement**: Fails if >3 keyword occurrences in one paragraph or >10 total (counts actual occurrences, not unique keywords)
 - Categories: Physical Restoration, Sleep Quality, Cognitive Enhancement, Energy/Vitality, Stress Response
 
 ### Feature Specifications
