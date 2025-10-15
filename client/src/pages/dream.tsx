@@ -37,6 +37,7 @@ export default function Dream() {
   const [, navigate] = useLocation();
   const [journeyIdea, setJourneyIdea] = useState("");
   const [selectedArchetypeId, setSelectedArchetypeId] = useState<number | null>(null);
+  const [selectedArcId, setSelectedArcId] = useState<string>("");
   const [expandedStory, setExpandedStory] = useState<string | null>(null); // NEW: Story shaper result
   const [generatedScript, setGeneratedScript] = useState<string | null>(null);
   const [generationId, setGenerationId] = useState<number | null>(null);
@@ -49,6 +50,11 @@ export default function Dream() {
   // Fetch blended archetypes for DREAM
   const { data: archetypes = [] } = useQuery<Archetype[]>({
     queryKey: ['/api/archetypes/blended'],
+  });
+
+  // Fetch DREAM narrative arcs
+  const { data: narrativeArcs = [] } = useQuery<any[]>({
+    queryKey: ['/api/narrative-arcs?type=dream'],
   });
 
   // Fetch ALL DREAM thumbnails for crowdsourced full-screen loading carousel
@@ -173,7 +179,8 @@ export default function Dream() {
 
     await shapeStory.mutateAsync({ 
       journeyIdea,
-      archetypeId: selectedArchetypeId || undefined 
+      archetypeId: selectedArchetypeId || undefined,
+      arcId: selectedArcId || undefined
     });
   };
 
@@ -184,7 +191,8 @@ export default function Dream() {
     await generateDreamScript.mutateAsync({ 
       journeyIdea, // Original idea for title/metadata
       expandedStory, // Shaped story for script content
-      archetypeId: selectedArchetypeId || undefined 
+      archetypeId: selectedArchetypeId || undefined,
+      arcId: selectedArcId || undefined
     });
   };
 
@@ -275,6 +283,44 @@ export default function Dream() {
                       ))}
                     </SelectContent>
                   </Select>
+                </div>
+
+                {/* Narrative Arc Selection */}
+                <div className="space-y-3">
+                  <Label htmlFor="arc-selection" className="text-lg">
+                    Narrative Arc (Optional)
+                    <span className="ml-2 text-xs text-muted-foreground">
+                      Manual selection - overrides auto-selection
+                    </span>
+                  </Label>
+                  <Select 
+                    value={selectedArcId} 
+                    onValueChange={setSelectedArcId}
+                    disabled={shapeStory.isPending}
+                  >
+                    <SelectTrigger id="arc-selection" data-testid="select-dream-arc">
+                      <SelectValue placeholder="Auto-select based on journey (recommended)" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="" data-testid="arc-option-auto">
+                        Auto-select based on journey (recommended)
+                      </SelectItem>
+                      {narrativeArcs.map((arc: any) => (
+                        <SelectItem 
+                          key={arc.id} 
+                          value={arc.id}
+                          data-testid={`arc-option-${arc.id}`}
+                        >
+                          {arc.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {selectedArcId && (
+                    <p className="text-xs text-muted-foreground">
+                      {narrativeArcs.find((arc: any) => arc.id === selectedArcId)?.description}
+                    </p>
+                  )}
                 </div>
 
                 {/* Example Ideas */}
