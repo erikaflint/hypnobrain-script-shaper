@@ -827,36 +827,38 @@
     {
       "id": "taking-to-heart",
       "name": "Taking to Heart (Deep Consideration)",
-      "description": "Truly considering wisdom, taking it to the heart of the self as counsel - not just hearing, but deeply contemplating",
-      "strategic_move": "Invite deep consideration, true contemplation at the heart of the self, not superficial understanding",
-      "core_message": "Take this to heart. Not just hear it, but truly consider it. Take it to the heart of yourself as counsel.",
+      "description": "Truly considering wisdom, taking it to the heart of the self as counsel - the heart is receptive to this new learning",
+      "strategic_move": "Invite deep consideration at the receptive heart of the self, true contemplation not superficial understanding",
+      "core_message": "Take this to heart. Your heart is receptive to this new learning. Not just hear it, but truly consider it.",
       "when_to_use": ["spiritual_clients", "emotional_clients", "after_insights", "deep_contemplation_needed"],
       "presenting_issues": ["superficial_understanding", "not_truly_considering", "spiritual_seeking", "needing_deep_reflection"],
       "mechanism": {
         "acknowledge_hearing": "You've heard this, you understand it cognitively",
+        "heart_receptivity": "Your heart is receptive to this new learning",
         "invite_consideration": "Now truly consider it, take it to heart",
         "heart_as_counsel": "Take it to the heart of yourself, let it be counsel",
         "deep_contemplation": "Not just knowing - deeply considering, contemplating"
       },
       "key_language": [
         "Take this to heart",
+        "Your heart is receptive to this new learning",
         "Not just hear it - truly consider it",
         "Take it to the heart of yourself as counsel",
-        "Let your heart truly consider this wisdom",
+        "The heart, receptive, truly considering this wisdom",
+        "Let your receptive heart consider this deeply",
         "Deep consideration, not just surface understanding",
-        "Take it to the heart of the self",
-        "Contemplate this deeply, consider it truly",
+        "Take it to the heart of the self, receptive and open",
         "Your heart knows how to truly consider",
-        "Take this as counsel to the heart of yourself"
+        "Receptive to this wisdom, taking it to heart"
       ],
-      "prompt_integration": "For spiritual/emotional clients who need to deeply contemplate wisdom. This is about TRUE CONSIDERATION - taking something to heart, not just intellectual understanding. The heart of the self as place of deep contemplation and counsel. Use language of 'taking to heart', 'truly considering', 'heart as counsel'. Different from cognitive understanding or somatic integration - this is about deep, heartfelt contemplation. Particularly powerful for spiritual clients who understand contemplative practice.",
+      "prompt_integration": "For spiritual/emotional clients who need to deeply contemplate wisdom. This is about TRUE CONSIDERATION - taking something to heart with receptivity, not just intellectual understanding. The heart of the self is RECEPTIVE to new learning, a place of deep contemplation and counsel. Use language of 'taking to heart', 'receptive', 'truly considering', 'heart as counsel'. Different from cognitive understanding or somatic integration - this is about deep, heartfelt contemplation with openness and receptivity. Particularly powerful for spiritual clients who understand contemplative practice.",
       "differs_from": {
         "recognition": "Recognition is ego strengthening. Taking to Heart is deep consideration/contemplation.",
-        "re-minding": "Re-minding is remembering. Taking to Heart is contemplating deeply.",
-        "mind-body-unity": "Mind-Body is somatic. Taking to Heart is contemplative counsel."
+        "re-minding": "Re-minding is remembering. Taking to Heart is receptive contemplation.",
+        "mind-body-unity": "Mind-Body is somatic. Taking to Heart is contemplative counsel with receptivity."
       },
       "pairs_well_with": ["inner-wisdom", "recognition-ego-strengthening", "spiritual-arcs"],
-      "critical_note": "About DEEP CONSIDERATION and CONTEMPLATION - taking wisdom to the heart of the self as counsel. Not somatic, not ego strengthening - this is about truly considering vs. superficial understanding. For spiritual/emotional clients."
+      "critical_note": "About DEEP CONSIDERATION and CONTEMPLATION - taking wisdom to the receptive heart of the self as counsel. The heart is RECEPTIVE to new learning. Not somatic, not ego strengthening - this is about truly considering with receptivity vs. superficial understanding. For spiritual/emotional clients."
     },
     {
       "id": "aversion-installation",
