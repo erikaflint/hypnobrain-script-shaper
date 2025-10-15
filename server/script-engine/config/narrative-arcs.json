@@ -399,6 +399,275 @@
       ],
       "critical_reframe": "NOT: Stuck at a broken-down car on the side of the road. BUT: Resting at a beautiful oasis - exactly what you need.",
       "prompt_integration": "For trauma/crisis recovery. Reframe rest as exactly what's needed, not failure or being stuck. Give explicit, repeated permission to do nothing. Rest until bored (boredom = safety). Use oasis, rest stop, winter/dormancy metaphors. NO future pacing - stay in present rest. Emphasize: trying to move when need rest is the problem. Connect to Arc 3 (Two Tempos - healing has its own timeline), Arc 1 (Effortlessness - healing happens during rest not effort). Validate exhaustion, normalize the need to completely stop."
+    },
+    {
+      "id": "signal-decoding",
+      "name": "Signal Decoding / Need Translation",
+      "description": "Interpret body signals (cravings, pain, tension) as coded messages about deeper needs",
+      "core_message": "Your body speaks in signals - what looks like hunger might be asking for comfort, what feels like pain might be requesting attention",
+      "when_to_use": ["emotional eating", "chronic pain", "psychosomatic symptoms", "body disconnect"],
+      "presenting_issues": ["emotional eating", "chronic pain", "cravings", "tension", "psychosomatic symptoms", "body signals unclear"],
+      "key_language": [
+        "What if this craving is your body's way of asking for something else?",
+        "Pain as a messenger, not an enemy",
+        "Your body speaking in code - what is it really asking for?",
+        "Beneath the hunger, a different need waiting to be heard",
+        "Translating the language your body speaks",
+        "This tension, this signal - what deeper need is calling?",
+        "Not just feeling - understanding what the feeling means"
+      ],
+      "metaphor_library": [
+        {
+          "name": "Hunger Translator",
+          "concept": "Cravings decoded as emotional/spiritual needs",
+          "example": "What looks like hunger for food might be hunger for connection, comfort, or rest"
+        },
+        {
+          "name": "Pain as Messenger",
+          "concept": "Pain signals as messengers carrying information",
+          "example": "This pain isn't punishment - it's your body trying to tell you something important"
+        },
+        {
+          "name": "Volume Control",
+          "concept": "Pain signals can be modulated at neurological level",
+          "example": "Like turning down the volume on a radio - the signal is there, but you control how loud"
+        }
+      ],
+      "prompt_integration": "Guide client to decode body signals as messages about deeper needs. Frame symptoms as communication, not pathology. Help translate physical sensations into underlying emotional/spiritual needs. Use gate control theory for pain - signals can be modulated. Connect physical sensation to what it's really asking for."
+    },
+    {
+      "id": "post-traumatic-growth",
+      "name": "Post-Traumatic Growth",
+      "description": "Transform wound into wisdom, strength, and purpose",
+      "core_message": "The wound that broke you open also let the light in - wisdom emerging from what you've survived",
+      "when_to_use": ["after trauma processing", "integration phase", "finding meaning", "growth from adversity"],
+      "presenting_issues": ["trauma integration", "post-traumatic stress", "seeking meaning from pain", "wanting growth from wounds"],
+      "key_language": [
+        "The wound that cracked you open also let wisdom in",
+        "Not just surviving - discovering strength you didn't know you had",
+        "Your pain becoming your purpose, your wound becoming your wisdom",
+        "What broke you also broke you open to something larger",
+        "From this hardship, unexpected gifts emerging",
+        "The teacher hidden in the trauma, the wisdom forged in fire",
+        "Not unchanged by what happened - transformed by it"
+      ],
+      "transformation_sequence": [
+        {
+          "stage": "acknowledging_wound",
+          "description": "Honor what was lost, what was hard",
+          "language": "First, acknowledging the weight of what you've carried, what you've survived"
+        },
+        {
+          "stage": "discovering_strength",
+          "description": "Recognize resilience that emerged",
+          "language": "And noticing - you're still here. Strength you didn't know you had, revealed"
+        },
+        {
+          "stage": "extracting_wisdom",
+          "description": "Find the teaching in the experience",
+          "language": "Wisdom earned through fire, understanding that only comes through experience"
+        },
+        {
+          "stage": "purpose_emerging",
+          "description": "Transform pain into purpose",
+          "language": "Your wound becoming your medicine - for yourself and perhaps for others"
+        }
+      ],
+      "prompt_integration": "For trauma integration phase AFTER processing is complete. Frame growth as natural emergence from adversity, not minimizing pain. Acknowledge wound while recognizing strength/wisdom it revealed. Use phoenix, broken-open, light-through-cracks metaphors. Connect to meaning-making and purpose."
+    },
+    {
+      "id": "attention-direction",
+      "name": "Attention Direction",
+      "description": "Where you point awareness changes what's real - attention itself as intervention",
+      "core_message": "What you pay attention to grows stronger - your awareness itself is a powerful tool",
+      "when_to_use": ["self-criticism", "rumination", "anxiety loops", "negative focus"],
+      "presenting_issues": ["rumination", "self-criticism", "anxiety", "negative thought loops", "stuck attention"],
+      "key_language": [
+        "What you pay attention to becomes your reality",
+        "Redirecting the spotlight of your mind",
+        "Not fighting the critic - simply turning your attention elsewhere",
+        "Where awareness goes, energy flows",
+        "Your attention is a choice, a tool, a power",
+        "The spotlight shifting from criticism to appreciation",
+        "Not suppressing thoughts - simply choosing where to look"
+      ],
+      "mechanism": {
+        "step_1": "Notice where attention is currently stuck (criticism, worry, rumination)",
+        "step_2": "Recognize attention itself as movable, not fixed",
+        "step_3": "Practice redirecting to neutral or positive stimuli",
+        "step_4": "Strengthen new attention pathways through repetition"
+      },
+      "prompt_integration": "Frame attention as a flashlight or spotlight that can be redirected. Not suppression or denial - conscious choice of where to place awareness. Use shifting, turning, redirecting language. Practice pointing attention away from rumination toward present sensory experience or positive focus. Emphasize: you're not changing reality, you're choosing what to notice."
+    },
+    {
+      "id": "boundary-reframing",
+      "name": "Boundary Reframing",
+      "description": "Boundaries as LOVE and CARE, not rejection or meanness",
+      "core_message": "Your 'no' to them is a 'yes' to yourself - boundaries are an act of love, not rejection",
+      "when_to_use": ["people-pleasing", "codependency", "boundary struggles", "guilt around saying no"],
+      "presenting_issues": ["people-pleasing", "can't say no", "codependency", "guilt", "boundary violation", "resentment"],
+      "key_language": [
+        "Your 'no' is not meanness - it's self-respect",
+        "Boundaries are love in action, protection for both of you",
+        "Saying yes to them when you mean no is saying no to yourself",
+        "Not walls to keep people out - clarity about where you end and they begin",
+        "Permission to care for yourself without guilt",
+        "Healthy boundaries, healthy relationships",
+        "Your needs matter just as much as theirs"
+      ],
+      "reframe_sequence": [
+        {
+          "old_belief": "Saying no is selfish/mean/rejecting",
+          "new_belief": "Saying no is honest, respectful, and necessary for authentic connection"
+        },
+        {
+          "old_belief": "I have to sacrifice myself to be good/loved",
+          "new_belief": "Healthy relationships require two whole people, not one martyr"
+        },
+        {
+          "old_belief": "Boundaries create distance",
+          "new_belief": "Boundaries create clarity, safety, and genuine intimacy"
+        }
+      ],
+      "prompt_integration": "Reframe boundaries as love, not rejection. Address guilt directly - saying yes when you mean no is dishonest and breeds resentment. Frame 'no' as self-respect and clarity. Use fence metaphors (clear property lines), 'yes to yourself' language. Emphasize: healthy relationships need two whole people with clear boundaries, not enmeshment."
+    },
+    {
+      "id": "forgiveness-protocol",
+      "name": "Forgiveness Protocol",
+      "description": "Releasing resentment without requiring reconciliation",
+      "core_message": "Forgiveness is for you, not them - releasing the weight you've been carrying",
+      "when_to_use": ["betrayal", "past hurts", "family wounds", "resentment", "holding grudges"],
+      "presenting_issues": ["resentment", "betrayal", "past hurts", "family wounds", "can't let go", "holding grudges"],
+      "key_language": [
+        "Forgiveness doesn't mean what they did was okay",
+        "You're not forgiving them - you're freeing yourself",
+        "Releasing the poison you've been drinking, hoping it would hurt them",
+        "Forgiveness without reconciliation - you can release without reconnecting",
+        "Not forgetting, not condoning - simply putting down the weight",
+        "The burden of resentment, yours to release when ready",
+        "Choosing your own peace over their punishment"
+      ],
+      "forgiveness_steps": [
+        {
+          "step": "acknowledge_harm",
+          "description": "Validate that real harm occurred",
+          "language": "What they did was real, the pain was real, your hurt is valid"
+        },
+        {
+          "step": "recognize_weight",
+          "description": "Notice the cost of carrying resentment",
+          "language": "And notice the weight of this resentment - what it costs you to carry it"
+        },
+        {
+          "step": "separate_forgiveness_reconciliation",
+          "description": "Forgiveness doesn't require relationship",
+          "language": "You can release the resentment without letting them back in. Forgiveness is for you."
+        },
+        {
+          "step": "release",
+          "description": "Let go of the emotional burden",
+          "language": "Putting down this weight you've been carrying. Not for them. For you."
+        }
+      ],
+      "prompt_integration": "Distinguish forgiveness from reconciliation - you can forgive without relationship. Frame as releasing burden for own peace, not absolution for offender. Validate harm while encouraging release of resentment. Use 'putting down weight', 'drinking poison hoping it hurts them' metaphors. Emphasize: forgiveness is selfish in the best way - for your freedom."
+    },
+    {
+      "id": "shame-dissolution",
+      "name": "Shame Dissolution",
+      "description": "Core self-worth beneath 'I AM bad' shame - different from 'I DID bad' guilt",
+      "core_message": "Guilt says 'I did something bad' - shame says 'I AM bad'. One is true sometimes. The other is never true.",
+      "when_to_use": ["deep shame", "abuse survivors", "addiction recovery", "core unworthiness"],
+      "presenting_issues": ["shame", "feeling fundamentally flawed", "unworthiness", "self-hatred", "abuse aftermath", "addiction recovery"],
+      "key_language": [
+        "Shame whispers 'I am bad' - but that voice is a liar",
+        "You did something regrettable - but you are not the mistake",
+        "Beneath the shame, your inherent worth, unchanged, unshakeable",
+        "The difference between 'I made a mistake' and 'I am a mistake' - worlds apart",
+        "Shame is the lie. Your worth is the truth.",
+        "Not fixing yourself - recognizing you were never broken",
+        "The part of you shame can't touch - your core goodness, always there"
+      ],
+      "shame_vs_guilt": {
+        "guilt": {
+          "message": "I did something bad",
+          "function": "Healthy - guides moral behavior, leads to repair",
+          "response": "Acknowledge, make amends, learn, move forward"
+        },
+        "shame": {
+          "message": "I AM bad - fundamentally flawed",
+          "function": "Toxic - disconnects from self and others",
+          "response": "Recognize as false, return to core worth"
+        }
+      },
+      "dissolution_process": [
+        {
+          "step": "distinguish",
+          "language": "Notice the difference - 'I did bad' versus 'I AM bad'. One is sometimes true. The other is always false."
+        },
+        {
+          "step": "return_to_core",
+          "language": "Beneath every mistake, every failing, your core worth - unchanged, untouchable"
+        },
+        {
+          "step": "compassion",
+          "language": "The kindness you'd show a child who made a mistake - offering that to yourself"
+        },
+        {
+          "step": "reconnection",
+          "language": "Shame isolates. Worth connects. Returning to your belonging, your fundamental okay-ness"
+        }
+      ],
+      "prompt_integration": "Distinguish shame (I AM bad) from guilt (I DID bad). Frame shame as false message, not truth. Return to core worth beneath all mistakes. Use 'shame is the liar' language. Emphasize: you can acknowledge wrongdoing without believing you're fundamentally flawed. Connect to inherent worth, belonging, basic goodness."
+    },
+    {
+      "id": "internal-sanctuary",
+      "name": "Internal Sanctuary Creation",
+      "description": "Create felt sense of being nourished, held, and protected from within",
+      "core_message": "Your body can feel held and resourced from the inside, creating permission to soften and rest",
+      "when_to_use": ["depletion", "burnout", "running on empty", "hypervigilance", "nervous system dysregulation"],
+      "presenting_issues": ["exhaustion", "can't rest", "always on alert", "feeling empty", "nervous system dysregulation", "insomnia from depletion", "running on fumes"],
+      "key_language": [
+        "Nourished from within",
+        "A protective layer, gentle coating",
+        "Held from the inside",
+        "Your body recognizing: I'm fed, I'm safe",
+        "Permission to soften now",
+        "Not empty, but full, resourced",
+        "That signal traveling through your vagus nerve",
+        "Your whole system understanding: I can rest now",
+        "Warm, gentle, protective from your very center",
+        "Not running on fumes, but filled, held, safe"
+      ],
+      "mechanism": {
+        "step_1": "Create visceral sensation of internal nourishment/coating/warmth",
+        "step_2": "Body interprets as 'I'm being taken care of'",
+        "step_3": "Vagus nerve receives safety signal",
+        "step_4": "Nervous system downregulates - permission to soften",
+        "result": "Rest becomes possible because body feels resourced, not empty"
+      },
+      "metaphor_library": [
+        {
+          "name": "Protective Coating",
+          "concept": "Gentle layer in belly protecting and nourishing from within",
+          "key_elements": ["coating", "warmth", "protection", "belly", "held from inside"]
+        },
+        {
+          "name": "Inner Well Filling",
+          "concept": "Empty well being filled with warm, nourishing water",
+          "key_elements": ["well", "filling", "depth", "nourishment", "satiation"]
+        },
+        {
+          "name": "Core Warmth",
+          "concept": "Gentle heat radiating from center outward, softening everything",
+          "key_elements": ["warmth", "radiating", "center", "softening", "melting"]
+        },
+        {
+          "name": "Internal Embrace",
+          "concept": "Being held gently from the inside, cradled by own body",
+          "key_elements": ["embrace", "held", "cradled", "safety", "internal holding"]
+        }
+      ],
+      "prompt_integration": "Create vivid somatic experience of internal nourishment - warmth, coating, protective layer in belly/core. Link this physical sensation explicitly to vagus nerve signaling and nervous system downregulation. Emphasize body's recognition of being 'taken care of' which creates permission to soften and rest. Use slow, sensory-rich language. Especially powerful for depleted clients who can't rest because they feel 'empty' or 'running on fumes'. This addresses the body's deep need to feel RESOURCED before it can rest."
     }
   ],
   "dream_arcs": [
