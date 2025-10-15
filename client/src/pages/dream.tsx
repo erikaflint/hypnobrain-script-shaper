@@ -64,7 +64,7 @@ export default function Dream() {
 
   // NEW: Shape story mutation (Step 1)
   const shapeStory = useMutation({
-    mutationFn: async (data: { journeyIdea: string; archetypeId?: number }) => {
+    mutationFn: async (data: { journeyIdea: string; archetypeId?: number; arcId?: string }) => {
       return await apiRequest('/api/shape-dream-story', {
         method: 'POST',
         body: JSON.stringify(data),
@@ -101,7 +101,7 @@ export default function Dream() {
 
   // Generate DREAM script mutation (Step 2)
   const generateDreamScript = useMutation({
-    mutationFn: async (data: { journeyIdea: string; expandedStory?: string; archetypeId?: number }) => {
+    mutationFn: async (data: { journeyIdea: string; expandedStory?: string; archetypeId?: number; arcId?: string }) => {
       return await apiRequest('/api/generate-dream-script', {
         method: 'POST',
         body: JSON.stringify(data),
