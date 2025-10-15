@@ -823,6 +823,77 @@
         "allow_inspiration": "In rest, the next knowing comes"
       },
       "prompt_integration": "Use after major success or breakthrough, especially with achievers/strivers who immediately look for next challenge. Validates BOTH the drive (divine spark, growth desire) AND the need for rest/integration. Prevents burnout while honoring ambition. Creates permission for cyclical rhythm rather than perpetual pushing. Particularly powerful for spiritual clients who understand 'divine spark' language, but can be framed secularly as 'natural growth drive.' Emphasize: the next inspiration COMES in rest, not in forcing."
+    },
+    {
+      "id": "taking-to-heart",
+      "name": "Taking to Heart (Somatic Integration)",
+      "description": "Moving wisdom from brain (cognitive) to heart (embodied integration) where it truly transforms",
+      "strategic_move": "Heart as sanctuary that ABSORBS and integrates wisdom deeper than mental understanding",
+      "core_message": "Take it to heart. Let your heart absorb this wisdom, integrate it deeper than thought alone.",
+      "when_to_use": ["after_insights", "integration_needed", "cognitive_to_somatic", "embodied_change"],
+      "presenting_issues": ["intellectual_understanding_but_no_change", "stuck_in_head", "knowing_vs_being"],
+      "mechanism": {
+        "acknowledge_brain": "Brain understands, processes, computes",
+        "shift_to_heart": "Heart absorbs, integrates, embodies",
+        "somatic_integration": "Sinks down into heart, changes you from within",
+        "barrier_removal": "Removes barrier between knowing and being"
+      },
+      "key_language": [
+        "Take it to heart",
+        "Heart absorbing this wonderful information",
+        "Brain is the computer, heart does it differently",
+        "Sinks right down into heart",
+        "Changes you by removing the barrier between knowing and being",
+        "Heart as sanctuary, absorbing what resonates",
+        "Deeper than mental understanding",
+        "Embodied integration, felt in the heart",
+        "Not just thinking it - feeling it, being it"
+      ],
+      "prompt_integration": "Move wisdom from cognitive to somatic. Brain processes, heart integrates. Use language of 'sinking down into heart', 'absorbing', 'embodied'. Heart selectively absorbs what resonates, releases what doesn't. Creates felt change, not just intellectual agreement. Particularly powerful after insights or realizations - this moves them from head to heart to truly transform.",
+      "differs_from": {
+        "recognition": "Recognition is ego strengthening. Taking to Heart is somatic integration.",
+        "re-minding": "Re-minding is remembering. Taking to Heart is embodying."
+      },
+      "pairs_well_with": ["recognition-ego-strengthening", "mind-body-unity", "emotional-physical-chain"],
+      "critical_note": "About SOMATIC integration - heart absorbs wisdom deeper than mental understanding. Not just knowing - BEING. Heart as sanctuary that selectively integrates. Creates embodied change vs cognitive agreement."
+    },
+    {
+      "id": "aversion-installation",
+      "name": "Aversion Installation (Drain the Appeal)",
+      "description": "Visual/sensory diminishment makes unwanted thing lose color, become fuzzy, distant, unappealing",
+      "strategic_move": "Don't fight the urge - drain ALL appeal from the object itself",
+      "core_message": "Let it lose its appeal. Color draining out, fuzzy, distant, not actually appealing anymore.",
+      "when_to_use": ["unwanted_habits", "cravings", "addictions", "compulsions", "food_issues"],
+      "presenting_issues": ["smoking", "overeating", "food_cravings", "unwanted_behaviors", "substance_use"],
+      "mechanism": {
+        "visual_diminishment": "Color drains out, becomes black and white, fuzzy",
+        "distance_installation": "Gets pushed far away, smaller, distant",
+        "appeal_removal": "Not actually appealing anymore, at all",
+        "sensory_reduction": "Loses texture, vibrancy, attraction"
+      },
+      "key_language": [
+        "Color drains right out, black and white now",
+        "Gets fuzzy, pushed far away",
+        "Not actually appealing anymore, at all",
+        "That cigarette, extra food, [unwanted thing] - losing its color",
+        "Becoming distant, small, uninteresting",
+        "All appeal draining away",
+        "Fuzzy, grey, unappealing",
+        "You see it clearly now - not appealing at all"
+      ],
+      "prompt_integration": "Classic NLP submodality shift pattern. Target the OBJECT, not the person. Drain color (black/white), reduce clarity (fuzzy), increase distance (far away), diminish size (small). The thing itself loses ALL appeal. Different from willpower or fighting urge - this makes the thing BORING and unappealing at sensory level. Particularly effective for food, smoking, substances. Use vivid sensory language of diminishment.",
+      "differs_from": {
+        "honoring": "Honoring validates the thing. Aversion drains its appeal.",
+        "releasing": "Releasing lets go. Aversion makes it actively unappealing.",
+        "brain-master-skill": "Brain Master is about forgetting/learning. Aversion is sensory diminishment."
+      },
+      "caution": {
+        "target_the_object": "Drain appeal from the OBJECT (food, cigarette), not the person",
+        "not_shaming": "Not about shame or willpower - about sensory diminishment",
+        "complete_drain": "Must drain ALL appeal - partial won't work"
+      },
+      "pairs_well_with": ["brain-master-skill", "signal-decoding", "earned-delight"],
+      "critical_note": "Classic NLP aversion pattern - visual/sensory DIMINISHMENT of unwanted object. Color drains, becomes fuzzy/distant/small/unappealing. Different from fighting urge - this drains the appeal itself. Makes thing BORING at sensory level."
     }
   ],
   "dream_arcs": [
@@ -1328,40 +1399,43 @@
     "always_include": ["effortlessness", "re-minding", "two-tempos"],
     "issue_mappings": {
       "anxiety": ["emotional-physical-chain", "effortlessness", "mind-body-unity", "attention-direction", "energy-reclamation", "overprotector-promotion"],
-      "confidence": ["recognition-ego-strengthening", "resource-activation", "playful-learning", "upward-spiral"],
+      "confidence": ["recognition-ego-strengthening", "resource-activation", "playful-learning", "upward-spiral", "taking-to-heart"],
       "stuck": ["relief-to-new-life", "two-tempos", "future-self", "earned-delight", "open-future", "the-seeker"],
-      "habits": ["brain-master-skill", "effortlessness", "playful-learning", "upward-spiral"],
-      "trauma": ["emotional-physical-chain", "two-tempos", "parts-integration", "oasis-rest", "post-traumatic-growth", "energy-reclamation", "overprotector-promotion"],
-      "self-worth": ["recognition-ego-strengthening", "resource-activation", "shame-dissolution"],
-      "life-change": ["relief-to-new-life", "future-self", "open-future"],
+      "habits": ["brain-master-skill", "effortlessness", "playful-learning", "upward-spiral", "aversion-installation"],
+      "trauma": ["emotional-physical-chain", "two-tempos", "parts-integration", "oasis-rest", "post-traumatic-growth", "energy-reclamation", "overprotector-promotion", "taking-to-heart"],
+      "self-worth": ["recognition-ego-strengthening", "resource-activation", "shame-dissolution", "taking-to-heart"],
+      "life-change": ["relief-to-new-life", "future-self", "open-future", "taking-to-heart"],
       "chronic-pain": ["mind-body-unity", "emotional-physical-chain", "signal-decoding", "energy-reclamation"],
-      "internal-conflict": ["parts-integration"],
+      "internal-conflict": ["parts-integration", "taking-to-heart"],
       "confusion": ["inner-wisdom", "future-self", "no-clarity", "open-future"],
       "overwhelm": ["resource-activation", "mind-body-unity", "no-clarity", "absurdity-grace"],
-      "disconnection": ["sensory-amplification", "mind-body-unity"],
+      "disconnection": ["sensory-amplification", "mind-body-unity", "taking-to-heart"],
       "perfectionism": ["playful-learning", "effortlessness", "two-tempos", "open-future", "the-seeker"],
       "learning-blocks": ["playful-learning", "re-minding", "brain-master-skill"],
-      "weight-loss": ["earned-delight", "brain-master-skill", "signal-decoding"],
+      "weight-loss": ["earned-delight", "brain-master-skill", "signal-decoding", "aversion-installation"],
       "exhaustion": ["oasis-rest", "two-tempos", "internal-sanctuary", "energy-reclamation"],
       "burnout": ["oasis-rest", "relief-to-new-life", "internal-sanctuary", "self-actualization-cycle"],
       "crisis": ["oasis-rest", "two-tempos"],
-      "emotional-eating": ["signal-decoding", "parts-integration", "brain-master-skill"],
+      "emotional-eating": ["signal-decoding", "parts-integration", "brain-master-skill", "aversion-installation"],
       "rumination": ["attention-direction", "mind-body-unity", "playful-learning"],
       "people-pleasing": ["boundary-reframing", "parts-integration", "recognition-ego-strengthening", "absurdity-grace"],
-      "codependency": ["boundary-reframing", "parts-integration"],
+      "codependency": ["boundary-reframing", "parts-integration", "taking-to-heart"],
       "resentment": ["forgiveness-protocol", "emotional-physical-chain", "energy-reclamation", "absurdity-grace"],
-      "shame": ["shame-dissolution", "recognition-ego-strengthening", "parts-integration"],
+      "shame": ["shame-dissolution", "recognition-ego-strengthening", "parts-integration", "taking-to-heart"],
       "depletion": ["internal-sanctuary", "oasis-rest", "resource-activation", "energy-reclamation"],
       "hypervigilance": ["internal-sanctuary", "emotional-physical-chain", "oasis-rest", "overprotector-promotion"],
-      "family-trauma": ["cycle-breaker", "ancestral-healing", "post-traumatic-growth"],
-      "generational-patterns": ["cycle-breaker", "ancestral-healing"],
-      "post-breakthrough": ["energy-reclamation", "open-future", "upward-spiral", "humor-as-healing"],
+      "family-trauma": ["cycle-breaker", "ancestral-healing", "post-traumatic-growth", "taking-to-heart"],
+      "generational-patterns": ["cycle-breaker", "ancestral-healing", "taking-to-heart"],
+      "post-breakthrough": ["energy-reclamation", "open-future", "upward-spiral", "humor-as-healing", "taking-to-heart"],
       "achievement-restlessness": ["self-actualization-cycle", "open-future"],
-      "spiritual-growth": ["ancestral-healing", "self-actualization-cycle"],
+      "spiritual-growth": ["ancestral-healing", "self-actualization-cycle", "taking-to-heart"],
       "post-success": ["self-actualization-cycle", "upward-spiral", "open-future"],
       "boredom": ["the-seeker", "playful-learning", "earned-delight"],
       "creative-blocks": ["the-seeker", "playful-learning", "open-future"],
-      "workplace-difficulties": ["absurdity-grace", "boundary-reframing"]
+      "workplace-difficulties": ["absurdity-grace", "boundary-reframing"],
+      "smoking": ["aversion-installation", "brain-master-skill", "parts-integration"],
+      "substance-use": ["aversion-installation", "signal-decoding", "parts-integration"],
+      "cravings": ["aversion-installation", "signal-decoding", "earned-delight"]
     },
     "max_arcs_per_script": 5,
     "priority_order": ["always_include", "issue_specific", "template_preferred"]
