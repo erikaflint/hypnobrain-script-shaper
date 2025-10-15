@@ -615,12 +615,12 @@ export default function AppV2() {
                       Manual selection - overrides auto-selection
                     </span>
                   </Label>
-                  <Select value={selectedArcId} onValueChange={setSelectedArcId}>
+                  <Select value={selectedArcId || "auto"} onValueChange={(value) => setSelectedArcId(value === "auto" ? "" : value)}>
                     <SelectTrigger id="arc-selection" data-testid="select-narrative-arc">
                       <SelectValue placeholder="Auto-select based on issue (recommended)" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="" data-testid="arc-option-auto">
+                      <SelectItem value="auto" data-testid="arc-option-auto">
                         Auto-select based on issue (recommended)
                       </SelectItem>
                       {narrativeArcs.map((arc: any) => (

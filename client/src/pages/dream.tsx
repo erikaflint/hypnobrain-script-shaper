@@ -294,15 +294,15 @@ export default function Dream() {
                     </span>
                   </Label>
                   <Select 
-                    value={selectedArcId} 
-                    onValueChange={setSelectedArcId}
+                    value={selectedArcId || "auto"} 
+                    onValueChange={(value) => setSelectedArcId(value === "auto" ? "" : value)}
                     disabled={shapeStory.isPending}
                   >
                     <SelectTrigger id="arc-selection" data-testid="select-dream-arc">
                       <SelectValue placeholder="Auto-select based on journey (recommended)" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="" data-testid="arc-option-auto">
+                      <SelectItem value="auto" data-testid="arc-option-auto">
                         Auto-select based on journey (recommended)
                       </SelectItem>
                       {narrativeArcs.map((arc: any) => (
