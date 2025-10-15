@@ -12,6 +12,7 @@
 
 import { StrategyPlanner, type GenerationContract, type PlannerInput } from './strategy-planner';
 import { PrincipleEnforcer, type PrincipleDirectives, type EnforcerInput } from './principle-enforcer';
+import type { ArcJourney } from '@shared/schema';
 
 export interface ScriptEngineInput {
   // Client context
@@ -21,6 +22,10 @@ export interface ScriptEngineInput {
   
   // Manual arc selection (overrides auto-selection if provided)
   arcId?: string; // e.g., "earned-delight", "oasis-rest"
+  
+  // Arc Journey (multi-stage scripts)
+  arcJourney?: ArcJourney;
+  targetWordCount?: number; // For journey word distribution
   
   // Template context (from TemplateSelector)
   templatePreferredArcs?: string[];
@@ -84,7 +89,10 @@ export class ScriptEngine {
       manualArcId: input.arcId, // Manual arc selection (overrides auto-selection)
       templatePreferredArcs: input.templatePreferredArcs,
       templateFallbackArcs: input.templateFallbackArcs,
-      symbolicDimensionLevel: input.symbolicDimensionLevel || 30
+      symbolicDimensionLevel: input.symbolicDimensionLevel || 30,
+      // Journey parameters
+      arcJourney: input.arcJourney,
+      targetWordCount: input.targetWordCount
     };
 
     const generationContract = await this.planner.plan(plannerInput);
@@ -142,12 +150,42 @@ export class ScriptEngine {
   ): string {
     let prompt = principles.systemPrompt + '\n\n';
 
-    prompt += '## NARRATIVE ARCS FOR THIS SCRIPT\n\n';
-    prompt += 'Weave the following narrative arcs into the script:\n\n';
+    // Check if this is a multi-stage Arc Journey
+    if (contract.isJourney && contract.journeyStages) {
+      const totalTarget = contract.journeyStages[contract.journeyStages.length - 1]?.cumulativeWordTarget || 2000;
+      
+      prompt += '## MULTI-STAGE ARC JOURNEY\n\n';
+      prompt += `This is a ${contract.journeyStages.length}-stage therapeutic journey. Each stage moves the client through a specific transformation with allocated word budget.\n\n`;
+      prompt += `**TOTAL SCRIPT TARGET: ~${totalTarget} words total** - Stay within this limit.\n\n`;
+      prompt += '**CRITICAL**: Maintain smooth narrative flow between stages with seamless transitions. Each stage builds on the previous.\n\n';
+      
+      for (let i = 0; i < contract.journeyStages.length; i++) {
+        const stage = contract.journeyStages[i];
+        prompt += `### STAGE ${i + 1}: ${stage.arcName}\n`;
+        prompt += `- Word Budget: ~${stage.wordBudget} words (${stage.weight}% of script)\n`;
+        prompt += `- Cumulative Target: ${stage.cumulativeWordTarget} words by end of this stage\n`;
+        if (stage.transitionGoal) {
+          prompt += `- Transition Goal: ${stage.transitionGoal}\n`;
+        }
+        prompt += `- Key Language: ${stage.keyLanguage.slice(0, 3).join('; ')}\n`;
+        prompt += `- Integration: ${stage.promptIntegration}\n\n`;
+      }
+      
+      prompt += '**Journey Flow Instructions:**\n';
+      prompt += '1. Begin with Stage 1 and write until you reach its cumulative word target\n';
+      prompt += '2. Transition to the next stage when cumulative target is reached - use organic phrases like "And now...", "As you move deeper...", "This opens the way to..."\n';
+      prompt += '3. Track your progress: check word count at each stage boundary\n';
+      prompt += `4. Final stage should conclude near ${totalTarget} words and lead naturally into emergence/awakening\n`;
+      prompt += `5. **STAY WITHIN TOTAL TARGET**: Do not exceed ${totalTarget} words for the complete script\n\n`;
+    } else {
+      // Standard single-arc or multi-arc (non-journey) script
+      prompt += '## NARRATIVE ARCS FOR THIS SCRIPT\n\n';
+      prompt += 'Weave the following narrative arcs into the script:\n\n';
 
-    for (const arc of contract.selectedArcs) {
-      prompt += `**${arc.arcName}**: ${arc.promptIntegration}\n`;
-      prompt += `Key language: ${arc.keyLanguage.slice(0, 3).join('; ')}\n\n`;
+      for (const arc of contract.selectedArcs) {
+        prompt += `**${arc.arcName}**: ${arc.promptIntegration}\n`;
+        prompt += `Key language: ${arc.keyLanguage.slice(0, 3).join('; ')}\n\n`;
+      }
     }
 
     if (contract.primaryMetaphor) {

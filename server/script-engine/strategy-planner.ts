@@ -36,7 +36,9 @@ export interface JourneyStage {
   transitionGoal?: string;
   reason: string;
   keyLanguage: string[];
+  promptIntegration: string; // How to integrate this arc into the script
   wordBudget?: number; // Calculated word count for this stage
+  cumulativeWordTarget?: number; // Total words up to and including this stage
 }
 
 export interface MetaphorSelection {
@@ -352,16 +354,18 @@ export class StrategyPlanner {
     reasoningLog.push(`Detected issues: ${detectedIssues.join(', ') || 'none specific'}`);
     
     // Build journey stages with word distribution
+    let cumulativeWords = 0;
     const journeyStages: JourneyStage[] = journey.stages.map((stage, index) => {
       const arc = this.narrativeArcs.find((a: any) => a.id === stage.arcId);
       const arcName = arc?.name || stage.arcId;
       const wordBudget = Math.round((stage.weight / 100) * targetWordCount);
+      cumulativeWords += wordBudget;
       
       const reason = stage.transitionGoal 
         ? `Stage ${index + 1}: ${stage.transitionGoal}`
         : `Stage ${index + 1} (${stage.weight}% of script)`;
       
-      reasoningLog.push(`  - ${arcName} (${stage.weight}%, ${wordBudget} words): ${stage.transitionGoal || 'no specific transition'}`);
+      reasoningLog.push(`  - ${arcName} (${stage.weight}%, ${wordBudget} words, cumulative: ${cumulativeWords}): ${stage.transitionGoal || 'no specific transition'}`);
       
       return {
         arcId: stage.arcId,
@@ -370,7 +374,9 @@ export class StrategyPlanner {
         transitionGoal: stage.transitionGoal,
         reason,
         keyLanguage: arc?.key_language || [],
+        promptIntegration: arc?.prompt_integration || `Weave ${arcName} naturally into this stage`,
         wordBudget,
+        cumulativeWordTarget: cumulativeWords,
       };
     });
     
