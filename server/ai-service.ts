@@ -36,6 +36,7 @@ export interface TemplateScriptGenerationParams {
   presentingIssue: string;
   desiredOutcome: string;
   clientNotes?: string;
+  arcId?: string; // Optional manual narrative arc selection (e.g., "earned-delight", "oasis-rest")
   emergenceType?: 'regular' | 'sleep'; // How to bring them out of trance
   targetWordCount?: number; // Default 1500-2000 for regular, 3000+ for DREAM
 }
@@ -180,7 +181,8 @@ Format as JSON:
       somaticDimensionLevel: params.template.dimensions.somatic.level,
       clientLevel: 'intermediate', // Full scripts assume some experience
       targetTranceDep: 'medium',
-      emergenceType: emergenceType
+      emergenceType: emergenceType,
+      arcId: params.arcId // Optional manual arc selection
     });
     
     // Step 3: Combine both into enhanced prompts

@@ -19,6 +19,9 @@ export interface ScriptEngineInput {
   desiredOutcome: string;
   clientNotes?: string;
   
+  // Manual arc selection (overrides auto-selection if provided)
+  arcId?: string; // e.g., "earned-delight", "oasis-rest"
+  
   // Template context (from TemplateSelector)
   templatePreferredArcs?: string[];
   templateFallbackArcs?: string[];
@@ -78,6 +81,7 @@ export class ScriptEngine {
       presentingIssue: input.presentingIssue,
       desiredOutcome: input.desiredOutcome,
       clientNotes: input.clientNotes,
+      manualArcId: input.arcId, // Manual arc selection (overrides auto-selection)
       templatePreferredArcs: input.templatePreferredArcs,
       templateFallbackArcs: input.templateFallbackArcs,
       symbolicDimensionLevel: input.symbolicDimensionLevel || 30

@@ -35,6 +35,7 @@ export interface PlannerInput {
   presentingIssue: string;
   desiredOutcome: string;
   clientNotes?: string;
+  manualArcId?: string; // Manual arc selection (overrides auto-selection if provided)
   templatePreferredArcs?: string[];
   templateFallbackArcs?: string[];
   symbolicDimensionLevel?: number;
@@ -57,6 +58,40 @@ export class StrategyPlanner {
   public async plan(input: PlannerInput): Promise<GenerationContract> {
     const reasoningLog: string[] = [];
     
+    // Check for manual arc selection first (overrides auto-selection)
+    if (input.manualArcId) {
+      reasoningLog.push(`MANUAL ARC SELECTION: ${input.manualArcId}`);
+      const arc = this.narrativeArcs.find((a: any) => a.id === input.manualArcId);
+      if (!arc) {
+        reasoningLog.push(`WARNING: Manual arc "${input.manualArcId}" not found, falling back to auto-selection`);
+      } else {
+        // Include foundation arcs + manual arc only
+        const alwaysIncludeArcs = this.arcSelectionRules.always_include;
+        const finalArcs = [...alwaysIncludeArcs, input.manualArcId];
+        const detectedIssues = this.detectIssues(input.presentingIssue, input.clientNotes);
+        
+        reasoningLog.push(`Using manual arc with foundation arcs: ${finalArcs.join(', ')}`);
+        
+        const selectedArcs = finalArcs.map(arcId => this.buildArcDetails(arcId, detectedIssues));
+        const primaryMetaphor = this.selectMetaphor(
+          detectedIssues,
+          input.symbolicDimensionLevel || 0
+        );
+        
+        if (primaryMetaphor) {
+          reasoningLog.push(`Primary metaphor: ${primaryMetaphor.family} (${primaryMetaphor.reason})`);
+        }
+        
+        return {
+          selectedArcs,
+          primaryMetaphor,
+          arcPriority: finalArcs,
+          reasoningLog
+        };
+      }
+    }
+    
+    // Auto-selection logic (when no manual arc provided)
     // Step 1: Always include foundation arcs
     const alwaysIncludeArcs = this.arcSelectionRules.always_include;
     reasoningLog.push(`Including foundation arcs: ${alwaysIncludeArcs.join(', ')}`);

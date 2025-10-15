@@ -41,6 +41,7 @@ scriptGeneratorRouter.post('/clinical',
         archetypeId: z.number().optional(), // Narrative archetype
         styleId: z.number().optional(), // Writing style
         templateId: z.number().optional(), // Direct template selection (overrides auto-recommendation)
+        arcId: z.string().optional(), // Optional narrative arc selection (e.g., "earned-delight", "oasis-rest")
         emergenceType: z.enum(['regular', 'sleep']).optional().default('regular'),
         targetWordCount: z.number().optional().default(1800),
       });
@@ -127,6 +128,7 @@ scriptGeneratorRouter.post('/clinical',
         presentingIssue: data.presentingIssue,
         desiredOutcome: data.desiredOutcome,
         clientNotes: data.additionalNotes,
+        arcId: data.arcId, // Optional manual arc selection
         emergenceType: data.emergenceType,
         targetWordCount: data.targetWordCount,
       });
@@ -183,6 +185,7 @@ scriptGeneratorRouter.post('/dream',
       const schema = z.object({
         journeyIdea: z.string().min(20, 'Journey idea must be at least 20 characters'),
         archetypeId: z.number().optional(),
+        arcId: z.string().optional(), // Optional DREAM narrative arc selection
         targetWordCount: z.number().optional().default(3000),
       });
 
@@ -261,6 +264,7 @@ scriptGeneratorRouter.post('/dream',
         template: dreamTemplate,
         presentingIssue: data.journeyIdea,
         desiredOutcome: "Experience a peaceful, restful journey into natural sleep",
+        arcId: data.arcId, // Optional manual arc selection for DREAM
         emergenceType: 'sleep',
         targetWordCount: data.targetWordCount,
       });

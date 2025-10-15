@@ -99,6 +99,39 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get all narrative arcs
+  app.get("/api/narrative-arcs", async (req, res) => {
+    try {
+      const { getAllNarrativeArcs } = await import("./script-engine/narrative-arc-loader");
+      const arcs = getAllNarrativeArcs();
+      res.json(arcs);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Get clinical narrative arcs only
+  app.get("/api/narrative-arcs/clinical", async (req, res) => {
+    try {
+      const { getClinicalArcs } = await import("./script-engine/narrative-arc-loader");
+      const arcs = getClinicalArcs();
+      res.json(arcs);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Get DREAM narrative arcs only
+  app.get("/api/narrative-arcs/dream", async (req, res) => {
+    try {
+      const { getDreamArcs } = await import("./script-engine/narrative-arc-loader");
+      const arcs = getDreamArcs();
+      res.json(arcs);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
   // Get authenticated user's saved generations
   app.get("/api/user/generations", isAuthenticated, async (req: any, res) => {
     try {
