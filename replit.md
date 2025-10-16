@@ -37,20 +37,26 @@ To prevent quality degradation and ensure consistency, DREAM scripts pass throug
 
 **Key Innovation**: Separation of concerns prevents the "50% degradation problem" where AI trying to do everything (plan + write + variety + quality) resulted in generic content. Each stage focuses on ONE job, with explicit "PRESERVE ALL details" instructions to maintain historical/contextual integrity.
 
+**Scaled Quality Thresholds**: Quality validation adapts to script length for fair assessment:
+- **Functional Suggestions**: Scales at ~1 per 200 words (1500w→8 min, 2000w→10 min, 3000w→15 min)
+- **Word Count Tolerance**: ±15% of target word count for all lengths
+- **Pattern Thresholds**: Fixed relative frequencies (independent of length) to catch repetitive openers
+
 **Metaphor Usage Guidelines**: To prevent metaphor overload, the system now enforces strict frequency limits:
 - ScriptEngine explicitly instructs AI to use metaphors 5-7 times maximum (not "throughout")
 - Symbolic Dimension levels specify exact metaphor counts (HEAVY: 6-8, MODERATE: 4-6, LIGHT: 2-3)
 - Quality Guard validates metaphor frequency and fails scripts with 10+ metaphor family uses
 - Guideline: "Metaphors should ENHANCE the experience, not dominate it"
 
-**Ego Strengthening Distribution**: To prevent functional improvement "dumps" that break script flow:
-- System selects 3-5 functional improvements maximum (not all categories)
-- Distributed across script: 1 in opening, 1-2 in middle, 1-2 near end
-- Each statement limited to 1-2 sentences, then narrative continues
-- Tied to metaphor when possible: "Like the [metaphor], your nervous system remembers calm"
-- Never dumped as paragraph list - scattered naturally throughout
-- **Quality Guard Enforcement**: Fails if >3 keyword occurrences in one paragraph or >10 total (counts actual occurrences, not unique keywords)
-- Categories: Physical Restoration, Sleep Quality, Cognitive Enhancement, Energy/Vitality, Stress Response
+**Benefit Cascade Pattern (Ego Strengthening)**: Replaces flat benefit lists with causal chains showing transformation through logical connections:
+- **Placement**: Near end of script, after main therapeutic work, before emergence (200-400 words for clinical, 400-600 for DREAM)
+- **Structure**: 5-stage cascade - (1) Anchor in Future Pacing, (2) Build Causal Chain(s), (3) Acknowledge Momentum, (4) Tie to Client's Desired Outcome, (5) Anchor in Present
+- **Core Principle**: Show how changes naturally lead to desired outcome through defensible causal connections
+- **Connecting Phrases**: "And because...", "With that...", "Which means...", "And as...", "As a result..." (creates narrative flow)
+- **Causal Pathways**: Physical (sleep→energy→activity), Mental (clarity→decisions→outcomes), Emotional (self-worth→boundaries→relationships), Behavioral (action→momentum→results), Relational (calm→communication→depth)
+- **Validation Test**: "Could you explain WHY step A leads to step B to a skeptical person?" If no clear mechanism exists, start new chain
+- **Quality Guard**: Validates 3/4 structural elements present, 2+ causal connections, detects flat list indicators (fails if 3+ list markers like "also", "additionally", "furthermore")
+- **Categories Used**: Physical Restoration, Sleep Quality, Cognitive Enhancement, Energy/Vitality, Stress Response (choose ALL relevant to issue)
 
 **Personal Pronouns in Hypnosis (Critical Language Rule)**: "You" and "your" are ESSENTIAL for maintaining personal connection, NOT repetition to avoid!
 - **The Problem Discovered (Oct 2025)**: AI was removing "you/your" and using impersonal commands/passive forms
