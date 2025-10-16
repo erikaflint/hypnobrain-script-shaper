@@ -147,7 +147,7 @@ export class EgoModule {
   private buildCascadeDirectives(input: EgoModuleInput): string[] {
     const directives: string[] = [];
     const cascadeMode = this.config.modes.cascade;
-    const causalPathways = this.config.causal_pathways;
+    const experientialCascades = this.config.experiential_cascades;
     
     // Core instruction
     directives.push('=== BENEFIT CASCADE PATTERN ===');
@@ -156,10 +156,21 @@ export class EgoModule {
     directives.push(`TARGET: ${cascadeMode.target_words[0]}-${cascadeMode.target_words[1]} words`);
     directives.push('');
     
-    // Core principle
-    directives.push('CORE PRINCIPLE:');
-    directives.push('Replace flat benefit lists with causal cascades showing how changes naturally lead to desired outcome.');
-    directives.push('Creates narrative of transformation unfolding through logical connections.');
+    // Core approach
+    directives.push('LANGUAGE PHILOSOPHY:');
+    directives.push('PAINT SCENES, don\'t explain causality.');
+    directives.push('Client\'s mind is open at script end - they experience benefits in a new way.');
+    directives.push(`APPROACH: ${cascadeMode.approach}`);
+    directives.push('');
+    
+    // Language style
+    directives.push('LANGUAGE STYLE:');
+    directives.push(`PREFER: ${cascadeMode.language_style.prefer}`);
+    directives.push(`AVOID: ${cascadeMode.language_style.avoid}`);
+    directives.push('');
+    directives.push('EXAMPLE:');
+    directives.push(`❌ AVOID: "${cascadeMode.language_style.examples.avoid_explanatory}"`);
+    directives.push(`✅ USE: "${cascadeMode.language_style.examples.use_experiential}"`);
     directives.push('');
     
     // Rules
@@ -169,17 +180,24 @@ export class EgoModule {
     });
     directives.push('');
     
+    // Variation rules
+    directives.push('VARIATION RULES:');
+    cascadeMode.variation_rules.forEach((rule: string) => {
+      directives.push(`- ${rule}`);
+    });
+    directives.push('');
+    
     // Structure
     directives.push('STRUCTURE:');
     directives.push(`1. ANCHOR IN FUTURE PACING: "${cascadeMode.structure.anchor_future}"`);
     directives.push('');
-    directives.push('2. BUILD CAUSAL CHAIN(S) using connecting phrases:');
+    directives.push('2. PAINT VIVID SCENES with sensory details:');
     cascadeMode.connecting_phrases.forEach((phrase: string) => {
       directives.push(`   - "${phrase}"`);
     });
     directives.push('');
     directives.push(`3. ACKNOWLEDGE MOMENTUM: "${cascadeMode.structure.acknowledge_momentum}"`);
-    directives.push('   OR: "All of these changes building on each other, creating momentum."');
+    directives.push('   OR: "One small shift creating the next."');
     directives.push('');
     directives.push(`4. TIE TO CLIENT'S DESIRED OUTCOME: "${cascadeMode.structure.tie_outcome}"`);
     if (input.desiredOutcome) {
@@ -189,26 +207,32 @@ export class EgoModule {
     directives.push(`5. ANCHOR IN PRESENT: "${cascadeMode.structure.anchor_present}"`);
     directives.push('');
     
-    // Causation logic
-    directives.push('CAUSATION LOGIC:');
-    directives.push('Each connection must be logically defensible.');
-    directives.push('Test: Could you explain WHY step A leads to step B to a skeptical person?');
-    directives.push('If no clear mechanism exists, don\'t force them into same chain. Start a new chain.');
+    // Sensory elements
+    directives.push('SENSORY ELEMENTS:');
+    cascadeMode.sensory_elements.forEach((element: string) => {
+      directives.push(`- ${element}`);
+    });
     directives.push('');
     
-    // Valid causal pathways
-    directives.push('VALID CAUSAL PATHWAYS:');
+    // Experiential cascades (scene-based flows)
+    directives.push('EXPERIENTIAL CASCADES (Scene-based flows, not logical chains):');
     directives.push('');
     
-    Object.entries(causalPathways).forEach(([key, pathway]: [string, any]) => {
-      if (key === 'description' || key === 'test') return;
+    Object.entries(experientialCascades).forEach(([key, cascade]: [string, any]) => {
+      if (key === 'description' || key === 'approach') return;
       
       const categoryName = key.split('_').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
       directives.push(`${categoryName}:`);
       
-      if (pathway.examples && pathway.examples.length > 0) {
-        pathway.examples.slice(0, 3).forEach((example: string) => {
-          directives.push(`  ${example}`);
+      if (cascade.scene_examples && cascade.scene_examples.length > 0) {
+        cascade.scene_examples.slice(0, 1).forEach((example: string) => {
+          directives.push(`  ✅ "${example}"`);
+        });
+      }
+      
+      if (cascade.avoid_logical && cascade.avoid_logical.length > 0) {
+        cascade.avoid_logical.slice(0, 1).forEach((example: string) => {
+          directives.push(`  ❌ AVOID: "${example}"`);
         });
       }
       directives.push('');
@@ -240,26 +264,35 @@ export class EgoModule {
       const categoryName = key.split('_').map((w: string) => w.toUpperCase()).join(' ');
       directives.push(`${categoryName}:`);
       
-      if (category.examples && category.examples.length > 0) {
-        category.examples.slice(0, 2).forEach((example: string) => {
-          directives.push(`- ${example}`);
+      // Prefer experiential_examples, fall back to examples
+      const examples = category.experiential_examples || category.examples;
+      if (examples && examples.length > 0) {
+        examples.slice(0, 1).forEach((example: string) => {
+          directives.push(`  ✅ "${example}"`);
+        });
+      }
+      
+      // Show what to avoid
+      if (category.avoid_explanatory && category.avoid_explanatory.length > 0) {
+        category.avoid_explanatory.slice(0, 1).forEach((example: string) => {
+          directives.push(`  ❌ AVOID: "${example}"`);
         });
       }
       directives.push('');
     });
     
-    // Example
-    directives.push('EXAMPLE (Single Chain, 5 benefits):');
+    // Example (Experiential Scene-Setting)
+    directives.push('EXAMPLE (Experiential Scene-Setting):');
     directives.push('');
-    directives.push('Imagine it now. Your sleep deepening as your body learns to release tension completely.');
+    directives.push('Imagine it now. Tonight, when you lay your head down, you might notice your body settling more quickly into rest.');
     directives.push('');
-    directives.push('And because you\'re sleeping better, your mind is clearer during the day. Sharper. More focused.');
+    directives.push('And tomorrow morning, when your feet touch the floor, there\'s energy you haven\'t felt in months. Not forced. Just... there.');
     directives.push('');
-    directives.push('With that clarity, your decisions become easier. You trust your judgment. You move through your day with confidence.');
+    directives.push('Perhaps next time you sit down to work, you\'ll notice the fog isn\'t quite as thick. Your thoughts connecting like they used to, one idea leading naturally to the next.');
     directives.push('');
-    directives.push('Which means your relationships deepen—because you\'re responding from calm presence rather than reactive anxiety.');
+    directives.push('And with that clarity, decisions coming easier. You trust what you know. Your voice steady when it used to shake.');
     directives.push('');
-    directives.push('And as stress diminishes, your body remembers its natural wisdom. Your energy increases.');
+    directives.push('Until you find yourself in moments you\'ve been avoiding, fully present, your relationships deepening in ways that surprise you.');
     directives.push('');
     directives.push('One small shift creating the next. Each change building on the last.');
     directives.push('');
@@ -583,19 +616,29 @@ export class EgoModule {
   
   /**
    * STATIC: Validate Benefit Cascade structure (for Quality Guard)
-   * Checks for causal chains showing transformation, not flat lists
+   * Checks for scene-setting/experiential language, NOT causal explanations
    */
   static validateCascadeStructure(script: string): { passed: boolean; details: string } {
     const lowerScript = script.toLowerCase();
     
     // Check for key cascade structural elements
     const hasFuturePacing = /imagine it now|picture this|see yourself|envision|future.*unfold/i.test(script);
-    const hasCausalConnections = /(because|with that|which means|and as|as a result|this means)/i.test(script);
+    const hasExperientialFlow = /(and tonight|you might notice|perhaps tomorrow|next time|in moments when|with each)/i.test(script);
     const hasMomentum = /(one small shift|all of these changes|building|creating momentum|each change building)/i.test(script);
     const hasPresent = /(already beginning|happening now|right now|natural cascade)/i.test(script);
     
-    // Count causal connectors
-    const causalWords = ['because', 'with that', 'which means', 'and as', 'as a result', 'this means'];
+    // Count experiential connectors (GOOD - scene-setting)
+    const experientialWords = ['and tonight', 'you might notice', 'perhaps', 'next time', 'in moments when', 'with each'];
+    let experientialCount = 0;
+    
+    experientialWords.forEach(word => {
+      const regex = new RegExp(word, 'gi');
+      const matches = script.match(regex) || [];
+      experientialCount += matches.length;
+    });
+    
+    // Count causal/explanatory language (BAD - should be flagged)
+    const causalWords = ['because', 'as a result', 'this means', 'therefore', 'consequently'];
     let causalCount = 0;
     
     causalWords.forEach(word => {
@@ -604,7 +647,12 @@ export class EgoModule {
       causalCount += matches.length;
     });
     
-    // Check for flat list indicators (bad)
+    // Check for temporal markers (GOOD - scene-setting)
+    const temporalMarkers = /(tonight|tomorrow|next week|next time|in the morning|when you wake)/gi;
+    const temporalMatches = script.match(temporalMarkers) || [];
+    const hasTemporalFlow = temporalMatches.length >= 2;
+    
+    // Check for flat list indicators (BAD)
     const flatListIndicators = [
       /you\s+(will|can)\s+(also|additionally|furthermore)/gi,
       /\b(and also|as well as|in addition to)\b/gi,
@@ -617,13 +665,21 @@ export class EgoModule {
       flatListCount += matches.length;
     });
     
-    const elementsPresent = [hasFuturePacing, hasCausalConnections, hasMomentum, hasPresent].filter(Boolean).length;
+    const elementsPresent = [hasFuturePacing, hasExperientialFlow, hasMomentum, hasPresent].filter(Boolean).length;
+    
+    // FAIL if using causal/explanatory language
+    if (causalCount >= 2) {
+      return {
+        passed: false,
+        details: `Explanatory language detected (${causalCount} causal words like "because", "as a result") - use scene-setting instead`
+      };
+    }
     
     // Fail if flat list structure detected
     if (flatListCount >= 3) {
       return {
         passed: false,
-        details: `Flat benefit list detected (${flatListCount} list indicators) - should use causal cascade structure`
+        details: `Flat benefit list detected (${flatListCount} list indicators) - use experiential cascade`
       };
     }
     
@@ -631,21 +687,21 @@ export class EgoModule {
     if (elementsPresent < 3) {
       return {
         passed: false,
-        details: `Missing cascade elements - found ${elementsPresent}/4 (future pacing, causal connections, momentum, present anchor)`
+        details: `Missing cascade elements - found ${elementsPresent}/4 (future pacing, experiential flow, momentum, present anchor)`
       };
     }
     
-    // Fail if not enough causal connections
-    if (causalCount < 2) {
+    // Fail if not enough experiential connections
+    if (experientialCount < 2) {
       return {
         passed: false,
-        details: `Only ${causalCount} causal connections - needs at least 2 to show transformation chain`
+        details: `Only ${experientialCount} experiential connections - needs at least 2 scene-setting phrases`
       };
     }
     
     return {
       passed: true,
-      details: `Benefit cascade structure validated - ${elementsPresent}/4 elements, ${causalCount} causal connections`
+      details: `Experiential cascade validated - ${elementsPresent}/4 elements, ${experientialCount} scene-setting phrases, ${temporalMatches.length} temporal markers`
     };
   }
 }
