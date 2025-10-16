@@ -621,23 +621,23 @@ export class EgoModule {
   static validateCascadeStructure(script: string): { passed: boolean; details: string } {
     const lowerScript = script.toLowerCase();
     
-    // Check for key cascade structural elements
-    const hasFuturePacing = /imagine it now|picture this|see yourself|envision|future.*unfold/i.test(script);
-    const hasExperientialFlow = /(and tonight|you might notice|perhaps tomorrow|next time|in moments when|with each)/i.test(script);
-    const hasMomentum = /(one small shift|all of these changes|building|creating momentum|each change building)/i.test(script);
-    const hasPresent = /(already beginning|happening now|right now|natural cascade)/i.test(script);
+    // Check for key cascade structural elements (all case-insensitive using lowerScript)
+    const hasFuturePacing = /imagine it now|picture this|see yourself|envision|future.*unfold/.test(lowerScript);
+    const hasExperientialFlow = /(and tonight|you might notice|perhaps tomorrow|next time|in moments when|with each)/.test(lowerScript);
+    const hasMomentum = /(one small shift|all of these changes|building|creating momentum|each change building)/.test(lowerScript);
+    const hasPresent = /(already beginning|happening now|right now|natural cascade)/.test(lowerScript);
     
-    // Count experiential connectors (GOOD - scene-setting)
+    // Count experiential connectors (GOOD - scene-setting) - use lowerScript
     const experientialWords = ['and tonight', 'you might notice', 'perhaps', 'next time', 'in moments when', 'with each'];
     let experientialCount = 0;
     
     experientialWords.forEach(word => {
-      const regex = new RegExp(word, 'gi');
-      const matches = script.match(regex) || [];
+      const regex = new RegExp(word, 'g');
+      const matches = lowerScript.match(regex) || [];
       experientialCount += matches.length;
     });
     
-    // Count causal/explanatory language (BAD - STRICT: fail on first occurrence)
+    // Count causal/explanatory language (BAD - STRICT: fail on first occurrence) - use lowerScript
     const causalWords = [
       'because', 'as a result', 'this means', 'therefore', 'consequently',
       'this causes', 'which results in', 'leading to', 'due to', 'since'
@@ -646,8 +646,8 @@ export class EgoModule {
     let foundCausalWords: string[] = [];
     
     causalWords.forEach(word => {
-      const regex = new RegExp(word, 'gi');
-      const matches = script.match(regex) || [];
+      const regex = new RegExp(word, 'g');
+      const matches = lowerScript.match(regex) || [];
       if (matches.length > 0) {
         causalCount += matches.length;
         foundCausalWords.push(`"${word}" (${matches.length}x)`);
