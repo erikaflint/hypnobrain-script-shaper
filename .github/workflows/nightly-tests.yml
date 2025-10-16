@@ -60,11 +60,10 @@ jobs:
 
       - name: Notify Slack on Success
         if: success()
-        uses: slackapi/slack-github-action@v1.26.0
-        with:
-          webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
-          payload: |
-            {
+        run: |
+          curl -X POST ${{ secrets.SLACK_WEBHOOK_URL }} \
+            -H 'Content-Type: application/json' \
+            -d '{
               "text": "✅ Nightly Tests Passed",
               "blocks": [
                 {
@@ -87,7 +86,7 @@ jobs:
                     },
                     {
                       "type": "mrkdwn",
-                      "text": "*Commit:*\n<${{ github.event.head_commit.url }}|${{ github.sha }}>"
+                      "text": "*Commit:*\n<${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}|'"$(echo ${{ github.sha }} | cut -c1-7)"'>"
                     },
                     {
                       "type": "mrkdwn",
@@ -103,15 +102,14 @@ jobs:
                   }
                 }
               ]
-            }
+            }'
 
       - name: Notify Slack on Failure
         if: failure()
-        uses: slackapi/slack-github-action@v1.26.0
-        with:
-          webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
-          payload: |
-            {
+        run: |
+          curl -X POST ${{ secrets.SLACK_WEBHOOK_URL }} \
+            -H 'Content-Type: application/json' \
+            -d '{
               "text": "❌ Nightly Tests Failed",
               "blocks": [
                 {
@@ -134,7 +132,7 @@ jobs:
                     },
                     {
                       "type": "mrkdwn",
-                      "text": "*Commit:*\n<${{ github.event.head_commit.url }}|${{ github.sha }}>"
+                      "text": "*Commit:*\n<${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}|'"$(echo ${{ github.sha }} | cut -c1-7)"'>"
                     },
                     {
                       "type": "mrkdwn",
@@ -150,4 +148,4 @@ jobs:
                   }
                 }
               ]
-            }
+            }'
