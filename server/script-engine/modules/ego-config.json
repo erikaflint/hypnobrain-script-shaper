@@ -26,9 +26,23 @@
       "connecting_phrases": [
         "And tonight, when...",
         "You might notice...",
-        "And as [moment], [experience]...",
+        "Perhaps tomorrow...",
         "With each [action], [sensation]...",
-        "Until [desired state]..."
+        "Until [desired state]...",
+        "Somewhere in...",
+        "Next time you...",
+        "In moments when...",
+        "Even as...",
+        "Your body already...",
+        "Sleep finding you...",
+        "Energy returning...",
+        "That feeling of..."
+      ],
+      "variation_rules": [
+        "VARY sentence openers - max 2 consecutive 'And...' starts",
+        "Mix temporal markers (tonight, tomorrow, next time)",
+        "Alternate between 'you might' and action-first structures",
+        "Use nostalgic callbacks sparingly ('the way it used to be', 'like you remember')"
       ],
       "sensory_elements": [
         "Physical sensations (settling, releasing, softening)",
@@ -207,14 +221,15 @@
       ]
     },
     
-    "logical_progression": {
-      "pattern": "Because of this... / As a result...",
-      "purpose": "Creates causal chain of improvements",
+    "experiential_flow": {
+      "pattern": "And as [moment], [experience]... / With that [sensation], [deeper benefit]...",
+      "purpose": "Creates flowing cascade of experiences, not causal explanations",
       "examples": [
-        "Because of this, you stand stronger...",
-        "As a result of this deep rest, you feel...",
-        "Because all these things happen, you become..."
-      ]
+        "And as your body settles, you find yourself standing stronger",
+        "With that deep rest comes a feeling you haven't had in years",
+        "And somewhere in all this, you notice yourself becoming..."
+      ],
+      "note": "AVOID 'because', 'as a result', causal language - use temporal/experiential flow"
     },
     
     "permission_framework": {
