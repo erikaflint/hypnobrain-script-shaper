@@ -80,7 +80,7 @@ export const generations = pgTable("generations", {
   userId: varchar("user_id").references(() => users.id, { onDelete: 'cascade' }), // Link to authenticated user
   sessionId: varchar("session_id", { length: 255 }),
   email: varchar("email", { length: 255 }), // Keep for backwards compatibility
-  title: varchar("title", { length: 255 }), // Script title
+  title: varchar("title", { length: 500 }), // Script title (increased for DREAM titles)
   imageUrl: varchar("image_url", { length: 500 }), // Generated stock image for the script (backwards compat - first image)
   imageUrls: text("image_urls").array(), // Multiple scene images for cinematic experience (beginning, middle, end)
   generationMode: varchar("generation_mode", { length: 20 }).notNull(), // 'create_new', 'remix', or 'free_weekly'
