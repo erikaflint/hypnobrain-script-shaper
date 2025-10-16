@@ -638,7 +638,7 @@ export class EgoModule {
     });
     
     // Count causal/explanatory language (BAD - STRICT: fail on first occurrence) - use lowerScript
-    // Comprehensive list of causal/explanatory connectors - only truly causal phrases
+    // COMPREHENSIVE list of causal/explanatory connectors (30+ phrases)
     const causalWords = [
       // Primary causal connectors
       'because', 'as a result', 'this means', 'therefore', 'consequently',
@@ -647,7 +647,11 @@ export class EgoModule {
       'so that', 'for this reason', 'as a consequence', 'which leads to',
       'which causes', 'which means that', 'this results in', 'resulting in',
       // Formal causal markers
-      'thus', 'hence', 'whereby', 'accordingly', 'ergo',
+      'thus', 'hence', 'whereby', 'accordingly', 'ergo', 'thereby',
+      // Sequential/transitional causality
+      'in turn', 'after that', 'as such', 'from this',
+      // Permission/enablement causality (allowing X to cause Y)
+      'allowing you to', 'so you can', 'that lets you', 'enabling you to',
       // Causation verbs in explanatory context
       'causes you to', 'results in you', 'leads you to', 'means you will'
     ];
