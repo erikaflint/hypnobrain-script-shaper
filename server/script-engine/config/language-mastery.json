@@ -56,9 +56,9 @@
           ]
         },
         {
-          "technique": "Body-as-subject (eliminates 'you' repetition)",
+          "technique": "Body-as-subject (reduces 'you' repetition while keeping pronouns)",
           "wrong": "You notice your heartbeat. You feel your shoulders.",
-          "right": "Your heartbeat surfaces in awareness. Shoulders soften."
+          "right": "Your heartbeat surfaces in awareness. Your shoulders soften."
         },
         {
           "technique": "Awareness-based (gentlest)",
