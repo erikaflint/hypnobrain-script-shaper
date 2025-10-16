@@ -151,14 +151,14 @@ function checkNaturalGrammar(script: string): QualityCheck {
 }
 
 /**
- * Check ego strengthening distribution (not dumped as paragraphs)
+ * Check ego strengthening uses Benefit Cascade pattern (not flat lists)
  * Delegates to EgoModule - single source of truth
  */
-function checkEgoStrengtheningDistribution(script: string): QualityCheck {
-  const result = EgoModule.validateDistribution(script);
+function checkEgoStrengtheningCascade(script: string): QualityCheck {
+  const result = EgoModule.validateCascadeStructure(script);
   
   return {
-    name: "Ego Strengthening Distribution",
+    name: "Benefit Cascade Structure",
     passed: result.passed,
     details: result.details
   };
@@ -466,7 +466,7 @@ export async function runQualityGuard(
     checkSentenceVariety(script),
     checkMetaphorFrequency(script, options.targetWordCount), // Check metaphor isn't overused
     checkMetaphorConsistency(script),
-    checkEgoStrengtheningDistribution(script) // NEW: Check ego strengthening isn't dumped
+    checkEgoStrengtheningCascade(script) // Check Benefit Cascade structure
   ];
   
   const failedChecks = checks.filter(c => !c.passed);
@@ -509,7 +509,7 @@ export async function runQualityGuard(
         checkSentenceVariety(polishedScript),
         checkMetaphorFrequency(polishedScript, options.targetWordCount), // Check metaphor isn't overused
         checkMetaphorConsistency(polishedScript),
-        checkEgoStrengtheningDistribution(polishedScript) // NEW: Check ego strengthening isn't dumped
+        checkEgoStrengtheningCascade(polishedScript) // Check Benefit Cascade structure
       ];
       
       const newFailedChecks = recheck.filter(c => !c.passed);

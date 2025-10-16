@@ -580,4 +580,72 @@ export class EgoModule {
       details: `Good distribution - ${totalKeywords} functional improvements scattered naturally`
     };
   }
+  
+  /**
+   * STATIC: Validate Benefit Cascade structure (for Quality Guard)
+   * Checks for causal chains showing transformation, not flat lists
+   */
+  static validateCascadeStructure(script: string): { passed: boolean; details: string } {
+    const lowerScript = script.toLowerCase();
+    
+    // Check for key cascade structural elements
+    const hasFuturePacing = /imagine it now|picture this|see yourself|envision|future.*unfold/i.test(script);
+    const hasCausalConnections = /(because|with that|which means|and as|as a result|this means)/i.test(script);
+    const hasMomentum = /(one small shift|all of these changes|building|creating momentum|each change building)/i.test(script);
+    const hasPresent = /(already beginning|happening now|right now|natural cascade)/i.test(script);
+    
+    // Count causal connectors
+    const causalWords = ['because', 'with that', 'which means', 'and as', 'as a result', 'this means'];
+    let causalCount = 0;
+    
+    causalWords.forEach(word => {
+      const regex = new RegExp(word, 'gi');
+      const matches = script.match(regex) || [];
+      causalCount += matches.length;
+    });
+    
+    // Check for flat list indicators (bad)
+    const flatListIndicators = [
+      /you\s+(will|can)\s+(also|additionally|furthermore)/gi,
+      /\b(and also|as well as|in addition to)\b/gi,
+      /\b(first|second|third|finally)\b.*\b(you\s+will|you\s+can)\b/gi
+    ];
+    
+    let flatListCount = 0;
+    flatListIndicators.forEach(pattern => {
+      const matches = script.match(pattern) || [];
+      flatListCount += matches.length;
+    });
+    
+    const elementsPresent = [hasFuturePacing, hasCausalConnections, hasMomentum, hasPresent].filter(Boolean).length;
+    
+    // Fail if flat list structure detected
+    if (flatListCount >= 3) {
+      return {
+        passed: false,
+        details: `Flat benefit list detected (${flatListCount} list indicators) - should use causal cascade structure`
+      };
+    }
+    
+    // Fail if missing cascade structure
+    if (elementsPresent < 3) {
+      return {
+        passed: false,
+        details: `Missing cascade elements - found ${elementsPresent}/4 (future pacing, causal connections, momentum, present anchor)`
+      };
+    }
+    
+    // Fail if not enough causal connections
+    if (causalCount < 2) {
+      return {
+        passed: false,
+        details: `Only ${causalCount} causal connections - needs at least 2 to show transformation chain`
+      };
+    }
+    
+    return {
+      passed: true,
+      details: `Benefit cascade structure validated - ${elementsPresent}/4 elements, ${causalCount} causal connections`
+    };
+  }
 }
