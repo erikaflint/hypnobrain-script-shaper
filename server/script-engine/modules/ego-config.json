@@ -249,57 +249,62 @@
     }
   },
   
-  "causal_pathways": {
-    "description": "Valid causal connections for building benefit chains",
-    "test": "Could you explain WHY step A leads to step B to a skeptical person?",
+  "experiential_cascades": {
+    "description": "Scene-based benefit flows - paint moments, not explain logic",
+    "approach": "Show the experience unfolding, not why it happens",
     
     "physical_cascade": {
-      "examples": [
-        "Sleep quality → Energy/Vitality → Activity level → Life engagement",
-        "Stress reduction → Immune function → Overall health",
-        "Physical relaxation → Healing → Body restoration",
-        "Nervous system regulation → Physical symptoms reduce → Functioning improves",
-        "Tension release → Pain reduction → Mobility → Quality of life"
+      "scene_examples": [
+        "And tonight, as your body settles into deeper rest, you might notice something shifting. Perhaps tomorrow morning, when your feet touch the floor, there's energy you haven't felt in months. And with that energy, you find yourself saying yes to a walk, to movement, to life calling you back",
+        "Your shoulders releasing tension they've carried for years. And as they soften, your breath deepens, fuller than it's been. And with that breath, your whole system remembering what ease feels like, healing happening in ways you can't see but will certainly feel"
+      ],
+      "avoid_logical": [
+        "Sleep quality leads to energy which increases activity level",
+        "Stress reduction causes immune function to improve resulting in better health"
       ]
     },
     
     "mental_cognitive_cascade": {
-      "examples": [
-        "Mental clarity → Better decisions → Improved outcomes",
-        "Reduced mental fog → Sharper focus → Enhanced performance",
-        "Calm mind → Problem-solving ability → Solutions emerge",
-        "Cognitive space → Creativity → Innovation",
-        "Concentration → Productivity → Achievement → Confidence"
+      "scene_examples": [
+        "And tomorrow, when you sit down to work, you might notice the fog isn't quite as thick. Your thoughts connecting like they used to, one idea leading naturally to the next. And with that clarity, decisions coming easier, the path forward revealing itself",
+        "Perhaps next week, you'll reach for a word and it will be there, waiting. And with that memory returning, your confidence building, until you find yourself in conversations you've been avoiding, your mind sharp, present, fully there"
+      ],
+      "avoid_logical": [
+        "Mental clarity leads to better decisions which improve outcomes",
+        "Reduced fog causes sharper focus resulting in enhanced performance"
       ]
     },
     
     "emotional_psychological_cascade": {
-      "examples": [
-        "Self-worth → Healthy boundaries → Better relationships",
-        "Confidence → Action-taking → Results → More confidence (reinforcing loop)",
-        "Self-compassion → Emotional regulation → Stability",
-        "Inner peace → Presence → Deeper connections",
-        "Reduced anxiety → Clear thinking → Effective action",
-        "Self-acceptance → Authenticity → Fulfillment"
+      "scene_examples": [
+        "And you might notice yourself standing a little taller tomorrow. Not forcing it, just... there. And when someone asks too much, you'll hear yourself say no, clear and kind. And with that boundary, space opening up, relationships deepening in ways that surprise you",
+        "That inner peace you've been seeking, settling into your bones. And with it, you find yourself present in moments you used to miss, really there with the people you love, connection flowing naturally again"
+      ],
+      "avoid_logical": [
+        "Self-worth creates healthy boundaries which lead to better relationships",
+        "Confidence drives action-taking resulting in results creating more confidence"
       ]
     },
     
     "behavioral_cascade": {
-      "examples": [
-        "Small action → Momentum → Bigger actions → Results",
-        "New habit → Consistency → Identity shift → Sustainable change",
-        "One choice → Pattern formation → Lifestyle change",
-        "Practice → Skill → Mastery → Confidence"
+      "scene_examples": [
+        "And you might take one small step tomorrow. Nothing dramatic, just... one thing. And with that one thing, momentum building, until next week you're doing things that seemed impossible today, the change so natural you almost don't notice it happening",
+        "Perhaps you'll catch yourself doing that new thing without thinking about it. And then again the next day. And somewhere in that repetition, you realize you've become the kind of person who does this, the identity shift so subtle it feels like it was always you"
+      ],
+      "avoid_logical": [
+        "Small action creates momentum leading to bigger actions and results",
+        "New habit drives consistency causing identity shift resulting in sustainable change"
       ]
     },
     
     "relational_cascade": {
-      "examples": [
-        "Calm presence → Better communication → Relationship depth",
-        "Self-regulation → Responding vs reacting → Healthier dynamics",
-        "Boundaries → Mutual respect → Quality relationships",
-        "Self-love → Attracting aligned people → Fulfilling connections",
-        "Authenticity → Genuine connection → Deep bonds"
+      "scene_examples": [
+        "And next time tension rises, you might notice yourself breathing instead of reacting. And in that breath, space opening. And in that space, words coming that actually help, your relationships shifting in ways you've wanted for years",
+        "Perhaps you'll notice people responding to you differently. Not because you're trying, but because something in you has changed. And with that change, the right people drawing closer, connections deepening into something real"
+      ],
+      "avoid_logical": [
+        "Calm presence leads to better communication resulting in relationship depth",
+        "Self-regulation causes responding vs reacting creating healthier dynamics"
       ]
     }
   },
