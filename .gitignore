@@ -4,3 +4,11 @@ dist
 server/public
 vite.config.ts.*
 *.tar.gz
+.env
+.env.local
+*.log
+coverage
+.vite
+.replit
+replit.nix
+.config
