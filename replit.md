@@ -1,7 +1,7 @@
 # HypnoBrain Script Shaper v2.0
 
 ## Overview
-HypnoBrain Script Shaper is a DAW-style web application for hypnotherapists, designed to generate customized hypnosis scripts based on Erika Flint's 8-Dimensional Hypnosis Framework. The project aims to provide a robust, methodology-driven platform for script creation, leveraging AI to streamline the process while adhering to established hypnotherapy principles. It targets professional hypnotherapists seeking high-quality, customizable content. The application also includes a "DREAM Hypnosis Series" for generating non-clinical sleep/meditation scripts, offering immersive journeys without therapeutic goals.
+HypnoBrain Script Shaper is a DAW-style web application for hypnotherapists, designed to generate customized hypnosis scripts based on Erika Flint's 8-Dimensional Hypnosis Framework. It aims to provide a robust, methodology-driven platform for script creation, leveraging AI to streamline the process while adhering to established hypnotherapy principles. The project is evolving into a "Positive Language Generator" that produces hypnotic scripts using experiential, scene-setting language for deeper trance states. The application also includes a "DREAM Hypnosis Series" for generating non-clinical sleep/meditation scripts.
 
 ## User Preferences
 I prefer detailed explanations.
@@ -12,102 +12,35 @@ Do not make changes to the file Y.
 
 ## System Architecture
 
-### Tech Stack
--   **Frontend**: React + TypeScript + Vite
--   **Backend**: Express.js + TypeScript
--   **Database**: PostgreSQL (Neon) + Drizzle ORM
--   **Authentication**: Replit Auth (OpenID Connect)
--   **AI**: Anthropic Claude Sonnet 4, OpenAI DALL-E 3
--   **Object Storage**: Replit App Storage (Google Cloud Storage)
--   **Styling**: Tailwind CSS + shadcn/ui components
+### UI/UX Decisions
+The application features a DAW-inspired interface with a dark mode, purple accent colors, and uses Inter, DM Sans, and JetBrains Mono fonts along with shadcn/ui components. Key routes include `/`, `/free`, `/app-v2`, `/dream`, `/dashboard`, and `/admin`. The DREAM Library uses a horizontal split-screen design with an independently scrolling sidebar and main content area, offering a fullscreen mode.
+
+### Technical Implementations
+-   **Frontend**: React, TypeScript, Vite
+-   **Backend**: Express.js, TypeScript
+-   **Database**: PostgreSQL (Neon) with Drizzle ORM
+-   **Authentication**: Replit Auth (OpenID Connect) for Google, GitHub, X, Apple, and Email/Password, with PostgreSQL-backed sessions.
 -   **State Management**: TanStack Query (React Query v5)
-
-### Core Architecture (JSON Template Architecture)
-The system separates concerns: Templates (JSON) for dimension mixes in PostgreSQL JSONB, a ScriptEngine as the core IP layer orchestrating Erika Flint's methodology, and an AI Service executing script generation directives. The data flow is: Client Intake → TemplateSelector → DimensionAssembler → ScriptEngine → AI Service.
-
-The ScriptEngine (`server/script-engine/`) is the IP layer transforming template-based generation into methodology-driven transformation. It includes a Config System (principles, narrative arcs, metaphor library), a StrategyPlanner, a PrincipleEnforcer, and a Main Orchestrator to generate AI directives. Key elements include 6 Core Principles and 30 Clinical Narrative Arcs. The arc library recently expanded with 13 new strategic arcs including: Signal Decoding, Post-Traumatic Growth, Attention Direction, Boundary Reframing, Forgiveness Protocol, Shame Dissolution, Internal Sanctuary Creation, Energy Reclamation, Open Future/Possibility Space, Upward Spiral, Cycle Breaker, Ancestral Healing, and Self-Actualization Cycle. Each arc represents a distinct therapeutic STRATEGY (not just metaphorical variation), with the StrategyPlanner selecting strategic moves while the AI Service applies metaphorical storytelling.
-
-### 4-Stage DREAM Quality Pipeline
-To prevent quality degradation and ensure consistency, DREAM scripts pass through a 4-stage pipeline where each AI call has ONE focused responsibility:
-
-1. **Story Shaper (Stage 1)**: Expands journey idea into detailed 800-1200 word story outline with rich sensory details. Saved to database for transparency.
-2. **Dream Maker (Stage 2)**: Generates full 3000-word hypnosis script from story outline using ScriptEngine methodology.
-3. **Pattern Refiner (Stage 3)**: Analyzes script for repetitive sentence patterns (e.g., "you might...", "as you...") and rewrites overused openers for variety. Preserves ALL content and context.
-4. **Quality Guard (Stage 4)**: Validates emergence type matches (sleep vs regular), checks for 15+ functional suggestions, verifies word count within 15% of target, ensures metaphor consistency, **detects metaphor overuse (max 8-10 uses per script)**. Applies micro-polish to fix issues.
-
-**Key Innovation**: Separation of concerns prevents the "50% degradation problem" where AI trying to do everything (plan + write + variety + quality) resulted in generic content. Each stage focuses on ONE job, with explicit "PRESERVE ALL details" instructions to maintain historical/contextual integrity.
-
-**Scaled Quality Thresholds**: Quality validation adapts to script length for fair assessment:
-- **Functional Suggestions**: Scales at ~1 per 200 words (1500w→8 min, 2000w→10 min, 3000w→15 min)
-- **Word Count Tolerance**: ±15% of target word count for all lengths
-- **Pattern Thresholds**: Fixed relative frequencies (independent of length) to catch repetitive openers
-
-**Metaphor Usage Guidelines**: To prevent metaphor overload, the system now enforces strict frequency limits:
-- ScriptEngine explicitly instructs AI to use metaphors 5-7 times maximum (not "throughout")
-- Symbolic Dimension levels specify exact metaphor counts (HEAVY: 6-8, MODERATE: 4-6, LIGHT: 2-3)
-- Quality Guard validates metaphor frequency and fails scripts with 10+ metaphor family uses
-- Guideline: "Metaphors should ENHANCE the experience, not dominate it"
-
-**Benefit Cascade Pattern (Ego Strengthening)**: Uses scene-setting/experiential language to paint vivid moments rather than explain causality:
-- **Placement**: Near end of script, after main therapeutic work, before emergence (200-400 words for clinical, 400-600 for DREAM)
-- **Language Philosophy**: PAINT SCENES, don't explain. Client's mind is open at script end - they experience benefits in a new way
-- **Structure**: 5-stage cascade - (1) Anchor in Future Pacing, (2) Paint Vivid Scenes with sensory details, (3) Acknowledge Momentum, (4) Tie to Client's Desired Outcome, (5) Anchor in Present
-- **Approach**: "And tonight, when you lay your head down, you might notice..." NOT "Your sleep becomes better because..."
-- **Sensory Elements**: Physical sensations (settling, releasing), temporal markers (tonight, tomorrow), gentle observations (you might notice), vivid imagery (sleep finding you), nostalgic callbacks (the way it used to be)
-- **Connecting Phrases**: "And tonight, when...", "You might notice...", "Perhaps tomorrow...", "And as [moment], [experience]...", "With each [action], [sensation]..."
-- **Experiential Cascades**: Paint flowing scenes showing transformation - "And tonight... rest deepening. Tomorrow... energy returning. Next week... life calling you forward"
-- **Quality Guard**: Validates 3/4 structural elements present, 2+ experiential connections, detects flat list indicators (fails if 3+ list markers)
-- **Categories**: Physical Restoration, Sleep Quality, Cognitive Enhancement, Energy/Vitality, Stress Response (use ALL relevant, woven as experiences not explanations)
-
-**Personal Pronouns in Hypnosis (Critical Language Rule)**: "You" and "your" are ESSENTIAL for maintaining personal connection, NOT repetition to avoid!
-- **The Problem Discovered (Oct 2025)**: AI was removing "you/your" and using impersonal commands/passive forms
-- **Root Causes**: 
-  1. Pattern Refiner had "your" threshold of only 8 uses (absurd for 1500-3000 word scripts)
-  2. ScriptEngine had "Scan for 'you...you...you' repetition and rewrite using body-as-subject" instruction
-  3. Examples showed removing pronouns: "You might notice" → "A gentle awareness may arise" (BAD!)
-- **The Fix**: Both prompts now explicitly preserve personal pronouns:
-  - ✅ "You take a breath" NOT "Take a breath"
-  - ✅ "Your eyes close" NOT "Let eyes close"  
-  - ✅ "You feel the warmth" NOT "Feel the warmth"
-- **Why It Matters**: Personal pronouns keep the client engaged with themselves - this is hypnotic language, not redundancy!
+-   **Styling**: Tailwind CSS
+-   **Object Storage**: Replit App Storage (Google Cloud Storage) for permanent thumbnail storage.
 
 ### Feature Specifications
--   **8-Dimensional Framework**: Implements Erika Flint's 8D Hypnosis Framework with independent emphasis levels (0-100%).
--   **AI Script Generation**: Generates script previews (150-200 words), full scripts (1500-2000 words, 3000 for DREAM), and 6 marketing assets. Includes AI-generated titles and supports "regular" or "sleep" emergence types.
--   **Three-Tier Pricing Model**: Free (weekly script), Create New ($3 for full customization), Remix Mode ($3 for AI analysis and adjustment of existing scripts).
--   **Rate Limiting**: Email-based 7-day cooldown for the Free Tier.
--   **Dice Mix Helper**: Randomly pre-fills presenting issue and desired outcome for inspiration.
--   **Type-Ahead Autocomplete**: Suggestions for "Presenting Issue" and context-aware "Desired Outcome" while allowing free-text input.
--   **Version Control & Favorites**: Star scripts, parent-child tracking for remixes, and API endpoints for managing them.
--   **Save/Apply Mix (Custom Templates)**: Users can save and apply custom dimension configurations.
--   **Script Package Generator**: Allows creating sellable collections of themed scripts, with AI generating concepts, and user modification and generation.
--   **Full CRUD Operations**: Complete Create, Read, Update, Delete functionality for all scripts with ownership verification. Edit modal for script text, delete with confirmation dialog, hover-to-reveal UI controls.
--   **DREAM Hypnosis Series**: Generates non-clinical, 30-minute immersive sleep/meditation scripts (3000 words). Features journey-based input, sleep emergence, high somatic/symbolic emphasis, full-screen crowdsourced loading carousel, and AI-generated serene thumbnails (DALL-E 3) with permanent storage. Includes 13 DREAM-specific Narrative Arcs and 8 Blended Archetypes. Also offers voice controls for playback. **4-Stage Quality Pipeline**: Story Shaper (800-1200 word outline) → Dream Maker (script generation) → Pattern Refiner (fix repetitive patterns) → Quality Guard (validate emergence, suggestions, word count, metaphors). **Story Outline Preservation**: The story outline from Stage 1 is saved in the database and displayed in the UI for full creative journey transparency.
--   **Permanent Thumbnail Storage**: DALL-E generated images are immediately downloaded and stored permanently in Replit App Storage (expires in 1 hour if not saved). Thumbnails are served via `/public-objects/dream-thumbnails/{uuid}.png` with 1-year cache headers.
--   **Crowdsourced Loading Carousel**: Full-screen immersive loading experience displays up to 50 recent DREAM thumbnails from ALL users (not just current user) to create a community-driven calming experience. Falls back to curated Unsplash landscapes for first-time users.
--   **External API (B2B)**: RESTful endpoints for third-party integrations. API key authentication with scopes, SHA-256 hashed keys, usage tracking. `/api/generate/clinical` and `/api/generate/dream` endpoints generate scripts with parameters matching the internal form structure: presentingIssue, desiredOutcome, additionalNotes, voiceProfileId, archetypeId, styleId, templateId (optional), emergenceType, and targetWordCount.
+The system implements Erika Flint's 8-Dimensional Hypnosis Framework, allowing independent emphasis levels. It supports AI-generated script previews, full scripts (1500-2000 words; 3000 for DREAM), and 6 marketing assets, including AI-generated titles and support for "regular" or "sleep" emergence types. Features include a three-tier pricing model (Free, Create New, Remix), email-based rate limiting, a Dice Mix Helper for inspiration, type-ahead autocomplete, script version control and favorites, and the ability to save/apply custom dimension mixes. It provides full CRUD operations for scripts with ownership verification.
 
-### UI/UX Decisions
--   **Design System**: Purple accent colors, dark mode, DAW-inspired interface, Inter, DM Sans, and JetBrains Mono fonts. Uses shadcn/ui components.
--   **Page Routes**: `/` (Landing), `/free`, `/app-v2` (Current production), `/dream`, `/dashboard`, `/admin`.
--   **DREAM Library Layout**: Horizontal split-screen design - 320px scrollable left sidebar displays condensed dream grid, flex-1 right panel shows large 21:9 hero image with full script content. Both sections scroll independently with `calc(100vh - 4rem)` height. Fullscreen mode available for immersive viewing.
+The **DREAM Hypnosis Series** generates non-clinical, 30-minute immersive scripts with a focus on journey-based input, sleep emergence, high somatic/symbolic emphasis, and AI-generated serene thumbnails. It utilizes a **4-Stage Quality Pipeline**:
+1.  **Story Shaper**: Expands ideas into detailed story outlines (800-1200 words).
+2.  **Dream Maker**: Generates full 3000-word scripts from outlines.
+3.  **Pattern Refiner**: Rewrites repetitive sentence patterns.
+4.  **Quality Guard**: Validates script quality against criteria like emergence type, suggestions, word count, and metaphor usage, strictly limiting metaphors to 5-7 uses. It also enforces the use of personal pronouns ("you" and "your") as critical hypnotic language.
+A crowdsourced loading carousel displays recent DREAM thumbnails for an immersive experience.
 
-### Authentication System
--   **Provider**: Replit Auth (OpenID Connect) supporting Google, GitHub, X, Apple, and Email/Password.
--   **Session Management**: PostgreSQL-backed sessions with 7-day TTL.
--   **User Storage**: `users` table for user information.
--   **Protected Routes**: Script generation and dashboard require authentication.
--   **Client Integration**: `useAuth()` hook for authentication state and automatic redirects.
--   **Middleware**: `isAuthenticated` middleware for API route protection and token refresh.
+An **External API (B2B)** offers RESTful endpoints (`/api/generate/clinical`, `/api/generate/dream`) for third-party integrations, secured by API key authentication with scopes and usage tracking.
 
-### Database Schema Highlights
--   **Core Tables**: `users`, `sessions`, `dimensions`, `archetypes`, `styles`, `pricing`, `generations`, `free_script_usage`, `admin_users`, `api_keys`.
--   **User Ownership**: `generations.userId` links scripts to users.
--   **API Keys**: SHA-256 hashed keys with scopes, active/inactive status, usage tracking.
--   **Naming Convention**: `snake_case` in database, `camelCase` in Drizzle ORM.
+### System Design Choices
+The core architecture uses JSON Templates in PostgreSQL JSONB for dimension mixes. The **ScriptEngine** (`server/script-engine/`) is the IP layer, orchestrating Erika Flint's methodology, transforming template-based generation into methodology-driven transformation. It includes a Config System, StrategyPlanner, PrincipleEnforcer, and Main Orchestrator to generate AI directives based on 6 Core Principles and 30 Clinical Narrative Arcs. The system incorporates a **Benefit Cascade Pattern** for ego strengthening, using experiential, scene-setting language and strictly banning causal language within this section. The 4-Stage DREAM Quality Pipeline ensures consistent, high-quality output by assigning each AI call a single, focused responsibility to prevent degradation, with strict guidelines on metaphor usage and enforcement of personal pronouns.
 
 ## External Dependencies
--   **Database**: PostgreSQL (via Neon)
+-   **Database**: PostgreSQL (Neon)
+-   **AI Services**: Anthropic Claude Sonnet 4, OpenAI DALL-E 3
 -   **ORM**: Drizzle ORM
--   **AI Service**: Anthropic Claude Sonnet 4
 -   **Payment Gateway**: Stripe (currently mocked)
