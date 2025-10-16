@@ -39,6 +39,8 @@ An **External API (B2B)** offers RESTful endpoints (`/api/generate/clinical`, `/
 ### System Design Choices
 The core architecture uses JSON Templates in PostgreSQL JSONB for dimension mixes. The **ScriptEngine** (`server/script-engine/`) is the IP layer, orchestrating Erika Flint's methodology, transforming template-based generation into methodology-driven transformation. It includes a Config System, StrategyPlanner, PrincipleEnforcer, and Main Orchestrator to generate AI directives based on 6 Core Principles and 30 Clinical Narrative Arcs. The system incorporates a **Benefit Cascade Pattern** for ego strengthening, using experiential, scene-setting language and strictly banning causal language within this section. The 4-Stage DREAM Quality Pipeline ensures consistent, high-quality output by assigning each AI call a single, focused responsibility to prevent degradation, with strict guidelines on metaphor usage and enforcement of personal pronouns.
 
+**Hypnotic Rhythm & Flow** (Oct 2025): Language Mastery Rules now enforce smooth connectors to prevent choppy comma splices. Common errors like "You pay attention to that sensation, it grows stronger" are caught with guidance to use flow connectors: "As you pay attention to that sensation, it grows stronger." Essential connectors include: As, And as, When, While, And now as. This maintains unbroken hypnotic rhythm for deeper trance states.
+
 ## External Dependencies
 -   **Database**: PostgreSQL (Neon)
 -   **AI Services**: Anthropic Claude Sonnet 4, OpenAI DALL-E 3

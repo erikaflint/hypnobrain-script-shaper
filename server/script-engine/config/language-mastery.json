@@ -138,6 +138,43 @@
     "critical_rule": "NEVER drop pronouns! 'Shoulders soften' should be 'Your shoulders soften'. Personal connection is MORE important than variety."
   },
 
+  "hypnotic_rhythm_and_flow": {
+    "description": "Smooth connectors that maintain unbroken hypnotic rhythm",
+    "rule": "NEVER use comma splices. ALWAYS connect related statements with flow words.",
+    "common_errors": [
+      {
+        "error": "Comma splice without connector",
+        "wrong": "You pay attention to that sensation, it grows stronger",
+        "right": "As you pay attention to that sensation, it grows stronger",
+        "alternative": "When you pay attention to that sensation, it grows stronger"
+      },
+      {
+        "error": "Related statements without transition",
+        "wrong": "Your thoughts shift toward what truly calls to you, your body responds",
+        "right": "Your thoughts shift toward what truly calls to you, and as they do, your body responds"
+      },
+      {
+        "error": "Abrupt section transitions",
+        "wrong": "Now, this session comes to a close",
+        "right": "And now, as this session comes to a close..."
+      }
+    ],
+    "essential_connectors": [
+      "As... (As you breathe, warmth spreads...)",
+      "And as... (And as you settle, peace arrives...)",
+      "When... (When your shoulders soften, ease follows...)",
+      "While... (While you rest here, healing unfolds...)",
+      "And now, as... (And now, as this journey continues...)"
+    ],
+    "why_this_matters": [
+      "Comma splices interrupt hypnotic flow - they feel choppy",
+      "Connectors ('as', 'and as', 'when') create seamless transitions",
+      "Smooth rhythm = maintained trance depth",
+      "Every pause should be intentional, not grammatical accident"
+    ],
+    "rhythm_test": "Read the script aloud. If any sentence feels choppy or grammatically abrupt, add a flow connector (as, when, and as, while)."
+  },
+
   "inclusive_sensory_language": {
     "description": "Use universal sensory language that works for everyone",
     "forbidden_visual_commands": [

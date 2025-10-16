@@ -140,6 +140,28 @@ Variety techniques WHILE keeping pronouns:
 
 CRITICAL: Personal connection > Variety. NEVER drop pronouns to create variety!`;
 
+    const hypnoticRhythm = `### Hypnotic Rhythm & Flow (CRITICAL for A+ Scripts)
+**RULE: NEVER use comma splices. ALWAYS connect related statements with flow words.**
+
+**Common Errors to Fix:**
+❌ "You pay attention to that sensation, it grows stronger"
+✅ "As you pay attention to that sensation, it grows stronger"
+
+❌ "Your thoughts shift toward what truly calls to you, your body responds"
+✅ "Your thoughts shift toward what truly calls to you, and as they do, your body responds"
+
+❌ "Now, this session comes to a close"
+✅ "And now, as this session comes to a close..."
+
+**Essential Connectors:**
+- As... (As you breathe, warmth spreads...)
+- And as... (And as you settle, peace arrives...)
+- When... (When your shoulders soften, ease follows...)
+- While... (While you rest here, healing unfolds...)
+- And now, as... (And now, as this journey continues...)
+
+**WHY THIS MATTERS:** Comma splices interrupt hypnotic flow. Connectors create seamless transitions. Smooth rhythm = maintained trance depth.`;
+
     const sensoryLanguage = `### Inclusive Sensory Language
 **NEVER use visual-only commands:**
 ❌ "See the...", "Visualize...", "Picture..."
@@ -158,7 +180,7 @@ CRITICAL: Personal connection > Variety. NEVER drop pronouns to create variety!`
 - Medium for guidance (8-15 words): "Your shoulders soften, releasing the weight they've carried."
 - Long for deepening (18-30 words): "And as you settle deeper into this peaceful state, your body remembers what it's always known..."`;
 
-    return [tonalBalance, antiPatterns, sentenceVariety, sensoryLanguage, craftRules].join('\n\n');
+    return [tonalBalance, antiPatterns, sentenceVariety, hypnoticRhythm, sensoryLanguage, craftRules].join('\n\n');
   }
 
   /**
