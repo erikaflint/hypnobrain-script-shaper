@@ -14,7 +14,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Eye, Calendar, Sparkles } from "lucide-react";
 import type { Generation } from "@shared/schema";
-import { VoicePlayer } from "@/components/voice-player";
+import { VoicePlayerPro } from "@/components/voice-player-pro";
 import { AppHeader } from "@/components/app-header";
 
 export default function Admin() {
@@ -135,7 +135,7 @@ export default function Admin() {
 
                         {/* Voice Player */}
                         {gen.fullScript && (
-                          <VoicePlayer text={gen.fullScript} title="Listen to Script" />
+                          <VoicePlayerPro text={gen.fullScript} title="Listen to Script" />
                         )}
 
                         {/* Marketing Assets */}

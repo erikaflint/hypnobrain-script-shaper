@@ -22,7 +22,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { VoicePlayer } from "@/components/voice-player";
+import { VoicePlayerPro } from "@/components/voice-player-pro";
 
 export default function App() {
   const [location] = useLocation();
@@ -468,7 +468,7 @@ export default function App() {
                 </div>
 
                 {/* Voice Player */}
-                <VoicePlayer text={generatedScript.fullScript} title="Listen to Your Script" />
+                <VoicePlayerPro text={generatedScript.fullScript} title="Listen to Your Script" />
 
                 {/* Marketing Assets */}
                 {generatedScript.marketingAssets && (

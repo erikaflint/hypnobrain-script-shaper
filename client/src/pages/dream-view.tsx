@@ -3,7 +3,7 @@ import { useRoute, Link } from "wouter";
 import { useRef, useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { VoicePlayer } from "@/components/voice-player";
+import { VoicePlayerPro } from "@/components/voice-player-pro";
 import { ArrowLeft } from "lucide-react";
 import { AppHeader } from "@/components/app-header";
 import type { Generation } from "@shared/schema";
@@ -162,7 +162,7 @@ export default function DreamView() {
 
               {/* Voice Player */}
               <div className="border-t pt-4">
-                <VoicePlayer 
+                <VoicePlayerPro 
                   text={dream.fullScript} 
                   title="Listen to Your Dream Journey" 
                 />

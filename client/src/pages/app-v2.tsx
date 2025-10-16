@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { VoicePlayer } from "@/components/voice-player";
+import { VoicePlayerPro } from "@/components/voice-player-pro";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { ArrowLeft, ArrowRight, Sparkles, Check, Sliders, User, MessageSquare, Eye, Wand2, FileText, Dices, ChevronsUpDown, Save, Download } from "lucide-react";
@@ -1192,7 +1192,7 @@ export default function AppV2() {
                 </Card>
 
                 {/* Voice Player */}
-                <VoicePlayer text={fullScriptResult.fullScript} title="Listen to Your Script" />
+                <VoicePlayerPro text={fullScriptResult.fullScript} title="Listen to Your Script" />
               </div>
             )}
           </div>

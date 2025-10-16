@@ -13,6 +13,7 @@ import { analyzeScript } from "./script-analyzer";
 import { z } from "zod";
 import { validateContent, validateMultipleFields } from "./content-validator";
 import { ObjectStorageService } from "./objectStorage";
+import { ttsService } from "./tts-service";
 import express from "express";
 import path from "path";
 
@@ -1718,6 +1719,53 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.send(exportText);
     } catch (error: any) {
       console.error('Error exporting package:', error);
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Text-to-Speech API endpoint (AUTHENTICATED - prevents OpenAI key abuse)
+  app.post("/api/tts/generate", isAuthenticated, async (req, res) => {
+    try {
+      const { text, voice, speed, model } = req.body;
+
+      if (!text) {
+        return res.status(400).json({ message: "Text is required" });
+      }
+
+      // Validate voice
+      const validVoices = ['alloy', 'echo', 'fable', 'onyx', 'nova', 'shimmer'];
+      const selectedVoice = validVoices.includes(voice) ? voice : 'nova';
+
+      // Validate speed (0.25 to 4.0, default 0.6 for hypnosis)
+      const selectedSpeed = speed ? Math.max(0.25, Math.min(4.0, parseFloat(speed))) : 0.6;
+
+      // Validate model
+      const selectedModel = model === 'tts-1' ? 'tts-1' : 'tts-1-hd';
+
+      const audioBuffer = await ttsService.generateSpeech(text, {
+        voice: selectedVoice as any,
+        speed: selectedSpeed,
+        model: selectedModel,
+      });
+
+      // Set headers for audio streaming
+      res.setHeader('Content-Type', 'audio/mpeg');
+      res.setHeader('Content-Length', audioBuffer.length);
+      res.setHeader('Accept-Ranges', 'bytes');
+      
+      res.send(audioBuffer);
+    } catch (error: any) {
+      console.error("TTS generation error:", error);
+      res.status(500).json({ message: "Failed to generate speech", error: error.message });
+    }
+  });
+
+  // Get available TTS voices (PUBLIC - just metadata)
+  app.get("/api/tts/voices", async (req, res) => {
+    try {
+      const voices = ttsService.getAvailableVoices();
+      res.json(voices);
+    } catch (error: any) {
       res.status(500).json({ message: error.message });
     }
   });

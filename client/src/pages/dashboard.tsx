@@ -4,7 +4,7 @@ import { Link } from "wouter";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { VoicePlayer } from "@/components/voice-player";
+import { VoicePlayerPro } from "@/components/voice-player-pro";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { isUnauthorizedError } from "@/lib/authUtils";
@@ -330,7 +330,7 @@ export default function Dreamboard() {
             
             {/* Voice Player for Full Script */}
             <div className="border-t pt-4">
-              <VoicePlayer text={generation.fullScript} title="Listen to Script" />
+              <VoicePlayerPro text={generation.fullScript} title="Listen to Script" />
             </div>
           </>
         ) : generation.previewText ? (
@@ -347,7 +347,7 @@ export default function Dreamboard() {
             
             {/* Voice Player for Preview */}
             <div className="border-t pt-4">
-              <VoicePlayer text={generation.previewText} title="Listen to Preview" />
+              <VoicePlayerPro text={generation.previewText} title="Listen to Preview" />
             </div>
           </>
         ) : null}

@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { AppHeader } from "@/components/app-header";
-import { VoicePlayer } from "@/components/voice-player";
+import { VoicePlayerPro } from "@/components/voice-player-pro";
 import { Search, Star, Calendar, Play, X, ChevronLeft, ChevronRight, Maximize2, Minimize2, Trash2, Edit } from "lucide-react";
 import type { Generation } from "@shared/schema";
 import { format } from "date-fns";
@@ -554,7 +554,7 @@ export default function DreamLibrary() {
                 <Card className="bg-card/90 backdrop-blur-sm">
                   <div className="p-6">
                     <h3 className="text-lg font-semibold mb-4">Listen</h3>
-                    <VoicePlayer text={dreamDetails.fullScript} />
+                    <VoicePlayerPro text={dreamDetails.fullScript} />
                   </div>
                 </Card>
               )}
@@ -698,7 +698,7 @@ export default function DreamLibrary() {
               <Card className="bg-card/90 backdrop-blur-sm">
                 <div className="p-6">
                   <h3 className="text-lg font-semibold mb-4">Listen</h3>
-                  <VoicePlayer text={dreamDetails.fullScript} />
+                  <VoicePlayerPro text={dreamDetails.fullScript} />
                 </div>
               </Card>
             )}

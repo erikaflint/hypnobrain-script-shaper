@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { VoicePlayer } from "@/components/voice-player";
+import { VoicePlayerPro } from "@/components/voice-player-pro";
 import { LoadingDream } from "@/components/loading-dream";
 import { Moon, Sparkles } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -507,7 +507,7 @@ export default function Dream() {
                 )}
 
                 {/* Voice Player */}
-                <VoicePlayer text={generatedScript} title="Listen to Your Journey" />
+                <VoicePlayerPro text={generatedScript} title="Listen to Your Journey" />
 
                 {/* Script Display */}
                 <Card className="p-8 bg-background/95 backdrop-blur-sm">
