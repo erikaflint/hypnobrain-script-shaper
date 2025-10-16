@@ -67,6 +67,7 @@ export default function App() {
 
   // Payment modal
   const [paymentModalOpen, setPaymentModalOpen] = useState(false);
+  const [paymentIntent, setPaymentIntent] = useState<{ id: string; clientSecret?: string; amount: number } | null>(null);
 
   // Results dialog
   const [resultsDialogOpen, setResultsDialogOpen] = useState(false);
@@ -220,10 +221,9 @@ export default function App() {
     setPreviewLoading(false);
   };
 
-  // Full script generation mutation (paid tier)
-  const generateFullScriptMutation = useMutation({
+  // Create payment intent mutation
+  const createPaymentIntentMutation = useMutation({
     mutationFn: async () => {
-      // Build dimension values for API
       const dimensionValues = {
         somatic: dimensions["Somatic"] || 50,
         temporal: dimensions["Temporal"] || 50,
@@ -245,8 +245,7 @@ export default function App() {
         existingScript: mode === "remix" ? originalScript : undefined,
       };
 
-      // Create payment intent (mock)
-      const paymentIntent = await apiRequest('/api/create-payment-intent', {
+      const result = await apiRequest('/api/create-payment-intent', {
         method: 'POST',
         body: JSON.stringify({
           tier: mode === 'create' ? 'create_new' : 'remix',
@@ -254,7 +253,49 @@ export default function App() {
         }),
       });
 
-      // Generate paid script
+      return result;
+    },
+    onSuccess: (data) => {
+      setPaymentIntent(data);
+      setPaymentModalOpen(true);
+    },
+    onError: (error) => {
+      toast({
+        title: "Payment Setup Failed",
+        description: (error as Error).message || "Failed to create payment",
+        variant: "destructive",
+      });
+    },
+  });
+
+  // Full script generation mutation (after payment)
+  const generateFullScriptMutation = useMutation({
+    mutationFn: async () => {
+      if (!paymentIntent) {
+        throw new Error("No payment intent found");
+      }
+
+      const dimensionValues = {
+        somatic: dimensions["Somatic"] || 50,
+        temporal: dimensions["Temporal"] || 50,
+        symbolic: dimensions["Symbolic"] || 50,
+        psychological: dimensions["Psychological"] || 50,
+        perspective: dimensions["Perspective"] || 50,
+        spiritual: dimensions["Spiritual"] || 50,
+        relational: dimensions["Relational"] || 50,
+        language: dimensions["Language"] || 50,
+      };
+
+      const generationData = {
+        mode,
+        clientName: "Client",
+        clientIssue: mode === "create" ? `${presentingIssue} - ${desiredOutcome}` : "",
+        archetypeId: selectedArchetypeId,
+        styleId: selectedStyleIds[0],
+        dimensionValues,
+        existingScript: mode === "remix" ? originalScript : undefined,
+      };
+
       const result = await apiRequest('/api/generate-paid-script', {
         method: 'POST',
         body: JSON.stringify({
@@ -282,8 +323,8 @@ export default function App() {
     },
   });
 
-  const handleGenerateFull = () => {
-    setPaymentModalOpen(true);
+  const handleGenerateFull = async () => {
+    await createPaymentIntentMutation.mutateAsync();
   };
 
   const handlePaymentProceed = async () => {
@@ -444,9 +485,16 @@ export default function App() {
 
       <PaymentModal
         open={paymentModalOpen}
-        onClose={() => setPaymentModalOpen(false)}
+        onClose={() => {
+          setPaymentModalOpen(false);
+          setPaymentIntent(null);
+        }}
         onProceed={handlePaymentProceed}
         loading={generateFullScriptMutation.isPending}
+        clientSecret={paymentIntent?.clientSecret}
+        amount={paymentIntent?.amount}
+        tier={mode === 'create' ? 'create_new' : 'remix'}
+        paymentIntentId={paymentIntent?.id}
       />
 
       <Dialog open={resultsDialogOpen} onOpenChange={setResultsDialogOpen}>

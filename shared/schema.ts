@@ -99,7 +99,7 @@ export const generations = pgTable("generations", {
   fullScript: text("full_script"),
   assetsJson: jsonb("assets_json"),
   pricePaidCents: integer("price_paid_cents").default(0).notNull(),
-  stripePaymentIntentId: varchar("stripe_payment_intent_id", { length: 255 }),
+  stripePaymentIntentId: varchar("stripe_payment_intent_id", { length: 255 }).unique(), // SECURITY: Prevent payment replay attacks
   paymentStatus: varchar("payment_status", { length: 50 }).default("pending_payment"), // 'pending_payment', 'completed', 'failed'
   templateUsed: varchar("template_used", { length: 255 }).references(() => templates.templateId, { onDelete: 'set null' }), // V2: Track which template was used
   

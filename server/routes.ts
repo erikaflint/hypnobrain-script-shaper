@@ -890,7 +890,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Create payment intent (mock for now)
+  // Create payment intent
   app.post("/api/create-payment-intent", async (req, res) => {
     try {
       const schema = z.object({
@@ -916,8 +916,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Generate full script (paid tier)
-  app.post("/api/generate-paid-script", async (req, res) => {
+  // Confirm payment status before script generation
+  app.post("/api/confirm-payment", isAuthenticated, async (req, res) => {
+    try {
+      const schema = z.object({
+        paymentIntentId: z.string(),
+      });
+      
+      const { paymentIntentId } = schema.parse(req.body);
+      
+      const isConfirmed = await paymentService.confirmPayment(paymentIntentId);
+      
+      if (!isConfirmed) {
+        return res.status(400).json({ 
+          message: "Payment not confirmed. Please complete payment before generating script.",
+          confirmed: false
+        });
+      }
+      
+      res.json({ confirmed: true });
+    } catch (error: any) {
+      console.error("Payment confirmation error:", error);
+      res.status(500).json({ message: "Failed to confirm payment", confirmed: false });
+    }
+  });
+
+  // Generate full script (paid tier) - REQUIRES PAYMENT CONFIRMATION
+  app.post("/api/generate-paid-script", isAuthenticated, async (req, res) => {
     try {
       const schema = z.object({
         mode: z.enum(['create', 'remix']),
@@ -940,6 +965,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
       
       const data = schema.parse(req.body);
+      
+      // CRITICAL: Verify payment before generating script
+      const isPaymentConfirmed = await paymentService.confirmPayment(data.paymentIntentId);
+      if (!isPaymentConfirmed) {
+        return res.status(402).json({ 
+          message: "Payment required. Please complete payment before generating script." 
+        });
+      }
+      
+      // CRITICAL: Prevent payment replay attacks - check if intent already used
+      const userId = (req.user as any)?.id;
+      const existingGeneration = await storage.getGenerationByPaymentIntent(data.paymentIntentId);
+      if (existingGeneration) {
+        return res.status(409).json({ 
+          message: "Payment already used. This payment has already been used to generate a script." 
+        });
+      }
       
       // Validate user input content
       const validation = validateMultipleFields({
@@ -971,8 +1013,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         existingScript: data.existingScript,
       } as any);
       
-      // Save to database (using actual schema field names)
+      // Save to database with confirmed payment status
       const generation = await storage.createGeneration({
+        userId,
         generationMode: data.mode === 'create' ? 'create_new' : 'remix',
         isFree: false,
         originalScript: data.existingScript,
@@ -984,7 +1027,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         previewText: result.fullScript.substring(0, 500),
         fullScript: result.fullScript,
         assetsJson: result.marketingAssets,
-        paymentStatus: 'pending_payment',
+        paymentStatus: 'completed', // Payment is confirmed, mark as completed
         stripePaymentIntentId: data.paymentIntentId,
       });
       
