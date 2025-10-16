@@ -3,16 +3,30 @@
   "description": "Ego Strengthening Configuration - Based on Hartland's classic approach, modernized",
   
   "modes": {
-    "sprinkle": {
-      "description": "3-5 statements scattered throughout script",
-      "min_statements": 3,
-      "max_statements": 5,
-      "distribution": {
-        "opening": 1,
-        "middle": "1-2",
-        "near_end": "1-2"
+    "cascade": {
+      "description": "Benefit Cascade pattern - causal chains showing transformation",
+      "placement": "Near end, after main therapeutic work, before emergence",
+      "target_words": [150, 250],
+      "structure": {
+        "anchor_future": "Imagine it now. [First change happening]",
+        "build_chains": "Use connecting phrases to show causation",
+        "acknowledge_momentum": "One small shift creating the next",
+        "tie_outcome": "Until you find yourself living exactly what you came here for: [desiredOutcome]",
+        "anchor_present": "This isn't hope. This is the natural cascade of change already beginning in your body right now"
       },
-      "statement_length": "1-2 sentences MAX"
+      "connecting_phrases": [
+        "And because [A], [B happens]",
+        "With that [B], [C emerges]",
+        "Which means [C leads to D]",
+        "And as [change], [deeper benefit]"
+      ],
+      "rules": [
+        "USE ALL submitted benefits but organize into logical causal chains",
+        "Each connection must be logically defensible",
+        "Create 1-3 chains depending on how benefits connect",
+        "If benefits don't all connect in one sequence, create 2-3 shorter chains",
+        "Tie all chains to client's desiredOutcome field"
+      ]
     },
     "chunk": {
       "description": "Meaningful 150-250 word segment for script ending",
@@ -192,6 +206,61 @@
         "1-2 sentences MAX per statement",
         "Then immediately return to main narrative",
         "Use transitional phrases: 'And as you...' 'Even as...' 'While...'"
+      ]
+    }
+  },
+  
+  "causal_pathways": {
+    "description": "Valid causal connections for building benefit chains",
+    "test": "Could you explain WHY step A leads to step B to a skeptical person?",
+    
+    "physical_cascade": {
+      "examples": [
+        "Sleep quality → Energy/Vitality → Activity level → Life engagement",
+        "Stress reduction → Immune function → Overall health",
+        "Physical relaxation → Healing → Body restoration",
+        "Nervous system regulation → Physical symptoms reduce → Functioning improves",
+        "Tension release → Pain reduction → Mobility → Quality of life"
+      ]
+    },
+    
+    "mental_cognitive_cascade": {
+      "examples": [
+        "Mental clarity → Better decisions → Improved outcomes",
+        "Reduced mental fog → Sharper focus → Enhanced performance",
+        "Calm mind → Problem-solving ability → Solutions emerge",
+        "Cognitive space → Creativity → Innovation",
+        "Concentration → Productivity → Achievement → Confidence"
+      ]
+    },
+    
+    "emotional_psychological_cascade": {
+      "examples": [
+        "Self-worth → Healthy boundaries → Better relationships",
+        "Confidence → Action-taking → Results → More confidence (reinforcing loop)",
+        "Self-compassion → Emotional regulation → Stability",
+        "Inner peace → Presence → Deeper connections",
+        "Reduced anxiety → Clear thinking → Effective action",
+        "Self-acceptance → Authenticity → Fulfillment"
+      ]
+    },
+    
+    "behavioral_cascade": {
+      "examples": [
+        "Small action → Momentum → Bigger actions → Results",
+        "New habit → Consistency → Identity shift → Sustainable change",
+        "One choice → Pattern formation → Lifestyle change",
+        "Practice → Skill → Mastery → Confidence"
+      ]
+    },
+    
+    "relational_cascade": {
+      "examples": [
+        "Calm presence → Better communication → Relationship depth",
+        "Self-regulation → Responding vs reacting → Healthier dynamics",
+        "Boundaries → Mutual respect → Quality relationships",
+        "Self-love → Attracting aligned people → Fulfilling connections",
+        "Authenticity → Genuine connection → Deep bonds"
       ]
     }
   },

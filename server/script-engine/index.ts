@@ -125,14 +125,14 @@ export class ScriptEngine {
     const egoInput: EgoModuleInput = {
       presentingIssue: input.presentingIssue,
       desiredOutcome: input.desiredOutcome,
-      mode: 'sprinkle', // For clinical scripts, always sprinkle
+      mode: 'cascade', // Benefit Cascade pattern at end of script
       emergenceType: (input.emergenceType === 'sleep') ? 'sleep' : 'wake',
       intensity: 'moderate',
       metaphorFamily: generationContract.primaryMetaphor?.family
     };
     
     const egoResult = await this.egoModule.generate(egoInput);
-    reasoningLog.push(`Ego mode: ${egoInput.mode}`);
+    reasoningLog.push(`Ego mode: ${egoInput.mode} (Benefit Cascade Pattern)`);
     reasoningLog.push(`Emergence type: ${egoInput.emergenceType}`);
     reasoningLog.push(`Directives: ${egoResult.directives.length} instructions`);
     reasoningLog.push('');

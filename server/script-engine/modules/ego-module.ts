@@ -1,11 +1,14 @@
 /**
  * EGO STRENGTHENING MODULE
  * 
- * Based on Hartland's classic approach, modernized for HypnoBrain.
+ * Based on Hartland's classic approach, modernized with Benefit Cascade Pattern.
  * This module can:
- * 1. Sprinkle ego strengthening throughout scripts (3-5 statements)
- * 2. Generate meaningful chunks for script endings
+ * 1. Generate Benefit Cascade (causal chains showing transformation) - placed at script end
+ * 2. Generate meaningful chunks for script endings (Hartland-style)
  * 3. Create standalone ego strengthening scripts
+ * 
+ * The Benefit Cascade Pattern replaces flat benefit lists with narrative causal chains
+ * that show how changes naturally lead to the client's desired outcome.
  * 
  * Used by: ScriptEngine (clinical), DREAM pipeline, and standalone generation
  */
@@ -18,7 +21,7 @@ export interface EgoModuleInput {
   desiredOutcome?: string;
   
   // Style
-  mode: 'sprinkle' | 'chunk' | 'standalone';
+  mode: 'cascade' | 'chunk' | 'standalone';
   emergenceType: 'wake' | 'sleep'; // wake = energizing, sleep = calming
   intensity?: 'gentle' | 'moderate' | 'powerful'; // Default: moderate
   
@@ -73,8 +76,8 @@ export class EgoModule {
     
     // Build directives based on mode
     switch (input.mode) {
-      case 'sprinkle':
-        return this.generateSprinkle(input);
+      case 'cascade':
+        return this.generateCascade(input);
       case 'chunk':
         return this.generateChunk(input);
       case 'standalone':
@@ -83,10 +86,10 @@ export class EgoModule {
   }
   
   /**
-   * Sprinkle mode: 3-5 statements scattered throughout script
+   * Cascade mode: Benefit cascade pattern showing transformation through causal chains
    */
-  private async generateSprinkle(input: EgoModuleInput): Promise<EgoModuleOutput> {
-    const directives = this.buildSprinkleDirectives(input);
+  private async generateCascade(input: EgoModuleInput): Promise<EgoModuleOutput> {
+    const directives = this.buildCascadeDirectives(input);
     
     // TODO: Call AI service to generate
     // For now, return structure
@@ -139,30 +142,77 @@ export class EgoModule {
   }
   
   /**
-   * Build directives for sprinkle mode
+   * Build directives for cascade mode (Benefit Cascade Pattern)
    */
-  private buildSprinkleDirectives(input: EgoModuleInput): string[] {
+  private buildCascadeDirectives(input: EgoModuleInput): string[] {
     const directives: string[] = [];
-    const sprinkleMode = this.config.modes.sprinkle;
-    const dist = sprinkleMode.distribution;
-    const qualityRules = this.config.quality_rules;
+    const cascadeMode = this.config.modes.cascade;
+    const causalPathways = this.config.causal_pathways;
     
     // Core instruction
-    directives.push('=== EGO STRENGTHENING: SPRINKLE MODE ===');
+    directives.push('=== BENEFIT CASCADE PATTERN ===');
     directives.push('');
-    directives.push(`SELECT ${sprinkleMode.min_statements}-${sprinkleMode.max_statements} FUNCTIONAL IMPROVEMENTS MAXIMUM - choose from categories below`);
-    directives.push(`DISTRIBUTE across script: ${dist.opening} in opening, ${dist.middle} in middle, ${dist.near_end} near end`);
-    directives.push(`KEEP EACH STATEMENT TO ${sprinkleMode.statement_length} - then continue narrative`);
+    directives.push(`PLACEMENT: ${cascadeMode.placement}`);
+    directives.push(`TARGET: ${cascadeMode.target_words[0]}-${cascadeMode.target_words[1]} words`);
+    directives.push('');
     
-    // Metaphor integration
-    if (input.metaphorFamily) {
-      const metaphorPattern = this.config.integration_patterns.metaphor_tie;
-      const example = metaphorPattern.template.replace('[METAPHOR]', input.metaphorFamily).replace('[IMPROVEMENT]', 'functional improvement');
-      directives.push(`TIE TO METAPHOR when possible: "${example}"`);
+    // Core principle
+    directives.push('CORE PRINCIPLE:');
+    directives.push('Replace flat benefit lists with causal cascades showing how changes naturally lead to desired outcome.');
+    directives.push('Creates narrative of transformation unfolding through logical connections.');
+    directives.push('');
+    
+    // Rules
+    directives.push('CRITICAL RULES:');
+    cascadeMode.rules.forEach((rule: string) => {
+      directives.push(`- ${rule}`);
+    });
+    directives.push('');
+    
+    // Structure
+    directives.push('STRUCTURE:');
+    directives.push(`1. ANCHOR IN FUTURE PACING: "${cascadeMode.structure.anchor_future}"`);
+    directives.push('');
+    directives.push('2. BUILD CAUSAL CHAIN(S) using connecting phrases:');
+    cascadeMode.connecting_phrases.forEach((phrase: string) => {
+      directives.push(`   - "${phrase}"`);
+    });
+    directives.push('');
+    directives.push(`3. ACKNOWLEDGE MOMENTUM: "${cascadeMode.structure.acknowledge_momentum}"`);
+    directives.push('   OR: "All of these changes building on each other, creating momentum."');
+    directives.push('');
+    directives.push(`4. TIE TO CLIENT'S DESIRED OUTCOME: "${cascadeMode.structure.tie_outcome}"`);
+    if (input.desiredOutcome) {
+      directives.push(`   Client's desired outcome: "${input.desiredOutcome}"`);
     }
-    
-    directives.push(`NEVER DUMP AS A LIST - max ${qualityRules.distribution.max_keywords_per_paragraph} keywords per paragraph`);
     directives.push('');
+    directives.push(`5. ANCHOR IN PRESENT: "${cascadeMode.structure.anchor_present}"`);
+    directives.push('');
+    
+    // Causation logic
+    directives.push('CAUSATION LOGIC:');
+    directives.push('Each connection must be logically defensible.');
+    directives.push('Test: Could you explain WHY step A leads to step B to a skeptical person?');
+    directives.push('If no clear mechanism exists, don\'t force them into same chain. Start a new chain.');
+    directives.push('');
+    
+    // Valid causal pathways
+    directives.push('VALID CAUSAL PATHWAYS:');
+    directives.push('');
+    
+    Object.entries(causalPathways).forEach(([key, pathway]: [string, any]) => {
+      if (key === 'description' || key === 'test') return;
+      
+      const categoryName = key.split('_').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+      directives.push(`${categoryName}:`);
+      
+      if (pathway.examples && pathway.examples.length > 0) {
+        pathway.examples.slice(0, 3).forEach((example: string) => {
+          directives.push(`  ${example}`);
+        });
+      }
+      directives.push('');
+    });
     
     // Emergence-specific style
     const styleConfig = input.emergenceType === 'wake' 
@@ -171,37 +221,51 @@ export class EgoModule {
     
     directives.push(`${input.emergenceType.toUpperCase()} STYLE: ${styleConfig.tone}`);
     directives.push(`- Tense: ${styleConfig.tense}`);
-    directives.push(`- Time reference: ${styleConfig.time_reference}`);
     directives.push(`- Emphasis: ${styleConfig.emphasis.join(', ')}`);
     directives.push('');
     
-    // Functional categories from config
-    directives.push(`Functional Improvement Categories (SELECT ${sprinkleMode.min_statements}-${sprinkleMode.max_statements} TOTAL):`);
+    // Functional categories to choose from
+    directives.push('FUNCTIONAL IMPROVEMENT CATEGORIES (Use ALL relevant to issue):');
     directives.push('');
     
     const categories = this.config.functional_categories;
     Object.entries(categories).forEach(([key, category]: [string, any]) => {
-      if (key === 'note') return; // Skip the note field
+      if (key === 'note') return;
       
-      // Check if category is appropriate for emergence type
+      // Check if appropriate for emergence type
       if (category.when_to_use && !category.when_to_use.toLowerCase().includes(input.emergenceType)) {
-        return; // Skip if not appropriate
+        return;
       }
       
       const categoryName = key.split('_').map((w: string) => w.toUpperCase()).join(' ');
       directives.push(`${categoryName}:`);
       
-      // Show 2 examples from the category
       if (category.examples && category.examples.length > 0) {
         category.examples.slice(0, 2).forEach((example: string) => {
-          directives.push(`- "${example}"`);
+          directives.push(`- ${example}`);
         });
       }
       directives.push('');
     });
     
-    // Add quality reminder
-    directives.push('CRITICAL: Each statement = 1-2 sentences MAX, then return to main narrative');
+    // Example
+    directives.push('EXAMPLE (Single Chain, 5 benefits):');
+    directives.push('');
+    directives.push('Imagine it now. Your sleep deepening as your body learns to release tension completely.');
+    directives.push('');
+    directives.push('And because you\'re sleeping better, your mind is clearer during the day. Sharper. More focused.');
+    directives.push('');
+    directives.push('With that clarity, your decisions become easier. You trust your judgment. You move through your day with confidence.');
+    directives.push('');
+    directives.push('Which means your relationships deepen—because you\'re responding from calm presence rather than reactive anxiety.');
+    directives.push('');
+    directives.push('And as stress diminishes, your body remembers its natural wisdom. Your energy increases.');
+    directives.push('');
+    directives.push('One small shift creating the next. Each change building on the last.');
+    directives.push('');
+    directives.push('Until you find yourself living exactly what you came here for: calm confidence and inner peace.');
+    directives.push('');
+    directives.push('This isn\'t hope. This is the natural cascade of change already beginning in your body right now.');
     
     return directives;
   }
@@ -299,18 +363,79 @@ export class EgoModule {
   /**
    * Validate generated ego strengthening content
    */
-  validate(content: string, mode: 'sprinkle' | 'chunk' | 'standalone'): EgoQualityCheck[] {
+  validate(content: string, mode: 'cascade' | 'chunk' | 'standalone'): EgoQualityCheck[] {
     const checks: EgoQualityCheck[] = [];
     
-    if (mode === 'sprinkle') {
-      checks.push(this.checkDistribution(content));
-      checks.push(this.checkNoDumps(content));
+    if (mode === 'cascade') {
+      checks.push(this.checkCascadeStructure(content));
+      checks.push(this.checkCausalConnections(content));
     }
     
     // Common checks
     checks.push(this.checkKeywordPresence(content));
     
     return checks;
+  }
+  
+  /**
+   * Check cascade has proper structure (future pacing, chains, momentum, outcome, present)
+   */
+  private checkCascadeStructure(content: string): EgoQualityCheck {
+    const lowerContent = content.toLowerCase();
+    
+    // Check for key structural elements
+    const hasFuturePacing = /imagine it now|picture this|see yourself/i.test(content);
+    const hasCausalConnections = /(because|with that|which means|and as)/i.test(content);
+    const hasMomentum = /(one small shift|all of these changes|building|creating momentum)/i.test(content);
+    const hasPresent = /(already beginning|happening now|right now)/i.test(content);
+    
+    const elementsPresent = [hasFuturePacing, hasCausalConnections, hasMomentum, hasPresent].filter(Boolean).length;
+    
+    if (elementsPresent < 3) {
+      return {
+        name: "Cascade Structure",
+        passed: false,
+        details: `Missing cascade elements - found ${elementsPresent}/4 (future pacing, causal connections, momentum, present anchor)`
+      };
+    }
+    
+    return {
+      name: "Cascade Structure",
+      passed: true,
+      details: `Proper cascade structure with ${elementsPresent}/4 key elements`
+    };
+  }
+  
+  /**
+   * Check for causal connections (not flat list)
+   */
+  private checkCausalConnections(content: string): EgoQualityCheck {
+    const sentences = content.split(/[.!?]+/).map(s => s.trim()).filter(s => s.length > 10);
+    
+    // Count causal connectors
+    const causalWords = ['because', 'with that', 'which means', 'and as', 'as a result', 'this means'];
+    let causalCount = 0;
+    
+    sentences.forEach(sentence => {
+      const lower = sentence.toLowerCase();
+      if (causalWords.some(word => lower.includes(word))) {
+        causalCount++;
+      }
+    });
+    
+    if (causalCount < 2) {
+      return {
+        name: "Causal Connections",
+        passed: false,
+        details: `Only ${causalCount} causal connections - needs at least 2 to show transformation chain`
+      };
+    }
+    
+    return {
+      name: "Causal Connections",
+      passed: true,
+      details: `${causalCount} causal connections showing transformation chain`
+    };
   }
   
   /**
