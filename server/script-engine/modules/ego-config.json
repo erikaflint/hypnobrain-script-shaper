@@ -79,15 +79,18 @@
   },
   
   "functional_categories": {
-    "note": "SELECT 3-5 TOTAL. These are EXAMPLES to inspire phrasing, not exhaustive lists.",
+    "note": "SELECT 3-5 TOTAL. Use EXPERIENTIAL scene-setting, not explanatory statements.",
     
     "physical_restoration": {
       "description": "Body healing, immune system, physical strength",
-      "examples": [
-        "Your body healing and replenishing completely",
-        "Immune system strengthening naturally",
-        "Physical vitality returning to every cell",
-        "Body systems finding balance and harmony"
+      "experiential_examples": [
+        "And you might notice, in the days ahead, your body remembering how to heal itself, the way it always has, cells renewing while you rest",
+        "Perhaps tomorrow, or the next day, you find yourself standing a little taller, breathing a little deeper, strength returning like an old friend",
+        "And with each night of rest, your body doing what it knows how to do, restoring itself quietly, completely"
+      ],
+      "avoid_explanatory": [
+        "Your body healing and replenishing completely because it knows how",
+        "Immune system strengthening naturally as a result of deep rest"
       ],
       "wake_emphasis": "Energy, strength, vitality",
       "sleep_emphasis": "Healing, restoration, replenishment"
@@ -95,22 +98,28 @@
     
     "sleep_quality": {
       "description": "Sleep depth, rest quality, restorative sleep",
-      "examples": [
-        "Your sleep deepening night after night",
-        "Rest becoming more restorative",
-        "Sleep cycles optimizing naturally",
-        "Dreams becoming more peaceful"
+      "experiential_examples": [
+        "And tonight, when you lay your head down, you might notice your body settling more quickly into rest, your mind releasing the day with each exhale",
+        "Sleep finding you the way it did when you were young, naturally, easily, your whole being softening into the rhythm of night",
+        "Perhaps you'll discover yourself waking tomorrow more refreshed, the kind of rest that used to come so easily now returning"
+      ],
+      "avoid_explanatory": [
+        "Your sleep deepening night after night because your nervous system knows rest",
+        "Rest becoming more restorative as a result of these changes"
       ],
       "when_to_use": "Sleep emergence type or insomnia-related issues"
     },
     
     "cognitive_enhancement": {
       "description": "Memory, focus, mental clarity, concentration",
-      "examples": [
-        "Memory becoming clearer, words flowing easily",
-        "Focus sharpening, concentration improving",
-        "Mental clarity increasing day by day",
-        "Thoughts organizing naturally, effortlessly"
+      "experiential_examples": [
+        "And tomorrow, when you reach for that word, that memory, you might find it there waiting, clear and easy, the way it used to be",
+        "Perhaps next time you sit down to focus, you'll notice the fog lifting, thoughts flowing with a clarity that surprises you",
+        "Your mind organizing itself while you rest, so that tomorrow, ideas connect effortlessly, decisions coming with ease"
+      ],
+      "avoid_explanatory": [
+        "Memory becoming clearer because your mind is rested",
+        "Focus sharpening as a result of better sleep quality"
       ],
       "wake_emphasis": "Clarity, focus, sharpness",
       "sleep_emphasis": "Mind settling, thoughts calming"
@@ -118,22 +127,28 @@
     
     "energy_vitality": {
       "description": "Energy levels, vitality, aliveness",
-      "examples": [
-        "Your energy replenishing completely",
-        "Vitality returning to every cell",
-        "Natural energy flowing throughout your day",
-        "Feeling more alive, more present"
+      "experiential_examples": [
+        "And you might wake tomorrow with that feeling you remember, energy flowing naturally through your day, not forced, just there",
+        "Perhaps next week, or the week after, you find yourself saying yes to things you've been too tired for, life calling you forward again",
+        "That vitality you used to know, returning like spring after winter, gentle at first, then undeniable"
+      ],
+      "avoid_explanatory": [
+        "Your energy replenishing completely because your body is healing",
+        "Vitality returning as a result of better rest"
       ],
       "when_to_use": "Wake emergence type, fatigue-related issues"
     },
     
     "stress_response": {
       "description": "Nervous system regulation, calm, stress management",
-      "examples": [
-        "Your nervous system learning deeper calm",
-        "Stress response becoming more balanced",
-        "Finding ease in challenging moments",
-        "Nervous system remembering safety"
+      "experiential_examples": [
+        "And next time something stressful happens, you might notice your body responding differently, a calm you didn't have to reach for, just there",
+        "Your nervous system learning what it feels like to be safe, really safe, carrying that knowing into your days, into your nights",
+        "Perhaps tomorrow, in a moment that used to spike anxiety, you'll find yourself steady, your breath even, your body remembering peace"
+      ],
+      "avoid_explanatory": [
+        "Your nervous system learning deeper calm because of this work",
+        "Stress response becoming balanced as a result of regulation"
       ],
       "universal": true,
       "note": "Appropriate for both wake and sleep"
@@ -141,22 +156,28 @@
     
     "emotional_wellbeing": {
       "description": "Emotional stability, calm, resilience",
-      "examples": [
-        "Emotions becoming steadier, more balanced",
-        "Inner calm growing stronger each day",
-        "Resilience building naturally, powerfully",
-        "Peace settling deep within"
+      "experiential_examples": [
+        "And in moments that used to shake you, you might notice yourself staying steady, like a tree in wind, bending but not breaking",
+        "That peace you've been searching for, settling into your chest, your shoulders, becoming something you carry with you",
+        "Perhaps next time emotions rise, you'll find yourself watching them pass, the way clouds move across sky, without being swept away"
+      ],
+      "avoid_explanatory": [
+        "Emotions becoming steadier because you're learning regulation",
+        "Inner calm growing stronger as a result of this practice"
       ],
       "hartland_inspired": true
     },
     
     "confidence_self_reliance": {
       "description": "Self-confidence, independence, inner strength",
-      "examples": [
-        "Confidence in yourself growing stronger",
-        "Trusting your own judgment more completely",
-        "Standing your own ground with ease",
-        "Relying on your own inner wisdom"
+      "experiential_examples": [
+        "And you might surprise yourself soon, speaking up when you used to stay quiet, your voice steady, your knowing clear",
+        "That feeling of trusting yourself, the way you did before doubt crept in, returning now, solid as ground beneath your feet",
+        "Perhaps in a moment of decision, you'll find yourself choosing without second-guessing, your inner compass pointing true"
+      ],
+      "avoid_explanatory": [
+        "Confidence in yourself growing stronger because you're healing",
+        "Trusting your own judgment more as a result of this work"
       ],
       "hartland_inspired": true,
       "wake_emphasis": "Confidence, capability, strength"
