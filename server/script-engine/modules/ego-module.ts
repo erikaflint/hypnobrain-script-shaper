@@ -637,14 +637,21 @@ export class EgoModule {
       experientialCount += matches.length;
     });
     
-    // Count causal/explanatory language (BAD - should be flagged)
-    const causalWords = ['because', 'as a result', 'this means', 'therefore', 'consequently'];
+    // Count causal/explanatory language (BAD - STRICT: fail on first occurrence)
+    const causalWords = [
+      'because', 'as a result', 'this means', 'therefore', 'consequently',
+      'this causes', 'which results in', 'leading to', 'due to', 'since'
+    ];
     let causalCount = 0;
+    let foundCausalWords: string[] = [];
     
     causalWords.forEach(word => {
       const regex = new RegExp(word, 'gi');
       const matches = script.match(regex) || [];
-      causalCount += matches.length;
+      if (matches.length > 0) {
+        causalCount += matches.length;
+        foundCausalWords.push(`"${word}" (${matches.length}x)`);
+      }
     });
     
     // Check for temporal markers (GOOD - scene-setting)
@@ -667,11 +674,11 @@ export class EgoModule {
     
     const elementsPresent = [hasFuturePacing, hasExperientialFlow, hasMomentum, hasPresent].filter(Boolean).length;
     
-    // FAIL if using causal/explanatory language
-    if (causalCount >= 2) {
+    // FAIL on FIRST occurrence of causal/explanatory language (STRICT)
+    if (causalCount >= 1) {
       return {
         passed: false,
-        details: `Explanatory language detected (${causalCount} causal words like "because", "as a result") - use scene-setting instead`
+        details: `Explanatory language detected (${foundCausalWords.join(', ')}) - MUST use scene-setting, NOT causal explanations`
       };
     }
     
