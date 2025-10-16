@@ -4,28 +4,46 @@
   
   "modes": {
     "cascade": {
-      "description": "Benefit Cascade pattern - causal chains showing transformation",
+      "description": "Benefit Cascade pattern - paint scenes and suggest experiences, not causal explanations",
       "placement": "Near end, after main therapeutic work, before emergence",
       "target_words": [150, 250],
+      "approach": "SCENE-SETTING over explanation. Paint vivid moments client can step into.",
       "structure": {
         "anchor_future": "Imagine it now. [First change happening]",
-        "build_chains": "Use connecting phrases to show causation",
+        "build_chains": "Paint vivid scenes with sensory details, not causal explanations",
         "acknowledge_momentum": "One small shift creating the next",
         "tie_outcome": "Until you find yourself living exactly what you came here for: [desiredOutcome]",
         "anchor_present": "This isn't hope. This is the natural cascade of change already beginning in your body right now"
       },
+      "language_style": {
+        "prefer": "Scene-setting, experiential, vivid sensory moments",
+        "avoid": "Causal explanations, 'because' statements, logical reasoning",
+        "examples": {
+          "avoid_explanatory": "Your sleep becomes more restorative because your nervous system knows how to rest",
+          "use_experiential": "And tonight, when you lay your head down, you might notice your body settling more quickly into rest, your mind releasing the day with each exhale, sleep finding you the way it did when you were young"
+        }
+      },
       "connecting_phrases": [
-        "And because [A], [B happens]",
-        "With that [B], [C emerges]",
-        "Which means [C leads to D]",
-        "And as [change], [deeper benefit]"
+        "And tonight, when...",
+        "You might notice...",
+        "And as [moment], [experience]...",
+        "With each [action], [sensation]...",
+        "Until [desired state]..."
+      ],
+      "sensory_elements": [
+        "Physical sensations (settling, releasing, softening)",
+        "Temporal markers (tonight, tomorrow, next time)",
+        "Gentle observations (you might notice, perhaps you find)",
+        "Vivid imagery (sleep finding you, day releasing)",
+        "Nostalgic callbacks (the way it used to be, like you remember)"
       ],
       "rules": [
-        "USE ALL submitted benefits but organize into logical causal chains",
-        "Each connection must be logically defensible",
-        "Create 1-3 chains depending on how benefits connect",
-        "If benefits don't all connect in one sequence, create 2-3 shorter chains",
-        "Tie all chains to client's desiredOutcome field"
+        "PAINT SCENES, don't explain causality",
+        "Use sensory details (settling, releasing, flowing)",
+        "Include temporal markers (tonight, tomorrow, next time)",
+        "Create moments client can experience, not understand",
+        "USE ALL submitted benefits but weave into experiential narrative",
+        "Tie all scenes to client's desiredOutcome field"
       ]
     },
     "chunk": {
