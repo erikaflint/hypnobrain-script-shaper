@@ -48,15 +48,16 @@ To prevent quality degradation and ensure consistency, DREAM scripts pass throug
 - Quality Guard validates metaphor frequency and fails scripts with 10+ metaphor family uses
 - Guideline: "Metaphors should ENHANCE the experience, not dominate it"
 
-**Benefit Cascade Pattern (Ego Strengthening)**: Replaces flat benefit lists with causal chains showing transformation through logical connections:
+**Benefit Cascade Pattern (Ego Strengthening)**: Uses scene-setting/experiential language to paint vivid moments rather than explain causality:
 - **Placement**: Near end of script, after main therapeutic work, before emergence (200-400 words for clinical, 400-600 for DREAM)
-- **Structure**: 5-stage cascade - (1) Anchor in Future Pacing, (2) Build Causal Chain(s), (3) Acknowledge Momentum, (4) Tie to Client's Desired Outcome, (5) Anchor in Present
-- **Core Principle**: Show how changes naturally lead to desired outcome through defensible causal connections
-- **Connecting Phrases**: "And because...", "With that...", "Which means...", "And as...", "As a result..." (creates narrative flow)
-- **Causal Pathways**: Physical (sleep→energy→activity), Mental (clarity→decisions→outcomes), Emotional (self-worth→boundaries→relationships), Behavioral (action→momentum→results), Relational (calm→communication→depth)
-- **Validation Test**: "Could you explain WHY step A leads to step B to a skeptical person?" If no clear mechanism exists, start new chain
-- **Quality Guard**: Validates 3/4 structural elements present, 2+ causal connections, detects flat list indicators (fails if 3+ list markers like "also", "additionally", "furthermore")
-- **Categories Used**: Physical Restoration, Sleep Quality, Cognitive Enhancement, Energy/Vitality, Stress Response (choose ALL relevant to issue)
+- **Language Philosophy**: PAINT SCENES, don't explain. Client's mind is open at script end - they experience benefits in a new way
+- **Structure**: 5-stage cascade - (1) Anchor in Future Pacing, (2) Paint Vivid Scenes with sensory details, (3) Acknowledge Momentum, (4) Tie to Client's Desired Outcome, (5) Anchor in Present
+- **Approach**: "And tonight, when you lay your head down, you might notice..." NOT "Your sleep becomes better because..."
+- **Sensory Elements**: Physical sensations (settling, releasing), temporal markers (tonight, tomorrow), gentle observations (you might notice), vivid imagery (sleep finding you), nostalgic callbacks (the way it used to be)
+- **Connecting Phrases**: "And tonight, when...", "You might notice...", "Perhaps tomorrow...", "And as [moment], [experience]...", "With each [action], [sensation]..."
+- **Experiential Cascades**: Paint flowing scenes showing transformation - "And tonight... rest deepening. Tomorrow... energy returning. Next week... life calling you forward"
+- **Quality Guard**: Validates 3/4 structural elements present, 2+ experiential connections, detects flat list indicators (fails if 3+ list markers)
+- **Categories**: Physical Restoration, Sleep Quality, Cognitive Enhancement, Energy/Vitality, Stress Response (use ALL relevant, woven as experiences not explanations)
 
 **Personal Pronouns in Hypnosis (Critical Language Rule)**: "You" and "your" are ESSENTIAL for maintaining personal connection, NOT repetition to avoid!
 - **The Problem Discovered (Oct 2025)**: AI was removing "you/your" and using impersonal commands/passive forms
