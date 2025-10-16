@@ -74,8 +74,9 @@ function checkEmergence(script: string, emergenceType: 'sleep' | 'regular'): Qua
 
 /**
  * Check for functional suggestions (therapeutic elements)
+ * Scales with target word count: ~1 per 200 words
  */
-function checkFunctionalSuggestions(script: string): QualityCheck {
+function checkFunctionalSuggestions(script: string, targetWordCount: number = 3000): QualityCheck {
   const scriptLower = script.toLowerCase();
   
   // Look for complete functional phrases (not just individual words)
@@ -98,14 +99,17 @@ function checkFunctionalSuggestions(script: string): QualityCheck {
     functionalCount += matches.length;
   });
   
-  const passed = functionalCount >= 15; // At least 15 functional suggestions
+  // Scale threshold: ~1 functional suggestion per 200 words
+  // 1500w → 8, 2000w → 10, 3000w → 15
+  const minSuggestions = Math.round(targetWordCount / 200);
+  const passed = functionalCount >= minSuggestions;
   
   return {
     name: "Functional Suggestions",
     passed,
     details: passed 
-      ? `Found ${functionalCount} functional/therapeutic suggestions`
-      : `Only ${functionalCount} functional suggestions (minimum: 15)`
+      ? `Found ${functionalCount} functional/therapeutic suggestions (minimum: ${minSuggestions})`
+      : `Only ${functionalCount} functional suggestions (minimum: ${minSuggestions} for ${targetWordCount}w)`
   };
 }
 
@@ -418,7 +422,7 @@ export function validateScriptQuality(
   }
 
   const emergenceCheck = checkEmergence(script, emergenceType);
-  const suggestionsCheck = checkFunctionalSuggestions(script);
+  const suggestionsCheck = checkFunctionalSuggestions(script, targetWordCount);
   const functionalCount = parseInt(suggestionsCheck.details.match(/\d+/)?.[0] || '0');
   const wordCountCheck = checkWordCount(script, targetWordCount, functionalCount);
   const grammarCheck = checkNaturalGrammar(script);
@@ -455,7 +459,7 @@ export async function runQualityGuard(
 ): Promise<QualityReport> {
   console.log('[QUALITY GUARD] Running quality checks...');
   
-  const suggestionsCheck = checkFunctionalSuggestions(script);
+  const suggestionsCheck = checkFunctionalSuggestions(script, options.targetWordCount);
   const functionalCount = parseInt(suggestionsCheck.details.match(/\d+/)?.[0] || '0');
   
   const checks: QualityCheck[] = [
@@ -498,7 +502,7 @@ export async function runQualityGuard(
       const polishedScript = await microPolish(script, failedChecks);
       
       // Re-check polished version
-      const polishedSuggestionsCheck = checkFunctionalSuggestions(polishedScript);
+      const polishedSuggestionsCheck = checkFunctionalSuggestions(polishedScript, options.targetWordCount);
       const polishedFunctionalCount = parseInt(polishedSuggestionsCheck.details.match(/\d+/)?.[0] || '0');
       
       const recheck: QualityCheck[] = [
